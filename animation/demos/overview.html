@@ -175,82 +175,57 @@
               >
               这包括 transform、width、opacity、color、background 等所有属性。
             </p>
-            <div class="code-block" style="margin: 15px 0">
-              <span class="comment"
-                >/* ❌ 单独改变属性 - 瞬间变化，无动画 */</span
-              >
+            <pre class="code-block" style="margin: 15px 0"><code><span class="comment">/* ❌ 单独改变属性 - 瞬间变化，无动画 */</span>
 
-              <span class="comment">/* transform 单独使用 */</span>
-              <span class="keyword">.box</span> {
-              <span class="property">transform</span>:
-              <span class="value">rotate(0deg)</span>; }
-              <span class="keyword">.box:hover</span> {
-              <span class="property">transform</span>:
-              <span class="value">rotate(45deg)</span>;
-              <span class="comment">/* 立即旋转，无动画 */</span>
-              }
+<span class="comment">/* transform 单独使用 */</span>
+<span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">rotate(0deg)</span>;
+}
+<span class="keyword">.box:hover</span> {
+  <span class="property">transform</span>: <span class="value">rotate(45deg)</span>; <span class="comment">/* 立即旋转，无动画 */</span>
+}
 
-              <span class="comment">/* width 单独使用 */</span>
-              <span class="keyword">.box</span> {
-              <span class="property">width</span>:
-              <span class="value">100px</span>; }
-              <span class="keyword">.box:hover</span> {
-              <span class="property">width</span>:
-              <span class="value">200px</span>;
-              <span class="comment">/* 立即变宽，无动画 */</span>
-              }
+<span class="comment">/* width 单独使用 */</span>
+<span class="keyword">.box</span> {
+  <span class="property">width</span>: <span class="value">100px</span>;
+}
+<span class="keyword">.box:hover</span> {
+  <span class="property">width</span>: <span class="value">200px</span>; <span class="comment">/* 立即变宽，无动画 */</span>
+}
 
-              <span class="comment">/* opacity 单独使用 */</span>
-              <span class="keyword">.box</span> {
-              <span class="property">opacity</span>:
-              <span class="value">1</span>; }
-              <span class="keyword">.box:hover</span> {
-              <span class="property">opacity</span>:
-              <span class="value">0.5</span>;
-              <span class="comment">/* 立即变透明，无动画 */</span>
-              }
+<span class="comment">/* opacity 单独使用 */</span>
+<span class="keyword">.box</span> {
+  <span class="property">opacity</span>: <span class="value">1</span>;
+}
+<span class="keyword">.box:hover</span> {
+  <span class="property">opacity</span>: <span class="value">0.5</span>; <span class="comment">/* 立即变透明，无动画 */</span>
+}
 
-              <span class="comment">/* background 单独使用 */</span>
-              <span class="keyword">.box</span> {
-              <span class="property">background</span>:
-              <span class="value">red</span>; }
-              <span class="keyword">.box:hover</span> {
-              <span class="property">background</span>:
-              <span class="value">blue</span>;
-              <span class="comment">/* 立即变色，无动画 */</span>
-              }
-            </div>
+<span class="comment">/* background 单独使用 */</span>
+<span class="keyword">.box</span> {
+  <span class="property">background</span>: <span class="value">red</span>;
+}
+<span class="keyword">.box:hover</span> {
+  <span class="property">background</span>: <span class="value">blue</span>; <span class="comment">/* 立即变色，无动画 */</span>
+}</code></pre>
             <p style="color: #92400e; margin-top: 15px">
               <strong
                 >如果想要平滑的动画效果，必须配合 Transition 或 Animation
                 使用。</strong
               >
             </p>
-            <div class="code-block" style="margin: 15px 0">
-              <span class="comment">/* ✅ 配合 transition - 平滑过渡 */</span>
-              <span class="keyword">.box</span> {
-              <span class="property">width</span>:
-              <span class="value">100px</span>;
-              <span class="property">opacity</span>:
-              <span class="value">1</span>;
-              <span class="property">background</span>:
-              <span class="value">red</span>;
-              <span class="property">transition</span>:
-              <span class="value">all 0.3s ease</span>;
-              <span class="comment">/* 添加过渡效果 */</span>
-              }
-              <span class="keyword">.box:hover</span> {
-              <span class="property">width</span>:
-              <span class="value">200px</span>;
-              <span class="comment">/* 0.3 秒内平滑变宽 */</span>
-              <span class="property">opacity</span>:
-              <span class="value">0.5</span>;
-              <span class="comment">/* 0.3 秒内平滑变透明 */</span>
-              <span class="property">background</span>:
-              <span class="value">blue</span>;
-              <span class="comment">/* 0.3 秒内平滑变色 */</span>
-              }
-            </div>
+            <pre class="code-block" style="margin: 15px 0"><code><span class="comment">/* ✅ 配合 transition - 平滑过渡 */</span>
+<span class="keyword">.box</span> {
+  <span class="property">width</span>: <span class="value">100px</span>;
+  <span class="property">opacity</span>: <span class="value">1</span>;
+  <span class="property">background</span>: <span class="value">red</span>;
+  <span class="property">transition</span>: <span class="value">all 0.3s ease</span>; <span class="comment">/* 添加过渡效果 */</span>
+}
+<span class="keyword">.box:hover</span> {
+  <span class="property">width</span>: <span class="value">200px</span>; <span class="comment">/* 0.3 秒内平滑变宽 */</span>
+  <span class="property">opacity</span>: <span class="value">0.5</span>; <span class="comment">/* 0.3 秒内平滑变透明 */</span>
+  <span class="property">background</span>: <span class="value">blue</span>; <span class="comment">/* 0.3 秒内平滑变色 */</span>
+}</code></pre>
           </div>
         </section>
 
@@ -269,58 +244,65 @@
           </div>
 
           <h3>完整写法</h3>
-          <pre class="code-block"><code>
-            <span class="comment">/* 所有属性分开写 */</span>
-            <span class="keyword">.box</span> { <span class="property">transition-property</span>: <span class="value">transform</span>;
-            <span class="comment">/* 要过渡的属性 */</span> <span class="property">transition-duration</span>: <span class="value">0.3s</span>;
-            <span class="comment">/* 持续时间 */</span> <span class="property">transition-timing-function</span>: <span class="value">ease</span>;
-            <span class="comment">/* 缓动函数 */</span> <span class="property">transition-delay</span>: <span class="value">0s</span>;
-            <span class="comment">/* 延迟时间 */</span>
-            }
-          </code></pre>
+          <pre class="code-block"><code><span class="comment">/* 所有属性分开写 */</span>
+<span class="keyword">.box</span> {
+  <span class="property">transition-property</span>: <span class="value">transform</span>; <span class="comment">/* 要过渡的属性 */</span>
+  <span class="property">transition-duration</span>: <span class="value">0.3s</span>; <span class="comment">/* 持续时间 */</span>
+  <span class="property">transition-timing-function</span>: <span class="value">ease</span>; <span class="comment">/* 缓动函数 */</span>
+  <span class="property">transition-delay</span>: <span class="value">0s</span>; <span class="comment">/* 延迟时间 */</span>
+}</code></pre>
 
           <h3>简写语法</h3>
-          <pre class="code-block"><code>
-            <span class="comment">/* 语法：transition: property duration timing-function delay; */</span>
+          <pre class="code-block"><code><span class="comment">/* 语法：transition: property duration timing-function delay; */</span>
 
-            <span class="comment">/* 完整简写 */</span>
-            <span class="keyword">.box</span> { <span class="property">transition</span>: <span class="value">transform 0.3s ease 0s</span>;
-            <span class="comment">/* 属性 时长 缓动 延迟 */</span>
-            }
+<span class="comment">/* 完整简写 */</span>
+<span class="keyword">.box</span> {
+  <span class="property">transition</span>: <span class="value">transform 0.3s ease 0s</span>; <span class="comment">/* 属性 时长 缓动 延迟 */</span>
+}
 
-            <span class="comment">/* 常用简写（省略延迟，默认 0s）*/</span>
-            <span class="keyword">.box</span> { <span class="property">transition</span>: <span class="value">transform 0.3s ease</span>; }
+<span class="comment">/* 常用简写（省略延迟，默认 0s）*/</span>
+<span class="keyword">.box</span> {
+  <span class="property">transition</span>: <span class="value">transform 0.3s ease</span>;
+}
 
-            <span class="comment">/* 最简写法（省略缓动，默认 ease）*/</span>
-            <span class="keyword">.box</span> { <span class="property">transition</span>: <span class="value">transform 0.3s</span>; }
+<span class="comment">/* 最简写法（省略缓动，默认 ease）*/</span>
+<span class="keyword">.box</span> {
+  <span class="property">transition</span>: <span class="value">transform 0.3s</span>;
+}
 
-            <span class="comment">/* 过渡所有属性 */</span>
-            <span class="keyword">.box</span> { <span class="property">transition</span>: <span class="value">all 0.3s ease</span>;
-            <span class="comment">/* ↑ 所有可动画的属性都会过渡 */</span>
-            }
-          </code></pre>
+<span class="comment">/* 过渡所有属性 */</span>
+<span class="keyword">.box</span> {
+  <span class="property">transition</span>: <span class="value">all 0.3s ease</span>; <span class="comment">/* ↑ 所有可动画的属性都会过渡 */</span>
+}</code></pre>
 
           <h3>多个属性分别设置</h3>
-          <pre class="code-block"><code>
-            <span class="comment">/* 不同属性使用不同的过渡效果 */</span>
-            <span class="keyword">.box</span> { <span class="property">transition</span>: <span class="value">transform 0.3s ease</span>,
-            <span class="value">opacity 0.5s linear</span>, <span class="value">background 0.2s ease-in</span>; }
-          </code></pre>
+          <pre class="code-block"><code><span class="comment">/* 不同属性使用不同的过渡效果 */</span>
+<span class="keyword">.box</span> {
+  <span class="property">transition</span>: <span class="value">transform 0.3s ease</span>,
+                <span class="value">opacity 0.5s linear</span>,
+                <span class="value">background 0.2s ease-in</span>;
+}</code></pre>
 
           <h3>实际应用示例</h3>
-          <pre class="code-block"><code>
-            <span class="comment">/* 按钮悬停效果 */</span>
-            <span class="keyword">.button</span> { <span class="property">transform</span>: <span class="value">translateY(0)</span>;
-            <span class="property">transition</span>: <span class="value">transform 0.2s ease</span>; }
+          <pre class="code-block"><code><span class="comment">/* 按钮悬停效果 */</span>
+<span class="keyword">.button</span> {
+  <span class="property">transform</span>: <span class="value">translateY(0)</span>;
+  <span class="property">transition</span>: <span class="value">transform 0.2s ease</span>;
+}
 
-            <span class="keyword">.button:hover</span> { <span class="property">transform</span>: <span class="value">translateY(-3px)</span>; }
+<span class="keyword">.button:hover</span> {
+  <span class="property">transform</span>: <span class="value">translateY(-3px)</span>;
+}
 
-            <span class="comment">/* 卡片悬停效果 */</span>
-            <span class="keyword">.card</span> { <span class="property">transition</span>: <span class="value">all 0.3s ease</span>; }
+<span class="comment">/* 卡片悬停效果 */</span>
+<span class="keyword">.card</span> {
+  <span class="property">transition</span>: <span class="value">all 0.3s ease</span>;
+}
 
-            <span class="keyword">.card:hover</span> { <span class="property">transform</span>: <span class="value">translateY(-5px)</span>;
-            <span class="property">box-shadow</span>: <span class="value">0 10px 20px rgba(0,0,0,0.1)</span>; }
-          </code></pre>
+<span class="keyword">.card:hover</span> {
+  <span class="property">transform</span>: <span class="value">translateY(-5px)</span>;
+  <span class="property">box-shadow</span>: <span class="value">0 10px 20px rgba(0,0,0,0.1)</span>;
+}</code></pre>
 
           <div class="info-box">
             <p>
@@ -346,90 +328,108 @@
           </div>
 
           <h3>第一步：定义关键帧</h3>
-          <pre class="code-block"><code>
-            <span class="comment">/* 使用 from/to */</span>
-            <span class="keyword">@keyframes</span> <span class="value">slideIn</span> { <span class="keyword">from</span> {
-            <span class="property">transform</span>: <span class="value">translateX(-100%)</span>; } <span class="keyword">to</span> {
-            <span class="property">transform</span>: <span class="value">translateX(0)</span>; } }
+          <pre class="code-block"><code><span class="comment">/* 使用 from/to */</span>
+<span class="keyword">@keyframes</span> <span class="value">slideIn</span> {
+  <span class="keyword">from</span> {
+    <span class="property">transform</span>: <span class="value">translateX(-100%)</span>;
+  }
+  <span class="keyword">to</span> {
+    <span class="property">transform</span>: <span class="value">translateX(0)</span>;
+  }
+}
 
-            <span class="comment">/* 使用百分比（更灵活）*/</span>
-            <span class="keyword">@keyframes</span> <span class="value">bounce</span> { <span class="keyword">0%</span> {
-            <span class="property">transform</span>: <span class="value">translateY(0)</span>; } <span class="keyword">50%</span> {
-            <span class="property">transform</span>: <span class="value">translateY(-30px)</span>; } <span class="keyword">100%</span> {
-            <span class="property">transform</span>: <span class="value">translateY(0)</span>; } }
-          </code></pre>
+<span class="comment">/* 使用百分比（更灵活）*/</span>
+<span class="keyword">@keyframes</span> <span class="value">bounce</span> {
+  <span class="keyword">0%</span> {
+    <span class="property">transform</span>: <span class="value">translateY(0)</span>;
+  }
+  <span class="keyword">50%</span> {
+    <span class="property">transform</span>: <span class="value">translateY(-30px)</span>;
+  }
+  <span class="keyword">100%</span> {
+    <span class="property">transform</span>: <span class="value">translateY(0)</span>;
+  }
+}</code></pre>
 
           <h3>第二步：完整写法</h3>
-          <pre class="code-block"><code>
-            <span class="comment">/* 所有属性分开写 */</span>
-            <span class="keyword">.box</span> { <span class="property">animation-name</span>: <span class="value">slideIn</span>;
-            <span class="comment">/* 动画名称（@keyframes 定义的）*/</span> <span class="property">animation-duration</span>:
-            <span class="value">1s</span>; <span class="comment">/* 持续时间 */</span> <span class="property">animation-timing-function</span>:
-            <span class="value">ease</span>; <span class="comment">/* 缓动函数 */</span> <span class="property">animation-delay</span>:
-            <span class="value">0s</span>; <span class="comment">/* 延迟时间 */</span> <span class="property">animation-iteration-count</span>:
-            <span class="value">1</span>; <span class="comment">/* 播放次数（1 或 infinite）*/</span>
-            <span class="property">animation-direction</span>: <span class="value">normal</span>; <span class="comment">/* 播放方向 */</span>
-            <span class="property">animation-fill-mode</span>: <span class="value">none</span>; <span class="comment">/* 填充模式 */</span>
-            <span class="property">animation-play-state</span>: <span class="value">running</span>; <span class="comment">/* 播放状态 */</span>
-            }
-          </code></pre>
+          <pre class="code-block"><code><span class="comment">/* 所有属性分开写 */</span>
+<span class="keyword">.box</span> {
+  <span class="property">animation-name</span>: <span class="value">slideIn</span>; <span class="comment">/* 动画名称（@keyframes 定义的）*/</span>
+  <span class="property">animation-duration</span>: <span class="value">1s</span>; <span class="comment">/* 持续时间 */</span>
+  <span class="property">animation-timing-function</span>: <span class="value">ease</span>; <span class="comment">/* 缓动函数 */</span>
+  <span class="property">animation-delay</span>: <span class="value">0s</span>; <span class="comment">/* 延迟时间 */</span>
+  <span class="property">animation-iteration-count</span>: <span class="value">1</span>; <span class="comment">/* 播放次数（1 或 infinite）*/</span>
+  <span class="property">animation-direction</span>: <span class="value">normal</span>; <span class="comment">/* 播放方向 */</span>
+  <span class="property">animation-fill-mode</span>: <span class="value">none</span>; <span class="comment">/* 填充模式 */</span>
+  <span class="property">animation-play-state</span>: <span class="value">running</span>; <span class="comment">/* 播放状态 */</span>
+}</code></pre>
 
           <h3>简写语法</h3>
-          <pre class="code-block"><code>
-            <span class="comment">/* 语法：animation: name duration timing-function delay iteration-count direction fill-mode; */</span>
+          <pre class="code-block"><code><span class="comment">/* 语法：animation: name duration timing-function delay iteration-count direction fill-mode; */</span>
 
-            <span class="comment">/* 完整简写 */</span>
-            <span class="keyword">.box</span> { <span class="property">animation</span>: <span class="value">slideIn 1s ease 0s 1 normal none</span>;
-            <span class="comment">/* 名称 时长 缓动 延迟 次数 方向 填充 */</span>
-            }
+<span class="comment">/* 完整简写 */</span>
+<span class="keyword">.box</span> {
+  <span class="property">animation</span>: <span class="value">slideIn 1s ease 0s 1 normal none</span>;
+  <span class="comment">/* 名称 时长 缓动 延迟 次数 方向 填充 */</span>
+}
 
-            <span class="comment">/* 常用简写（省略延迟、方向、填充）*/</span>
-            <span class="keyword">.box</span> { <span class="property">animation</span>: <span class="value">slideIn 1s ease</span>; }
+<span class="comment">/* 常用简写（省略延迟、方向、填充）*/</span>
+<span class="keyword">.box</span> {
+  <span class="property">animation</span>: <span class="value">slideIn 1s ease</span>;
+}
 
-            <span class="comment">/* 最简写法（省略缓动，默认 ease）*/</span>
-            <span class="keyword">.box</span> { <span class="property">animation</span>: <span class="value">slideIn 1s</span>; }
-          </code></pre>
+<span class="comment">/* 最简写法（省略缓动，默认 ease）*/</span>
+<span class="keyword">.box</span> {
+  <span class="property">animation</span>: <span class="value">slideIn 1s</span>;
+}</code></pre>
 
           <h3>常用场景</h3>
-          <pre class="code-block"><code>
-            <span class="comment">/* 无限循环 */</span>
-            <span class="keyword">.spinner</span> { <span class="property">animation</span>: <span class="value">spin 2s linear infinite</span>;
-            <span class="comment">/* ↑ 无限循环 */</span>
-            }
+          <pre class="code-block"><code><span class="comment">/* 无限循环 */</span>
+<span class="keyword">.spinner</span> {
+  <span class="property">animation</span>: <span class="value">spin 2s linear infinite</span>; <span class="comment">/* ↑ 无限循环 */</span>
+}
 
-            <span class="comment">/* 保持最后一帧 */</span>
-            <span class="keyword">.fade-in</span> { <span class="property">animation</span>: <span class="value">fadeIn 1s ease forwards</span>;
-            <span class="comment">/* ↑ 结束后保持最后状态 */</span>
-            }
+<span class="comment">/* 保持最后一帧 */</span>
+<span class="keyword">.fade-in</span> {
+  <span class="property">animation</span>: <span class="value">fadeIn 1s ease forwards</span>; <span class="comment">/* ↑ 结束后保持最后状态 */</span>
+}
 
-            <span class="comment">/* 延迟 + 保持 */</span>
-            <span class="keyword">.slide-in</span> { <span class="property">animation</span>:
-            <span class="value">slideIn 0.5s ease 0.3s 1 normal forwards</span>;
-            <span class="comment">/* ↑延迟0.3秒 ↑保持最后状态 */</span>
-            }
+<span class="comment">/* 延迟 + 保持 */</span>
+<span class="keyword">.slide-in</span> {
+  <span class="property">animation</span>: <span class="value">slideIn 0.5s ease 0.3s 1 normal forwards</span>;
+  <span class="comment">/* ↑延迟0.3秒 ↑保持最后状态 */</span>
+}
 
-            <span class="comment">/* 来回播放 */</span>
-            <span class="keyword">.pulse</span> { <span class="property">animation</span>:
-            <span class="value">pulse 1s ease-in-out infinite alternate</span>;
-            <span class="comment">/* ↑ 来回交替 */</span>
-            }
-          </code></pre>
+<span class="comment">/* 来回播放 */</span>
+<span class="keyword">.pulse</span> {
+  <span class="property">animation</span>: <span class="value">pulse 1s ease-in-out infinite alternate</span>; <span class="comment">/* ↑ 来回交替 */</span>
+}</code></pre>
 
           <h3>实际应用示例</h3>
-          <pre class="code-block"><code>
-            <span class="comment">/* 加载动画 */</span>
-            <span class="keyword">@keyframes</span> <span class="value">spin</span> { <span class="keyword">to</span> {
-            <span class="property">transform</span>: <span class="value">rotate(360deg)</span>; } }
+          <pre class="code-block"><code><span class="comment">/* 加载动画 */</span>
+<span class="keyword">@keyframes</span> <span class="value">spin</span> {
+  <span class="keyword">to</span> {
+    <span class="property">transform</span>: <span class="value">rotate(360deg)</span>;
+  }
+}
 
-            <span class="keyword">.loader</span> { <span class="property">animation</span>: <span class="value">spin 1s linear infinite</span>; }
+<span class="keyword">.loader</span> {
+  <span class="property">animation</span>: <span class="value">spin 1s linear infinite</span>;
+}
 
-            <span class="comment">/* 页面加载淡入 */</span>
-            <span class="keyword">@keyframes</span> <span class="value">fadeIn</span> { <span class="keyword">from</span> {
-            <span class="property">opacity</span>: <span class="value">0</span>; } <span class="keyword">to</span> {
-            <span class="property">opacity</span>: <span class="value">1</span>; } }
+<span class="comment">/* 页面加载淡入 */</span>
+<span class="keyword">@keyframes</span> <span class="value">fadeIn</span> {
+  <span class="keyword">from</span> {
+    <span class="property">opacity</span>: <span class="value">0</span>;
+  }
+  <span class="keyword">to</span> {
+    <span class="property">opacity</span>: <span class="value">1</span>;
+  }
+}
 
-            <span class="keyword">.page</span> { <span class="property">animation</span>: <span class="value">fadeIn 0.5s ease</span>; }
-          </code></pre>
+<span class="keyword">.page</span> {
+  <span class="property">animation</span>: <span class="value">fadeIn 0.5s ease</span>;
+}</code></pre>
         </section>
 
         <!-- 对比表格 -->
@@ -550,34 +550,38 @@
           </div>
 
           <h3>代码对比</h3>
-          <pre class="code-block"><code>
-            <span class="comment">/* 方式 1：单独使用 transform - 瞬间变化 ❌ */</span>
-            <span class="keyword">.box1</span> { <span class="property">transform</span>: <span class="value">rotate(45deg)</span>;
-            <span class="comment">/* 页面加载时立即旋转 45 度，无动画 */</span>
-            }
+          <pre class="code-block"><code><span class="comment">/* 方式 1：单独使用 transform - 瞬间变化 ❌ */</span>
+<span class="keyword">.box1</span> {
+  <span class="property">transform</span>: <span class="value">rotate(45deg)</span>; <span class="comment">/* 页面加载时立即旋转 45 度，无动画 */</span>
+}
 
-            <span class="keyword">.box1:hover</span> { <span class="property">transform</span>: <span class="value">rotate(90deg)</span>;
-            <span class="comment">/* 悬停时立即旋转到 90 度，无动画 */</span>
-            }
+<span class="keyword">.box1:hover</span> {
+  <span class="property">transform</span>: <span class="value">rotate(90deg)</span>; <span class="comment">/* 悬停时立即旋转到 90 度，无动画 */</span>
+}
 
-            <span class="comment">/* 方式 2：transform + transition - 平滑过渡 ✅ */</span>
-            <span class="keyword">.box2</span> { <span class="property">transform</span>: <span class="value">rotate(0deg)</span>;
-            <span class="property">transition</span>: <span class="value">transform 0.5s ease</span>; <span class="comment">/* 添加过渡效果 */</span>
-            }
+<span class="comment">/* 方式 2：transform + transition - 平滑过渡 ✅ */</span>
+<span class="keyword">.box2</span> {
+  <span class="property">transform</span>: <span class="value">rotate(0deg)</span>;
+  <span class="property">transition</span>: <span class="value">transform 0.5s ease</span>; <span class="comment">/* 添加过渡效果 */</span>
+}
 
-            <span class="keyword">.box2:hover</span> { <span class="property">transform</span>: <span class="value">rotate(45deg)</span>;
-            <span class="comment">/* 悬停时在 0.5 秒内平滑旋转到 45 度 */</span>
-            }
+<span class="keyword">.box2:hover</span> {
+  <span class="property">transform</span>: <span class="value">rotate(45deg)</span>; <span class="comment">/* 悬停时在 0.5 秒内平滑旋转到 45 度 */</span>
+}
 
-            <span class="comment">/* 方式 3：transform + animation - 持续动画 ✅ */</span>
-            <span class="keyword">@keyframes</span> <span class="value">spin</span> { <span class="keyword">from</span> {
-            <span class="property">transform</span>: <span class="value">rotate(0deg)</span>; } <span class="keyword">to</span> {
-            <span class="property">transform</span>: <span class="value">rotate(360deg)</span>; } }
+<span class="comment">/* 方式 3：transform + animation - 持续动画 ✅ */</span>
+<span class="keyword">@keyframes</span> <span class="value">spin</span> {
+  <span class="keyword">from</span> {
+    <span class="property">transform</span>: <span class="value">rotate(0deg)</span>;
+  }
+  <span class="keyword">to</span> {
+    <span class="property">transform</span>: <span class="value">rotate(360deg)</span>;
+  }
+}
 
-            <span class="keyword">.box3</span> { <span class="property">animation</span>: <span class="value">spin 2s linear infinite</span>;
-            <span class="comment">/* 持续旋转，每圈 2 秒 */</span>
-            }
-          </code></pre>
+<span class="keyword">.box3</span> {
+  <span class="property">animation</span>: <span class="value">spin 2s linear infinite</span>; <span class="comment">/* 持续旋转，每圈 2 秒 */</span>
+}</code></pre>
 
           <div class="info-box" style="margin-top: 20px">
             <h3 style="margin-top: 0">📝 总结</h3>
