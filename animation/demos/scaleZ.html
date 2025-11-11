@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>scaleZ() - CSS 动画教程</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      .perspective-container {
+        perspective: 800px;
+        min-height: 350px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+      }
+
+      .cube-3d {
+        width: 150px;
+        height: 150px;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.8s ease;
+      }
+
+      .cube-3d:hover {
+        transform: rotateX(45deg) rotateY(45deg);
+      }
+
+      .cube-face {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        background: rgba(16, 185, 129, 0.8);
+        border: 2px solid #059669;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 1.2rem;
+      }
+
+      .front {
+        transform: translateZ(75px);
+      }
+      .back {
+        transform: rotateY(180deg) translateZ(75px);
+      }
+      .right {
+        transform: rotateY(90deg) translateZ(75px);
+      }
+      .left {
+        transform: rotateY(-90deg) translateZ(75px);
+      }
+      .top {
+        transform: rotateX(90deg) translateZ(75px);
+      }
+      .bottom {
+        transform: rotateX(-90deg) translateZ(75px);
+      }
+
+      .cube-scaled {
+        transform: scaleZ(2) rotateX(45deg) rotateY(45deg);
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>CSS 动画教程</h1>
+        <a href="../index.html" class="back-home">← 返回首页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a href="coordinate.html" class="nav-item">坐标系统</a>
+        </div>
+        <div class="nav-section">
+          <h3>Transform 变换</h3>
+          <a href="translate.html" class="nav-item">translate() 平移</a>
+          <a href="scale.html" class="nav-item">scale() 缩放</a>
+          <a href="scaleX.html" class="nav-item">scaleX() X轴缩放</a>
+          <a href="scaleY.html" class="nav-item">scaleY() Y轴缩放</a>
+          <a href="scaleZ.html" class="nav-item active">scaleZ() Z轴缩放</a>
+        </div>
+        <div class="nav-section">
+          <h3>3D 变换</h3>
+          <a href="perspective.html" class="nav-item">perspective 透视</a>
+          <a href="transform-style.html" class="nav-item">transform-style</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>scaleZ() - Z 轴缩放</h1>
+        <p class="subtitle">控制元素在 3D 空间中的深度缩放</p>
+
+        <section class="section">
+          <h2>什么是 scaleZ()？</h2>
+          <p><code>scaleZ()</code> 函数沿 Z 轴缩放元素。</p>
+          <div class="info-box" style="background: #fef3c7; border-left-color: #f59e0b">
+            <p style="color: #92400e"><strong>⚠️ 重要：</strong>单独使用 scaleZ() 看不到效果，必须配合其他 3D 变换（如 rotateX/Y）才能观察到变化。</p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>语法说明</h2>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">transform:</span> <span class="property">scaleZ</span>(<span class="value">number</span>);</code></pre>
+
+          <ul>
+            <li><span class="highlight">number</span> - 缩放倍数（无单位）</li>
+            <li><strong>scaleZ(1)：</strong>正常深度（默认）</li>
+            <li><strong>scaleZ(2)：</strong>深度拉伸 2 倍</li>
+            <li><strong>scaleZ(0.5)：</strong>深度压缩为一半</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>示例：3D 立方体对比</h2>
+          <p>悬停立方体查看 3D 效果，注意观察深度的区别</p>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px">
+            <div>
+              <h3 style="text-align: center; margin-bottom: 15px; color: #059669">正常立方体 (scaleZ(1))</h3>
+              <div class="demo-area perspective-container">
+                <div class="cube-3d">
+                  <div class="cube-face front">前</div>
+                  <div class="cube-face back">后</div>
+                  <div class="cube-face right">右</div>
+                  <div class="cube-face left">左</div>
+                  <div class="cube-face top">上</div>
+                  <div class="cube-face bottom">下</div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 style="text-align: center; margin-bottom: 15px; color: #059669">拉伸立方体 (scaleZ(2))</h3>
+              <div class="demo-area perspective-container">
+                <div class="cube-3d cube-scaled">
+                  <div class="cube-face front">前</div>
+                  <div class="cube-face back">后</div>
+                  <div class="cube-face right">右</div>
+                  <div class="cube-face left">左</div>
+                  <div class="cube-face top">上</div>
+                  <div class="cube-face bottom">下</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <pre class="code-block"><code><span class="comment">/* scaleZ() 必须配合 3D 旋转才能看到效果 */</span>
+<span class="keyword">.cube</span> {
+    <span class="property">transform-style</span>: <span class="value">preserve-3d</span>;
+    <span class="property">transform</span>: <span class="value">scaleZ(2) rotateX(45deg) rotateY(45deg)</span>;
+}
+
+<span class="comment">/* 立方体的前后面距离会被拉伸 2 倍 */</span>
+<span class="keyword">.front</span>  { <span class="property">transform</span>: <span class="value">translateZ(75px)</span>; }
+<span class="keyword">.back</span>   { <span class="property">transform</span>: <span class="value">rotateY(180deg) translateZ(75px)</span>; }</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>重要说明</h2>
+          <div class="info-box">
+            <ul>
+              <li><strong>单独使用无效：</strong>scaleZ() 必须配合 rotateX/Y 等 3D 变换才能看到效果</li>
+              <li><strong>作用原理：</strong>改变元素在 Z 轴上的深度，影响 translateZ 的实际距离</li>
+              <li><strong>实际应用：</strong>创建 3D 立方体、3D 文字效果等</li>
+            </ul>
+          </div>
+
+          <div class="info-box" style="background: #fef3c7; border-left-color: #f59e0b">
+            <h3 style="color: #d97706">⚠️ 为什么单独使用看不到效果？</h3>
+            <ul style="color: #92400e">
+              <li>scaleZ() 只改变 Z 轴的缩放，不改变 X、Y 轴</li>
+              <li>如果元素没有在 Z 轴上旋转，从正面看深度变化是看不见的</li>
+              <li>就像从正面看一张纸，无论纸多厚都看不出来</li>
+              <li>必须旋转元素（rotateX/Y）才能看到深度的变化</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>实际应用</h2>
+          <pre class="code-block"><code><span class="comment">/* 3D 文字效果 */</span>
+<span class="keyword">.text-3d</span> {
+    <span class="property">transform-style</span>: <span class="value">preserve-3d</span>;
+    <span class="property">transform</span>: <span class="value">scaleZ(3) rotateX(60deg) rotateY(30deg)</span>;
+}
+
+<span class="comment">/* 3D 按钮 */</span>
+<span class="keyword">.button-3d</span> {
+    <span class="property">transform</span>: <span class="value">scaleZ(2) rotateX(10deg)</span>;
+    <span class="property">transition</span>: <span class="value">transform 0.3s</span>;
+}
+
+<span class="keyword">.button-3d:hover</span> {
+    <span class="property">transform</span>: <span class="value">scaleZ(3) rotateX(15deg)</span>;
+}</code></pre>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

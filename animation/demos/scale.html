@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>scale() - CSS 动画教程</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>CSS 动画教程</h1>
+        <a href="../index.html" class="back-home">← 返回首页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a href="coordinate.html" class="nav-item">坐标系统</a>
+        </div>
+        <div class="nav-section">
+          <h3>Transform 变换</h3>
+          <a href="translate.html" class="nav-item">translate() 平移</a>
+          <a href="translateX.html" class="nav-item">translateX() X轴平移</a>
+          <a href="translateY.html" class="nav-item">translateY() Y轴平移</a>
+          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
+          <a href="scale.html" class="nav-item active">scale() 缩放</a>
+          <a href="skew.html" class="nav-item">skew() 倾斜</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>scale() - 缩放变换</h1>
+        <p class="subtitle">改变元素的大小</p>
+
+        <section class="section">
+          <h2>语法说明</h2>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">transform:</span> <span class="property">scale</span>(<span class="value">x, y</span>);</code></pre>
+
+          <ul>
+            <li><span class="highlight">x</span> - X 轴方向的缩放比例</li>
+            <li><span class="highlight">y</span> - Y 轴方向的缩放比例（可选，默认等于 x）</li>
+            <li><strong>1：</strong>保持原始大小</li>
+            <li><strong>&gt; 1：</strong>放大</li>
+            <li><strong>&lt; 1：</strong>缩小</li>
+            <li><strong>负值：</strong>翻转并缩放</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：等比例放大</h2>
+          <p>scale(1.5) 将元素放大到原来的 1.5 倍</p>
+
+          <div class="demo-area">
+            <div class="box" id="demo-box-1">1.5x</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo1()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">scale(1.5)</span>;
+  <span class="comment">/* 等价于 scale(1.5, 1.5) */</span>
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：非等比例缩放</h2>
+          <p>scale(2, 0.5) 水平放大 2 倍，垂直缩小到 0.5 倍</p>
+
+          <div class="demo-area">
+            <div class="box" id="demo-box-2">2x, 0.5x</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo2()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">scale(2, 0.5)</span>;
+  <span class="comment">/* X 轴放大 2 倍，Y 轴缩小到 0.5 倍 */</span>
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 3：缩小效果</h2>
+          <p>scale(0.5) 将元素缩小到原来的一半</p>
+
+          <div class="demo-area">
+            <div class="box" id="demo-box-3">0.5x</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo3()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">scale(0.5)</span>;
+  <span class="comment">/* 缩小到原来的 50% */</span>
+}</code></pre>
+
+          <div class="info-box">
+            <p><strong>常见应用：</strong>按钮点击效果 scale(0.95)，悬停放大效果 scale(1.1)</p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      function playDemo1() {
+        const box = document.getElementById('demo-box-1');
+        box.style.transform = 'none';
+        box.offsetHeight;
+        box.style.transform = 'scale(1.5)';
+        setTimeout(() => {
+          box.style.transform = 'none';
+        }, 1500);
+      }
+
+      function playDemo2() {
+        const box = document.getElementById('demo-box-2');
+        box.style.transform = 'none';
+        box.offsetHeight;
+        box.style.transform = 'scale(2, 0.5)';
+        setTimeout(() => {
+          box.style.transform = 'none';
+        }, 1500);
+      }
+
+      function playDemo3() {
+        const box = document.getElementById('demo-box-3');
+        box.style.transform = 'none';
+        box.offsetHeight;
+        box.style.transform = 'scale(0.5)';
+        setTimeout(() => {
+          box.style.transform = 'none';
+        }, 1500);
+      }
+    </script>
+  </body>
+</html>

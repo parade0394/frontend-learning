@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>前端学习中心 - Frontend Learning Hub</title>
+  <link rel="stylesheet" href="shared/common.css">
+  <style>
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      margin-bottom: 50px;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      font-weight: 800;
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      opacity: 0.95;
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    .module-card {
+      background: white;
+      border-radius: 16px;
+      padding: 35px;
+      text-decoration: none;
+      color: #111827;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      border: 2px solid transparent;
+    }
+
+    .module-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      border-color: var(--primary);
+    }
+
+    .module-icon {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .module-card h2 {
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+      color: #111827;
+    }
+
+    .module-card p {
+      color: #6b7280;
+      line-height: 1.7;
+      margin-bottom: 15px;
+    }
+
+    .module-meta {
+      display: flex;
+      gap: 15px;
+      font-size: 0.9rem;
+      color: #9ca3af;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .module-meta span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .stats {
+      background: #f9fafb;
+      padding: 40px 20px;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .stat-item h3 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .stat-item p {
+      color: #6b7280;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero p {
+        font-size: 1.1rem;
+      }
+
+      .modules-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .module-card {
+        padding: 25px;
+      }
+
+      .module-icon {
+        font-size: 2.5rem;
+      }
+
+      .module-card h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1>🚀 前端学习中心</h1>
+    <p>系统化学习前端核心技术，从基础到进阶</p>
+  </div>
+
+  <div class="modules-grid">
+    <a href="animation/index.html" class="module-card">
+      <span class="module-icon">🎬</span>
+      <h2>CSS 动画教程</h2>
+      <p>完整的 Transform、Transition 和 Animation 教程，包含 32 个核心知识点和 120+ 个交互式演示。</p>
+      <div class="module-meta">
+        <span>📚 32 个知识点</span>
+        <span>🎮 120+ 演示</span>
+        <span>⏱️ 4-6 小时</span>
+      </div>
+    </a>
+
+    <a href="grid/index.html" class="module-card">
+      <span class="module-icon">📐</span>
+      <h2>CSS Grid 布局</h2>
+      <p>从基础到高级的 Grid 布局教程，涵盖网格系统的所有核心概念和实际应用场景。</p>
+      <div class="module-meta">
+        <span>📚 10 个示例</span>
+        <span>🎯 实战导向</span>
+        <span>⏱️ 2-3 小时</span>
+      </div>
+    </a>
+
+    <a href="box-shadow/index.html" class="module-card">
+      <span class="module-icon">💡</span>
+      <h2>Box-Shadow 工具</h2>
+      <p>交互式阴影生成器，通过可视化方式学习和调试 CSS 阴影效果，支持多层阴影和光源控制。</p>
+      <div class="module-meta">
+        <span>🛠️ 交互工具</span>
+        <span>🎨 实时预览</span>
+        <span>⏱️ 随时使用</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="stats">
+    <h2 style="margin-bottom: 30px; color: #111827;">学习统计</h2>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <h3>42+</h3>
+        <p>知识点</p>
+      </div>
+      <div class="stat-item">
+        <h3>120+</h3>
+        <p>交互演示</p>
+      </div>
+      <div class="stat-item">
+        <h3>3</h3>
+        <p>学习模块</p>
+      </div>
+    </div>
+  </div>
+
+  <footer style="text-align: center; padding: 40px 20px; color: #6b7280; border-top: 1px solid #e5e7eb; margin-top: 40px;">
+    <p>💡 选择一个模块开始学习之旅</p>
+    <p style="margin-top: 10px; font-size: 0.9rem;">持续更新中 · 更多模块即将推出</p>
+  </footer>
+</body>
+</html>

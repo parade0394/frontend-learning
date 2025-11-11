@@ -1,0 +1,245 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>perspective - CSS 动画教程</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>CSS 动画教程</h1>
+        <a href="../index.html" class="back-home">← 返回首页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a href="coordinate.html" class="nav-item">坐标系统</a>
+        </div>
+        <div class="nav-section">
+          <h3>Transform 变换</h3>
+          <a href="translate.html" class="nav-item">translate() 平移</a>
+          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
+          <a href="scale.html" class="nav-item">scale() 缩放</a>
+        </div>
+        <div class="nav-section">
+          <h3>3D 变换</h3>
+          <a href="perspective.html" class="nav-item active">perspective 透视</a>
+          <a href="rotate3d.html" class="nav-item">rotate3d() 3D旋转</a>
+          <a href="translate3d.html" class="nav-item">translate3d() 3D平移</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>perspective - 透视</h1>
+        <p class="subtitle">为 3D 变换添加景深效果</p>
+
+        <section class="section">
+          <h2>什么是透视？</h2>
+          <p>透视（perspective）定义了观察者与 3D 元素之间的距离。它让元素产生近大远小的视觉效果，是实现真实 3D 效果的关键。</p>
+
+          <ul>
+            <li><strong>值越小：</strong>透视效果越强烈（观察者离得越近）</li>
+            <li><strong>值越大：</strong>透视效果越平缓（观察者离得越远）</li>
+            <li><strong>常用值：</strong>500px - 1500px</li>
+            <li><strong>应用位置：</strong>设置在父元素上</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：无透视 vs 有透视</h2>
+          <p>对比没有透视和有透视的 rotateY 效果</p>
+
+          <button class="play-button" onclick="playDemo1()" style="margin-bottom: 15px">播放对比</button>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px">
+            <div>
+              <p><strong>无透视</strong></p>
+              <div class="demo-area">
+                <div class="box" id="box-no-perspective">无透视</div>
+              </div>
+            </div>
+            <div>
+              <p><strong>有透视 (800px)</strong></p>
+              <div class="demo-area perspective">
+                <div class="box" id="box-with-perspective">有透视</div>
+              </div>
+            </div>
+          </div>
+
+          <pre class="code-block"><code><span class="comment">/* 无透视 - 看起来像 2D 缩放 */</span>
+<span class="keyword">.no-perspective .box</span> {
+  <span class="property">transform</span>: <span class="value">rotateY(60deg)</span>;
+}
+
+<span class="comment">/* 有透视 - 真正的 3D 效果 */</span>
+<span class="keyword">.with-perspective</span> {
+  <span class="property">perspective</span>: <span class="value">800px</span>;
+}
+
+<span class="keyword">.with-perspective .box</span> {
+  <span class="property">transform</span>: <span class="value">rotateY(60deg)</span>;
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：不同透视距离</h2>
+          <p>观察不同 perspective 值的效果差异</p>
+
+          <button class="play-button" onclick="playDemo2()" style="margin-bottom: 15px">播放对比</button>
+
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px">
+            <div>
+              <p><strong>300px（近）</strong></p>
+              <div class="demo-area" style="perspective: 300px">
+                <div class="box" id="box-p300" style="width: 80px; height: 80px; font-size: 14px">300px</div>
+              </div>
+            </div>
+            <div>
+              <p><strong>800px（中）</strong></p>
+              <div class="demo-area" style="perspective: 800px">
+                <div class="box" id="box-p800" style="width: 80px; height: 80px; font-size: 14px">800px</div>
+              </div>
+            </div>
+            <div>
+              <p><strong>1500px（远）</strong></p>
+              <div class="demo-area" style="perspective: 1500px">
+                <div class="box" id="box-p1500" style="width: 80px; height: 80px; font-size: 14px">1500px</div>
+              </div>
+            </div>
+          </div>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">.near</span> { <span class="property">perspective</span>: <span class="value">300px</span>; }
+<span class="keyword">.medium</span> { <span class="property">perspective</span>: <span class="value">800px</span>; }
+<span class="keyword">.far</span> { <span class="property">perspective</span>: <span class="value">1500px</span>; }</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 3：3D 卡片翻转</h2>
+          <p>透视的经典应用 - 卡片翻转效果</p>
+
+          <div class="demo-area perspective">
+            <div
+              id="card-container"
+              style="width: 200px; height: 150px; position: relative; transform-style: preserve-3d; transition: transform 0.8s; cursor: pointer"
+              onclick="flipCard()"
+            >
+              <div
+                style="
+                  position: absolute;
+                  width: 100%;
+                  height: 100%;
+                  backface-visibility: hidden;
+                  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-weight: bold;
+                  border-radius: 8px;
+                "
+              >
+                正面
+              </div>
+              <div
+                style="
+                  position: absolute;
+                  width: 100%;
+                  height: 100%;
+                  backface-visibility: hidden;
+                  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-weight: bold;
+                  border-radius: 8px;
+                  transform: rotateY(180deg);
+                "
+              >
+                背面
+              </div>
+            </div>
+          </div>
+
+          <p style="text-align: center; color: #666; margin-top: 10px">点击卡片翻转</p>
+
+          <pre class="code-block"><code><span class="keyword">.container</span> {
+  <span class="property">perspective</span>: <span class="value">800px</span>;
+}
+
+<span class="keyword">.card</span> {
+  <span class="property">transform-style</span>: <span class="value">preserve-3d</span>;
+  <span class="property">transition</span>: <span class="value">transform 0.8s</span>;
+}
+
+<span class="keyword">.card.flipped</span> {
+  <span class="property">transform</span>: <span class="value">rotateY(180deg)</span>;
+}</code></pre>
+
+          <div class="info-box">
+            <p><strong>应用场景：</strong>3D 卡片、产品展示、翻页效果、立体菜单</p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      function playDemo1() {
+        const box1 = document.getElementById('box-no-perspective');
+        const box2 = document.getElementById('box-with-perspective');
+
+        box1.style.transform = 'none';
+        box2.style.transform = 'none';
+        box1.style.transition = 'transform 1s';
+        box2.style.transition = 'transform 1s';
+
+        setTimeout(() => {
+          box1.style.transform = 'rotateY(60deg)';
+          box2.style.transform = 'rotateY(60deg)';
+        }, 50);
+
+        setTimeout(() => {
+          box1.style.transform = 'none';
+          box2.style.transform = 'none';
+        }, 1500);
+      }
+
+      function playDemo2() {
+        const boxes = ['box-p300', 'box-p800', 'box-p1500'];
+
+        boxes.forEach((id) => {
+          const box = document.getElementById(id);
+          box.style.transform = 'none';
+          box.style.transition = 'transform 1s';
+        });
+
+        setTimeout(() => {
+          boxes.forEach((id) => {
+            const box = document.getElementById(id);
+            box.style.transform = 'rotateY(60deg)';
+          });
+        }, 50);
+
+        setTimeout(() => {
+          boxes.forEach((id) => {
+            const box = document.getElementById(id);
+            box.style.transform = 'none';
+          });
+        }, 1500);
+      }
+
+      let isFlipped = false;
+      function flipCard() {
+        const card = document.getElementById('card-container');
+        isFlipped = !isFlipped;
+        card.style.transform = isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiro - 现代化的 AI 开发工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            color: #111827;
+            overflow-x: hidden;
+        }
+
+        /* 导航栏 - translateY + backdrop-filter */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            z-index: 1000;
+            transform: translateY(-100%);
+            animation: slideDown 0.6s ease-out forwards;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes slideDown {
+            to { transform: translateY(0); }
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #10b981;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #374151;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #10b981;
+            transform: translateY(-2px);
+        }
+
+        /* Hero 区域 - 多种动画组合 */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+            display: flex;
+            align-items: center;
+            padding: 100px 20px 60px;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            color: #6b7280;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.4s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.6s forwards;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #059669;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #10b981;
+            border: 2px solid #10b981;
+        }
+
+        .btn-secondary:hover {
+            background: #ecfdf5;
+            transform: translateY(-3px);
+        }
+
+        /* Hero 图片 - 3D 旋转 + 悬浮 */
+        .hero-visual {
+            perspective: 1000px;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 0.8s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .floating-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .code-preview {
+            background: #1f2937;
+            color: #10b981;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* 特性卡片 - scale + translateY */
+        .features {
+            padding: 100px 20px;
+            background: white;
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 60px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: #f9fafb;
+            padding: 40px 30px;
+            border-radius: 16px;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-color: #10b981;
+            background: white;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        /* 产品展示 - rotateY 翻转 */
+        .product-showcase {
+            padding: 100px 20px;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+        }
+
+        .showcase-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .showcase-item {
+            perspective: 1000px;
+            height: 400px;
+        }
+
+        .showcase-card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .showcase-item:hover .showcase-card {
+            transform: rotateY(180deg);
+        }
+
+        .showcase-front,
+        .showcase-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .showcase-front {
+            background: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .showcase-back {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        /* 统计数据 - 数字滚动 */
+        .stats {
+            padding: 80px 20px;
+            background: #111827;
+            color: white;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-item {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .stat-item:nth-child(1) { animation-delay: 0.1s; }
+        .stat-item:nth-child(2) { animation-delay: 0.2s; }
+        .stat-item:nth-child(3) { animation-delay: 0.3s; }
+        .stat-item:nth-child(4) { animation-delay: 0.4s; }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #10b981;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: #9ca3af;
+        }
+
+        /* CTA 区域 - 脉冲动画 */
+        .cta {
+            padding: 100px 20px;
+            background: white;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .cta p {
+            font-size: 1.2rem;
+            color: #6b7280;
+            margin-bottom: 40px;
+        }
+
+        .cta-button {
+            position: relative;
+            padding: 16px 40px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: #10b981;
+            border-radius: 12px;
+            transform: translate(-50%, -50%);
+            animation: pulse 2s ease-out infinite;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.5;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.3);
+                opacity: 0;
+            }
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Footer */
+        .footer {
+            background: #111827;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .footer a {
+            color: #10b981;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+            }
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            .features-grid,
+            .showcase-grid,
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">Kiro</a>
+            <ul class="nav-links">
+                <li><a href="#features">特性</a></li>
+                <li><a href="#showcase">产品</a></li>
+                <li><a href="#stats">数据</a></li>
+                <li><a href="index.html">教程</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>AI 驱动的<br>现代开发工具</h1>
+                <p>让编程更简单、更高效、更有趣。Kiro 为开发者提供智能代码补全、实时协作和强大的调试工具。</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary">免费试用</a>
+                    <a href="#" class="btn btn-secondary">查看演示</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-card">
+                    <div class="code-preview">
+&lt;div class="hero"&gt;<br>
+  &lt;h1&gt;Hello World&lt;/h1&gt;<br>
+  &lt;p&gt;Welcome to Kiro&lt;/p&gt;<br>
+&lt;/div&gt;
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 特性卡片 -->
+    <section class="features" id="features">
+        <div class="features-container">
+            <h2 class="section-title">为什么选择 Kiro？</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>极速性能</h3>
+                    <p>基于 Rust 构建，启动速度快 10 倍，内存占用降低 50%</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI 助手</h3>
+                    <p>智能代码补全，自动生成文档，让编程效率提升 3 倍</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>精美界面</h3>
+                    <p>现代化设计，支持自定义主题，让编码成为一种享受</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>安全可靠</h3>
+                    <p>端到端加密，本地优先，保护你的代码和隐私</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>实时协作</h3>
+                    <p>多人同时编辑，实时同步，团队协作更高效</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>插件生态</h3>
+                    <p>丰富的插件市场，一键安装，扩展无限可能</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 产品展示 -->
+    <section class="product-showcase" id="showcase">
+        <div class="showcase-container">
+            <h2 class="section-title">核心功能展示</h2>
+            <div class="showcase-grid">
+                <div class="showcase-item">
+                    <div class="showcase-card">
+                        <div class="showcase-front">
+                            <div>
+                                <h3 style="font-size: 2rem; margin-bottom: 15px;">智能补全</h3>
+                                <p style="color: #6b7280;">悬停查看详情</p>
+                            </div>
+                        </div>
+                        <div class="showcase-back">
+                            <div>
+                                <h3 style="font-size: 1.8rem; margin-bottom: 15px;">AI 驱动</h3>
+                                <p style="font-size: 1.1rem; line-height: 1.6;">基于上下文的智能代码建议，支持 50+ 编程语言，准确率高达 95%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="showcase-item">
+                    <div class="showcase-card">
+                        <div class="showcase-front">
+                            <div>
+                                <h3 style="font-size: 2rem; margin-bottom: 15px;">调试工具</h3>
+                                <p style="color: #6b7280;">悬停查看详情</p>
+                            </div>
+                        </div>
+                        <div class="showcase-back">
+                            <div>
+                                <h3 style="font-size: 1.8rem; margin-bottom: 15px;">强大调试</h3>
+                                <p style="font-size: 1.1rem; line-height: 1.6;">可视化断点，实时变量监控，时间旅行调试</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="showcase-item">
+                    <div class="showcase-card">
+                        <div class="showcase-front">
+                            <div>
+                                <h3 style="font-size: 2rem; margin-bottom: 15px;">Git 集成</h3>
+                                <p style="color: #6b7280;">悬停查看详情</p>
+                            </div>
+                        </div>
+                        <div class="showcase-back">
+                            <div>
+                                <h3 style="font-size: 1.8rem; margin-bottom: 15px;">版本控制</h3>
+                                <p style="font-size: 1.1rem; line-height: 1.6;">可视化 Git 操作，冲突解决助手，分支管理更简单</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="showcase-item">
+                    <div class="showcase-card">
+                        <div class="showcase-front">
+                            <div>
+                                <h3 style="font-size: 2rem; margin-bottom: 15px;">终端集成</h3>
+                                <p style="color: #6b7280;">悬停查看详情</p>
+                            </div>
+                        </div>
+                        <div class="showcase-back">
+                            <div>
+                                <h3 style="font-size: 1.8rem; margin-bottom: 15px;">内置终端</h3>
+                                <p style="font-size: 1.1rem; line-height: 1.6;">多标签终端，命令历史，快捷键支持</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 统计数据 -->
+    <section class="stats" id="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number">1M+</div>
+                <div class="stat-label">活跃用户</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">支持语言</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">10K+</div>
+                <div class="stat-label">插件数量</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">99.9%</div>
+                <div class="stat-label">正常运行时间</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <h2>准备好开始了吗？</h2>
+        <p>加入百万开发者，体验下一代开发工具</p>
+        <button class="cta-button">立即免费试用</button>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>这是一个演示页面，展示 CSS 动画效果 | <a href="index.html">返回教程</a></p>
+    </footer>
+</body>
+</html>

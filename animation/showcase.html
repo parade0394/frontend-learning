@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiro - 现代化的开发工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f9fafb;
+            color: #111827;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .showcase-section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #111827;
+        }
+
+        .section-desc {
+            font-size: 1.1rem;
+            color: #6b7280;
+            margin-bottom: 40px;
+        }
+
+        /* 1. 居中对话框 - translate */
+        .modal-demo {
+            position: relative;
+            height: 400px;
+            background: #e5e7eb;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+        }
+
+        .modal-box {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            transform: translate(-50%, -50%) scale(0.7);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .modal-trigger {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 12px 30px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-trigger:hover {
+            background: #059669;
+            transform: translate(-50%, -50%) translateY(-2px);
+        }
+
+        /* 2. 卡片悬停效果 - scale + translateY */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .hover-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .hover-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-color: #10b981;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: #ecfdf5;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .hover-card:hover .card-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* 3. 3D 翻转卡片 - rotateY */
+        .flip-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .flip-card {
+            height: 250px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .flip-card-front {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .flip-card-back {
+            background: white;
+            border: 2px solid #10b981;
+            transform: rotateY(180deg);
+        }
+
+        /* 4. 加载动画 - rotate */
+        .loader-demo {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e5e7eb;
+            border-top-color: #10b981;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .pulse-dot {
+            width: 50px;
+            height: 50px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.5; }
+        }
+
+        /* 5. 按钮效果 - multiple transforms */
+        .buttons-demo {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        .demo-button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-lift {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-lift:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-lift:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-scale {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-scale:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-scale:active {
+            transform: scale(0.95);
+        }
+
+        .btn-skew {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .btn-skew:hover {
+            transform: skewX(-5deg);
+        }
+
+        /* 6. 图片画廊 - scale */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .gallery-item {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        .gallery-item-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        /* 代码展示 */
+        .code-showcase {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        .code-showcase .keyword { color: #f472b6; }
+        .code-showcase .property { color: #34d399; }
+        .code-showcase .value { color: #fbbf24; }
+        .code-showcase .comment { color: #9ca3af; }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .section-title { font-size: 1.5rem; }
+            .cards-grid, .flip-cards, .gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎨 CSS 动画效果展示</h1>
+        <p>实际应用场景演示 - 让学习更有趣</p>
+        <a href="index.html" class="back-link">← 返回教程首页</a>
+    </div>
+
+    <div class="container">
+        <!-- 1. 居中对话框 -->
+        <div class="showcase-section">
+            <h2 class="section-title">1. 居中对话框 - translate()</h2>
+            <p class="section-desc">使用 translate(-50%, -50%) 实现完美居中</p>
+            
+            <div class="modal-demo">
+                <button class="modal-trigger" onclick="toggleModal()">打开对话框</button>
+                <div class="modal-overlay" id="modalOverlay" onclick="toggleModal()">
+                    <div class="modal-box" onclick="event.stopPropagation()">
+                        <h3 style="margin-bottom: 10px;">欢迎！</h3>
+                        <p style="color: #6b7280; margin-bottom: 20px;">这是一个完美居中的对话框</p>
+                        <button onclick="toggleModal()" style="padding: 8px 20px; background: #10b981; color: white; border: none; border-radius: 6px; cursor: pointer;">关闭</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-showcase"><span class="keyword">.modal-box</span> {
+  <span class="property">position</span>: <span class="value">absolute</span>;
+  <span class="property">top</span>: <span class="value">50%</span>;
+  <span class="property">left</span>: <span class="value">50%</span>;
+  <span class="property">transform</span>: <span class="value">translate(-50%, -50%)</span>;
+  <span class="comment">/* 完美居中，无需计算宽高 */</span>
+}</div>
+        </div>
+
+        <!-- 2. 卡片悬停效果 -->
+        <div class="showcase-section">
+            <h2 class="section-title">2. 卡片悬停效果 - scale() + translateY()</h2>
+            <p class="section-desc">鼠标悬停时卡片上浮并放大，常见于产品展示</p>
+            
+            <div class="cards-grid">
+                <div class="hover-card">
+                    <div class="card-icon">🚀</div>
+                    <h3 style="margin-bottom: 8px;">快速</h3>
+                    <p style="color: #6b7280; font-size: 0.9rem;">性能优化，极速加载</p>
+                </div>
+                <div class="hover-card">
+                    <div class="card-icon">🎨</div>
+                    <h3 style="margin-bottom: 8px;">美观</h3>
+                    <p style="color: #6b7280; font-size: 0.9rem;">现代设计，赏心悦目</p>
+                </div>
+                <div class="hover-card">
+                    <div class="card-icon">⚡</div>
+                    <h3 style="margin-bottom: 8px;">强大</h3>
+                    <p style="color: #6b7280; font-size: 0.9rem;">功能丰富，应有尽有</p>
+                </div>
+            </div>
+
+            <div class="code-showcase"><span class="keyword">.card:hover</span> {
+  <span class="property">transform</span>: <span class="value">translateY(-8px)</span>;
+  <span class="property">box-shadow</span>: <span class="value">0 10px 15px rgba(0,0,0,0.1)</span>;
+}
+
+<span class="keyword">.card:hover .icon</span> {
+  <span class="property">transform</span>: <span class="value">scale(1.1) rotate(5deg)</span>;
+}</div>
+        </div>
+
+        <!-- 3. 3D 翻转卡片 -->
+        <div class="showcase-section">
+            <h2 class="section-title">3. 3D 翻转卡片 - rotateY()</h2>
+            <p class="section-desc">鼠标悬停翻转卡片，展示更多信息</p>
+            
+            <div class="flip-cards">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <h3>前端开发</h3>
+                            <p style="margin-top: 10px; opacity: 0.9;">悬停查看详情</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <h4 style="margin-bottom: 10px;">技能</h4>
+                            <p style="color: #6b7280; font-size: 0.9rem;">HTML, CSS, JavaScript, React, Vue</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <h3>UI 设计</h3>
+                            <p style="margin-top: 10px; opacity: 0.9;">悬停查看详情</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <h4 style="margin-bottom: 10px;">工具</h4>
+                            <p style="color: #6b7280; font-size: 0.9rem;">Figma, Sketch, Adobe XD</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <h3>后端开发</h3>
+                            <p style="margin-top: 10px; opacity: 0.9;">悬停查看详情</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <h4 style="margin-bottom: 10px;">技术栈</h4>
+                            <p style="color: #6b7280; font-size: 0.9rem;">Node.js, Python, Go, Docker</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-showcase"><span class="keyword">.flip-card</span> {
+  <span class="property">perspective</span>: <span class="value">1000px</span>;
+}
+
+<span class="keyword">.flip-card:hover .inner</span> {
+  <span class="property">transform</span>: <span class="value">rotateY(180deg)</span>;
+}
+
+<span class="keyword">.back</span> {
+  <span class="property">transform</span>: <span class="value">rotateY(180deg)</span>;
+  <span class="property">backface-visibility</span>: <span class="value">hidden</span>;
+}</div>
+        </div>
+
+        <!-- 4. 加载动画 -->
+        <div class="showcase-section">
+            <h2 class="section-title">4. 加载动画 - rotate() + scale()</h2>
+            <p class="section-desc">常见的加载指示器效果</p>
+            
+            <div class="loader-demo">
+                <div>
+                    <div class="spinner"></div>
+                    <p style="text-align: center; margin-top: 10px; color: #6b7280; font-size: 0.9rem;">旋转加载</p>
+                </div>
+                <div>
+                    <div class="pulse-dot"></div>
+                    <p style="text-align: center; margin-top: 10px; color: #6b7280; font-size: 0.9rem;">脉冲动画</p>
+                </div>
+            </div>
+
+            <div class="code-showcase"><span class="keyword">@keyframes</span> <span class="value">spin</span> {
+  <span class="keyword">to</span> { <span class="property">transform</span>: <span class="value">rotate(360deg)</span>; }
+}
+
+<span class="keyword">@keyframes</span> <span class="value">pulse</span> {
+  <span class="keyword">0%, 100%</span> { <span class="property">transform</span>: <span class="value">scale(1)</span>; }
+  <span class="keyword">50%</span> { <span class="property">transform</span>: <span class="value">scale(1.3)</span>; }
+}</div>
+        </div>
+
+        <!-- 5. 按钮效果 -->
+        <div class="showcase-section">
+            <h2 class="section-title">5. 交互按钮 - 多种变换组合</h2>
+            <p class="section-desc">不同的按钮交互效果</p>
+            
+            <div class="buttons-demo">
+                <button class="demo-button btn-lift">上浮按钮</button>
+                <button class="demo-button btn-scale">缩放按钮</button>
+                <button class="demo-button btn-skew">倾斜按钮</button>
+            </div>
+
+            <div class="code-showcase"><span class="keyword">.btn-lift:hover</span> {
+  <span class="property">transform</span>: <span class="value">translateY(-3px)</span>;
+  <span class="property">box-shadow</span>: <span class="value">0 4px 12px rgba(16,185,129,0.4)</span>;
+}
+
+<span class="keyword">.btn-scale:hover</span> {
+  <span class="property">transform</span>: <span class="value">scale(1.05)</span>;
+}
+
+<span class="keyword">.btn-skew:hover</span> {
+  <span class="property">transform</span>: <span class="value">skewX(-5deg)</span>;
+}</div>
+        </div>
+
+        <!-- 6. 图片画廊 -->
+        <div class="showcase-section">
+            <h2 class="section-title">6. 图片画廊 - scale()</h2>
+            <p class="section-desc">悬停放大效果，常用于图片展示</p>
+            
+            <div class="gallery">
+                <div class="gallery-item"><div class="gallery-item-content">1</div></div>
+                <div class="gallery-item"><div class="gallery-item-content">2</div></div>
+                <div class="gallery-item"><div class="gallery-item-content">3</div></div>
+                <div class="gallery-item"><div class="gallery-item-content">4</div></div>
+                <div class="gallery-item"><div class="gallery-item-content">5</div></div>
+                <div class="gallery-item"><div class="gallery-item-content">6</div></div>
+            </div>
+
+            <div class="code-showcase"><span class="keyword">.gallery-item:hover</span> {
+  <span class="property">transform</span>: <span class="value">scale(1.05)</span>;
+  <span class="property">z-index</span>: <span class="value">10</span>;
+  <span class="comment">/* 放大并提升层级，避免被遮挡 */</span>
+}</div>
+        </div>
+    </div>
+
+    <script>
+        function toggleModal() {
+            const overlay = document.getElementById('modalOverlay');
+            overlay.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

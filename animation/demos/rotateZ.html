@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>rotateZ() - CSS 动画教程</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>CSS 动画教程</h1>
+        <a href="../index.html" class="back-home">← 返回首页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a href="coordinate.html" class="nav-item">坐标系统</a>
+        </div>
+        <div class="nav-section">
+          <h3>Transform 变换</h3>
+          <a href="translate.html" class="nav-item">translate() 平移</a>
+          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
+          <a href="rotateX.html" class="nav-item">rotateX() X轴旋转</a>
+          <a href="rotateY.html" class="nav-item">rotateY() Y轴旋转</a>
+          <a href="rotateZ.html" class="nav-item active">rotateZ() Z轴旋转</a>
+          <a href="scale.html" class="nav-item">scale() 缩放</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>rotateZ() - Z 轴旋转</h1>
+        <p class="subtitle">等同于 rotate()，绕 Z 轴旋转</p>
+
+        <section class="section">
+          <h2>什么是 rotateZ()？</h2>
+          <p><code>rotateZ()</code> 函数绕 Z 轴（垂直于屏幕）旋转元素。效果与 <code>rotate()</code> 完全相同，都是平面旋转。</p>
+        </section>
+
+        <section class="section">
+          <h2>语法说明</h2>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">transform:</span> <span class="property">rotateZ</span>(<span class="value">angle</span>);</code></pre>
+
+          <ul>
+            <li><span class="highlight">angle</span> - 旋转角度</li>
+            <li><strong>deg（度）：</strong>最常用，360deg = 一圈</li>
+            <li><strong>rad（弧度）：</strong>2π rad = 一圈</li>
+            <li><strong>turn（圈数）：</strong>1turn = 一圈</li>
+            <li><strong>正值：</strong>顺时针旋转</li>
+            <li><strong>负值：</strong>逆时针旋转</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：基础旋转</h2>
+          <p>悬停方块查看旋转效果</p>
+
+          <div class="demo-area">
+            <div class="box" id="box1">悬停旋转 45°</div>
+            <div class="box" id="box2" style="transform: rotateZ(90deg)">固定 90°</div>
+            <div class="box" id="box3" style="transform: rotateZ(180deg)">固定 180°</div>
+          </div>
+
+          <pre class="code-block"><code><span class="comment">/* 基础旋转 */</span>
+<span class="keyword">.box</span> {
+    <span class="property">transform</span>: <span class="value">rotateZ(45deg)</span>;
+}
+
+<span class="comment">/* 悬停旋转 */</span>
+<span class="keyword">.box:hover</span> {
+    <span class="property">transform</span>: <span class="value">rotateZ(45deg)</span>;
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：rotateZ() vs rotate()</h2>
+          <p>两者效果完全相同</p>
+
+          <div class="demo-area">
+            <div class="box" style="transform: rotate(45deg)">rotate(45deg)</div>
+            <div class="box" style="transform: rotateZ(45deg)">rotateZ(45deg)</div>
+          </div>
+
+          <pre class="code-block"><code><span class="comment">/* 这两种写法效果完全相同 */</span>
+<span class="keyword">.box1</span> { <span class="property">transform</span>: <span class="value">rotate(45deg)</span>; }
+<span class="keyword">.box2</span> { <span class="property">transform</span>: <span class="value">rotateZ(45deg)</span>; }
+
+<span class="comment">/* rotate() 是 rotateZ() 的简写 */</span></code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 3：持续旋转动画</h2>
+          <p>使用 @keyframes 创建旋转动画</p>
+
+          <div class="demo-area">
+            <div class="box" id="box4">持续旋转</div>
+          </div>
+
+          <button class="play-button" onclick="playAnimation()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">@keyframes</span> <span class="value">spinZ</span> {
+    <span class="keyword">from</span> { <span class="property">transform</span>: <span class="value">rotateZ(0deg)</span>; }
+    <span class="keyword">to</span>   { <span class="property">transform</span>: <span class="value">rotateZ(360deg)</span>; }
+}
+
+<span class="keyword">.spinning</span> {
+    <span class="property">animation</span>: <span class="value">spinZ 2s linear infinite</span>;
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>重要说明</h2>
+          <div class="info-box">
+            <ul>
+              <li><strong>与 rotate() 的关系：</strong>rotateZ() 和 rotate() 效果完全相同</li>
+              <li>
+                <strong>何时使用 rotateZ()：</strong>
+                <ul style="margin-top: 5px">
+                  <li>与 rotateX()、rotateY() 一起使用时，保持命名一致性</li>
+                  <li>在 3D 变换中明确指定 Z 轴旋转</li>
+                  <li>其他情况下，使用 rotate() 更简洁</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>实际应用</h2>
+          <pre class="code-block"><code><span class="comment">/* 加载动画 */</span>
+<span class="keyword">.spinner</span> {
+    <span class="property">animation</span>: <span class="value">spinZ 1s linear infinite</span>;
+}
+
+<span class="comment">/* 3D 组合变换 - 保持命名一致性 */</span>
+<span class="keyword">.cube</span> {
+    <span class="property">transform</span>: <span class="value">rotateX(30deg) rotateY(45deg) rotateZ(15deg)</span>;
+}
+
+<span class="comment">/* 卡片翻转 */</span>
+<span class="keyword">.card:hover</span> {
+    <span class="property">transform</span>: <span class="value">rotateZ(5deg) scale(1.05)</span>;
+}</code></pre>
+        </section>
+      </div>
+    </main>
+
+    <style>
+      #box1:hover {
+        transform: rotateZ(45deg);
+      }
+
+      @keyframes spinZ {
+        from {
+          transform: rotateZ(0deg);
+        }
+        to {
+          transform: rotateZ(360deg);
+        }
+      }
+
+      #box4.spinning {
+        animation: spinZ 2s linear infinite;
+      }
+    </style>
+
+    <script>
+      function playAnimation() {
+        const box = document.getElementById('box4');
+        box.classList.add('spinning');
+        setTimeout(() => {
+          box.classList.remove('spinning');
+        }, 4000);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>translateX() - CSS 动画教程</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>CSS 动画教程</h1>
+        <a href="../index.html" class="back-home">← 返回首页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a href="coordinate.html" class="nav-item">坐标系统</a>
+        </div>
+        <div class="nav-section">
+          <h3>Transform 变换</h3>
+          <a href="translate.html" class="nav-item">translate() 平移</a>
+          <a href="translateX.html" class="nav-item active">translateX() X轴平移</a>
+          <a href="translateY.html" class="nav-item">translateY() Y轴平移</a>
+          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
+          <a href="scale.html" class="nav-item">scale() 缩放</a>
+          <a href="skew.html" class="nav-item">skew() 倾斜</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>translateX() - X轴平移</h1>
+        <p class="subtitle">只在水平方向（X轴）上移动元素</p>
+
+        <section class="section">
+          <h2>语法说明</h2>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">transform:</span> <span class="property">translateX</span>(<span class="value">x</span>);</code></pre>
+
+          <ul>
+            <li><span class="highlight">x</span> - X 轴方向的偏移量</li>
+            <li><strong>正值：</strong>向右移动</li>
+            <li><strong>负值：</strong>向左移动</li>
+            <li>等价于 <span class="highlight">translate(x, 0)</span></li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：向右移动</h2>
+          <p>translateX(150px) 将元素向右移动 150 像素</p>
+
+          <div class="demo-area with-axis">
+            <span class="axis-label axis-x">X →</span>
+            <span class="axis-label axis-y">Y ↓</span>
+            <div class="box" id="demo-box-1">向右</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo1()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">translateX(150px)</span>;
+  <span class="comment">/* 向右移动 150px */</span>
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：向左移动</h2>
+          <p>使用负值向左移动</p>
+
+          <div class="demo-area with-axis">
+            <span class="axis-label axis-x">X →</span>
+            <span class="axis-label axis-y">Y ↓</span>
+            <div class="box" id="demo-box-2">向左</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo2()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">translateX(-150px)</span>;
+  <span class="comment">/* 向左移动 150px */</span>
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>常见应用场景</h2>
+          <ul>
+            <li>侧边栏滑入滑出效果</li>
+            <li>轮播图切换动画</li>
+            <li>水平滚动效果</li>
+            <li>
+              元素水平居中：<span class="highlight">translateX(-50%)</span> 配合
+              <span class="highlight">left: 50%</span>
+            </li>
+          </ul>
+
+          <div class="info-box">
+            <p><strong>性能提示：</strong>使用 transform 比修改 left/right 属性性能更好，因为它不会触发页面重排（reflow）</p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      function playDemo1() {
+        const box = document.getElementById('demo-box-1');
+        box.style.transform = 'none';
+        box.offsetHeight;
+        box.style.transform = 'translateX(150px)';
+        setTimeout(() => {
+          box.style.transform = 'none';
+        }, 1500);
+      }
+
+      function playDemo2() {
+        const box = document.getElementById('demo-box-2');
+        box.style.transform = 'none';
+        box.offsetHeight;
+        box.style.transform = 'translateX(-150px)';
+        setTimeout(() => {
+          box.style.transform = 'none';
+        }, 1500);
+      }
+    </script>
+  </body>
+</html>

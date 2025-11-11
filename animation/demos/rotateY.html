@@ -1,0 +1,148 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>rotateY() - CSS 动画教程</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>CSS 动画教程</h1>
+        <a href="../index.html" class="back-home">← 返回首页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a href="coordinate.html" class="nav-item">坐标系统</a>
+        </div>
+        <div class="nav-section">
+          <h3>Transform 变换</h3>
+          <a href="translate.html" class="nav-item">translate() 平移</a>
+          <a href="translateX.html" class="nav-item">translateX() X轴平移</a>
+          <a href="translateY.html" class="nav-item">translateY() Y轴平移</a>
+          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
+          <a href="rotateX.html" class="nav-item">rotateX() X轴旋转</a>
+          <a href="rotateY.html" class="nav-item active">rotateY() Y轴旋转</a>
+          <a href="scale.html" class="nav-item">scale() 缩放</a>
+          <a href="skew.html" class="nav-item">skew() 倾斜</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>rotateY() - Y轴旋转（3D）</h1>
+        <p class="subtitle">围绕 Y 轴旋转元素，产生左右翻转的 3D 效果</p>
+
+        <section class="section">
+          <h2>语法说明</h2>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">transform:</span> <span class="property">rotateY</span>(<span class="value">angle</span>);</code></pre>
+
+          <ul>
+            <li><span class="highlight">angle</span> - 旋转角度</li>
+            <li><strong>正值：</strong>右侧向后旋转（远离你）</li>
+            <li><strong>负值：</strong>右侧向前旋转（靠近你）</li>
+            <li>
+              需要配合 <span class="highlight">perspective</span> 属性才能看到
+              3D 效果
+            </li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：向右翻转 60 度</h2>
+          <p>rotateY(60deg) 让元素右侧向后倾斜</p>
+
+          <div class="demo-area perspective">
+            <div class="box" id="demo-box-1">60°</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo1()">播放动画</button>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">.container</span> {
+  <span class="property">perspective</span>: <span class="value">800px</span>;
+}
+
+<span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">rotateY(60deg)</span>;
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：完整翻转</h2>
+          <p>rotateY(180deg) 完全翻转元素，像翻书一样</p>
+
+          <div class="demo-area perspective">
+            <div class="box" id="demo-box-2">180°</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo2()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">rotateY(180deg)</span>;
+  <span class="comment">/* 左右翻转 180 度 */</span>
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 3：连续旋转</h2>
+          <p>rotateY(360deg) 完整旋转一圈</p>
+
+          <div class="demo-area perspective">
+            <div class="box" id="demo-box-3">360°</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo3()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">rotateY(360deg)</span>;
+  <span class="property">transition</span>: <span class="value">transform 2s</span>;
+}</code></pre>
+
+          <div class="info-box">
+            <p><strong>应用场景：</strong>产品展示旋转、卡片翻转、3D 轮播图</p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      function playDemo1() {
+        const box = document.getElementById("demo-box-1");
+        box.style.transform = "none";
+        box.offsetHeight;
+        box.style.transform = "rotateY(60deg)";
+        setTimeout(() => {
+          box.style.transform = "none";
+        }, 1500);
+      }
+
+      function playDemo2() {
+        const box = document.getElementById("demo-box-2");
+        box.style.transform = "none";
+        box.offsetHeight;
+        box.style.transform = "rotateY(180deg)";
+        setTimeout(() => {
+          box.style.transform = "none";
+        }, 1500);
+      }
+
+      function playDemo3() {
+        const box = document.getElementById("demo-box-3");
+        box.style.transform = "none";
+        box.style.transition = "transform 2s";
+        box.offsetHeight;
+        box.style.transform = "rotateY(360deg)";
+        setTimeout(() => {
+          box.style.transform = "none";
+        }, 2500);
+      }
+    </script>
+  </body>
+</html>

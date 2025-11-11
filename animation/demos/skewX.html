@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>skewX() - CSS 动画教程</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>CSS 动画教程</h1>
+        <a href="../index.html" class="back-home">← 返回首页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a href="coordinate.html" class="nav-item">坐标系统</a>
+        </div>
+        <div class="nav-section">
+          <h3>Transform 变换</h3>
+          <a href="translate.html" class="nav-item">translate() 平移</a>
+          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
+          <a href="scale.html" class="nav-item">scale() 缩放</a>
+          <a href="skew.html" class="nav-item">skew() 倾斜</a>
+          <a href="skewX.html" class="nav-item active">skewX() X轴倾斜</a>
+          <a href="skewY.html" class="nav-item">skewY() Y轴倾斜</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>skewX() - X轴倾斜</h1>
+        <p class="subtitle">沿 X 轴倾斜元素，创建平行四边形效果</p>
+
+        <section class="section">
+          <h2>语法说明</h2>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">transform:</span> <span class="property">skewX</span>(<span class="value">angle</span>);</code></pre>
+
+          <ul>
+            <li><span class="highlight">angle</span> - X 轴倾斜角度</li>
+            <li><strong>正值：</strong>顶部向左偏移，底部向右偏移（形成 \ 形状）</li>
+            <li><strong>负值：</strong>顶部向右偏移，底部向左偏移（形成 / 形状）</li>
+            <li>等价于 <span class="highlight">skew(angle, 0)</span></li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：正值倾斜（\）</h2>
+          <p>skewX(30deg) 顶部向左，底部向右，形成 \ 形状</p>
+
+          <div class="demo-area">
+            <div class="box" id="demo-box-1">30°</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo1()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">skewX(30deg)</span>;
+  <span class="comment">/* 顶部向左，底部向右 */</span>
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：负值倾斜（/）</h2>
+          <p>skewX(-30deg) 顶部向右，底部向左，形成 / 形状</p>
+
+          <div class="demo-area">
+            <div class="box" id="demo-box-2">-30°</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo2()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">skewX(-30deg)</span>;
+  <span class="comment">/* 顶部向右，底部向左 */</span>
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 3：大角度倾斜</h2>
+          <p>skewX(45deg) 创建更明显的倾斜效果</p>
+
+          <div class="demo-area">
+            <div class="box" id="demo-box-3">45°</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo3()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">skewX(45deg)</span>;
+}</code></pre>
+
+          <div class="info-box">
+            <p><strong>应用场景：</strong>创建斜角按钮、标签、丝带效果</p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      function playDemo1() {
+        const box = document.getElementById('demo-box-1');
+        box.style.transform = 'none';
+        box.offsetHeight;
+        box.style.transform = 'skewX(30deg)';
+        setTimeout(() => {
+          box.style.transform = 'none';
+        }, 1500);
+      }
+
+      function playDemo2() {
+        const box = document.getElementById('demo-box-2');
+        box.style.transform = 'none';
+        box.offsetHeight;
+        box.style.transform = 'skewX(-30deg)';
+        setTimeout(() => {
+          box.style.transform = 'none';
+        }, 1500);
+      }
+
+      function playDemo3() {
+        const box = document.getElementById('demo-box-3');
+        box.style.transform = 'none';
+        box.offsetHeight;
+        box.style.transform = 'skewX(45deg)';
+        setTimeout(() => {
+          box.style.transform = 'none';
+        }, 1500);
+      }
+    </script>
+  </body>
+</html>

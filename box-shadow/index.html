@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Box-Shadow 光源与多阴影演示</title>
+  <link rel="stylesheet" href="../shared/common.css">
+  <style>
+    body {
+      padding: 24px;
+      background: #f7f7fb;
+    }
+    
+    .page-header {
+      max-width: 1200px;
+      margin: 0 auto 30px;
+    }
+    
+    .page-header h1 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      color: var(--gray-900);
+    }
+    
+    .page-header .subtitle {
+      font-size: 14px;
+      color: var(--gray-500);
+      margin-bottom: 20px;
+    }
+    
+    .container {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .controls {
+      width: 400px;
+      background: #fff;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .control {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 15px 0;
+    }
+    
+    .control label {
+      width: 140px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-700);
+    }
+    
+    .control input[type=range] {
+      flex: 1;
+    }
+    
+    .preview {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      padding: 40px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .box {
+      width: 240px;
+      height: 160px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, #fff, #f0f4ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: box-shadow 0.1s ease;
+    }
+    
+    .sample-text {
+      font-size: 14px;
+      color: #222;
+      font-weight: 500;
+    }
+    
+    .css-area {
+      width: 100%;
+      background: var(--gray-800);
+      color: #e6eef8;
+      padding: 15px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      white-space: pre-wrap;
+      margin-top: 15px;
+      border: 1px solid var(--gray-700);
+    }
+    
+    .color-input {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+    }
+    
+    input[type=number] {
+      width: 72px;
+      padding: 6px 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--gray-300);
+      font-size: 13px;
+    }
+    
+    input[type=color] {
+      width: 50px;
+      height: 32px;
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+    }
+    
+    canvas {
+      background: #fff;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      cursor: crosshair;
+      border: 1px solid var(--gray-200);
+    }
+    
+    .hint {
+      font-size: 12px;
+      color: var(--gray-500);
+      text-align: center;
+      margin-top: 10px;
+    }
+    
+    @media (max-width: 968px) {
+      .container {
+        flex-direction: column;
+      }
+      
+      .controls {
+        width: 100%;
+      }
+      
+      .preview {
+        width: 100%;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      body {
+        padding: 15px;
+      }
+      
+      .control {
+        flex-wrap: wrap;
+      }
+      
+      .control label {
+        width: 100%;
+      }
+      
+      .box {
+        width: 200px;
+        height: 140px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <a href="../index.html" class="back-link">← 返回首页</a>
+    <h1>Box-Shadow 光源与多阴影演示</h1>
+    <p class="subtitle">通过调整参数与光源方向，观察多个阴影叠加的效果</p>
+  </div>
+  
+  <div class="container">
+    <div class="controls">
+      <div class="control">
+        <label>光源方向</label>
+      </div>
+      <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+        <canvas id="lightCanvas" width="200" height="200"></canvas>
+      </div>
+
+      <div class="control">
+        <label>blur-radius</label>
+        <input id="blur" type="range" min="0" max="120" value="20">
+        <input id="blurn" type="number" value="20">
+      </div>
+      
+      <div class="control">
+        <label>spread-radius</label>
+        <input id="spread" type="range" min="-60" max="60" value="0">
+        <input id="spreadn" type="number" value="0">
+      </div>
+
+      <div class="control">
+        <label>层数（多阴影）</label>
+        <input id="layers" type="range" min="1" max="5" value="2">
+        <input id="layersn" type="number" value="2">
+      </div>
+
+      <div class="control">
+        <label>颜色 + 透明度</label>
+        <div class="color-input">
+          <input id="col" type="color" value="#000000">
+          <input id="alpha" type="range" min="0" max="1" step="0.01" value="0.25">
+          <input id="alphan" type="number" step="0.01" min="0" max="1" value="0.25">
+        </div>
+      </div>
+      
+      <pre class="css-area" id="css"></pre>
+    </div>
+
+    <div class="preview">
+      <div class="box" id="box">
+        <div class="sample-text">预览方块</div>
+      </div>
+      <p class="hint">拖动画布控制光源方向。阴影数量越多，模拟的柔光越自然。</p>
+    </div>
+  </div>
+
+  <script src="../shared/utils.js"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+    const box = $('box'), cssArea = $('css');
+    const lightCanvas = $('lightCanvas');
+    const ctx = lightCanvas.getContext('2d');
+    let angle = Math.PI / 4, distance = 40;
+
+    const blur = $('blur'), spread = $('spread'), layers = $('layers'), col = $('col'), alpha = $('alpha');
+    const blurn = $('blurn'), spreadn = $('spreadn'), layersn = $('layersn'), alphan = $('alphan');
+
+    function rgba(hex, a) {
+      const h = hex.replace('#', '');
+      const bigint = parseInt(h, 16);
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+      return `rgba(${r},${g},${b},${a})`;
+    }
+
+    function drawLight() {
+      ctx.clearRect(0, 0, 200, 200);
+      ctx.fillStyle = '#f9fafb';
+      ctx.fillRect(0, 0, 200, 200);
+      
+      const cx = 100, cy = 100;
+      const lx = cx + Math.cos(angle) * distance;
+      const ly = cy + Math.sin(angle) * distance;
+      
+      // 绘制圆圈
+      ctx.strokeStyle = '#ccc';
+      ctx.beginPath();
+      ctx.arc(cx, cy, 80, 0, Math.PI * 2);
+      ctx.stroke();
+      
+      // 绘制光源
+      ctx.fillStyle = '#ffd000';
+      ctx.beginPath();
+      ctx.arc(lx, ly, 10, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // 绘制连线
+      ctx.strokeStyle = '#888';
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(lx, ly);
+      ctx.stroke();
+    }
+
+    function updateShadow() {
+      const brv = +blur.value, srv = +spread.value, lay = +layers.value;
+      const a = +alpha.value;
+      const c = col.value;
+      const shadows = [];
+      
+      for (let i = 1; i <= lay; i++) {
+        const ox = Math.cos(angle) * i * 6;
+        const oy = Math.sin(angle) * i * 6;
+        shadows.push(`${ox.toFixed(1)}px ${oy.toFixed(1)}px ${brv * i / lay}px ${srv}px ${rgba(c, a / lay)}`);
+      }
+      
+      const css = `box-shadow:\n  ${shadows.join(',\n  ')};`;
+      box.style.boxShadow = shadows.join(',');
+      cssArea.textContent = css;
+    }
+
+    function syncRange(r, n) {
+      r.addEventListener('input', () => {
+        n.value = r.value;
+        updateShadow();
+      });
+      n.addEventListener('input', () => {
+        r.value = n.value;
+        updateShadow();
+      });
+    }
+    
+    syncRange(blur, blurn);
+    syncRange(spread, spreadn);
+    syncRange(layers, layersn);
+    
+    alpha.addEventListener('input', () => {
+      alphan.value = alpha.value;
+      updateShadow();
+    });
+    alphan.addEventListener('input', () => {
+      alpha.value = alphan.value;
+      updateShadow();
+    });
+    col.addEventListener('input', updateShadow);
+
+    // 光源拖拽
+    lightCanvas.addEventListener('mousedown', startDrag);
+    let dragging = false;
+    
+    function startDrag(e) {
+      dragging = true;
+      updateAngle(e);
+      window.addEventListener('mousemove', updateAngle);
+      window.addEventListener('mouseup', stopDrag);
+    }
+    
+    function stopDrag() {
+      dragging = false;
+      window.removeEventListener('mousemove', updateAngle);
+      window.removeEventListener('mouseup', stopDrag);
+    }
+    
+    function updateAngle(e) {
+      const rect = lightCanvas.getBoundingClientRect();
+      const x = e.clientX - rect.left - 100;
+      const y = e.clientY - rect.top - 100;
+      angle = Math.atan2(y, x);
+      drawLight();
+      updateShadow();
+    }
+
+    // 初始化
+    drawLight();
+    updateShadow();
+  </script>
+</body>
+</html>
