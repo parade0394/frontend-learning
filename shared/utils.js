@@ -45,6 +45,29 @@ function resetAnimation(element, classNames = null) {
 }
 
 /**
+ * 播放 Transform 动画 - 直接操作 style.transform
+ * 适用于不想定义 CSS 类的场景
+ * @param {HTMLElement} element - 目标元素
+ * @param {string} transformValue - transform 的值，如 'translate(100px, 50px)'
+ * @param {number} duration - 动画持续时间（毫秒）
+ */
+function playTransform(element, transformValue, duration = 1500) {
+  // 重置 transform
+  element.style.transform = 'none';
+
+  // 强制重排，确保动画重新开始
+  void element.offsetHeight;
+
+  // 应用 transform
+  element.style.transform = transformValue;
+
+  // 动画结束后重置
+  setTimeout(() => {
+    element.style.transform = 'none';
+  }, duration);
+}
+
+/**
  * 防抖函数 - 延迟执行，多次调用只执行最后一次
  * @param {Function} fn - 要执行的函数
  * @param {number} delay - 延迟时间（毫秒）

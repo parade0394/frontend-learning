@@ -106,24 +106,15 @@
     </main>
 
     <script>
+      // 使用 utils.js 中的 playTransform 工具函数
       function playDemo1() {
         const box = document.getElementById('demo-box-1');
-        box.style.transform = 'none';
-        box.offsetHeight;
-        box.style.transform = 'translateY(100px)';
-        setTimeout(() => {
-          box.style.transform = 'none';
-        }, 1500);
+        playTransform(box, 'translateY(100px)', 1500);
       }
 
       function playDemo2() {
         const box = document.getElementById('demo-box-2');
-        box.style.transform = 'none';
-        box.offsetHeight;
-        box.style.transform = 'translateY(-100px)';
-        setTimeout(() => {
-          box.style.transform = 'none';
-        }, 1500);
+        playTransform(box, 'translateY(-100px)', 1500);
       }
     </script>
   </body>
