@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CSS Transform & Transition 交互式教程</title>
+    <title>CSS Transform & Transition 交互式教�?/title>
     <link rel="stylesheet" href="../shared/common.css">
     <script src="../shared/theme.js"></script>
     <style>
@@ -15,9 +15,11 @@
 
       body {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        background: #f9fafb;
+        background: var(--bg-secondary);
+        color: var(--text-primary);
         min-height: 100vh;
         padding: 40px 20px;
+        transition: background-color 0.3s ease, color 0.3s ease;
       }
 
       .container {
@@ -27,7 +29,6 @@
 
       header {
         text-align: center;
-        color: #111827;
         margin-bottom: 50px;
       }
 
@@ -35,15 +36,12 @@
         font-size: 3rem;
         margin-bottom: 10px;
         font-weight: 800;
-        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: var(--primary);
       }
 
       header p {
         font-size: 1.2rem;
-        color: #6b7280;
+        color: var(--text-secondary);
         font-weight: 400;
       }
 
@@ -55,72 +53,51 @@
       }
 
       .section-title {
-        color: #111827;
+        color: var(--text-primary);
         font-size: 1.8rem;
         margin: 40px 0 20px 0;
         padding-bottom: 10px;
-        border-bottom: 2px solid #e5e7eb;
+        border-bottom: 2px solid var(--border-color);
         font-weight: 700;
       }
 
+      /* Animation 页面特定样式 */
       .demo-card {
-        background: white;
-        border-radius: 16px;
         padding: 25px;
-        text-decoration: none;
-        color: #111827;
-        transition: all 0.2s ease;
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-        display: block;
-        border: 1px solid #e5e7eb;
-      }
-
-      .demo-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        border-color: #10b981;
       }
 
       .demo-card h3 {
         font-size: 1.3rem;
-        margin-bottom: 10px;
-        color: #111827;
         font-weight: 700;
       }
 
       .demo-card p {
-        color: #6b7280;
         font-size: 0.95rem;
-        line-height: 1.6;
-      }
-
-      .demo-icon {
-        width: 50px;
-        height: 50px;
-        background: #ecfdf5;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #059669;
-        font-size: 1.5rem;
-        margin-bottom: 15px;
-        border: 1px solid #d1fae5;
       }
 
       footer {
         text-align: center;
-        color: #6b7280;
+        color: var(--text-secondary);
         margin-top: 60px;
         padding-top: 30px;
-        border-top: 1px solid #e5e7eb;
+        border-top: 1px solid var(--border-color);
       }
 
       footer p {
         font-weight: 400;
       }
 
-      /* 响应式设计 - 移动端适配 */
+      footer a {
+        color: var(--primary);
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      footer a:hover {
+        color: var(--primary-dark);
+      }
+
+      /* 响应式设�?- 移动端适配 */
       @media (max-width: 768px) {
         body {
           padding: 20px 15px;
@@ -218,32 +195,32 @@
   <body>
     <div class="container">
       <header>
-        <a href="../index.html" class="back-link" style="display: inline-block; margin-bottom: 20px;">← 返回首页</a>
+        <a href="../index.html" class="back-link" style="display: inline-block; margin-bottom: 20px;">�?返回首页</a>
         <h1>CSS Transform & Transition</h1>
-        <p>交互式动画教程 - 点击卡片开始学习</p>
+        <p>交互式动画教�?- 点击卡片开始学�?/p>
       </header>
 
       <!-- CSS 动画总览卡片 -->
       <section>
         <div class="demo-grid" style="margin-bottom: 20px;">
-          <a href="demos/overview.html" class="demo-card" style="background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border: 2px solid #10b981;">
-            <div class="demo-icon" style="background: #10b981; color: white; font-size: 2rem;">🎬</div>
-            <h3 style="color: #059669;">CSS 动画总览</h3>
-            <p style="color: #065f46;">
-              <strong>新手必看！</strong>详细介绍 Transition 和 Animation 的区别、语法和使用场景
+          <a href="demos/overview.html" class="card demo-card featured">
+            <div class="card-icon" style="font-size: 2rem;">🎬</div>
+            <h3>CSS 动画总览</h3>
+            <p>
+              <strong>新手必看�?/strong>详细介绍 Transition �?Animation 的区别、语法和使用场景
             </p>
           </a>
         </div>
       </section>
 
-      <section>
+    
 
 
       <section>
         <h2 class="section-title">📐 基础概念</h2>
         <div class="demo-grid">
-          <a href="demos/coordinate.html" class="demo-card">
-            <div class="demo-icon">📍</div>
+          <a href="demos/coordinate.html" class="card demo-card">
+            <div class="card-icon">📍</div>
             <h3>坐标系统</h3>
             <p>理解 CSS 中的 X、Y、Z 轴和坐标原点</p>
           </a>
@@ -253,83 +230,83 @@
       <section>
         <h2 class="section-title">🔄 Transform 变换</h2>
         <div class="demo-grid">
-          <a href="demos/translate.html" class="demo-card">
-            <div class="demo-icon">↔️</div>
+          <a href="demos/translate.html" class="card demo-card">
+            <div class="card-icon">↔️</div>
             <h3>translate()</h3>
-            <p>在 X 和 Y 轴上同时移动元素</p>
+            <p>�?X �?Y 轴上同时移动元素</p>
           </a>
-          <a href="demos/translateX.html" class="demo-card">
-            <div class="demo-icon">→</div>
+          <a href="demos/translateX.html" class="card demo-card">
+            <div class="card-icon">�?/div>
             <h3>translateX()</h3>
             <p>只在水平方向移动元素</p>
           </a>
-          <a href="demos/translateY.html" class="demo-card">
-            <div class="demo-icon">↓</div>
+          <a href="demos/translateY.html" class="card demo-card">
+            <div class="card-icon">�?/div>
             <h3>translateY()</h3>
             <p>只在垂直方向移动元素</p>
           </a>
-          <a href="demos/translateZ.html" class="demo-card">
-            <div class="demo-icon">⬆️</div>
+          <a href="demos/translateZ.html" class="card demo-card">
+            <div class="card-icon">⬆️</div>
             <h3>translateZ()</h3>
-            <p>在 Z 轴上移动元素（3D）</p>
+            <p>�?Z 轴上移动元素�?D�?/p>
           </a>
-          <a href="demos/rotate.html" class="demo-card">
-            <div class="demo-icon">🔄</div>
+          <a href="demos/rotate.html" class="card demo-card">
+            <div class="card-icon">🔄</div>
             <h3>rotate()</h3>
-            <p>围绕元素中心点旋转</p>
+            <p>围绕元素中心点旋�?/p>
           </a>
-          <a href="demos/rotateX.html" class="demo-card">
-            <div class="demo-icon">⤴️</div>
+          <a href="demos/rotateX.html" class="card demo-card">
+            <div class="card-icon">⤴️</div>
             <h3>rotateX()</h3>
-            <p>围绕 X 轴旋转（3D）</p>
+            <p>围绕 X 轴旋转（3D�?/p>
           </a>
-          <a href="demos/rotateY.html" class="demo-card">
-            <div class="demo-icon">⤵️</div>
+          <a href="demos/rotateY.html" class="card demo-card">
+            <div class="card-icon">⤵️</div>
             <h3>rotateY()</h3>
-            <p>围绕 Y 轴旋转（3D）</p>
+            <p>围绕 Y 轴旋转（3D�?/p>
           </a>
-          <a href="demos/rotateZ.html" class="demo-card">
-            <div class="demo-icon">🔄</div>
+          <a href="demos/rotateZ.html" class="card demo-card">
+            <div class="card-icon">🔄</div>
             <h3>rotateZ()</h3>
-            <p>围绕 Z 轴旋转（等同于 rotate）</p>
+            <p>围绕 Z 轴旋转（等同�?rotate�?/p>
           </a>
-          <a href="demos/scale.html" class="demo-card">
-            <div class="demo-icon">🔍</div>
+          <a href="demos/scale.html" class="card demo-card">
+            <div class="card-icon">🔍</div>
             <h3>scale()</h3>
-            <p>改变元素的大小</p>
+            <p>改变元素的大�?/p>
           </a>
-          <a href="demos/scaleX.html" class="demo-card">
-            <div class="demo-icon">↔️</div>
+          <a href="demos/scaleX.html" class="card demo-card">
+            <div class="card-icon">↔️</div>
             <h3>scaleX()</h3>
             <p>只在水平方向缩放</p>
           </a>
-          <a href="demos/scaleY.html" class="demo-card">
-            <div class="demo-icon">↕️</div>
+          <a href="demos/scaleY.html" class="card demo-card">
+            <div class="card-icon">↕️</div>
             <h3>scaleY()</h3>
             <p>只在垂直方向缩放</p>
           </a>
-          <a href="demos/scaleZ.html" class="demo-card">
-            <div class="demo-icon">📏</div>
+          <a href="demos/scaleZ.html" class="card demo-card">
+            <div class="card-icon">📏</div>
             <h3>scaleZ()</h3>
-            <p>在 Z 轴上缩放（3D 深度）</p>
+            <p>�?Z 轴上缩放�?D 深度�?/p>
           </a>
-          <a href="demos/skew.html" class="demo-card">
-            <div class="demo-icon">📐</div>
+          <a href="demos/skew.html" class="card demo-card">
+            <div class="card-icon">📐</div>
             <h3>skew()</h3>
-            <p>沿 X 和 Y 轴倾斜元素</p>
+            <p>�?X �?Y 轴倾斜元素</p>
           </a>
-          <a href="demos/skewX.html" class="demo-card">
-            <div class="demo-icon">⤢</div>
+          <a href="demos/skewX.html" class="card demo-card">
+            <div class="card-icon">�?/div>
             <h3>skewX()</h3>
-            <p>沿 X 轴倾斜元素</p>
+            <p>�?X 轴倾斜元素</p>
           </a>
-          <a href="demos/skewY.html" class="demo-card">
-            <div class="demo-icon">⤡</div>
+          <a href="demos/skewY.html" class="card demo-card">
+            <div class="card-icon">�?/div>
             <h3>skewY()</h3>
-            <p>沿 Y 轴倾斜元素</p>
+            <p>�?Y 轴倾斜元素</p>
           </a>
-          <a href="demos/multiple.html" class="demo-card">
-            <div class="demo-icon">✨</div>
+          <a href="demos/multiple.html" class="card demo-card">
+            <div class="card-icon">�?/div>
             <h3>组合变换</h3>
             <p>同时应用多个 transform 函数</p>
           </a>
@@ -339,18 +316,18 @@
       <section>
         <h2 class="section-title">⏱️ Transition 过渡</h2>
         <div class="demo-grid">
-          <a href="demos/duration.html" class="demo-card">
-            <div class="demo-icon">⏰</div>
+          <a href="demos/duration.html" class="card demo-card">
+            <div class="card-icon">�?/div>
             <h3>transition-duration</h3>
             <p>控制过渡持续时间</p>
           </a>
-          <a href="demos/timing.html" class="demo-card">
-            <div class="demo-icon">📈</div>
+          <a href="demos/timing.html" class="card demo-card">
+            <div class="card-icon">📈</div>
             <h3>transition-timing-function</h3>
             <p>控制过渡速度曲线</p>
           </a>
-          <a href="demos/delay.html" class="demo-card">
-            <div class="demo-icon">⏳</div>
+          <a href="demos/delay.html" class="card demo-card">
+            <div class="card-icon">�?/div>
             <h3>transition-delay</h3>
             <p>控制过渡延迟时间</p>
           </a>
@@ -360,13 +337,13 @@
       <section>
         <h2 class="section-title">🎬 Animation 动画</h2>
         <div class="demo-grid">
-          <a href="demos/keyframes.html" class="demo-card">
-            <div class="demo-icon">🎞️</div>
+          <a href="demos/keyframes.html" class="card demo-card">
+            <div class="card-icon">🎞�?/div>
             <h3>@keyframes</h3>
             <p>创建复杂的关键帧动画</p>
           </a>
-          <a href="demos/animation-play-state.html" class="demo-card">
-            <div class="demo-icon">⏯️</div>
+          <a href="demos/animation-play-state.html" class="card demo-card">
+            <div class="card-icon">⏯️</div>
             <h3>animation-play-state</h3>
             <p>控制动画的播放和暂停</p>
           </a>
@@ -376,51 +353,51 @@
       <section>
         <h2 class="section-title">🎲 3D 变换</h2>
         <div class="demo-grid">
-          <a href="demos/perspective.html" class="demo-card">
-            <div class="demo-icon">👁️</div>
+          <a href="demos/perspective.html" class="card demo-card">
+            <div class="card-icon">👁�?/div>
             <h3>perspective</h3>
-            <p>为 3D 变换添加景深效果</p>
+            <p>�?3D 变换添加景深效果</p>
           </a>
-          <a href="demos/rotate3d.html" class="demo-card">
-            <div class="demo-icon">🌀</div>
+          <a href="demos/rotate3d.html" class="card demo-card">
+            <div class="card-icon">🌀</div>
             <h3>rotate3d()</h3>
-            <p>围绕自定义 3D 轴旋转</p>
+            <p>围绕自定�?3D 轴旋�?/p>
           </a>
-          <a href="demos/translate3d.html" class="demo-card">
-            <div class="demo-icon">📦</div>
+          <a href="demos/translate3d.html" class="card demo-card">
+            <div class="card-icon">📦</div>
             <h3>translate3d()</h3>
-            <p>在 X、Y、Z 三个轴上移动</p>
+            <p>�?X、Y、Z 三个轴上移动</p>
           </a>
-          <a href="demos/transform-style.html" class="demo-card">
-            <div class="demo-icon">🎭</div>
+          <a href="demos/transform-style.html" class="card demo-card">
+            <div class="card-icon">🎭</div>
             <h3>transform-style</h3>
             <p>控制子元素的 3D 空间渲染</p>
           </a>
-          <a href="demos/backface-visibility.html" class="demo-card">
-            <div class="demo-icon">🔙</div>
+          <a href="demos/backface-visibility.html" class="card demo-card">
+            <div class="card-icon">🔙</div>
             <h3>backface-visibility</h3>
             <p>控制元素背面是否可见</p>
           </a>
-          <a href="demos/perspective-origin.html" class="demo-card">
-            <div class="demo-icon">👀</div>
+          <a href="demos/perspective-origin.html" class="card demo-card">
+            <div class="card-icon">👀</div>
             <h3>perspective-origin</h3>
-            <p>控制 3D 透视的视角位置</p>
+            <p>控制 3D 透视的视角位�?/p>
           </a>
         </div>
       </section>
 
       <section>
-        <h2 class="section-title">⚙️ 高级属性</h2>
+        <h2 class="section-title">⚙️ 高级属�?/h2>
         <div class="demo-grid">
-          <a href="demos/transform-origin.html" class="demo-card">
-            <div class="demo-icon">🎯</div>
+          <a href="demos/transform-origin.html" class="card demo-card">
+            <div class="card-icon">🎯</div>
             <h3>transform-origin</h3>
-            <p>设置变换的原点位置</p>
+            <p>设置变换的原点位�?/p>
           </a>
-          <a href="demos/will-change.html" class="demo-card">
-            <div class="demo-icon">⚡</div>
+          <a href="demos/will-change.html" class="card demo-card">
+            <div class="card-icon">�?/div>
             <h3>will-change</h3>
-            <p>性能优化 - 提前告知浏览器</p>
+            <p>性能优化 - 提前告知浏览�?/p>
           </a>
         </div>
       </section>
@@ -428,24 +405,25 @@
       <section>
         <h2 class="section-title">🎨 实际应用</h2>
         <div class="demo-grid">
-          <a href="product-demo.html" class="demo-card">
-            <div class="demo-icon">🚀</div>
+          <a href="product-demo.html" class="card demo-card">
+            <div class="card-icon">🚀</div>
             <h3>产品演示页面</h3>
-            <p>真实的产品介绍页面示例</p>
+            <p>真实的产品介绍页面示�?/p>
           </a>
-          <a href="showcase.html" class="demo-card">
-            <div class="demo-icon">✨</div>
+          <a href="showcase.html" class="card demo-card">
+            <div class="card-icon">�?/div>
             <h3>效果展示集合</h3>
-            <p>常见动画效果的实际应用</p>
+            <p>常见动画效果的实际应�?/p>
           </a>
         </div>
       </section>
 
       <footer>
         <p>💡 提示：每个演示页面都包含详细的解释和可交互的动画示例</p>
-        <p style="margin-top: 10px">🚀 从"坐标系统"开始，按顺序学习效果最佳</p>
-        <p style="margin-top: 10px; color: #6b7280;">📚 共 32 个知识点 + 2 个实际应用示例</p>
+        <p style="margin-top: 10px">🚀 �?坐标系统"开始，按顺序学习效果最�?/p>
+        <p style="margin-top: 10px; color: #6b7280;">📚 �?32 个知识点 + 2 个实际应用示�?/p>
       </footer>
     </div>
   </body>
 </html>
+

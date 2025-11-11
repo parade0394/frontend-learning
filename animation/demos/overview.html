@@ -5,31 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CSS 动画总览 - 完整指南</title>
     <link rel="stylesheet" href="../styles.css" />
+    <script src="../../shared/theme.js"></script>
     <style>
       .overview-section {
-        background: white;
+        background: var(--card-bg);
         padding: 40px;
         border-radius: 16px;
         margin-bottom: 30px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 8px var(--card-hover-shadow);
+        border: 2px solid var(--border-color);
       }
 
       .overview-section h2 {
-        color: #059669;
+        color: var(--primary);
         font-size: 1.8rem;
         margin-bottom: 20px;
         font-weight: 700;
       }
 
       .overview-section h3 {
-        color: #111827;
+        color: var(--text-primary);
         font-size: 1.3rem;
         margin: 25px 0 15px 0;
         font-weight: 600;
       }
 
       .overview-section p {
-        color: #6b7280;
+        color: var(--text-secondary);
         line-height: 1.8;
         margin-bottom: 15px;
       }
@@ -41,33 +43,22 @@
       }
 
       .highlight-box.transition {
-        background: #f0fdf4;
-        border-left: 4px solid #10b981;
+        background: var(--primary-light);
+        border-left: 4px solid var(--primary);
       }
 
       .highlight-box.animation {
-        background: #fef3c7;
-        border-left: 4px solid #f59e0b;
+        background: var(--primary-light);
+        border-left: 4px solid var(--primary);
       }
 
       .highlight-box h3 {
         margin-top: 0;
+        color: var(--primary);
       }
 
-      .highlight-box.transition h3 {
-        color: #059669;
-      }
-
-      .highlight-box.animation h3 {
-        color: #d97706;
-      }
-
-      .highlight-box.transition p {
-        color: #065f46;
-      }
-
-      .highlight-box.animation p {
-        color: #92400e;
+      .highlight-box p {
+        color: var(--text-secondary);
       }
 
       .comparison-table {

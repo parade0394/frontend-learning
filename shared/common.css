@@ -140,12 +140,84 @@ body {
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   box-shadow: var(--shadow-md);
-  transition: all var(--transition-base);
-  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  border: 2px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--primary);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
 }
 
 .card:hover {
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px var(--card-hover-shadow), 0 10px 10px -5px var(--card-hover-shadow);
+  border-color: var(--primary);
+}
+
+.card:hover::before {
+  transform: scaleX(1);
+}
+
+/* 卡片链接样式 - 用于可点击的卡片 */
+a.card {
+  text-decoration: none;
+  color: var(--text-primary);
+  display: block;
+}
+
+/* 卡片标题 */
+.card h2,
+.card h3 {
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+/* 卡片描述文本 */
+.card p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* 卡片图标 */
+.card-icon {
+  width: 50px;
+  height: 50px;
+  background: var(--primary-light);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  border: 1px solid var(--primary);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.card:hover .card-icon {
+  transform: scale(1.1);
+}
+
+/* 特色卡片 - 用于突出显示 */
+.card.featured {
+  background: var(--primary-light);
+  border-color: var(--primary);
+}
+
+.card.featured .card-icon {
+  background: var(--primary);
+  color: white;
 }
 
 /* 代码块样式 */

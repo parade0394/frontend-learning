@@ -148,39 +148,13 @@
       padding: 0 20px 60px;
     }
 
+    /* 首页模块卡片特定样式 */
     .module-card {
-      background: var(--card-bg);
-      border-radius: 16px;
       padding: 35px;
-      text-decoration: none;
-      color: var(--text-primary);
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 6px -1px var(--card-hover-shadow), 0 2px 4px -1px var(--card-hover-shadow);
-      border: 2px solid var(--border-color);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .module-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: var(--primary);
-      transform: scaleX(0);
-      transition: transform 0.3s ease;
     }
 
     .module-card:hover {
       transform: translateY(-8px);
-      box-shadow: 0 20px 25px -5px var(--card-hover-shadow), 0 10px 10px -5px var(--card-hover-shadow);
-      border-color: var(--primary);
-    }
-
-    .module-card:hover::before {
-      transform: scaleX(1);
     }
 
     .module-icon {
@@ -188,24 +162,15 @@
       margin-bottom: 20px;
       display: block;
       filter: grayscale(0.3);
-      transition: filter 0.3s ease, transform 0.3s ease;
+      transition: filter 0.3s ease;
     }
 
     .module-card:hover .module-icon {
       filter: grayscale(0);
-      transform: scale(1.1);
     }
 
     .module-card h2 {
       font-size: 1.8rem;
-      margin-bottom: 12px;
-      color: var(--text-primary);
-    }
-
-    .module-card p {
-      color: var(--text-secondary);
-      line-height: 1.7;
-      margin-bottom: 15px;
     }
 
     .module-meta {
@@ -388,7 +353,7 @@
   </div>
 
   <div class="modules-grid" id="modules">
-    <a href="animation/index.html" class="module-card">
+    <a href="animation/index.html" class="card module-card">
       <span class="module-icon">🎬</span>
       <h2>CSS 动画教程</h2>
       <p>完整的 Transform、Transition 和 Animation 教程，包含 32 个核心知识点和 120+ 个交互式演示。</p>
@@ -399,7 +364,7 @@
       </div>
     </a>
 
-    <a href="grid/index.html" class="module-card">
+    <a href="grid/index.html" class="card module-card">
       <span class="module-icon">📐</span>
       <h2>CSS Grid 布局</h2>
       <p>从基础到高级的 Grid 布局教程，涵盖网格系统的所有核心概念和实际应用场景。</p>
@@ -410,7 +375,7 @@
       </div>
     </a>
 
-    <a href="box-shadow/index.html" class="module-card">
+    <a href="box-shadow/index.html" class="card module-card">
       <span class="module-icon">💡</span>
       <h2>Box-Shadow 工具</h2>
       <p>交互式阴影生成器，通过可视化方式学习和调试 CSS 阴影效果，支持多层阴影和光源控制。</p>

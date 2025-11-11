@@ -74,41 +74,42 @@
     toolbar.id = 'themeToolbar';
     toolbar.className = 'theme-toolbar';
     toolbar.innerHTML = `
-      <button class="theme-toolbar-btn" id="themeToggle" title="主题设置">
+      <button class="theme-toolbar-btn" id="themeToggle" title="暗色模式">
         <span id="themeIcon">${currentTheme === 'dark' ? '🌙' : '☀️'}</span>
       </button>
-      <button class="theme-toolbar-btn" id="customizeBtn" title="颜色定制">
+      <button class="theme-toolbar-btn" id="customizeBtn" title="主题定制">
         🎨
       </button>
     `;
 
-    // 创建主题面板
-    const panel = document.createElement('div');
-    panel.id = 'themePanel';
-    panel.className = 'theme-panel';
-    panel.innerHTML = `
-      <h3>🎨 主题定制</h3>
-      
-      <!-- 暗色模式选择 -->
-      <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color);">
-        <div style="font-size: 0.9rem; font-weight: 600; margin-bottom: 10px; color: var(--text-primary);">暗色模式</div>
-        <div class="theme-mode-options">
-          <label class="theme-mode-option">
-            <input type="radio" name="themeMode" value="light" ${savedThemeMode === 'light' ? 'checked' : ''}>
-            <span>☀️ 亮色</span>
-          </label>
-          <label class="theme-mode-option">
-            <input type="radio" name="themeMode" value="dark" ${savedThemeMode === 'dark' ? 'checked' : ''}>
-            <span>🌙 暗色</span>
-          </label>
-          <label class="theme-mode-option">
-            <input type="radio" name="themeMode" value="auto" ${savedThemeMode === 'auto' ? 'checked' : ''}>
-            <span>🖥️ 跟随系统</span>
-          </label>
-        </div>
+    // 创建暗色模式面板
+    const themeModePanel = document.createElement('div');
+    themeModePanel.id = 'themeModePanel';
+    themeModePanel.className = 'theme-panel';
+    themeModePanel.innerHTML = `
+      <h3>🌙 暗色模式</h3>
+      <div class="theme-mode-options">
+        <label class="theme-mode-option">
+          <input type="radio" name="themeMode" value="light" ${savedThemeMode === 'light' ? 'checked' : ''}>
+          <span>☀️ 亮色</span>
+        </label>
+        <label class="theme-mode-option">
+          <input type="radio" name="themeMode" value="dark" ${savedThemeMode === 'dark' ? 'checked' : ''}>
+          <span>🌙 暗色</span>
+        </label>
+        <label class="theme-mode-option">
+          <input type="radio" name="themeMode" value="auto" ${savedThemeMode === 'auto' ? 'checked' : ''}>
+          <span>🖥️ 跟随系统</span>
+        </label>
       </div>
+    `;
 
-      <div style="font-size: 0.9rem; font-weight: 600; margin-bottom: 10px; color: var(--text-primary);">主题颜色</div>
+    // 创建主题颜色面板
+    const colorPanel = document.createElement('div');
+    colorPanel.id = 'colorPanel';
+    colorPanel.className = 'theme-panel';
+    colorPanel.innerHTML = `
+      <h3>🎨 主题颜色</h3>
       <div class="theme-options">
         <div class="theme-option ${savedColor === '#10b981' ? 'active' : ''}" data-color="#10b981">
           <div class="color-preview" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);"></div>
@@ -150,7 +151,8 @@
 
     // 添加到页面
     document.body.appendChild(toolbar);
-    document.body.appendChild(panel);
+    document.body.appendChild(themeModePanel);
+    document.body.appendChild(colorPanel);
 
     // 添加样式（如果还没有）
     if (!document.getElementById('themeStyles')) {
@@ -374,25 +376,35 @@
   function setupEventListeners() {
     const themeToggle = document.getElementById('themeToggle');
     const customizeBtn = document.getElementById('customizeBtn');
-    const themePanel = document.getElementById('themePanel');
+    const themeModePanel = document.getElementById('themeModePanel');
+    const colorPanel = document.getElementById('colorPanel');
     const themeOptions = document.querySelectorAll('.theme-option');
     const themeModeInputs = document.querySelectorAll('input[name="themeMode"]');
 
-    // 点击工具栏按钮打开面板
+    // 点击暗色模式按钮
     if (themeToggle) {
       themeToggle.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (themePanel) {
-          themePanel.classList.toggle('active');
+        if (themeModePanel) {
+          themeModePanel.classList.toggle('active');
+          // 关闭颜色面板
+          if (colorPanel) {
+            colorPanel.classList.remove('active');
+          }
         }
       });
     }
 
+    // 点击主题定制按钮
     if (customizeBtn) {
       customizeBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (themePanel) {
-          themePanel.classList.toggle('active');
+        if (colorPanel) {
+          colorPanel.classList.toggle('active');
+          // 关闭暗色模式面板
+          if (themeModePanel) {
+            themeModePanel.classList.remove('active');
+          }
         }
       });
     }
@@ -408,8 +420,12 @@
 
     // 点击外部关闭面板
     document.addEventListener('click', (e) => {
-      if (themePanel && !themePanel.contains(e.target) && !themeToggle.contains(e.target) && (!customizeBtn || !customizeBtn.contains(e.target))) {
-        themePanel.classList.remove('active');
+      const isClickInsidePanel = (themeModePanel && themeModePanel.contains(e.target)) || (colorPanel && colorPanel.contains(e.target));
+      const isClickOnButton = (themeToggle && themeToggle.contains(e.target)) || (customizeBtn && customizeBtn.contains(e.target));
+
+      if (!isClickInsidePanel && !isClickOnButton) {
+        if (themeModePanel) themeModePanel.classList.remove('active');
+        if (colorPanel) colorPanel.classList.remove('active');
       }
     });
 
