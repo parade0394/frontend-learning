@@ -14,7 +14,7 @@ const path = require('path');
 
 // 配置
 const DEMOS_DIR = path.join(__dirname, '../animation/demos');
-const DRY_RUN = true; // 设置为 false 才会真正修改文件
+const DRY_RUN = false; // 设置为 false 才会真正修改文件
 
 // 需要更新的文件列表（排除已更新的）
 const demoFiles = [
