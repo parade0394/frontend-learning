@@ -124,44 +124,25 @@
     </main>
 
     <script>
+      // 使用 utils.js 中的 playTransform 工具函数
       function playDemo1() {
         const box = document.getElementById('demo-box-1');
-        box.style.transform = 'none';
-        box.offsetHeight;
-        box.style.transform = 'translateX(100px) rotate(45deg) scale(1.2)';
-        setTimeout(() => {
-          box.style.transform = 'none';
-        }, 1500);
+        playTransform(box, 'translateX(100px) rotate(45deg) scale(1.2)', 1500);
       }
 
       function playDemo2a() {
         const box = document.getElementById('demo-box-2a');
-        box.style.transform = 'none';
-        box.offsetHeight;
-        box.style.transform = 'rotate(45deg) translateX(100px)';
-        setTimeout(() => {
-          box.style.transform = 'none';
-        }, 1500);
+        playTransform(box, 'rotate(45deg) translateX(100px)', 1500);
       }
 
       function playDemo2b() {
         const box = document.getElementById('demo-box-2b');
-        box.style.transform = 'none';
-        box.offsetHeight;
-        box.style.transform = 'translateX(100px) rotate(45deg)';
-        setTimeout(() => {
-          box.style.transform = 'none';
-        }, 1500);
+        playTransform(box, 'translateX(100px) rotate(45deg)', 1500);
       }
 
       function playDemo3() {
         const box = document.getElementById('demo-box-3');
-        box.style.transform = 'none';
-        box.offsetHeight;
-        box.style.transform = 'translate(80px, 30px) rotate(30deg) scale(1.3) skewX(10deg)';
-        setTimeout(() => {
-          box.style.transform = 'none';
-        }, 1500);
+        playTransform(box, 'translate(80px, 30px) rotate(30deg) scale(1.3) skewX(10deg)', 1500);
       }
     </script>
   </body>
