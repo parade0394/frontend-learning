@@ -3,6 +3,28 @@
    用于所有模块的基础样式和变量
    ======================================== */
 
+/* 主题变量 - 亮色模式 */
+:root[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --border-color: #e5e7eb;
+  --card-bg: #ffffff;
+  --card-hover-shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* 主题变量 - 暗色模式 */
+:root[data-theme="dark"] {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --text-primary: #f9fafb;
+  --text-secondary: #9ca3af;
+  --border-color: #404040;
+  --card-bg: #2d2d2d;
+  --card-hover-shadow: rgba(255, 255, 255, 0.1);
+}
+
 /* CSS 变量定义 */
 :root {
   /* 主色调 */
@@ -67,11 +89,12 @@
 
 body {
   font-family: var(--font-base);
-  background: var(--gray-50);
-  color: var(--gray-900);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* 通用按钮样式 */
@@ -113,11 +136,12 @@ body {
 
 /* 通用卡片样式 */
 .card {
-  background: white;
+  background: var(--card-bg);
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   box-shadow: var(--shadow-md);
   transition: all var(--transition-base);
+  border: 1px solid var(--border-color);
 }
 
 .card:hover {
