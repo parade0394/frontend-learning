@@ -292,6 +292,11 @@
         border-color: var(--primary);
       }
 
+      .theme-mode-option:has(input:checked) span {
+        color: var(--primary);
+        font-weight: 600;
+      }
+
       .theme-mode-option input[type="radio"] {
         cursor: pointer;
       }
@@ -322,6 +327,11 @@
       .theme-option.active {
         background: var(--primary-light);
         border-color: var(--primary);
+      }
+
+      .theme-option.active .theme-option-name,
+      .theme-option.active .theme-option-desc {
+        color: var(--primary);
       }
 
       .color-preview {
