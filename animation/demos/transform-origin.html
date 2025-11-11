@@ -263,16 +263,19 @@
             <div class="clock-hand"></div>
           </div>
 
-          <div class="code-block" style="margin-top: 20px">
-            <span class="keyword">.clock-hand</span> { <span class="property">transform-origin</span>: <span class="value">center top</span>;
-            <span class="comment">/* 指针从顶部旋转 */</span>
-            <span class="property">animation</span>: <span class="value">rotate 4s linear infinite</span>; }
+          <pre class="code-block" style="margin-top: 20px"><code><span class="keyword">.clock-hand</span> {
+  <span class="property">transform-origin</span>: <span class="value">center top</span>; <span class="comment">/* 指针从顶部旋转 */</span>
+  <span class="property">animation</span>: <span class="value">rotate 4s linear infinite</span>;
+}
 
-            <span class="keyword">@keyframes</span>
-            <span class="value">rotate</span> { <span class="keyword">from</span> { <span class="property">transform</span>:
-            <span class="value">rotate(0deg)</span>; } <span class="keyword">to</span> { <span class="property">transform</span>:
-            <span class="value">rotate(360deg)</span>; } }
-          </div>
+<span class="keyword">@keyframes</span> <span class="value">rotate</span> {
+  <span class="keyword">from</span> {
+    <span class="property">transform</span>: <span class="value">rotate(0deg)</span>;
+  }
+  <span class="keyword">to</span> {
+    <span class="property">transform</span>: <span class="value">rotate(360deg)</span>;
+  }
+}</code></pre>
         </section>
 
         <section class="section">
