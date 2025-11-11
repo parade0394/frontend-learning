@@ -337,16 +337,20 @@ a.card {
   gap: 8px;
   color: var(--primary);
   text-decoration: none;
-  font-weight: 500;
-  padding: 8px 12px;
+  font-weight: 600;
+  padding: 10px 16px;
   border-radius: var(--radius-md);
   transition: all var(--transition-base);
   background: var(--primary-light);
+  border: 2px solid var(--primary);
+  box-shadow: 0 2px 4px var(--card-hover-shadow);
 }
 
 .back-link:hover {
-  background: var(--primary-lighter);
+  background: var(--primary);
+  color: white;
   transform: translateX(-3px);
+  box-shadow: 0 4px 8px var(--card-hover-shadow);
 }
 
 /* 响应式工具类 */
