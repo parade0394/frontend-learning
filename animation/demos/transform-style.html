@@ -82,7 +82,7 @@
         margin: 0 auto;
       }
 
-      .card {
+      .card-card {
         width: 100%;
         height: 100%;
         position: relative;
@@ -90,7 +90,7 @@
         cursor: pointer;
       }
 
-      .card.flipped {
+      .card-card.flipped {
         transform: rotateY(180deg);
       }
 
@@ -114,6 +114,7 @@
       .card-back {
         background: white;
         border: 2px solid #10b981;
+        color: #1f2937;
         transform: rotateY(180deg);
       }
     </style>
@@ -259,7 +260,7 @@
           <p>点击卡片查看翻转效果</p>
 
           <div class="card-container">
-            <div class="card" id="flip-card" style="transform-style: preserve-3d" onclick="flipCard()">
+            <div class="card-card" id="flip-card" style="transform-style: preserve-3d" onclick="flipCard()">
               <div class="card-side card-front">
                 <div>
                   <h3 style="font-size: 1.5rem; margin-bottom: 10px">正面</h3>
@@ -324,8 +325,7 @@
 
           <div class="info-box" style="margin-top: 20px">
             <p>
-              <strong>最佳实践：</strong>创建 3D 效果时，记住这个顺序：父元素设置 perspective → 父元素设置 transform-style: preserve-3d → 子元素应用
-              3D 变换
+              <strong>最佳实践：</strong>创建 3D 效果时，记住这个三层结构：祖父元素设置 perspective（透视点）→ 父元素设置 transform-style: preserve-3d（3D空间）→ 子元素应用 3D 变换（具体变换）
             </p>
           </div>
         </section>
