@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SVG 动画效果 - 前端学习中心</title>
+  <link rel="stylesheet" href="../shared/common.css">
+  <script src="../shared/theme-sync.js"></script>
+  <script src="../shared/utils.js"></script>
+  <style>
+    .animation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--spacing-lg);
+      margin: var(--spacing-lg) 0;
+    }
+
+    .animation-demo {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-md);
+    }
+
+    .animation-demo h3 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    .svg-container {
+      background: var(--bg-primary);
+      border-radius: var(--radius-sm);
+      padding: var(--spacing-md);
+      margin: var(--spacing-md) 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 200px;
+    }
+
+    /* CSS 动画 */
+    @keyframes pulse {
+      0%, 100% { r: 30; opacity: 1; }
+      50% { r: 40; opacity: 0.6; }
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes slide {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(100px); }
+    }
+
+    @keyframes morph {
+      0%, 100% { d: path('M 50,50 L 150,50 L 150,150 L 50,150 Z'); }
+      50% { d: path('M 100,30 L 170,100 L 100,170 L 30,100 Z'); }
+    }
+
+    .css-pulse { animation: pulse 2s ease-in-out infinite; }
+    .css-rotate { animation: rotate 3s linear infinite; transform-origin: center; }
+    .css-slide { animation: slide 2s ease-in-out infinite; }
+    .css-morph { animation: morph 3s ease-in-out infinite; }
+
+    .btn-group {
+      display: flex;
+      gap: var(--spacing-sm);
+      flex-wrap: wrap;
+      margin-top: var(--spacing-md);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-link">← 返回 SVG 模块</a>
+    
+    <h1>SVG 动画效果</h1>
+    <p>SVG 支持多种动画方式：SMIL 动画、CSS 动画和 JavaScript 动画。</p>
+
+    <div class="animation-grid">
+      <!-- SMIL 动画 - 属性动画 -->
+      <div class="animation-demo">
+        <h3>SMIL 属性动画</h3>
+        <div class="svg-container">
+          <svg width="200" height="200" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="30" fill="var(--primary)">
+              <animate attributeName="r" values="30;50;30" dur="2s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+        </div>
+        <div class="code-block">
+          <code>&lt;circle cx="100" cy="100" r="30"&gt;
+  &lt;animate attributeName="r" 
+           values="30;50;30" 
+           dur="2s" 
+           repeatCount="indefinite"/&gt;
+&lt;/circle&gt;</code>
+        </div>
+      </div>
+
+      <!-- SMIL 动画 - 路径动画 -->
+      <div class="animation-demo">
+        <h3>SMIL 路径动画</h3>
+        <div class="svg-container">
+          <svg width="200" height="200" viewBox="0 0 200 200">
+            <path d="M 50,100 Q 100,50 150,100 T 250,100" 
+                  stroke="var(--text-secondary)" stroke-width="2" fill="none" opacity="0.3"/>
+            <circle r="8" fill="var(--primary)">
+              <animateMotion dur="3s" repeatCount="indefinite">
+                <mpath href="#motionPath"/>
+              </animateMotion>
+            </circle>
+            <path id="motionPath" d="M 50,100 Q 100,50 150,100 T 250,100" fill="none"/>
+          </svg>
+        </div>
+        <div class="code-block">
+          <code>&lt;circle r="8"&gt;
+  &lt;animateMotion dur="3s" repeatCount="indefinite"&gt;
+    &lt;mpath href="#path"/&gt;
+  &lt;/animateMotion&gt;
+&lt;/circle&gt;</code>
+        </div>
+      </div>
+
+      <!-- SMIL 动画 - 变换动画 -->
+      <div class="animation-demo">
+        <h3>SMIL 变换动画</h3>
+        <div class="svg-container">
+          <svg width="200" height="200" viewBox="0 0 200 200">
+            <rect x="75" y="75" width="50" height="50" fill="var(--primary)" rx="5">
+              <animateTransform attributeName="transform" type="rotate"
+                                from="0 100 100" to="360 100 100"
+                                dur="3s" repeatCount="indefinite"/>
+            </rect>
+          </svg>
+        </div>
+        <div class="code-block">
+          <code>&lt;rect x="75" y="75" width="50" height="50"&gt;
+  &lt;animateTransform 
+    attributeName="transform" 
+    type="rotate"
+    from="0 100 100" 
+    to="360 100 100"
+    dur="3s" 
+    repeatCount="indefinite"/&gt;
+&lt;/rect&gt;</code>
+        </div>
+      </div>
+
+      <!-- CSS 动画 - 脉冲 -->
+      <div class="animation-demo">
+        <h3>CSS 动画 - 脉冲</h3>
+        <div class="svg-container">
+          <svg width="200" height="200" viewBox="0 0 200 200">
+            <circle class="css-pulse" cx="100" cy="100" r="30" fill="var(--primary)"/>
+          </svg>
+        </div>
+        <div class="code-block">
+          <code>@keyframes pulse {
+  0%, 100% { r: 30; opacity: 1; }
+  50% { r: 40; opacity: 0.6; }
+}
+.pulse { animation: pulse 2s infinite; }</code>
+        </div>
+      </div>
+
+      <!-- CSS 动画 - 旋转 -->
+      <div class="animation-demo">
+        <h3>CSS 动画 - 旋转</h3>
+        <div class="svg-container">
+          <svg width="200" height="200" viewBox="0 0 200 200">
+            <rect class="css-rotate" x="75" y="75" width="50" height="50" 
+                  fill="var(--primary)" rx="5"/>
+          </svg>
+        </div>
+        <div class="code-block">
+          <code>@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.rotate { 
+  animation: rotate 3s linear infinite;
+  transform-origin: center;
+}</code>
+        </div>
+      </div>
+
+      <!-- CSS 动画 - 滑动 -->
+      <div class="animation-demo">
+        <h3>CSS 动画 - 滑动</h3>
+        <div class="svg-container">
+          <svg width="200" height="200" viewBox="0 0 200 200">
+            <circle class="css-slide" cx="50" cy="100" r="20" fill="var(--primary)"/>
+          </svg>
+        </div>
+        <div class="code-block">
+          <code>@keyframes slide {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(100px); }
+}
+.slide { animation: slide 2s infinite; }</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript 动画 -->
+    <div class="animation-demo" style="margin-top: var(--spacing-xl);">
+      <h3>🎮 JavaScript 动画控制</h3>
+      <div class="svg-container">
+        <svg id="js-svg" width="100%" height="250" viewBox="0 0 500 250">
+          <circle id="js-circle" cx="50" cy="125" r="25" fill="var(--primary)"/>
+        </svg>
+      </div>
+      <div class="btn-group">
+        <button class="btn" onclick="startAnimation()">开始动画</button>
+        <button class="btn" onclick="pauseAnimation()">暂停动画</button>
+        <button class="btn" onclick="resetAnimation()">重置</button>
+      </div>
+      <div class="code-block" style="margin-top: var(--spacing-md);">
+        <code>let position = 0;
+let animationId;
+
+function animate() {
+  position += 2;
+  if (position > 450) position = 50;
+  circle.setAttribute('cx', position);
+  animationId = requestAnimationFrame(animate);
+}
+
+function start() {
+  animate();
+}
+
+function pause() {
+  cancelAnimationFrame(animationId);
+}</code>
+      </div>
+    </div>
+
+    <!-- 交互式动画编辑器 -->
+    <div class="animation-demo" style="margin-top: var(--spacing-xl);">
+      <h3>🎮 交互式动画编辑器</h3>
+      <div class="svg-container">
+        <svg width="100%" height="250" viewBox="0 0 500 250">
+          <circle id="custom-circle" cx="250" cy="125" r="30" fill="var(--primary)">
+            <animate id="custom-animate" attributeName="r" 
+                     values="30;50;30" dur="2s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+      </div>
+      
+      <div style="display: flex; flex-direction: column; gap: var(--spacing-sm); margin-top: var(--spacing-md);">
+        <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+          <label style="min-width: 100px;">属性:</label>
+          <select id="attr-select" class="btn" style="flex: 1;">
+            <option value="r">半径 (r)</option>
+            <option value="opacity">透明度 (opacity)</option>
+            <option value="cx">X 位置 (cx)</option>
+          </select>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+          <label style="min-width: 100px;">起始值:</label>
+          <input type="text" id="from-value" value="30" class="btn" style="flex: 1;">
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+          <label style="min-width: 100px;">中间值:</label>
+          <input type="text" id="mid-value" value="50" class="btn" style="flex: 1;">
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+          <label style="min-width: 100px;">结束值:</label>
+          <input type="text" id="to-value" value="30" class="btn" style="flex: 1;">
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+          <label style="min-width: 100px;">持续时间:</label>
+          <input type="range" id="duration" min="0.5" max="5" step="0.5" value="2" style="flex: 1;">
+          <span id="duration-value" style="min-width: 40px; font-weight: 600; color: var(--primary);">2s</span>
+        </div>
+      </div>
+
+      <button class="btn" onclick="updateCustomAnimation()" style="margin-top: var(--spacing-md);">应用动画</button>
+
+      <div class="code-block" style="margin-top: var(--spacing-md);">
+        <code id="custom-code">&lt;animate attributeName="r" values="30;50;30" dur="2s" repeatCount="indefinite"/&gt;</code>
+      </div>
+    </div>
+
+    <div class="info-section" style="margin-top: var(--spacing-xl); padding: var(--spacing-md); background: var(--bg-secondary); border-radius: var(--radius-md);">
+      <h2>💡 关键知识点</h2>
+      <ul>
+        <li><strong>SMIL 动画</strong>: 使用 &lt;animate&gt;, &lt;animateTransform&gt;, &lt;animateMotion&gt; 等元素</li>
+        <li><strong>CSS 动画</strong>: 使用 @keyframes 和 animation 属性，性能更好</li>
+        <li><strong>JavaScript 动画</strong>: 使用 requestAnimationFrame 实现精确控制</li>
+        <li><strong>dur</strong>: 动画持续时间（如 "2s", "500ms"）</li>
+        <li><strong>repeatCount</strong>: 重复次数（"indefinite" 表示无限循环）</li>
+        <li><strong>values</strong>: 关键帧值列表，用分号分隔</li>
+        <li><strong>from/to</strong>: 简单的起始和结束值</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // JavaScript 动画控制
+      const jsCircle = document.getElementById('js-circle');
+      let position = 50;
+      let animationId = null;
+
+      function animate() {
+        position += 2;
+        if (position > 450) position = 50;
+        jsCircle.setAttribute('cx', position);
+        animationId = requestAnimationFrame(animate);
+      }
+
+      window.startAnimation = function() {
+        if (!animationId) {
+          animate();
+          showToast('动画已开始', 'success');
+        }
+      };
+
+      window.pauseAnimation = function() {
+        if (animationId) {
+          cancelAnimationFrame(animationId);
+          animationId = null;
+          showToast('动画已暂停', 'info');
+        }
+      };
+
+      window.resetAnimation = function() {
+        if (animationId) {
+          cancelAnimationFrame(animationId);
+          animationId = null;
+        }
+        position = 50;
+        jsCircle.setAttribute('cx', position);
+        showToast('动画已重置', 'success');
+      };
+
+      // 自定义动画编辑器
+      const customAnimate = document.getElementById('custom-animate');
+      const attrSelect = document.getElementById('attr-select');
+      const fromValue = document.getElementById('from-value');
+      const midValue = document.getElementById('mid-value');
+      const toValue = document.getElementById('to-value');
+      const duration = document.getElementById('duration');
+      const durationValue = document.getElementById('duration-value');
+      const customCode = document.getElementById('custom-code');
+
+      duration.addEventListener('input', () => {
+        durationValue.textContent = duration.value + 's';
+      });
+
+      window.updateCustomAnimation = function() {
+        const attr = attrSelect.value;
+        const from = fromValue.value;
+        const mid = midValue.value;
+        const to = toValue.value;
+        const dur = duration.value + 's';
+
+        customAnimate.setAttribute('attributeName', attr);
+        customAnimate.setAttribute('values', `${from};${mid};${to}`);
+        customAnimate.setAttribute('dur', dur);
+
+        // 重启动画
+        customAnimate.beginElement();
+
+        customCode.textContent = `<animate attributeName="${attr}" values="${from};${mid};${to}" dur="${dur}" repeatCount="indefinite"/>`;
+        
+        showToast('动画已更新', 'success');
+      };
+    })();
+  </script>
+</body>
+</html>

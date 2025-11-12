@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SVG 变换操作 - 前端学习中心</title>
+  <link rel="stylesheet" href="../shared/common.css">
+  <script src="../shared/theme-sync.js"></script>
+  <script src="../shared/utils.js"></script>
+  <style>
+    .transform-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--spacing-lg);
+      margin: var(--spacing-lg) 0;
+    }
+
+    .transform-demo {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-md);
+    }
+
+    .transform-demo h3 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    .svg-container {
+      background: var(--bg-primary);
+      border-radius: var(--radius-sm);
+      padding: var(--spacing-md);
+      margin: var(--spacing-md) 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 250px;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+      margin-top: var(--spacing-md);
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    .control-row label {
+      min-width: 100px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .control-row input[type="range"] {
+      flex: 1;
+    }
+
+    .value-display {
+      min-width: 50px;
+      text-align: right;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .reference-shape {
+      opacity: 0.2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-link">← 返回 SVG 模块</a>
+    
+    <h1>SVG 变换操作</h1>
+    <p>使用 transform 属性对 SVG 元素进行平移、旋转、缩放和倾斜等变换。</p>
+
+    <div class="transform-grid">
+      <!-- 平移 -->
+      <div class="transform-demo">
+        <h3>平移 (translate)</h3>
+        <div class="svg-container">
+          <svg width="300" height="250" viewBox="0 0 300 250">
+            <rect class="reference-shape" x="75" y="75" width="80" height="80" 
+                  fill="var(--text-secondary)" rx="5"/>
+            <rect id="translate-rect" x="75" y="75" width="80" height="80" 
+                  fill="var(--primary)" rx="5" transform="translate(0, 0)"/>
+          </svg>
+        </div>
+        <div class="controls">
+          <div class="control-row">
+            <label>X 偏移:</label>
+            <input type="range" id="translate-x" min="-100" max="100" value="0">
+            <span class="value-display" id="translate-x-value">0</span>
+          </div>
+          <div class="control-row">
+            <label>Y 偏移:</label>
+            <input type="range" id="translate-y" min="-100" max="100" value="0">
+            <span class="value-display" id="translate-y-value">0</span>
+          </div>
+        </div>
+        <div class="code-block">
+          <code id="translate-code">transform="translate(0, 0)"</code>
+        </div>
+      </div>
+
+      <!-- 旋转 -->
+      <div class="transform-demo">
+        <h3>旋转 (rotate)</h3>
+        <div class="svg-container">
+          <svg width="300" height="250" viewBox="0 0 300 250">
+            <rect class="reference-shape" x="110" y="85" width="80" height="80" 
+                  fill="var(--text-secondary)" rx="5"/>
+            <circle cx="150" cy="125" r="3" fill="var(--error)"/>
+            <rect id="rotate-rect" x="110" y="85" width="80" height="80" 
+                  fill="var(--primary)" rx="5" transform="rotate(0 150 125)"/>
+          </svg>
+        </div>
+        <div class="controls">
+          <div class="control-row">
+            <label>旋转角度:</label>
+            <input type="range" id="rotate-angle" min="0" max="360" value="0">
+            <span class="value-display" id="rotate-value">0°</span>
+          </div>
+        </div>
+        <div class="code-block">
+          <code id="rotate-code">transform="rotate(0 150 125)"</code>
+        </div>
+      </div>
+
+      <!-- 缩放 -->
+      <div class="transform-demo">
+        <h3>缩放 (scale)</h3>
+        <div class="svg-container">
+          <svg width="300" height="250" viewBox="0 0 300 250">
+            <rect class="reference-shape" x="110" y="85" width="80" height="80" 
+                  fill="var(--text-secondary)" rx="5"/>
+            <rect id="scale-rect" x="110" y="85" width="80" height="80" 
+                  fill="var(--primary)" rx="5" 
+                  transform="scale(1) translate(0, 0)" transform-origin="150px 125px"/>
+          </svg>
+        </div>
+        <div class="controls">
+          <div class="control-row">
+            <label>X 缩放:</label>
+            <input type="range" id="scale-x" min="0.5" max="2" step="0.1" value="1">
+            <span class="value-display" id="scale-x-value">1.0</span>
+          </div>
+          <div class="control-row">
+            <label>Y 缩放:</label>
+            <input type="range" id="scale-y" min="0.5" max="2" step="0.1" value="1">
+            <span class="value-display" id="scale-y-value">1.0</span>
+          </div>
+        </div>
+        <div class="code-block">
+          <code id="scale-code">transform="scale(1, 1)"</code>
+        </div>
+      </div>
+
+      <!-- 倾斜 -->
+      <div class="transform-demo">
+        <h3>倾斜 (skew)</h3>
+        <div class="svg-container">
+          <svg width="300" height="250" viewBox="0 0 300 250">
+            <rect class="reference-shape" x="110" y="85" width="80" height="80" 
+                  fill="var(--text-secondary)" rx="5"/>
+            <rect id="skew-rect" x="110" y="85" width="80" height="80" 
+                  fill="var(--primary)" rx="5" transform="skewX(0) skewY(0)"/>
+          </svg>
+        </div>
+        <div class="controls">
+          <div class="control-row">
+            <label>X 倾斜:</label>
+            <input type="range" id="skew-x" min="-45" max="45" value="0">
+            <span class="value-display" id="skew-x-value">0°</span>
+          </div>
+          <div class="control-row">
+            <label>Y 倾斜:</label>
+            <input type="range" id="skew-y" min="-45" max="45" value="0">
+            <span class="value-display" id="skew-y-value">0°</span>
+          </div>
+        </div>
+        <div class="code-block">
+          <code id="skew-code">transform="skewX(0) skewY(0)"</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- 组合变换 -->
+    <div class="transform-demo" style="margin-top: var(--spacing-xl);">
+      <h3>🎮 组合变换</h3>
+      <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md);">
+        多个变换可以组合使用，变换顺序会影响最终结果
+      </p>
+      <div class="svg-container">
+        <svg width="100%" height="300" viewBox="0 0 500 300">
+          <rect class="reference-shape" x="210" y="110" width="80" height="80" 
+                fill="var(--text-secondary)" rx="5"/>
+          <circle cx="250" cy="150" r="3" fill="var(--error)"/>
+          <rect id="combined-rect" x="210" y="110" width="80" height="80" 
+                fill="var(--primary)" rx="5" 
+                transform="translate(0, 0) rotate(0 250 150) scale(1)"/>
+        </svg>
+      </div>
+      
+      <div class="controls">
+        <div class="control-row">
+          <label>平移 X:</label>
+          <input type="range" id="combined-tx" min="-100" max="100" value="0">
+          <span class="value-display" id="combined-tx-value">0</span>
+        </div>
+        <div class="control-row">
+          <label>平移 Y:</label>
+          <input type="range" id="combined-ty" min="-100" max="100" value="0">
+          <span class="value-display" id="combined-ty-value">0</span>
+        </div>
+        <div class="control-row">
+          <label>旋转:</label>
+          <input type="range" id="combined-rotate" min="0" max="360" value="0">
+          <span class="value-display" id="combined-rotate-value">0°</span>
+        </div>
+        <div class="control-row">
+          <label>缩放:</label>
+          <input type="range" id="combined-scale" min="0.5" max="2" step="0.1" value="1">
+          <span class="value-display" id="combined-scale-value">1.0</span>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <code id="combined-code">transform="translate(0, 0) rotate(0 250 150) scale(1)"</code>
+      </div>
+
+      <button class="btn" onclick="resetCombined()" style="margin-top: var(--spacing-md);">重置变换</button>
+    </div>
+
+    <div class="info-section" style="margin-top: var(--spacing-xl); padding: var(--spacing-md); background: var(--bg-secondary); border-radius: var(--radius-md);">
+      <h2>💡 关键知识点</h2>
+      <ul>
+        <li><strong>translate(x, y)</strong>: 平移元素，x 和 y 为偏移量</li>
+        <li><strong>rotate(angle cx cy)</strong>: 旋转元素，angle 为角度，cx/cy 为旋转中心（可选）</li>
+        <li><strong>scale(x, y)</strong>: 缩放元素，x 和 y 为缩放比例（y 可选，默认等于 x）</li>
+        <li><strong>skewX(angle)</strong> / <strong>skewY(angle)</strong>: 倾斜元素</li>
+        <li><strong>matrix(a b c d e f)</strong>: 使用矩阵进行复杂变换</li>
+        <li>多个变换可以组合使用，从左到右依次应用</li>
+        <li>变换顺序很重要：<code>translate rotate</code> 和 <code>rotate translate</code> 结果不同</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // 平移控制
+      const translateRect = document.getElementById('translate-rect');
+      const translateX = document.getElementById('translate-x');
+      const translateY = document.getElementById('translate-y');
+      const translateCode = document.getElementById('translate-code');
+
+      translateX.addEventListener('input', updateTranslate);
+      translateY.addEventListener('input', updateTranslate);
+
+      function updateTranslate() {
+        const x = translateX.value;
+        const y = translateY.value;
+        translateRect.setAttribute('transform', `translate(${x}, ${y})`);
+        document.getElementById('translate-x-value').textContent = x;
+        document.getElementById('translate-y-value').textContent = y;
+        translateCode.textContent = `transform="translate(${x}, ${y})"`;
+      }
+
+      // 旋转控制
+      const rotateRect = document.getElementById('rotate-rect');
+      const rotateAngle = document.getElementById('rotate-angle');
+      const rotateCode = document.getElementById('rotate-code');
+
+      rotateAngle.addEventListener('input', () => {
+        const angle = rotateAngle.value;
+        rotateRect.setAttribute('transform', `rotate(${angle} 150 125)`);
+        document.getElementById('rotate-value').textContent = angle + '°';
+        rotateCode.textContent = `transform="rotate(${angle} 150 125)"`;
+      });
+
+      // 缩放控制
+      const scaleRect = document.getElementById('scale-rect');
+      const scaleX = document.getElementById('scale-x');
+      const scaleY = document.getElementById('scale-y');
+      const scaleCode = document.getElementById('scale-code');
+
+      scaleX.addEventListener('input', updateScale);
+      scaleY.addEventListener('input', updateScale);
+
+      function updateScale() {
+        const x = scaleX.value;
+        const y = scaleY.value;
+        const offsetX = 150 * (1 - x);
+        const offsetY = 125 * (1 - y);
+        scaleRect.setAttribute('transform', `translate(${offsetX}, ${offsetY}) scale(${x}, ${y})`);
+        document.getElementById('scale-x-value').textContent = parseFloat(x).toFixed(1);
+        document.getElementById('scale-y-value').textContent = parseFloat(y).toFixed(1);
+        scaleCode.textContent = `transform="scale(${x}, ${y})"`;
+      }
+
+      // 倾斜控制
+      const skewRect = document.getElementById('skew-rect');
+      const skewX = document.getElementById('skew-x');
+      const skewY = document.getElementById('skew-y');
+      const skewCode = document.getElementById('skew-code');
+
+      skewX.addEventListener('input', updateSkew);
+      skewY.addEventListener('input', updateSkew);
+
+      function updateSkew() {
+        const x = skewX.value;
+        const y = skewY.value;
+        skewRect.setAttribute('transform', `skewX(${x}) skewY(${y})`);
+        document.getElementById('skew-x-value').textContent = x + '°';
+        document.getElementById('skew-y-value').textContent = y + '°';
+        skewCode.textContent = `transform="skewX(${x}) skewY(${y})"`;
+      }
+
+      // 组合变换控制
+      const combinedRect = document.getElementById('combined-rect');
+      const combinedTx = document.getElementById('combined-tx');
+      const combinedTy = document.getElementById('combined-ty');
+      const combinedRotate = document.getElementById('combined-rotate');
+      const combinedScale = document.getElementById('combined-scale');
+      const combinedCode = document.getElementById('combined-code');
+
+      combinedTx.addEventListener('input', updateCombined);
+      combinedTy.addEventListener('input', updateCombined);
+      combinedRotate.addEventListener('input', updateCombined);
+      combinedScale.addEventListener('input', updateCombined);
+
+      function updateCombined() {
+        const tx = combinedTx.value;
+        const ty = combinedTy.value;
+        const rotate = combinedRotate.value;
+        const scale = combinedScale.value;
+
+        combinedRect.setAttribute('transform', 
+          `translate(${tx}, ${ty}) rotate(${rotate} 250 150) scale(${scale})`);
+
+        document.getElementById('combined-tx-value').textContent = tx;
+        document.getElementById('combined-ty-value').textContent = ty;
+        document.getElementById('combined-rotate-value').textContent = rotate + '°';
+        document.getElementById('combined-scale-value').textContent = parseFloat(scale).toFixed(1);
+
+        combinedCode.textContent = 
+          `transform="translate(${tx}, ${ty}) rotate(${rotate} 250 150) scale(${scale})"`;
+      }
+
+      // 全局函数
+      window.resetCombined = function() {
+        combinedTx.value = 0;
+        combinedTy.value = 0;
+        combinedRotate.value = 0;
+        combinedScale.value = 1;
+        updateCombined();
+        showToast('变换已重置', 'success');
+      };
+    })();
+  </script>
+</body>
+</html>
