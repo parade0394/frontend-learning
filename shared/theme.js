@@ -188,12 +188,6 @@
         --card-hover-shadow: rgba(255, 255, 255, 0.1);
       }
 
-      body {
-        background: var(--bg-secondary);
-        color: var(--text-primary);
-        transition: background-color 0.3s ease, color 0.3s ease;
-      }
-
       /* 工具栏 */
       .theme-toolbar {
         position: fixed;
