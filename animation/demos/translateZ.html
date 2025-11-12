@@ -69,6 +69,12 @@
         width: 250px;
         height: 300px;
         transform-style: preserve-3d;
+        transform: rotateY(-15deg) rotateX(10deg);
+        transition: transform 0.5s ease;
+      }
+
+      .card-stack:hover {
+        transform: rotateY(-15deg) rotateX(10deg) scale(1.05);
       }
 
       .stacked-card {
@@ -263,6 +269,7 @@
 
           <pre class="code-block"><code><span class="keyword">.card-stack</span> {
   <span class="property">transform-style</span>: <span class="value">preserve-3d</span>;
+  <span class="property">transform</span>: <span class="value">rotateY(-15deg) rotateX(10deg)</span>;  <span class="comment">/* 旋转一下才能看到层叠 */</span>
 }
 
 <span class="keyword">.card:nth-child(1)</span> { <span class="property">transform</span>: <span class="value">translateZ(0px)</span>; }
