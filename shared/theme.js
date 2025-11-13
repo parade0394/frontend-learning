@@ -467,6 +467,25 @@
       }
     });
 
+    document.addEventListener('keydown', (e) => {
+      const activePanel = (themeModePanel && themeModePanel.classList.contains('active')) ? themeModePanel : (colorPanel && colorPanel.classList.contains('active')) ? colorPanel : null;
+      if (!activePanel) return;
+      if (e.key !== 'Tab') return;
+      const focusables = Array.from(activePanel.querySelectorAll('a, button, input, [tabindex]:not([tabindex="-1"])'));
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const isShift = e.shiftKey;
+      const current = document.activeElement;
+      if (isShift && current === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!isShift && current === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
+
     // 主题颜色选择
     themeOptions.forEach((option) => {
       option.addEventListener('click', () => {
