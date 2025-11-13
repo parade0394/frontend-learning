@@ -167,27 +167,6 @@
     const style = document.createElement('style');
     style.id = 'themeStyles';
     style.textContent = `
-      /* 主题变量 */
-      :root[data-theme="light"] {
-        --bg-primary: #ffffff;
-        --bg-secondary: #f9fafb;
-        --text-primary: #111827;
-        --text-secondary: #6b7280;
-        --border-color: #e5e7eb;
-        --card-bg: #ffffff;
-        --card-hover-shadow: rgba(0, 0, 0, 0.1);
-      }
-
-      :root[data-theme="dark"] {
-        --bg-primary: #1a1a1a;
-        --bg-secondary: #2d2d2d;
-        --text-primary: #f9fafb;
-        --text-secondary: #9ca3af;
-        --border-color: #404040;
-        --card-bg: #2d2d2d;
-        --card-hover-shadow: rgba(255, 255, 255, 0.1);
-      }
-
       /* 工具栏 */
       .theme-toolbar {
         position: fixed;

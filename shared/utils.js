@@ -3,6 +3,14 @@
    用于所有模块的通用JavaScript功能
    ======================================== */
 
+const reduceMotion = (function() {
+  try {
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  } catch (e) {
+    return false;
+  }
+})();
+
 /**
  * 播放动画 - 通过添加/移除类名触发CSS动画
  * @param {HTMLElement} element - 目标元素
@@ -10,6 +18,7 @@
  * @param {number} duration - 动画持续时间（毫秒）
  */
 function playAnimation(element, className, duration = 1500) {
+  if (reduceMotion) return;
   // 移除类名，重置动画
   element.classList.remove(className);
 
@@ -52,6 +61,7 @@ function resetAnimation(element, classNames = null) {
  * @param {number} duration - 动画持续时间（毫秒）
  */
 function playTransform(element, transformValue, duration = 1500) {
+  if (reduceMotion) return;
   // 重置 transform
   element.style.transform = 'none';
 

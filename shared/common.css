@@ -412,3 +412,12 @@ a.card {
     font-size: 0.85rem;
   }
 }
+
+/* 降动效偏好支持 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -322,27 +322,36 @@
     // 光源拖拽
     lightCanvas.addEventListener('mousedown', startDrag);
     let dragging = false;
+    let rafPending = false;
+    let lastEvent = null;
     
     function startDrag(e) {
       dragging = true;
-      updateAngle(e);
-      window.addEventListener('mousemove', updateAngle);
+      scheduleUpdate(e);
+      window.addEventListener('mousemove', scheduleUpdate);
       window.addEventListener('mouseup', stopDrag);
     }
     
     function stopDrag() {
       dragging = false;
-      window.removeEventListener('mousemove', updateAngle);
+      window.removeEventListener('mousemove', scheduleUpdate);
       window.removeEventListener('mouseup', stopDrag);
     }
     
-    function updateAngle(e) {
-      const rect = lightCanvas.getBoundingClientRect();
-      const x = e.clientX - rect.left - 100;
-      const y = e.clientY - rect.top - 100;
-      angle = Math.atan2(y, x);
-      drawLight();
-      updateShadow();
+    function scheduleUpdate(e) {
+      lastEvent = e;
+      if (rafPending) return;
+      rafPending = true;
+      requestAnimationFrame(() => {
+        rafPending = false;
+        if (!dragging || !lastEvent) return;
+        const rect = lightCanvas.getBoundingClientRect();
+        const x = lastEvent.clientX - rect.left - 100;
+        const y = lastEvent.clientY - rect.top - 100;
+        angle = Math.atan2(y, x);
+        drawLight();
+        updateShadow();
+      });
     }
 
     // 初始�?
