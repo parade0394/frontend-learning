@@ -150,3 +150,79 @@
     }
   });
 })();
+
+// 返回顶部按钮
+(function initBackToTop() {
+  'use strict';
+
+  function init() {
+    // 检查是否已经存在按钮，避免重复创建
+    if (document.querySelector('.back-to-top')) {
+      return;
+    }
+
+    // 创建按钮
+    const backToTopBtn = document.createElement('button');
+    backToTopBtn.className = 'back-to-top';
+    backToTopBtn.innerHTML = '↑';
+    backToTopBtn.setAttribute('aria-label', '返回顶部');
+    backToTopBtn.setAttribute('title', '返回顶部');
+
+    // 添加到页面
+    document.body.appendChild(backToTopBtn);
+
+    // 检测实际的滚动容器（可能是 window 或 .main-content）
+    const scrollContainer = document.querySelector('.main-content') || window;
+    const isWindow = scrollContainer === window;
+
+    // 显示/隐藏按钮的核心逻辑
+    function checkScroll() {
+      const scrollTop = isWindow
+        ? window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0
+        : scrollContainer.scrollTop;
+
+      if (scrollTop > 300) {
+        backToTopBtn.classList.add('visible');
+      } else {
+        backToTopBtn.classList.remove('visible');
+      }
+    }
+
+    // 节流函数（内部定义）
+    let lastTime = 0;
+    function throttledCheck() {
+      const now = Date.now();
+      if (now - lastTime >= 100) {
+        lastTime = now;
+        checkScroll();
+      }
+    }
+
+    scrollContainer.addEventListener('scroll', throttledCheck, { passive: true });
+
+    // 点击事件 - 平滑滚动到顶部
+    backToTopBtn.addEventListener('click', () => {
+      if (isWindow) {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+      } else {
+        scrollContainer.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+      }
+    });
+
+    // 初始检查
+    checkScroll();
+  }
+
+  // 确保 DOM 加载完成
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
