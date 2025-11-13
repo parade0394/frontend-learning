@@ -1,54 +1,109 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Demo 8: 对齐方式</title>
+        <link rel="stylesheet" href="../shared/common.css">
+    <!-- 防止主题闪烁 -->
+    <script>
+      (function() {
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {}
+      })();
+    </script>
+    <script src="../shared/theme-sync.js"></script>
+    <style>
+        /* 主题适配 */
+        body {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .container {
+            background: var(--card-bg);
+            color: var(--text-primary);
+        }
+        
+        h1, h2 {
+            color: var(--text-primary);
+        }
+        
+        .description {
+            color: var(--text-secondary);
+        }
+        
+        .code-block {
+            background: var(--gray-800);
+            color: var(--gray-200);
+            border: 1px solid var(--gray-700);
+        }
+        
+        .syntax-note, .info-box {
+            background: var(--primary-light);
+            border-left-color: var(--primary);
+            color: var(--text-primary);
+        }
+        
+        .syntax-note code, .info-box code {
+            background: var(--bg-primary);
+            color: var(--primary);
+        }
+    </style>
     <style>
       body {
         font-family: Arial, sans-serif;
         padding: 20px;
-        background: #f5f5f5;
+        background: var(--bg-secondary);
       }
 
       .container {
         max-width: 900px;
         margin: 0 auto;
-        background: white;
+        background: var(--card-bg);
         padding: 30px;
         border-radius: 8px;
       }
 
       h1 {
-        color: #2c3e50;
+        color: var(--text-primary);
         margin-bottom: 10px;
       }
 
       h2 {
-        color: #34495e;
+        color: var(--text-primary);
         margin-top: 40px;
         margin-bottom: 15px;
         font-size: 20px;
-        border-bottom: 2px solid #ecf0f1;
+        border-bottom: 2px solid var(--border-color);
         padding-bottom: 10px;
       }
 
       h3 {
-        color: #2c3e50;
+        color: var(--text-primary);
         margin-top: 25px;
         margin-bottom: 10px;
         font-size: 16px;
       }
 
       .description {
-        color: #666;
+        color: var(--text-secondary);
         margin-bottom: 30px;
         line-height: 1.6;
       }
 
       .code-block {
-        background: #2c3e50;
-        color: #ecf0f1;
+        background: var(--gray-800);
+        color: var(--gray-200);
         padding: 20px;
         border-radius: 5px;
         margin-bottom: 30px;
@@ -63,7 +118,7 @@
       }
 
       .code-block .value {
-        color: #3498db;
+        color: var(--primary);
       }
 
       .grid {
@@ -71,7 +126,7 @@
         grid-template-columns: repeat(3, 100px);
         grid-template-rows: 80px;
         gap: 10px;
-        background: #ecf0f1;
+        background: var(--bg-secondary);
         padding: 15px;
         height: 250px;
         margin-bottom: 20px;
@@ -82,7 +137,7 @@
         grid-template-columns: repeat(3, 120px);
         grid-template-rows: repeat(2, 100px);
         gap: 10px;
-        background: #ecf0f1;
+        background: var(--bg-secondary);
         padding: 15px;
         margin-bottom: 20px;
       }
@@ -155,7 +210,7 @@
       .back-link {
         display: inline-block;
         margin-top: 30px;
-        color: #3498db;
+        color: var(--primary);
         text-decoration: none;
       }
 
@@ -167,8 +222,8 @@
       }
 
       .note-box {
-        background: #fff3cd;
-        border-left: 4px solid #ffc107;
+        background: var(--card-bg)3cd;
+        border-left: 4px solid var(--primary);
         padding: 15px;
         margin: 20px 0;
         font-size: 14px;
@@ -205,7 +260,7 @@
 
       <div class="comparison-box">
         <h3>📊 对齐属性速查表</h3>
-        <table style="width: 100%; border-collapse: collapse; margin: 15px 0; background: white">
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0; background: var(--card-bg)">
           <tr style="background: #2196f3; color: white">
             <th style="border: 1px solid #ddd; padding: 10px">属性</th>
             <th style="border: 1px solid #ddd; padding: 10px">作用对象</th>
@@ -218,7 +273,7 @@
             <td style="border: 1px solid #ddd; padding: 10px">水平（行轴）</td>
             <td style="border: 1px solid #ddd; padding: 10px">网格在容器中的水平位置</td>
           </tr>
-          <tr style="background: #f5f5f5">
+          <tr style="background: var(--bg-secondary)">
             <td style="border: 1px solid #ddd; padding: 10px"><code>align-content</code></td>
             <td style="border: 1px solid #ddd; padding: 10px">整个网格</td>
             <td style="border: 1px solid #ddd; padding: 10px">垂直（列轴）</td>
@@ -230,7 +285,7 @@
             <td style="border: 1px solid #ddd; padding: 10px">水平（行轴）</td>
             <td style="border: 1px solid #ddd; padding: 10px">项目在单元格中的水平位置</td>
           </tr>
-          <tr style="background: #f5f5f5">
+          <tr style="background: var(--bg-secondary)">
             <td style="border: 1px solid #ddd; padding: 10px"><code>align-items</code></td>
             <td style="border: 1px solid #ddd; padding: 10px">所有项目</td>
             <td style="border: 1px solid #ddd; padding: 10px">垂直（列轴）</td>
@@ -381,7 +436,7 @@
         }
       </div>
 
-      <a href="index.html" class="back-link">← 返回目录</a>
+      <a href="index.html" class="back-link">← 返回 Grid 教程</a>
     </div>
   </body>
 </html>
