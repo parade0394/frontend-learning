@@ -1,9 +1,22 @@
 /* ========================================
    公共工具函数 - Utility Functions
    用于所有模块的通用JavaScript功能
+   
+   包含功能：
+   - 动画控制 (playAnimation, resetAnimation, playTransform)
+   - 防抖节流 (debounce, throttle)
+   - 代码格式化 (formatCode)
+   - 剪贴板操作 (copyToClipboard)
+   - 提示消息 (showToast)
+   - 本地存储 (storage)
+   - 工具函数 (isMobile, scrollToElement, getComputedStyle)
    ======================================== */
 
-const reduceMotion = (function() {
+/**
+ * 检测用户是否启用了减少动画偏好
+ * @type {boolean}
+ */
+const reduceMotion = (function () {
   try {
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   } catch (e) {
@@ -13,12 +26,17 @@ const reduceMotion = (function() {
 
 /**
  * 播放动画 - 通过添加/移除类名触发CSS动画
+ * 自动处理减少动画偏好设置
+ *
  * @param {HTMLElement} element - 目标元素
  * @param {string} className - 动画类名
- * @param {number} duration - 动画持续时间（毫秒）
+ * @param {number} duration - 动画持续时间（毫秒），默认1500ms
+ * @example
+ * playAnimation(box, 'bounce', 1000);
  */
 function playAnimation(element, className, duration = 1500) {
   if (reduceMotion) return;
+
   // 移除类名，重置动画
   element.classList.remove(className);
 
@@ -36,8 +54,13 @@ function playAnimation(element, className, duration = 1500) {
 
 /**
  * 重置动画 - 移除所有动画类名
+ *
  * @param {HTMLElement} element - 目标元素
- * @param {string|string[]} classNames - 要移除的类名（可选）
+ * @param {string|string[]|null} classNames - 要移除的类名（可选）
+ * @example
+ * resetAnimation(box); // 移除所有 animate- 开头的类
+ * resetAnimation(box, 'bounce'); // 移除指定类
+ * resetAnimation(box, ['bounce', 'fade']); // 移除多个类
  */
 function resetAnimation(element, classNames = null) {
   if (classNames) {
@@ -56,9 +79,13 @@ function resetAnimation(element, classNames = null) {
 /**
  * 播放 Transform 动画 - 直接操作 style.transform
  * 适用于不想定义 CSS 类的场景
+ *
  * @param {HTMLElement} element - 目标元素
- * @param {string} transformValue - transform 的值，如 'translate(100px, 50px)'
- * @param {number} duration - 动画持续时间（毫秒）
+ * @param {string} transformValue - transform 的值
+ * @param {number} duration - 动画持续时间（毫秒），默认1500ms
+ * @example
+ * playTransform(box, 'translate(100px, 50px)', 1000);
+ * playTransform(box, 'rotate(45deg) scale(1.5)', 2000);
  */
 function playTransform(element, transformValue, duration = 1500) {
   if (reduceMotion) return;
@@ -79,9 +106,14 @@ function playTransform(element, transformValue, duration = 1500) {
 
 /**
  * 防抖函数 - 延迟执行，多次调用只执行最后一次
+ * 常用于搜索输入、窗口resize等高频事件
+ *
  * @param {Function} fn - 要执行的函数
- * @param {number} delay - 延迟时间（毫秒）
+ * @param {number} delay - 延迟时间（毫秒），默认300ms
  * @returns {Function} 防抖后的函数
+ * @example
+ * const debouncedSearch = debounce((query) => search(query), 500);
+ * input.addEventListener('input', (e) => debouncedSearch(e.target.value));
  */
 function debounce(fn, delay = 300) {
   let timer = null;
@@ -95,9 +127,14 @@ function debounce(fn, delay = 300) {
 
 /**
  * 节流函数 - 限制执行频率
+ * 常用于滚动事件、鼠标移动等高频事件
+ *
  * @param {Function} fn - 要执行的函数
- * @param {number} interval - 时间间隔（毫秒）
+ * @param {number} interval - 时间间隔（毫秒），默认300ms
  * @returns {Function} 节流后的函数
+ * @example
+ * const throttledScroll = throttle(() => handleScroll(), 100);
+ * window.addEventListener('scroll', throttledScroll);
  */
 function throttle(fn, interval = 300) {
   let lastTime = 0;
@@ -112,8 +149,13 @@ function throttle(fn, interval = 300) {
 
 /**
  * 格式化代码 - 添加语法高亮
+ * 为代码字符串添加HTML标记以实现语法高亮
+ *
  * @param {string} code - 代码字符串
- * @returns {string} 格式化后的HTML
+ * @returns {string} 格式化后的HTML字符串
+ * @example
+ * const highlighted = formatCode('transform: rotate(45deg);');
+ * codeBlock.innerHTML = highlighted;
  */
 function formatCode(code) {
   return code
@@ -129,8 +171,13 @@ function formatCode(code) {
 
 /**
  * 复制文本到剪贴板
+ * 优先使用现代 Clipboard API，降级到 execCommand
+ *
  * @param {string} text - 要复制的文本
  * @returns {Promise<boolean>} 是否成功
+ * @example
+ * const success = await copyToClipboard('Hello World');
+ * if (success) showToast('复制成功', 'success');
  */
 async function copyToClipboard(text) {
   try {
@@ -156,10 +203,15 @@ async function copyToClipboard(text) {
 }
 
 /**
- * 显示提示消息
+ * 显示提示消息 (Toast)
+ * 在页面右上角显示临时提示消息
+ *
  * @param {string} message - 消息内容
- * @param {string} type - 消息类型 (success|warning|error|info)
- * @param {number} duration - 显示时长（毫秒）
+ * @param {('success'|'warning'|'error'|'info')} type - 消息类型
+ * @param {number} duration - 显示时长（毫秒），默认3000ms
+ * @example
+ * showToast('操作成功', 'success');
+ * showToast('请检查输入', 'warning', 5000);
  */
 function showToast(message, type = 'info', duration = 3000) {
   const toast = document.createElement('div');
@@ -191,9 +243,12 @@ function showToast(message, type = 'info', duration = 3000) {
 
 /**
  * 获取元素的计算样式
+ *
  * @param {HTMLElement} element - 目标元素
  * @param {string} property - CSS属性名
  * @returns {string} 属性值
+ * @example
+ * const color = getComputedStyle(element, 'color');
  */
 function getComputedStyle(element, property) {
   return window.getComputedStyle(element).getPropertyValue(property);
@@ -201,7 +256,13 @@ function getComputedStyle(element, property) {
 
 /**
  * 检测是否为移动设备
- * @returns {boolean}
+ * 基于 User Agent 字符串判断
+ *
+ * @returns {boolean} 是否为移动设备
+ * @example
+ * if (isMobile()) {
+ *   // 移动端特殊处理
+ * }
  */
 function isMobile() {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -209,8 +270,12 @@ function isMobile() {
 
 /**
  * 平滑滚动到指定元素
+ *
  * @param {string|HTMLElement} target - 目标元素或选择器
- * @param {number} offset - 偏移量（像素）
+ * @param {number} offset - 偏移量（像素），默认0
+ * @example
+ * scrollToElement('#section2', 80); // 滚动到元素，留80px顶部间距
+ * scrollToElement(document.querySelector('.target'));
  */
 function scrollToElement(target, offset = 0) {
   const element = typeof target === 'string' ? document.querySelector(target) : target;
@@ -224,45 +289,68 @@ function scrollToElement(target, offset = 0) {
 }
 
 /**
- * 本地存储工具
+ * 本地存储工具 - 带完整错误处理
+ * 在隐私模式或存储配额满时安全降级
  */
 const storage = {
+  /**
+   * 存储数据
+   * @param {string} key - 键名
+   * @param {*} value - 值（会自动JSON序列化）
+   * @returns {boolean} 是否成功
+   */
   set(key, value) {
     try {
       localStorage.setItem(key, JSON.stringify(value));
       return true;
     } catch (err) {
-      console.error('存储失败:', err);
+      console.warn(`存储失败 (${key}):`, err.message);
+      // 可能的错误：QuotaExceededError, SecurityError (隐私模式)
       return false;
     }
   },
 
+  /**
+   * 读取数据
+   * @param {string} key - 键名
+   * @param {*} defaultValue - 默认值
+   * @returns {*} 存储的值或默认值
+   */
   get(key, defaultValue = null) {
     try {
       const value = localStorage.getItem(key);
       return value ? JSON.parse(value) : defaultValue;
     } catch (err) {
-      console.error('读取失败:', err);
+      console.warn(`读取失败 (${key}):`, err.message);
       return defaultValue;
     }
   },
 
+  /**
+   * 删除数据
+   * @param {string} key - 键名
+   * @returns {boolean} 是否成功
+   */
   remove(key) {
     try {
       localStorage.removeItem(key);
       return true;
     } catch (err) {
-      console.error('删除失败:', err);
+      console.warn(`删除失败 (${key}):`, err.message);
       return false;
     }
   },
 
+  /**
+   * 清空所有数据
+   * @returns {boolean} 是否成功
+   */
   clear() {
     try {
       localStorage.clear();
       return true;
     } catch (err) {
-      console.error('清空失败:', err);
+      console.warn('清空失败:', err.message);
       return false;
     }
   },

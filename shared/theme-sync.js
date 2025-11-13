@@ -1,16 +1,37 @@
 /**
- * 主题同步脚本 - 用于demo页面
- * 从localStorage读取主题设置并应用，无需完整的theme.js
+ * 主题同步脚本 v2.0 - 用于demo页面
+ * 轻量级主题同步，从localStorage读取并应用主题设置
+ * 不包含UI组件，仅同步主题状态
+ *
+ * @module theme-sync
  */
 
 (function () {
   'use strict';
 
-  // 从 localStorage 读取主题设置
-  const savedThemeMode = localStorage.getItem('themeMode') || 'light';
-  const savedColor = localStorage.getItem('primaryColor') || '#10b981';
+  /**
+   * 安全读取 localStorage
+   * @param {string} key - 键名
+   * @param {*} defaultValue - 默认值
+   * @returns {*} 存储的值或默认值
+   */
+  function safeStorageGet(key, defaultValue) {
+    try {
+      return localStorage.getItem(key) || defaultValue;
+    } catch (err) {
+      console.warn(`localStorage 读取失败 (${key}):`, err.message);
+      return defaultValue;
+    }
+  }
 
-  // 应用主题模式
+  // 从 localStorage 安全读取主题设置
+  const savedThemeMode = safeStorageGet('themeMode', 'light');
+  const savedColor = safeStorageGet('primaryColor', '#10b981');
+
+  /**
+   * 应用主题模式
+   * @param {string} mode - 主题模式: 'light' | 'dark' | 'auto'
+   */
   function applyThemeMode(mode) {
     let actualTheme = mode;
 
@@ -26,11 +47,14 @@
     document.documentElement.setAttribute('data-theme', actualTheme);
   }
 
-  // 应用主色调
+  /**
+   * 应用主色调
+   * @param {string} color - 十六进制颜色值
+   */
   function applyPrimaryColor(color) {
-    const darkColor = adjustColor(color, -15); // 稍微变暗
-    const lightColor = adjustColor(color, 35); // 明显变亮但不至于接近白色
-    const lighterColor = adjustColor(color, 40); // 更亮一些
+    const darkColor = adjustColor(color, -15);
+    const lightColor = adjustColor(color, 35);
+    const lighterColor = adjustColor(color, 40);
 
     document.documentElement.style.setProperty('--primary', color);
     document.documentElement.style.setProperty('--primary-dark', darkColor);
@@ -38,15 +62,18 @@
     document.documentElement.style.setProperty('--primary-lighter', lighterColor);
   }
 
-  // 颜色调整函数 - 使用HSL色彩空间进行更自然的调整
+  /**
+   * 颜色调整函数 - 使用HSL色彩空间
+   * @param {string} color - 十六进制颜色值
+   * @param {number} percent - 亮度调整百分比
+   * @returns {string} 调整后的颜色
+   */
   function adjustColor(color, percent) {
-    // 将hex转换为RGB
     const num = parseInt(color.replace('#', ''), 16);
     let r = (num >> 16) / 255;
     let g = ((num >> 8) & 0x00ff) / 255;
     let b = (num & 0x0000ff) / 255;
 
-    // 转换为HSL
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
     let h,
@@ -71,10 +98,8 @@
       }
     }
 
-    // 调整亮度
     l = Math.max(0, Math.min(1, l + percent / 100));
 
-    // 转换回RGB
     function hue2rgb(p, q, t) {
       if (t < 0) t += 1;
       if (t > 1) t -= 1;
@@ -94,7 +119,6 @@
       b = hue2rgb(p, q, h - 1 / 3);
     }
 
-    // 转换为hex
     const toHex = (x) => {
       const hex = Math.round(x * 255).toString(16);
       return hex.length === 1 ? '0' + hex : hex;

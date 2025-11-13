@@ -18,6 +18,7 @@ Desktop.ini
 .settings/
 *.sublime-project
 *.sublime-workspace
+.kiro
 
 # 日志文件
 *.log
@@ -43,3 +44,6 @@ bower_components/
 *.zip
 *.tar.gz
 *.rar
+
+# 打包文件
+dist

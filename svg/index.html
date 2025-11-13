@@ -1,12 +1,27 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="SVG 图形模块：基础形状、路径、渐变、变换、文本、滤镜、动画与响应式，创建高质量可交互矢量图形。">
     <title>SVG 图形 - 前端学习中心</title>
-  <link rel="stylesheet" href="../shared/common.css">
-  <script src="../shared/theme.js"></script>
+    <link rel="stylesheet" href="../shared/common.css">
+    <!-- 防止主题闪烁 -->
+    <script>
+      (function() {
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {}
+      })();
+    </script>
+    <script src="../shared/theme.js"></script>
   <style>
     .demo-grid {
       display: grid;

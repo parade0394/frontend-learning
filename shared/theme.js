@@ -1,14 +1,23 @@
 /**
- * 全站主题系统 v2.0
+ * 全站主题系统 v2.1
  * 支持暗色模式（亮色/暗色/跟随系统）和主题颜色定制
+ *
+ * 功能：
+ * - 主题模式切换 (亮色/暗色/跟随系统)
+ * - 主题颜色定制 (5种预设颜色)
+ * - 设置持久化 (localStorage)
+ * - 系统主题监听
+ * - 完整的键盘导航和可访问性支持
+ *
+ * @module theme
  */
 
 (function () {
   'use strict';
 
-  // 从 localStorage 读取主题设置
-  const savedThemeMode = localStorage.getItem('themeMode') || 'light'; // light, dark, auto
-  const savedColor = localStorage.getItem('primaryColor') || '#10b981';
+  // 从 localStorage 安全读取主题设置
+  const savedThemeMode = safeStorageGet('themeMode', 'light');
+  const savedColor = safeStorageGet('primaryColor', '#10b981');
 
   // 立即应用主题（避免闪烁）
   applyThemeMode(savedThemeMode);
@@ -37,7 +46,40 @@
   }
 
   /**
+   * 安全的 localStorage 读取
+   * @param {string} key - 键名
+   * @param {*} defaultValue - 默认值
+   * @returns {*} 存储的值或默认值
+   */
+  function safeStorageGet(key, defaultValue) {
+    try {
+      const value = localStorage.getItem(key);
+      return value || defaultValue;
+    } catch (err) {
+      console.warn(`localStorage 读取失败 (${key}):`, err.message);
+      return defaultValue;
+    }
+  }
+
+  /**
+   * 安全的 localStorage 写入
+   * @param {string} key - 键名
+   * @param {*} value - 值
+   * @returns {boolean} 是否成功
+   */
+  function safeStorageSet(key, value) {
+    try {
+      localStorage.setItem(key, value);
+      return true;
+    } catch (err) {
+      console.warn(`localStorage 写入失败 (${key}):`, err.message);
+      return false;
+    }
+  }
+
+  /**
    * 应用主题模式
+   * @param {string} mode - 主题模式: 'light' | 'dark' | 'auto'
    */
   function applyThemeMode(mode) {
     let actualTheme = mode;
@@ -62,6 +104,7 @@
 
   /**
    * 创建主题 UI（工具栏和面板）
+   * 动态生成主题切换工具栏和设置面板
    */
   function createThemeUI() {
     // 检查是否已存在（避免重复创建）
@@ -73,12 +116,22 @@
     const toolbar = document.createElement('div');
     toolbar.id = 'themeToolbar';
     toolbar.className = 'theme-toolbar';
+    toolbar.setAttribute('role', 'toolbar');
+    toolbar.setAttribute('aria-label', '主题设置工具栏');
     toolbar.innerHTML = `
-      <button class="theme-toolbar-btn" id="themeToggle" title="暗色模式">
-        <span id="themeIcon">${currentTheme === 'dark' ? '🌙' : '☀️'}</span>
+      <button class="theme-toolbar-btn" id="themeToggle" 
+              title="暗色模式" 
+              aria-label="切换暗色模式"
+              aria-controls="themeModePanel"
+              aria-expanded="false">
+        <span id="themeIcon" aria-hidden="true">${currentTheme === 'dark' ? '🌙' : '☀️'}</span>
       </button>
-      <button class="theme-toolbar-btn" id="customizeBtn" title="主题定制">
-        🎨
+      <button class="theme-toolbar-btn" id="customizeBtn" 
+              title="主题定制" 
+              aria-label="定制主题颜色"
+              aria-controls="colorPanel"
+              aria-expanded="false">
+        <span aria-hidden="true">🎨</span>
       </button>
     `;
 
@@ -156,214 +209,14 @@
 
     // ARIA 属性
     themeModePanel.setAttribute('role', 'dialog');
-    themeModePanel.setAttribute('aria-modal', 'true');
+    themeModePanel.setAttribute('aria-modal', 'false');
     themeModePanel.setAttribute('aria-hidden', 'true');
+    themeModePanel.setAttribute('aria-label', '暗色模式设置');
+
     colorPanel.setAttribute('role', 'dialog');
-    colorPanel.setAttribute('aria-modal', 'true');
+    colorPanel.setAttribute('aria-modal', 'false');
     colorPanel.setAttribute('aria-hidden', 'true');
-    const themeToggleBtn = document.getElementById('themeToggle');
-    const customizeBtnEl = document.getElementById('customizeBtn');
-    if (themeToggleBtn) {
-      themeToggleBtn.setAttribute('aria-controls', 'themeModePanel');
-      themeToggleBtn.setAttribute('aria-expanded', 'false');
-    }
-    if (customizeBtnEl) {
-      customizeBtnEl.setAttribute('aria-controls', 'colorPanel');
-      customizeBtnEl.setAttribute('aria-expanded', 'false');
-    }
-  }
-
-  /**
-   * 添加主题样式
-   */
-  function addThemeStyles() {
-    const style = document.createElement('style');
-    style.id = 'themeStyles';
-    style.textContent = `
-      /* 工具栏 */
-      .theme-toolbar {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        display: flex;
-        gap: 10px;
-        z-index: 10000;
-      }
-
-      .theme-toolbar-btn {
-        width: 44px;
-        height: 44px;
-        border-radius: 12px;
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-        transition: all 0.2s ease;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      }
-
-      .theme-toolbar-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        border-color: var(--primary);
-      }
-
-      /* 主题面板 */
-      .theme-panel {
-        position: fixed;
-        top: 80px;
-        right: 20px;
-        width: 300px;
-        max-height: 80vh;
-        overflow-y: auto;
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 16px;
-        padding: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        display: none;
-        z-index: 9999;
-      }
-
-      .theme-panel.active {
-        display: block;
-        animation: slideIn 0.3s ease;
-      }
-
-      @keyframes slideIn {
-        from {
-          opacity: 0;
-          transform: translateY(-10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .theme-panel h3 {
-        font-size: 1.1rem;
-        margin-bottom: 15px;
-        color: var(--text-primary);
-      }
-
-      /* 暗色模式选项 */
-      .theme-mode-options {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .theme-mode-option {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 12px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        border: 2px solid var(--border-color);
-      }
-
-      .theme-mode-option:hover {
-        background: var(--bg-secondary);
-        border-color: var(--primary);
-      }
-
-      .theme-mode-option:has(input:checked) {
-        background: var(--primary-light);
-        border-color: var(--primary);
-      }
-
-      .theme-mode-option:has(input:checked) span {
-        color: var(--primary);
-        font-weight: 600;
-      }
-
-      .theme-mode-option input[type="radio"] {
-        cursor: pointer;
-      }
-
-      .theme-mode-option span {
-        font-size: 0.9rem;
-        color: var(--text-primary);
-        font-weight: 500;
-      }
-
-      /* 主题颜色选项 */
-      .theme-option {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 10px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background 0.2s ease;
-        margin-bottom: 8px;
-        border: 2px solid transparent;
-      }
-
-      .theme-option:hover {
-        background: var(--bg-secondary);
-      }
-
-      .theme-option.active {
-        background: var(--primary-light);
-        border-color: var(--primary);
-      }
-
-      .theme-option.active .theme-option-name,
-      .theme-option.active .theme-option-desc {
-        color: var(--primary);
-      }
-
-      .color-preview {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-        border: 2px solid var(--border-color);
-        flex-shrink: 0;
-      }
-
-      .theme-option-text {
-        flex: 1;
-      }
-
-      .theme-option-name {
-        font-weight: 600;
-        color: var(--text-primary);
-        font-size: 0.9rem;
-      }
-
-      .theme-option-desc {
-        font-size: 0.75rem;
-        color: var(--text-secondary);
-      }
-
-      /* 响应式 */
-      @media (max-width: 768px) {
-        .theme-toolbar {
-          top: 10px;
-          right: 10px;
-        }
-
-        .theme-toolbar-btn {
-          width: 40px;
-          height: 40px;
-          font-size: 18px;
-        }
-
-        .theme-panel {
-          right: 10px;
-          left: 10px;
-          width: auto;
-        }
-      }
-    `;
-    document.head.appendChild(style);
+    colorPanel.setAttribute('aria-label', '主题颜色设置');
   }
 
   /**
@@ -428,7 +281,7 @@
       input.addEventListener('change', (e) => {
         const mode = e.target.value;
         applyThemeMode(mode);
-        localStorage.setItem('themeMode', mode);
+        safeStorageSet('themeMode', mode);
       });
     });
 
@@ -468,7 +321,12 @@
     });
 
     document.addEventListener('keydown', (e) => {
-      const activePanel = (themeModePanel && themeModePanel.classList.contains('active')) ? themeModePanel : (colorPanel && colorPanel.classList.contains('active')) ? colorPanel : null;
+      const activePanel =
+        themeModePanel && themeModePanel.classList.contains('active')
+          ? themeModePanel
+          : colorPanel && colorPanel.classList.contains('active')
+          ? colorPanel
+          : null;
       if (!activePanel) return;
       if (e.key !== 'Tab') return;
       const focusables = Array.from(activePanel.querySelectorAll('a, button, input, [tabindex]:not([tabindex="-1"])'));
@@ -497,18 +355,19 @@
 
         // 应用颜色
         applyPrimaryColor(color);
-        localStorage.setItem('primaryColor', color);
+        safeStorageSet('primaryColor', color);
       });
     });
   }
 
   /**
    * 应用主色调
+   * @param {string} color - 十六进制颜色值
    */
   function applyPrimaryColor(color) {
-    const darkColor = adjustColor(color, -15); // 稍微变暗
-    const lightColor = adjustColor(color, 35); // 明显变亮但不至于接近白色
-    const lighterColor = adjustColor(color, 40); // 更亮一些
+    const darkColor = adjustColor(color, -15);
+    const lightColor = adjustColor(color, 35);
+    const lighterColor = adjustColor(color, 40);
 
     document.documentElement.style.setProperty('--primary', color);
     document.documentElement.style.setProperty('--primary-dark', darkColor);
@@ -517,16 +376,17 @@
   }
 
   /**
-   * 颜色调整函数 - 使用HSL色彩空间进行更自然的调整
+   * 颜色调整函数 - 使用HSL色彩空间
+   * @param {string} color - 十六进制颜色值
+   * @param {number} percent - 亮度调整百分比
+   * @returns {string} 调整后的颜色
    */
   function adjustColor(color, percent) {
-    // 将hex转换为RGB
     const num = parseInt(color.replace('#', ''), 16);
     let r = (num >> 16) / 255;
     let g = ((num >> 8) & 0x00ff) / 255;
     let b = (num & 0x0000ff) / 255;
 
-    // 转换为HSL
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
     let h,
@@ -551,10 +411,8 @@
       }
     }
 
-    // 调整亮度
     l = Math.max(0, Math.min(1, l + percent / 100));
 
-    // 转换回RGB
     function hue2rgb(p, q, t) {
       if (t < 0) t += 1;
       if (t > 1) t -= 1;
@@ -574,7 +432,6 @@
       b = hue2rgb(p, q, h - 1 / 3);
     }
 
-    // 转换为hex
     const toHex = (x) => {
       const hex = Math.round(x * 255).toString(16);
       return hex.length === 1 ? '0' + hex : hex;

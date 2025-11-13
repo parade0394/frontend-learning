@@ -31,6 +31,13 @@ frontend-learning/
 
 ## 🚀 快速开始
 
+### ⚠️ 重要提示
+
+**请使用 HTTP 服务器访问，不要直接双击 HTML 文件！**
+
+原因：浏览器安全限制（CORS、JavaScript 模块加载等）
+详见：[WHY_HTTP_SERVER.md](WHY_HTTP_SERVER.md)
+
 ### 方式 1：使用 Vite 本地开发（推荐）
 ```bash
 npm install
@@ -156,10 +163,12 @@ npx serve
 ## 🔧 扩展性
 
 ### 添加新模块
-1. 在根目录创建新模块文件夹
+1. 复制 `.templates/module-page.html` 到新模块目录
 2. 使用 `shared/common.css` 作为基础样式
 3. 使用 `shared/utils.js` 中的工具函数
 4. 在 `index.html` 中添加模块入口
+
+详细指南：[.templates/README.md](.templates/README.md)
 
 ### 自定义样式
 - 修改 `shared/common.css` 中的 CSS 变量
@@ -200,9 +209,41 @@ npx serve
 
 MIT License
 
-## 📦 部署
-- 执行 `npm run build` 生成 `dist/`
-- 将 `dist/` 静态托管到任意平台（GitHub Pages、Vercel、Netlify、Nginx 等）
+## 📦 构建和部署
+
+### 构建
+```bash
+npm run build    # 构建项目
+npm run verify   # 验证构建结果
+```
+
+### 本地预览
+```bash
+npm run preview  # 使用 Vite 预览
+
+# 或使用 serve
+npx serve dist
+
+# 或使用 Python
+cd dist && python -m http.server 8000
+```
+
+**注意**：请使用 HTTP 服务器访问，不要直接双击 HTML 文件。
+
+### 部署
+```bash
+# Vercel（推荐）
+vercel --prod
+
+# Netlify
+netlify deploy --prod
+
+# 或将 dist/ 目录上传到任意静态服务器
+```
+
+详细指南：
+- [BUILD_AND_DEPLOY.md](BUILD_AND_DEPLOY.md) - 构建和部署完整指南
+- [DEPLOYMENT.md](DEPLOYMENT.md) - 详细部署方案
 
 ---
 

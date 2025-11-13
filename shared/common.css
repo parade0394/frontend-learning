@@ -446,7 +446,11 @@ a.card {
   }
 }
 
-/* 主题工具栏与面板样式（从 theme.js 收敛） */
+/* ========================================
+   主题系统样式
+   工具栏与面板的视觉样式定义
+   ======================================== */
+
 .theme-toolbar {
   position: fixed;
   top: 20px;
@@ -475,6 +479,11 @@ a.card {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   border-color: var(--primary);
+}
+
+.theme-toolbar-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 .theme-panel {
@@ -604,6 +613,6 @@ a.card {
 
 @media (max-width: 768px) {
   .theme-toolbar { top: 10px; right: 10px; }
-  .theme-toolbar-btn { width: 40px; height: 40px; font-size: 18px; }
+  .theme-toolbar-btn { width: 44px; height: 44px; font-size: 18px; }
   .theme-panel { right: 10px; left: 10px; width: auto; }
 }
