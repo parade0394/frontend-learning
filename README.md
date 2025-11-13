@@ -1,6 +1,6 @@
 # 前端学习中心 Frontend Learning Hub
 
-一个整合的前端学习项目，包含 CSS 动画、Grid 布局和实用工具的完整教程。
+一个整合的前端学习项目，包含 CSS 动画、Grid 布局和实用工具的完整教程。支持使用 Vite 本地开发与多页面构建。
 
 ## 📁 项目结构
 
@@ -9,28 +9,48 @@ frontend-learning/
 ├── index.html              # 主入口页面
 ├── shared/                 # 公共资源
 │   ├── common.css          # 公共样式（CSS变量、通用组件）
-│   └── utils.js            # 公共工具函数
+│   ├── utils.js            # 公共工具函数
+│   └── theme.js            # 主题系统（亮/暗/跟随系统 + 主色定制）
 ├── animation/              # CSS 动画模块
 │   ├── index.html          # 动画模块主页
 │   ├── styles.css          # 动画模块专用样式
-│   ├── demos/              # 32个动画演示
+│   ├── demos/              # 32+ 个动画演示
 │   ├── product-demo.html   # 产品演示页面
 │   └── showcase.html       # 效果展示集合
 ├── grid/                   # CSS Grid 布局模块
-│   ├── index.html          # Grid模块主页
-│   └── demo*.html          # 10个Grid演示
-└── box-shadow/             # Box-Shadow 工具模块
-    └── index.html          # 交互式阴影生成器
+│   ├── index.html          # Grid 模块主页
+│   └── demo*.html          # 10 个 Grid 演示
+├── box-shadow/             # Box-Shadow 工具模块
+│   └── index.html          # 交互式阴影生成器
+├── scripts/                # 辅助脚本
+│   └── batch-update-demos.js
+├── vite.config.js          # Vite 配置（多页面构建）
+├── package.json            # 项目元数据与脚本
+└── dist/                   # 构建产物（由 Vite 生成）
 ```
 
 ## 🚀 快速开始
 
-### 方式 1：直接打开（推荐）
-1. 双击 `index.html` 文件
-2. 在浏览器中打开
+### 方式 1：使用 Vite 本地开发（推荐）
+```bash
+npm install
+
+# 启动本地开发服务器（默认端口 5173）
+npm run dev
+
+# 生产构建到 dist/
+npm run build
+
+# 本地预览构建结果
+npm run preview
+```
+
+### 方式 2：直接打开静态文件
+1. 双击 `index.html`
+2. 在浏览器中打开即可离线学习
 3. 选择一个模块开始学习
 
-### 方式 2：使用本地服务器
+### 方式 3：使用任意静态服务器
 ```bash
 # 使用 Python
 python -m http.server 8000
@@ -45,7 +65,7 @@ npx serve
 
 ### 1. CSS 动画教程 🎬
 - **内容**：Transform、Transition、Animation 完整教程
-- **知识点**：32 个核心概念
+- **知识点**：32+ 个核心概念
 - **演示**：120+ 个交互式示例
 - **时长**：4-6 小时
 - **入口**：`animation/index.html`
@@ -92,10 +112,17 @@ npx serve
 - **响应式**：完美适配桌面和移动端
 - **现代化**：清新的绿色主题，专业的 UI 设计
 
+### 主题系统（已实现）
+- **模式**：亮色、暗色、跟随系统自动切换
+- **主色定制**：预设多种主题色，实时应用并持久化
+- **可访问性**：ARIA 属性与键盘可达性完善
+- **入口**：在页面中引入 `shared/theme.js`
+
 ### 公共资源
 所有模块共享以下资源：
 - `shared/common.css`：基础样式、CSS 变量、通用组件
 - `shared/utils.js`：工具函数（动画控制、存储、提示等）
+- `shared/theme.js`：主题工具栏与面板（暗色模式与主题色）
 
 ## 🛠️ 技术栈
 
@@ -103,6 +130,12 @@ npx serve
 - **CSS3**：Transform、Transition、Animation、Grid、Flexbox、CSS Variables
 - **Vanilla JavaScript**：无依赖框架，纯原生 JS
 - **响应式设计**：移动端优先
+- **Vite 5**：本地开发与多页面构建
+- **vite-plugin-static-copy**：拷贝 `shared/`、各模块静态资源至构建产物
+
+### 多页面构建说明
+- 通过 `vite.config.js` 的 `rollupOptions.input` 配置多入口：`index.html`、`animation/index.html`、`grid/index.html`、`svg/index.html`、`box-shadow/index.html`
+- 构建后在 `dist/` 生成对应页面与资源，适合静态托管
 
 ## 📊 项目统计
 
@@ -153,20 +186,28 @@ npx serve
 
 - [ ] 添加 Flexbox 布局模块
 - [ ] 添加响应式设计模块
-- [ ] 添加 CSS 变量和主题切换
 - [ ] 添加学习进度追踪
-- [ ] 添加代码复制功能
+- [ ] 添加代码复制与示例分享功能
 - [ ] 添加搜索功能
-- [ ] 添加暗色模式
+- [ ] 增强动画示例的可访问性
+
+## 🧰 辅助脚本
+- `scripts/batch-update-demos.js`：批量为动画示例引入公共工具与优化代码片段
+- 运行方式：`node scripts/batch-update-demos.js`
+- 如果遇到 `require is not defined`（项目 `type: module`），可改名为 `.cjs` 或在独立目录运行
 
 ## 📄 许可
 
 MIT License
 
+## 📦 部署
+- 执行 `npm run build` 生成 `dist/`
+- 将 `dist/` 静态托管到任意平台（GitHub Pages、Vercel、Netlify、Nginx 等）
+
 ---
 
-**项目状态**：✅ 基础版本完成  
-**最后更新**：2024-11-11
+**项目状态**：✅ 基础版本完成（支持 Vite 多页面）  
+**最后更新**：2025-11-13
 
 ## 💡 使用提示
 
