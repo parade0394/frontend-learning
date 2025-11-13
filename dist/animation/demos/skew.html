@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>skew() - CSS 动画教程</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <script src="../../shared/theme-sync.js"></script>
+      <script src="../../shared/utils.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>CSS 动画教程</h1>
+        <a href="../index.html" class="back-home">← 返回首页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a href="coordinate.html" class="nav-item">坐标系统</a>
+        </div>
+        <div class="nav-section">
+          <h3>Transform 变换</h3>
+          <a href="translate.html" class="nav-item">translate() 平移</a>
+          <a href="translateX.html" class="nav-item">translateX() X轴平移</a>
+          <a href="translateY.html" class="nav-item">translateY() Y轴平移</a>
+          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
+          <a href="scale.html" class="nav-item">scale() 缩放</a>
+          <a href="skew.html" class="nav-item active">skew() 倾斜</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>skew() - 倾斜变换</h1>
+        <p class="subtitle">沿 X 和 Y 轴倾斜元素</p>
+
+        <section class="section">
+          <h2>语法说明</h2>
+          <pre class="code-block"><code>
+            <span class="keyword">transform:</span> <span class="property">skew</span>(<span class="value">x-angle, y-angle</span>);
+          </code></pre>
+
+          <ul>
+            <li><span class="highlight">x-angle</span> - X 轴方向的倾斜角度</li>
+            <li><span class="highlight">y-angle</span> - Y 轴方向的倾斜角度（可选，默认为 0）</li>
+            <li><strong>skewX 正值：</strong>顶部向左，底部向右（\ 形状）</li>
+            <li><strong>skewY 正值：</strong>左侧向上，右侧向下</li>
+            <li>常用单位：deg（度）</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <p>skewX(30deg) 顶部向左，底部向右，产生平行四边形效果</p>
+
+          <div class="demo-area">
+            <div class="box" id="demo-box-1">30°</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo1()">播放动画</button>
+
+          <pre class="code-block"><code>
+            <span class="keyword">.box</span> { <span class="property">transform</span>: <span class="value">skewX(30deg)</span>;
+            <span class="comment">/* 等价于 skew(30deg, 0) - 形成 \ 形状 */</span>
+            }
+          </code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：Y 轴倾斜</h2>
+          <p>skewY(20deg) 左侧向上，右侧向下</p>
+
+          <div class="demo-area">
+            <div class="box" id="demo-box-2">20°</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo2()">播放动画</button>
+
+          <pre class="code-block"><code>
+            <span class="keyword">.box</span> { <span class="property">transform</span>: <span class="value">skewY(20deg)</span>;
+            <span class="comment">/* 等价于 skew(0, 20deg) */</span>
+            }
+          </code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 3：双轴倾斜</h2>
+          <p>skew(20deg, 10deg) 同时在 X 和 Y 轴上倾斜</p>
+
+          <div class="demo-area">
+            <div class="box" id="demo-box-3">20°, 10°</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo3()">播放动画</button>
+
+          <pre class="code-block"><code>
+            <span class="keyword">.box</span> { <span class="property">transform</span>: <span class="value">skew(20deg, 10deg)</span>;
+            <span class="comment">/* X 轴倾斜 20 度，Y 轴倾斜 10 度 */</span>
+            }
+          </code></pre>
+
+          <div class="info-box">
+            <p><strong>理解技巧：</strong>skewX 想象成把矩形的顶部和底部向相反方向推；skewY 想象成把左侧和右侧向相反方向推</p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      // 使用 utils.js 中的 playTransform 工具函数
+      function playDemo1() {
+        const box = document.getElementById('demo-box-1');
+        playTransform(box, 'skewX(30deg)', 1500);
+      }
+
+      function playDemo2() {
+        const box = document.getElementById('demo-box-2');
+        playTransform(box, 'skewY(20deg)', 1500);
+      }
+
+      function playDemo3() {
+        const box = document.getElementById('demo-box-3');
+        playTransform(box, 'skew(20deg, 10deg)', 1500);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SVG 图形模块：基础形状、路径、渐变、变换、文本、滤镜、动画与响应式，创建高质量可交互矢量图形。">
+    <title>SVG 图形 - 前端学习中心</title>
+  <link rel="stylesheet" href="../shared/common.css">
+  <script src="../shared/theme.js"></script>
+  <style>
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-lg);
+      content-visibility: auto;
+      contain-intrinsic-size: 600px;
+    }
+
+    .demo-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-md);
+      transition: var(--transition-base);
+      text-decoration: none;
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+    }
+
+    .demo-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary);
+    }
+
+    .demo-preview {
+      width: 100%;
+      height: 150px;
+      background: var(--bg-primary);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .demo-preview svg {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    .demo-card h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--text-primary);
+    }
+
+    .demo-card p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .difficulty {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .difficulty.easy {
+      background: var(--success);
+      color: white;
+    }
+
+    .difficulty.medium {
+      background: var(--warning);
+      color: white;
+    }
+
+    .difficulty.hard {
+      background: var(--error);
+      color: white;
+    }
+
+    .intro-section {
+      background: var(--bg-secondary);
+      border-left: 4px solid var(--primary);
+      padding: var(--spacing-md);
+      border-radius: var(--radius-md);
+      margin: var(--spacing-lg) 0;
+    }
+
+    .intro-section h2 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    .intro-section ul {
+      margin: var(--spacing-sm) 0;
+      padding-left: var(--spacing-lg);
+    }
+
+    .intro-section li {
+      margin: var(--spacing-xs) 0;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="../index.html" class="back-link">← 返回首页</a>
+      <h1>🎨 SVG 图形</h1>
+      <p>可缩放矢量图形 (Scalable Vector Graphics) - 创建高质量、可交互的矢量图形</p>
+    </header>
+
+    <div class="intro-section">
+      <h2>关于 SVG</h2>
+      <p>SVG 是一种基于 XML 的矢量图形格式，具有以下优势：</p>
+      <ul>
+        <li>📐 <strong>无损缩放</strong> - 在任何分辨率下都保持清晰</li>
+        <li>🎯 <strong>精确控制</strong> - 使用代码精确定义每个图形元素</li>
+        <li>🎨 <strong>样式灵活</strong> - 可以使用 CSS 控制样式和动画</li>
+        <li>⚡ <strong>性能优秀</strong> - 文件体积小，渲染效率高</li>
+        <li>🔍 <strong>可访问性</strong> - 支持文本描述和搜索引擎索引</li>
+        <li>🎮 <strong>可交互</strong> - 支持 JavaScript 事件和动态操作</li>
+      </ul>
+    </div>
+
+    <h2>📚 学习路径</h2>
+    <div class="demo-grid">
+      <!-- 基础形状 -->
+      <a href="demo1-basic-shapes.html" class="demo-card">
+        <div class="demo-preview">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="30" cy="30" r="20" fill="var(--primary)" opacity="0.8"/>
+            <rect x="60" y="10" width="40" height="40" fill="var(--primary)" opacity="0.8"/>
+            <polygon points="30,90 10,110 50,110" fill="var(--primary)" opacity="0.8"/>
+            <ellipse cx="85" cy="95" rx="25" ry="15" fill="var(--primary)" opacity="0.8"/>
+          </svg>
+        </div>
+        <h3>基础形状</h3>
+        <p>学习 SVG 的基本图形元素：圆形、矩形、椭圆、多边形等</p>
+        <span class="difficulty easy">入门</span>
+      </a>
+
+      <!-- 路径绘制 -->
+      <a href="demo2-paths.html" class="demo-card">
+        <div class="demo-preview">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <path d="M 20,60 Q 60,20 100,60 T 100,100" 
+                  stroke="var(--primary)" stroke-width="3" fill="none"/>
+            <path d="M 20,80 C 20,40 100,40 100,80" 
+                  stroke="var(--primary)" stroke-width="3" fill="none" opacity="0.6"/>
+          </svg>
+        </div>
+        <h3>路径绘制</h3>
+        <p>掌握 path 元素和路径命令，绘制复杂的曲线和形状</p>
+        <span class="difficulty medium">进阶</span>
+      </a>
+
+      <!-- 渐变填充 -->
+      <a href="demo3-gradients.html" class="demo-card">
+        <div class="demo-preview">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <defs>
+              <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:var(--primary);stop-opacity:1" />
+                <stop offset="100%" style="stop-color:var(--primary);stop-opacity:0.3" />
+              </linearGradient>
+            </defs>
+            <circle cx="60" cy="60" r="45" fill="url(#grad1)"/>
+          </svg>
+        </div>
+        <h3>渐变填充</h3>
+        <p>使用线性渐变和径向渐变创建丰富的视觉效果</p>
+        <span class="difficulty medium">进阶</span>
+      </a>
+
+      <!-- 变换操作 -->
+      <a href="demo4-transforms.html" class="demo-card">
+        <div class="demo-preview">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <rect x="40" y="40" width="40" height="40" fill="var(--primary)" opacity="0.3"/>
+            <rect x="40" y="40" width="40" height="40" fill="var(--primary)" opacity="0.6" 
+                  transform="rotate(15 60 60)"/>
+            <rect x="40" y="40" width="40" height="40" fill="var(--primary)" 
+                  transform="rotate(30 60 60)"/>
+          </svg>
+        </div>
+        <h3>变换操作</h3>
+        <p>学习平移、旋转、缩放和倾斜等变换操作</p>
+        <span class="difficulty easy">入门</span>
+      </a>
+
+      <!-- 文本处理 -->
+      <a href="demo5-text.html" class="demo-card">
+        <div class="demo-preview">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <defs>
+              <path id="curve" d="M 10,60 Q 60,20 110,60"/>
+            </defs>
+            <text fill="var(--primary)" font-size="14" font-weight="bold">
+              <textPath href="#curve">SVG Text Path</textPath>
+            </text>
+          </svg>
+        </div>
+        <h3>文本处理</h3>
+        <p>在 SVG 中添加和样式化文本，包括路径文本</p>
+        <span class="difficulty easy">入门</span>
+      </a>
+
+      <!-- 滤镜效果 -->
+      <a href="demo6-filters.html" class="demo-card">
+        <div class="demo-preview">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <defs>
+              <filter id="shadow">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+                <feOffset dx="2" dy="2" result="offsetblur"/>
+                <feMerge>
+                  <feMergeNode/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <circle cx="60" cy="60" r="35" fill="var(--primary)" filter="url(#shadow)"/>
+          </svg>
+        </div>
+        <h3>滤镜效果</h3>
+        <p>使用 SVG 滤镜创建阴影、模糊、光照等特效</p>
+        <span class="difficulty hard">高级</span>
+      </a>
+
+      <!-- 动画效果 -->
+      <a href="demo7-animations.html" class="demo-card">
+        <div class="demo-preview">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="30" fill="var(--primary)">
+              <animate attributeName="r" values="30;40;30" dur="2s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+        </div>
+        <h3>动画效果</h3>
+        <p>使用 SMIL 动画和 CSS 动画让 SVG 动起来</p>
+        <span class="difficulty medium">进阶</span>
+      </a>
+
+      <!-- 图标系统 -->
+      <a href="demo8-icons.html" class="demo-card">
+        <div class="demo-preview">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <path d="M60,20 L75,50 L110,55 L85,80 L90,110 L60,95 L30,110 L35,80 L10,55 L45,50 Z" 
+                  fill="var(--primary)"/>
+          </svg>
+        </div>
+        <h3>图标系统</h3>
+        <p>创建可复用的 SVG 图标库和 sprite 系统</p>
+        <span class="difficulty medium">进阶</span>
+      </a>
+
+      <!-- 交互图表 -->
+      <a href="demo9-charts.html" class="demo-card">
+        <div class="demo-preview">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <rect x="20" y="60" width="15" height="40" fill="var(--primary)" opacity="0.8"/>
+            <rect x="45" y="40" width="15" height="60" fill="var(--primary)" opacity="0.8"/>
+            <rect x="70" y="50" width="15" height="50" fill="var(--primary)" opacity="0.8"/>
+            <rect x="95" y="30" width="15" height="70" fill="var(--primary)" opacity="0.8"/>
+          </svg>
+        </div>
+        <h3>交互图表</h3>
+        <p>使用 SVG 创建动态、可交互的数据可视化图表</p>
+        <span class="difficulty hard">高级</span>
+      </a>
+
+      <!-- 响应式 SVG -->
+      <a href="demo10-responsive.html" class="demo-card">
+        <div class="demo-preview">
+          <svg width="120" height="120" viewBox="0 0 120 120" preserveAspectRatio="xMidYMid meet">
+            <rect x="10" y="10" width="100" height="100" fill="none" 
+                  stroke="var(--primary)" stroke-width="2" stroke-dasharray="5,5"/>
+            <circle cx="60" cy="60" r="35" fill="var(--primary)" opacity="0.6"/>
+          </svg>
+        </div>
+        <h3>响应式 SVG</h3>
+        <p>掌握 viewBox 和 preserveAspectRatio，创建自适应图形</p>
+        <span class="difficulty medium">进阶</span>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

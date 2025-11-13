@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo 7: 弹性尺寸</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+        
+        .code-block .keyword {
+            color: #e74c3c;
+        }
+        
+        .code-block .value {
+            color: #3498db;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: minmax(100px, 200px) minmax(150px, 1fr) minmax(100px, 300px);
+            gap: 15px;
+            background: #ecf0f1;
+            padding: 15px;
+        }
+        
+        .item {
+            background: #e67e22;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .item small {
+            display: block;
+            margin-top: 10px;
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Demo 7: 弹性尺寸 - minmax()</h1>
+        <div class="description">
+            <p><strong>知识点：</strong>使用 <code>minmax(最小值, 最大值)</code> 定义弹性尺寸。</p>
+            <p>列1：<code>minmax(100px, 200px)</code> - 最小100px，最大200px</p>
+            <p>列2：<code>minmax(150px, 1fr)</code> - 最小150px，最大占据剩余空间</p>
+            <p>列3：<code>minmax(100px, 300px)</code> - 最小100px，最大300px</p>
+            <p>试着调整窗口大小，观察列宽变化！</p>
+        </div>
+        
+        <div class="code-block">
+.grid {<br>
+&nbsp;&nbsp;<span class="keyword">grid-template-columns</span>: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="value">minmax(100px, 200px)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="value">minmax(150px, 1fr)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="value">minmax(100px, 300px)</span>;<br>
+}
+        </div>
+        
+        <div class="grid">
+            <div class="item">
+                列 1
+                <small>100-200px</small>
+            </div>
+            <div class="item">
+                列 2
+                <small>150px-1fr</small>
+            </div>
+            <div class="item">
+                列 3
+                <small>100-300px</small>
+            </div>
+        </div>
+        
+        <a href="index.html" class="back-link">← 返回目录</a>
+    </div>
+</body>
+</html>

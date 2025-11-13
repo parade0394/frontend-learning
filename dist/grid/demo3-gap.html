@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo 3: 网格间距</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+        
+        .code-block .keyword {
+            color: #e74c3c;
+        }
+        
+        .code-block .value {
+            color: #3498db;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            background: #ecf0f1;
+            padding: 20px;
+        }
+        
+        .item {
+            background: #e74c3c;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            font-size: 18px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Demo 3: 网格间距 - gap</h1>
+        <div class="description">
+            <p><strong>知识点：</strong>使用 <code>gap</code> 设置网格项之间的间距。</p>
+            <p>可以分别设置：<code>row-gap</code> 和 <code>column-gap</code>，或使用简写 <code>gap: 20px</code></p>
+            <p>本例使用 <code>repeat(3, 1fr)</code> 创建3个等宽列，<code>1fr</code> 表示可用空间的一份。</p>
+        </div>
+        
+        <div class="code-block">
+.grid {<br>
+&nbsp;&nbsp;<span class="keyword">display</span>: <span class="value">grid</span>;<br>
+&nbsp;&nbsp;<span class="keyword">grid-template-columns</span>: <span class="value">repeat(3, 1fr)</span>;<br>
+&nbsp;&nbsp;<span class="keyword">gap</span>: <span class="value">20px</span>;<br>
+}
+        </div>
+        
+        <div class="grid">
+            <div class="item">1</div>
+            <div class="item">2</div>
+            <div class="item">3</div>
+            <div class="item">4</div>
+            <div class="item">5</div>
+            <div class="item">6</div>
+        </div>
+        
+        <a href="index.html" class="back-link">← 返回目录</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>rotateX() - CSS 动画教程</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <script src="../../shared/theme-sync.js"></script>
+      <script src="../../shared/utils.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>CSS 动画教程</h1>
+        <a href="../index.html" class="back-home">← 返回首页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a href="coordinate.html" class="nav-item">坐标系统</a>
+        </div>
+        <div class="nav-section">
+          <h3>Transform 变换</h3>
+          <a href="translate.html" class="nav-item">translate() 平移</a>
+          <a href="translateX.html" class="nav-item">translateX() X轴平移</a>
+          <a href="translateY.html" class="nav-item">translateY() Y轴平移</a>
+          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
+          <a href="rotateX.html" class="nav-item active">rotateX() X轴旋转</a>
+          <a href="rotateY.html" class="nav-item">rotateY() Y轴旋转</a>
+          <a href="scale.html" class="nav-item">scale() 缩放</a>
+          <a href="skew.html" class="nav-item">skew() 倾斜</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>rotateX() - X轴旋转（3D）</h1>
+        <p class="subtitle">围绕 X 轴旋转元素，产生上下翻转的 3D 效果</p>
+
+        <section class="section">
+          <h2>语法说明</h2>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">transform:</span> <span class="property">rotateX</span>(<span class="value">angle</span>);</code></pre>
+
+          <ul>
+            <li><span class="highlight">angle</span> - 旋转角度</li>
+            <li><strong>正值：</strong>顶部向后旋转（远离你）</li>
+            <li><strong>负值：</strong>顶部向前旋转（靠近你）</li>
+            <li>需要配合 <span class="highlight">perspective</span> 属性才能看到 3D 效果</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：向后翻转 60 度</h2>
+          <p>rotateX(60deg) 让元素顶部向后倾斜</p>
+
+          <div class="demo-area perspective">
+            <div class="box" id="demo-box-1">60°</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo1()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.container</span> {
+  <span class="property">perspective</span>: <span class="value">800px</span>;
+}
+
+<span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">rotateX(60deg)</span>;
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：完整翻转</h2>
+          <p>rotateX(180deg) 完全翻转元素</p>
+
+          <div class="demo-area perspective">
+            <div class="box" id="demo-box-2">180°</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo2()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">rotateX(180deg)</span>;
+  <span class="comment">/* 上下翻转 180 度 */</span>
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 3：向前翻转</h2>
+          <p>使用负值让顶部向前旋转</p>
+
+          <div class="demo-area perspective">
+            <div class="box" id="demo-box-3">-45°</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo3()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">rotateX(-45deg)</span>;
+  <span class="comment">/* 顶部向前倾斜 */</span>
+}</code></pre>
+
+          <div class="info-box">
+            <p><strong>应用场景：</strong>卡片翻转效果、3D 菜单、翻页动画</p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      // 使用 utils.js 中的 playTransform 工具函数
+      function playDemo1() {
+        const box = document.getElementById('demo-box-1');
+        playTransform(box, 'rotateX(60deg)', 1500);
+      }
+
+      function playDemo2() {
+        const box = document.getElementById('demo-box-2');
+        playTransform(box, 'rotateX(180deg)', 1500);
+      }
+
+      function playDemo3() {
+        const box = document.getElementById('demo-box-3');
+        playTransform(box, 'rotateX(-45deg)', 1500);
+      }
+    </script>
+  </body>
+</html>

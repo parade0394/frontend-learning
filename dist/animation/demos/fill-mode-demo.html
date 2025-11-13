@@ -1,0 +1,365 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>animation-fill-mode 详细演示</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <script src="../../shared/theme-sync.js"></script>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: #f9fafb;
+        padding: 40px 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        color: #111827;
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        color: #6b7280;
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+      }
+
+      .back-link {
+        display: inline-block;
+        margin-bottom: 30px;
+        color: #10b981;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .back-link:hover {
+        text-decoration: underline;
+      }
+
+      .demo-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin: 40px 0;
+      }
+
+      .demo-card {
+        border: 3px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 25px;
+        background: white;
+      }
+
+      .demo-card h3 {
+        margin: 0 0 20px 0;
+        font-size: 1.3rem;
+      }
+
+      .demo-area {
+        height: 200px;
+        background: #f9fafb;
+        border-radius: 12px;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 20px;
+        border: 2px dashed #d1d5db;
+      }
+
+      .box {
+        width: 100px;
+        height: 100px;
+        background: #10b981;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        border-radius: 12px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .play-btn {
+        width: 100%;
+        padding: 12px;
+        background: #10b981;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .play-btn:hover {
+        background: #059669;
+        transform: translateY(-2px);
+      }
+
+      .play-btn:active {
+        transform: translateY(0);
+      }
+
+      .description {
+        margin-top: 15px;
+        padding: 15px;
+        background: #f0fdf4;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      .description strong {
+        color: #059669;
+      }
+
+      .info-box {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 30px 0;
+      }
+
+      .info-box h3 {
+        color: #d97706;
+        margin: 0 0 10px 0;
+      }
+
+      .info-box p {
+        color: #92400e;
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      /* 动画定义 */
+      @keyframes slideFromLeft {
+        from {
+          transform: translate(-250%, -50%);
+          background: #ef4444;
+        }
+        to {
+          transform: translate(-50%, -50%);
+          background: #10b981;
+        }
+      }
+
+      .code-block {
+        background: #1f2937;
+        color: #e5e7eb;
+        padding: 20px;
+        border-radius: 12px;
+        margin: 20px 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        overflow-x: auto;
+      }
+
+      .keyword {
+        color: #f472b6;
+      }
+      .property {
+        color: #34d399;
+      }
+      .value {
+        color: #fbbf24;
+      }
+      .comment {
+        color: #9ca3af;
+      }
+    </style>
+      <script src="../../shared/utils.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <a href="keyframes.html" class="back-link">← 返回 @keyframes 教程</a>
+
+      <h1>animation-fill-mode 详细演示</h1>
+      <p class="subtitle">理解"延迟期间"和四种填充模式的区别</p>
+
+      <div class="info-box">
+        <h3>💡 什么是"延迟期间"？</h3>
+        <p>
+          当你设置
+          <code>animation-delay: 2s</code> 时，动画不会立即开始，而是等待 2 秒。<strong>这 2 秒就是"延迟期间"。</strong>
+        </p>
+        <p style="margin-top: 10px">
+          下面的演示中，所有动画都有
+          <strong>2 秒延迟</strong>。点击按钮后，<strong>仔细观察前 2 秒</strong>方块的位置和颜色！
+        </p>
+      </div>
+
+      <h2 style="margin: 40px 0 20px 0; color: #111827">backwards 的作用对比</h2>
+      <p style="color: #6b7280; margin-bottom: 20px">动画：从左侧（红色）滑到中间（绿色），有 2 秒延迟</p>
+
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3 style="color: #ef4444">❌ none（默认）</h3>
+          <div class="demo-area">
+            <div class="box" id="box-none">中间</div>
+          </div>
+          <button class="play-btn" onclick="playDemo('none')">播放动画</button>
+          <div class="description">
+            <strong>点击后：</strong><br />
+            • 0-2秒：方块在中间（绿色）等待<br />
+            • 2秒时：突然跳到左边（红色）<br />
+            • 2-3.5秒：从左边滑到中间<br />
+            • 3.5秒后：回到中间（绿色）
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3 style="color: #10b981">✅ backwards</h3>
+          <div class="demo-area">
+            <div class="box" id="box-backwards">中间</div>
+          </div>
+          <button class="play-btn" onclick="playDemo('backwards')">播放动画</button>
+          <div class="description">
+            <strong>点击后：</strong><br />
+            • <strong>立即：</strong>方块跳到左边（红色）<br />
+            • 0-2秒：在左边等待<br />
+            • 2-3.5秒：从左边滑到中间<br />
+            • 3.5秒后：回到中间（绿色）
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <h3>🎯 关键区别</h3>
+        <p>
+          <strong>none:</strong>
+          延迟期间保持原始状态（中间），动画开始时才跳到起始位置（左边）<br /><br />
+          <strong>backwards:</strong>
+          点击后立即跳到起始位置（左边），然后在那里等待延迟结束
+        </p>
+      </div>
+
+      <h2 style="margin: 40px 0 20px 0; color: #111827">forwards 的作用对比</h2>
+      <p style="color: #6b7280; margin-bottom: 20px">观察动画结束后的状态</p>
+
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3 style="color: #ef4444">❌ none（默认）</h3>
+          <div class="demo-area">
+            <div class="box" id="box-none-2">中间</div>
+          </div>
+          <button class="play-btn" onclick="playDemo2('none')">播放动画</button>
+          <div class="description">
+            <strong>动画结束后：</strong><br />
+            回到原始状态（中间，绿色）
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3 style="color: #10b981">✅ forwards</h3>
+          <div class="demo-area">
+            <div class="box" id="box-forwards">中间</div>
+          </div>
+          <button class="play-btn" onclick="playDemo2('forwards')">播放动画</button>
+          <div class="description">
+            <strong>动画结束后：</strong><br />
+            保持最后一帧状态（中间，绿色）
+          </div>
+        </div>
+      </div>
+
+      <h2 style="margin: 40px 0 20px 0; color: #111827">both = backwards + forwards</h2>
+
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>both</h3>
+          <div class="demo-area">
+            <div class="box" id="box-both">中间</div>
+          </div>
+          <button class="play-btn" onclick="playDemo('both')">播放动画</button>
+          <div class="description">
+            <strong>点击后：</strong><br />
+            • <strong>立即：</strong>跳到左边（backwards）<br />
+            • 0-2秒：在左边等待<br />
+            • 2-3.5秒：从左边滑到中间<br />
+            • 3.5秒后：<strong>保持在中间</strong>（forwards）
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <h3>完整对比</h3>
+          <div class="code-block" style="font-size: 0.85rem">
+            <span class="keyword">none</span>: 延迟期间：原始状态 结束后：原始状态
+
+            <span class="keyword">backwards</span>: 延迟期间：<span class="value">第一帧</span>
+            ✨ 结束后：原始状态
+
+            <span class="keyword">forwards</span>: 延迟期间：原始状态 结束后：<span class="value">最后一帧</span> ✨
+
+            <span class="keyword">both</span>: 延迟期间：<span class="value">第一帧</span> ✨ 结束后：<span class="value">最后一帧</span> ✨
+          </div>
+        </div>
+      </div>
+
+      <pre class="code-block"><code>
+        <span class="comment">/* 动画定义 */</span>
+        <span class="keyword">@keyframes</span> <span class="value">slideFromLeft</span> { <span class="keyword">from</span> {
+        <span class="property">transform</span>: <span class="value">translate(-250%, -50%)</span>; <span class="comment">/* 在左边 */</span>
+        <span class="property">background</span>: <span class="value">#ef4444</span>; <span class="comment">/* 红色 */</span>
+        }
+        <span class="keyword">to</span> { <span class="property">transform</span>: <span class="value">translate(-50%, -50%)</span>;
+        <span class="comment">/* 在中间 */</span> <span class="property">background</span>: <span class="value">#10b981</span>;
+        <span class="comment">/* 绿色 */</span>
+        } }
+
+        <span class="comment">/* 应用动画 */</span>
+        <span class="keyword">.box</span> { <span class="property">animation</span>:
+        <span class="value">slideFromLeft 1.5s ease-out 2s 1 backwards</span>;
+        <span class="comment">/* 动画名 时长 缓动 延迟 次数 填充模式 */</span>
+        }
+      </code></pre>
+    </div>
+
+    <script>
+      function playDemo(mode) {
+        const box = document.getElementById('box-' + mode);
+        resetBox(box);
+
+        // 应用动画
+        box.style.animation = `slideFromLeft 1.5s ease-out 2s 1 ${mode}`;
+
+        // 动画结束后重置（除了 forwards 和 both）
+        if (mode === 'none' || mode === 'backwards') {
+          setTimeout(() => {
+            resetBox(box);
+          }, 3600);
+        }
+      }
+
+      function playDemo2(mode) {
+        const box = document.getElementById('box-' + mode + '-2');
+        resetBox(box);
+
+        // 应用动画
+        box.style.animation = `slideFromLeft 1.5s ease-out 2s 1 ${mode}`;
+
+        // none 模式需要重置
+        if (mode === 'none') {
+          setTimeout(() => {
+            resetBox(box);
+          }, 3600);
+        }
+      }
+
+      function resetBox(box) {
+        box.style.animation = 'none';
+        box.style.transform = 'translate(-50%, -50%)';
+        box.style.background = '#10b981';
+        box.offsetHeight; // 触发重排
+      }
+    </script>
+  </body>
+</html>

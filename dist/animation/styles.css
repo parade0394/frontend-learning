@@ -1,0 +1,388 @@
+/* Animation 模块专用样式 */
+@import url('../shared/common.css');
+
+body {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 侧边栏样式 */
+.sidebar {
+  width: 280px;
+  background: var(--card-bg);
+  color: var(--text-primary);
+  overflow-y: auto;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border-color);
+}
+
+.sidebar-header {
+  padding: 30px 20px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.back-home {
+  display: inline-block;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-base);
+  background: var(--primary-light);
+  font-weight: 500;
+}
+
+.back-home:hover {
+  background: var(--primary-lighter);
+  transform: translateX(-3px);
+}
+
+.sidebar-nav {
+  padding: 20px 0;
+}
+
+.nav-section {
+  margin-bottom: 25px;
+}
+
+.nav-section h3 {
+  padding: 10px 20px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  letter-spacing: 1.2px;
+  font-weight: 700;
+}
+
+.nav-item {
+  display: block;
+  padding: 12px 20px 12px 35px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all var(--transition-base);
+  font-size: 0.95rem;
+  border-left: 3px solid transparent;
+  font-weight: 500;
+}
+
+.nav-item:hover {
+  background: var(--bg-secondary);
+  border-left-color: var(--primary);
+  color: var(--primary);
+}
+
+.nav-item.active {
+  background: var(--primary-light);
+  border-left-color: var(--primary);
+  color: var(--primary);
+}
+
+/* 主内容区 */
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 40px 60px;
+  background: var(--bg-secondary);
+}
+
+/* Demo 页面样式 */
+.demo-page {
+  max-width: 900px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.demo-page h1 {
+  font-size: 2.5rem;
+  color: var(--text-primary);
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.demo-page .subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 30px;
+  font-weight: 400;
+}
+
+.section {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  margin-bottom: 25px;
+  box-shadow: var(--shadow-md);
+  border: 2px solid var(--border-color);
+}
+
+.section h2 {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border-color);
+  font-weight: 700;
+}
+
+.section p {
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: 15px;
+}
+
+.section ul {
+  margin-left: 25px;
+  margin-bottom: 15px;
+}
+
+.section li {
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.highlight {
+  background: var(--primary-light);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  color: var(--primary-dark);
+  font-weight: 500;
+}
+
+.demo-area.with-axis::before,
+.demo-area.with-axis::after {
+  content: '';
+  position: absolute;
+  background: #dee2e6;
+}
+
+.demo-area.with-axis::before {
+  width: 100%;
+  height: 1px;
+  top: 50%;
+  left: 0;
+}
+
+.demo-area.with-axis::after {
+  width: 1px;
+  height: 100%;
+  left: 50%;
+  top: 0;
+}
+
+.demo-area.perspective {
+  perspective: 800px;
+}
+
+.box {
+  width: 100px;
+  height: 100px;
+  background: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: var(--radius-lg);
+  transition: transform 0.8s ease;
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2), 0 2px 4px -1px rgba(16, 185, 129, 0.1);
+}
+
+.play-button {
+  display: inline-block;
+  padding: 12px 30px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  margin-top: 15px;
+  box-shadow: var(--shadow-sm);
+}
+
+.play-button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.play-button:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.coordinate-system {
+  width: 100%;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+.axis-label {
+  position: absolute;
+  font-weight: 700;
+  color: #dc2626;
+  font-size: 1.1rem;
+}
+
+.axis-x {
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.axis-y {
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Animation Classes */
+.animate-translate {
+  transform: translate(100px, 50px);
+}
+
+.animate-translateX {
+  transform: translateX(150px);
+}
+
+.animate-translateY {
+  transform: translateY(100px);
+}
+
+.animate-rotate {
+  transform: rotate(360deg);
+}
+
+.animate-rotateX {
+  transform: rotateX(180deg);
+}
+
+.animate-rotateY {
+  transform: rotateY(180deg);
+}
+
+.animate-scale {
+  transform: scale(1.5);
+}
+
+.animate-scaleX {
+  transform: scaleX(2);
+}
+
+.animate-scaleY {
+  transform: scaleY(2);
+}
+
+.animate-skew {
+  transform: skew(30deg, 20deg);
+}
+
+.animate-skewX {
+  transform: skewX(30deg);
+}
+
+.animate-skewY {
+  transform: skewY(20deg);
+}
+
+.animate-multiple {
+  transform: translateX(100px) rotate(45deg) scale(1.2);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+    height: auto;
+    overflow: auto;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  .sidebar-header {
+    padding: 20px 15px;
+  }
+
+  .sidebar-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .main-content {
+    padding: 20px 15px;
+    overflow-y: visible;
+  }
+
+  .demo-page h1 {
+    font-size: 1.8rem;
+  }
+
+  .demo-page .subtitle {
+    font-size: 1rem;
+  }
+
+  .section {
+    padding: 20px 15px;
+  }
+
+  .box {
+    width: 80px;
+    height: 80px;
+    font-size: 0.9rem;
+  }
+
+  .play-button {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .animate-translateX,
+  .animate-translate {
+    transform: translateX(100px);
+  }
+}
+
+@media (max-width: 480px) {
+  .box {
+    width: 70px;
+    height: 70px;
+    font-size: 0.85rem;
+  }
+
+  .animate-translateX {
+    transform: translateX(80px);
+  }
+}

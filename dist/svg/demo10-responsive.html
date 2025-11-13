@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>响应式 SVG - 前端学习中心</title>
+  <link rel="stylesheet" href="../shared/common.css">
+  <script src="../shared/theme-sync.js"></script>
+  <script src="../shared/utils.js"></script>
+  <style>
+    .responsive-demo {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-md);
+      margin: var(--spacing-lg) 0;
+    }
+
+    .responsive-demo h3 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    .demo-container {
+      background: var(--bg-primary);
+      border-radius: var(--radius-sm);
+      padding: var(--spacing-md);
+      margin: var(--spacing-md) 0;
+      resize: both;
+      overflow: auto;
+      min-width: 200px;
+      min-height: 200px;
+      border: 2px dashed var(--border-color);
+    }
+
+    .demo-container svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .aspect-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--spacing-md);
+      margin: var(--spacing-md) 0;
+    }
+
+    .aspect-item {
+      background: var(--bg-primary);
+      border-radius: var(--radius-sm);
+      padding: var(--spacing-sm);
+      text-align: center;
+    }
+
+    .aspect-item svg {
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+    }
+
+    .aspect-item p {
+      margin-top: var(--spacing-xs);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+      margin: var(--spacing-md) 0;
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    .control-row label {
+      min-width: 150px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .control-row select {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-link">← 返回 SVG 模块</a>
+    
+    <h1>响应式 SVG</h1>
+    <p>学习如何创建自适应不同尺寸和比例的 SVG 图形。</p>
+
+    <!-- viewBox 基础 -->
+    <div class="responsive-demo">
+      <h3>📐 viewBox 基础</h3>
+      <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md);">
+        拖动右下角调整容器大小，观察 SVG 如何自适应
+      </p>
+      
+      <div class="demo-container" style="width: 400px; height: 300px;">
+        <svg viewBox="0 0 200 200">
+          <rect x="10" y="10" width="180" height="180" fill="none" 
+                stroke="var(--primary)" stroke-width="2" stroke-dasharray="5,5"/>
+          <circle cx="100" cy="100" r="60" fill="var(--primary)" opacity="0.6"/>
+          <text x="100" y="105" text-anchor="middle" fill="white" 
+                font-size="20" font-weight="bold">
+            viewBox
+          </text>
+        </svg>
+      </div>
+
+      <div class="code-block">
+        <code>&lt;!-- viewBox="min-x min-y width height" --&gt;
+&lt;svg viewBox="0 0 200 200"&gt;
+  &lt;!-- 内容会自动缩放以适应容器 --&gt;
+&lt;/svg&gt;</code>
+      </div>
+    </div>
+
+    <!-- preserveAspectRatio -->
+    <div class="responsive-demo">
+      <h3>🎯 preserveAspectRatio</h3>
+      <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md);">
+        控制 SVG 在容器中的对齐和缩放方式
+      </p>
+
+      <div class="aspect-grid">
+        <div class="aspect-item">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="xMinYMin meet" 
+               style="width: 100%; height: 150px;">
+            <rect width="100" height="100" fill="var(--primary)" opacity="0.3"/>
+            <circle cx="50" cy="50" r="30" fill="var(--primary)"/>
+          </svg>
+          <p>xMinYMin meet</p>
+        </div>
+
+        <div class="aspect-item">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" 
+               style="width: 100%; height: 150px;">
+            <rect width="100" height="100" fill="var(--primary)" opacity="0.3"/>
+            <circle cx="50" cy="50" r="30" fill="var(--primary)"/>
+          </svg>
+          <p>xMidYMid meet</p>
+        </div>
+
+        <div class="aspect-item">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="xMaxYMax meet" 
+               style="width: 100%; height: 150px;">
+            <rect width="100" height="100" fill="var(--primary)" opacity="0.3"/>
+            <circle cx="50" cy="50" r="30" fill="var(--primary)"/>
+          </svg>
+          <p>xMaxYMax meet</p>
+        </div>
+
+        <div class="aspect-item">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" 
+               style="width: 100%; height: 150px;">
+            <rect width="100" height="100" fill="var(--primary)" opacity="0.3"/>
+            <circle cx="50" cy="50" r="30" fill="var(--primary)"/>
+          </svg>
+          <p>none (拉伸)</p>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <code>&lt;!-- 对齐方式: xMin/xMid/xMax + YMin/YMid/YMax --&gt;
+&lt;!-- 缩放方式: meet(完整显示) / slice(裁剪) / none(拉伸) --&gt;
+&lt;svg preserveAspectRatio="xMidYMid meet"&gt;...&lt;/svg&gt;</code>
+      </div>
+    </div>
+
+    <!-- 交互式编辑器 -->
+    <div class="responsive-demo">
+      <h3>🎮 交互式 preserveAspectRatio 编辑器</h3>
+      
+      <div style="background: var(--bg-primary); border-radius: var(--radius-sm); padding: var(--spacing-md); margin: var(--spacing-md) 0;">
+        <svg id="interactive-svg" viewBox="0 0 200 200" 
+             preserveAspectRatio="xMidYMid meet"
+             style="width: 100%; height: 300px; border: 2px solid var(--border-color); border-radius: var(--radius-sm);">
+          <rect width="200" height="200" fill="var(--bg-secondary)"/>
+          <rect x="10" y="10" width="180" height="180" fill="none" 
+                stroke="var(--text-secondary)" stroke-width="1" stroke-dasharray="5,5"/>
+          <circle cx="100" cy="100" r="60" fill="var(--primary)" opacity="0.8"/>
+          <text x="100" y="105" text-anchor="middle" fill="white" 
+                font-size="16" font-weight="bold">
+            SVG
+          </text>
+        </svg>
+      </div>
+
+      <div class="controls">
+        <div class="control-row">
+          <label>X 对齐:</label>
+          <select id="align-x">
+            <option value="xMin">xMin (左对齐)</option>
+            <option value="xMid" selected>xMid (居中)</option>
+            <option value="xMax">xMax (右对齐)</option>
+          </select>
+        </div>
+        <div class="control-row">
+          <label>Y 对齐:</label>
+          <select id="align-y">
+            <option value="YMin">YMin (顶部对齐)</option>
+            <option value="YMid" selected>YMid (垂直居中)</option>
+            <option value="YMax">YMax (底部对齐)</option>
+          </select>
+        </div>
+        <div class="control-row">
+          <label>缩放方式:</label>
+          <select id="meet-slice">
+            <option value="meet" selected>meet (完整显示)</option>
+            <option value="slice">slice (填充裁剪)</option>
+            <option value="none">none (拉伸变形)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <code id="aspect-code">preserveAspectRatio="xMidYMid meet"</code>
+      </div>
+    </div>
+
+    <!-- 响应式图标 -->
+    <div class="responsive-demo">
+      <h3>📱 响应式图标示例</h3>
+      <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md);">
+        使用 viewBox 创建可缩放的图标
+      </p>
+
+      <div style="display: flex; gap: var(--spacing-lg); align-items: center; justify-content: center; padding: var(--spacing-lg); background: var(--bg-primary); border-radius: var(--radius-sm);">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" 
+             stroke="var(--primary)" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
+        </svg>
+
+        <svg viewBox="0 0 24 24" width="48" height="48" fill="none" 
+             stroke="var(--primary)" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
+        </svg>
+
+        <svg viewBox="0 0 24 24" width="72" height="72" fill="none" 
+             stroke="var(--primary)" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
+        </svg>
+      </div>
+
+      <div class="code-block" style="margin-top: var(--spacing-md);">
+        <code>&lt;!-- 相同的 viewBox，不同的尺寸 --&gt;
+&lt;svg viewBox="0 0 24 24" width="24" height="24"&gt;...&lt;/svg&gt;
+&lt;svg viewBox="0 0 24 24" width="48" height="48"&gt;...&lt;/svg&gt;
+&lt;svg viewBox="0 0 24 24" width="72" height="72"&gt;...&lt;/svg&gt;</code>
+      </div>
+    </div>
+
+    <!-- 流式布局 -->
+    <div class="responsive-demo">
+      <h3>🌊 流式布局 SVG</h3>
+      <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md);">
+        使用百分比宽度实现流式布局
+      </p>
+
+      <div style="background: var(--bg-primary); border-radius: var(--radius-sm); padding: var(--spacing-md);">
+        <svg viewBox="0 0 800 200" style="width: 100%; height: auto;">
+          <rect x="10" y="10" width="180" height="180" rx="10" fill="var(--primary)" opacity="0.8"/>
+          <rect x="210" y="10" width="180" height="180" rx="10" fill="var(--success)" opacity="0.8"/>
+          <rect x="410" y="10" width="180" height="180" rx="10" fill="var(--warning)" opacity="0.8"/>
+          <rect x="610" y="10" width="180" height="180" rx="10" fill="var(--error)" opacity="0.8"/>
+        </svg>
+      </div>
+
+      <div class="code-block" style="margin-top: var(--spacing-md);">
+        <code>&lt;svg viewBox="0 0 800 200" style="width: 100%; height: auto;"&gt;
+  &lt;!-- 内容会随容器宽度自动缩放 --&gt;
+&lt;/svg&gt;</code>
+      </div>
+    </div>
+
+    <div class="info-section" style="margin-top: var(--spacing-xl); padding: var(--spacing-md); background: var(--bg-secondary); border-radius: var(--radius-md);">
+      <h2>💡 关键知识点</h2>
+      <ul>
+        <li><strong>viewBox</strong>: 定义 SVG 的坐标系统，格式为 "min-x min-y width height"</li>
+        <li><strong>preserveAspectRatio</strong>: 控制 SVG 如何适应容器</li>
+        <li><strong>meet</strong>: 保持宽高比，完整显示内容（类似 contain）</li>
+        <li><strong>slice</strong>: 保持宽高比，填充容器并裁剪（类似 cover）</li>
+        <li><strong>none</strong>: 不保持宽高比，拉伸填充容器</li>
+        <li><strong>对齐方式</strong>: xMin/xMid/xMax 控制水平对齐，YMin/YMid/YMax 控制垂直对齐</li>
+        <li><strong>响应式技巧</strong>: 使用 width: 100% 和 height: auto 实现流式布局</li>
+        <li><strong>图标设计</strong>: 使用固定的 viewBox（如 24x24）便于缩放</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+
+      const svg = document.getElementById('interactive-svg');
+      const alignX = document.getElementById('align-x');
+      const alignY = document.getElementById('align-y');
+      const meetSlice = document.getElementById('meet-slice');
+      const aspectCode = document.getElementById('aspect-code');
+
+      alignX.addEventListener('change', updateAspectRatio);
+      alignY.addEventListener('change', updateAspectRatio);
+      meetSlice.addEventListener('change', updateAspectRatio);
+
+      function updateAspectRatio() {
+        const x = alignX.value;
+        const y = alignY.value;
+        const scale = meetSlice.value;
+
+        let value;
+        if (scale === 'none') {
+          value = 'none';
+        } else {
+          value = `${x}${y} ${scale}`;
+        }
+
+        svg.setAttribute('preserveAspectRatio', value);
+        aspectCode.textContent = `preserveAspectRatio="${value}"`;
+      }
+    })();
+  </script>
+</body>
+</html>

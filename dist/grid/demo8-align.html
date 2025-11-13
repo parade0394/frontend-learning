@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo 8: 对齐方式</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+      }
+
+      h1 {
+        color: #2c3e50;
+        margin-bottom: 10px;
+      }
+
+      h2 {
+        color: #34495e;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        font-size: 20px;
+        border-bottom: 2px solid #ecf0f1;
+        padding-bottom: 10px;
+      }
+
+      h3 {
+        color: #2c3e50;
+        margin-top: 25px;
+        margin-bottom: 10px;
+        font-size: 16px;
+      }
+
+      .description {
+        color: #666;
+        margin-bottom: 30px;
+        line-height: 1.6;
+      }
+
+      .code-block {
+        background: #2c3e50;
+        color: #ecf0f1;
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 30px;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        overflow-x: auto;
+      }
+
+      .code-block .keyword {
+        color: #e74c3c;
+      }
+
+      .code-block .value {
+        color: #3498db;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 100px);
+        grid-template-rows: 80px;
+        gap: 10px;
+        background: #ecf0f1;
+        padding: 15px;
+        height: 250px;
+        margin-bottom: 20px;
+      }
+
+      .grid-items {
+        display: grid;
+        grid-template-columns: repeat(3, 120px);
+        grid-template-rows: repeat(2, 100px);
+        gap: 10px;
+        background: #ecf0f1;
+        padding: 15px;
+        margin-bottom: 20px;
+      }
+
+      .justify-start {
+        justify-content: start;
+      }
+      .justify-center {
+        justify-content: center;
+      }
+      .justify-end {
+        justify-content: end;
+      }
+      .justify-space-between {
+        justify-content: space-between;
+      }
+      .justify-space-around {
+        justify-content: space-around;
+      }
+      .justify-space-evenly {
+        justify-content: space-evenly;
+      }
+
+      .align-start {
+        align-content: start;
+      }
+      .align-center {
+        align-content: center;
+      }
+      .align-end {
+        align-content: end;
+      }
+
+      .justify-items-start {
+        justify-items: start;
+      }
+      .justify-items-center {
+        justify-items: center;
+      }
+      .justify-items-end {
+        justify-items: end;
+      }
+      .justify-items-stretch {
+        justify-items: stretch;
+      }
+
+      .align-items-start {
+        align-items: start;
+      }
+      .align-items-center {
+        align-items: center;
+      }
+      .align-items-end {
+        align-items: end;
+      }
+      .align-items-stretch {
+        align-items: stretch;
+      }
+
+      .item {
+        background: #3498db;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .back-link {
+        display: inline-block;
+        margin-top: 30px;
+        color: #3498db;
+        text-decoration: none;
+      }
+
+      code {
+        background: #f8f9fa;
+        padding: 2px 6px;
+        border-radius: 3px;
+        color: #e74c3c;
+      }
+
+      .note-box {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 15px;
+        margin: 20px 0;
+        font-size: 14px;
+      }
+
+      .comparison-box {
+        background: #e3f2fd;
+        border: 2px solid #2196f3;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 30px 0;
+      }
+
+      .item-small {
+        background: #e91e63;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Demo 8: 对齐方式 - align & justify</h1>
+      <div class="description">
+        <p><strong>知识点：</strong>Grid 提供了强大的对齐控制，分为两类：</p>
+        <p>1️⃣ <strong>容器级对齐</strong>：控制整个网格在容器中的位置（content）</p>
+        <p>2️⃣ <strong>项目级对齐</strong>：控制每个项目在其网格单元中的位置（items）</p>
+      </div>
+
+      <div class="comparison-box">
+        <h3>📊 对齐属性速查表</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0; background: white">
+          <tr style="background: #2196f3; color: white">
+            <th style="border: 1px solid #ddd; padding: 10px">属性</th>
+            <th style="border: 1px solid #ddd; padding: 10px">作用对象</th>
+            <th style="border: 1px solid #ddd; padding: 10px">方向</th>
+            <th style="border: 1px solid #ddd; padding: 10px">说明</th>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ddd; padding: 10px"><code>justify-content</code></td>
+            <td style="border: 1px solid #ddd; padding: 10px">整个网格</td>
+            <td style="border: 1px solid #ddd; padding: 10px">水平（行轴）</td>
+            <td style="border: 1px solid #ddd; padding: 10px">网格在容器中的水平位置</td>
+          </tr>
+          <tr style="background: #f5f5f5">
+            <td style="border: 1px solid #ddd; padding: 10px"><code>align-content</code></td>
+            <td style="border: 1px solid #ddd; padding: 10px">整个网格</td>
+            <td style="border: 1px solid #ddd; padding: 10px">垂直（列轴）</td>
+            <td style="border: 1px solid #ddd; padding: 10px">网格在容器中的垂直位置</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #ddd; padding: 10px"><code>justify-items</code></td>
+            <td style="border: 1px solid #ddd; padding: 10px">所有项目</td>
+            <td style="border: 1px solid #ddd; padding: 10px">水平（行轴）</td>
+            <td style="border: 1px solid #ddd; padding: 10px">项目在单元格中的水平位置</td>
+          </tr>
+          <tr style="background: #f5f5f5">
+            <td style="border: 1px solid #ddd; padding: 10px"><code>align-items</code></td>
+            <td style="border: 1px solid #ddd; padding: 10px">所有项目</td>
+            <td style="border: 1px solid #ddd; padding: 10px">垂直（列轴）</td>
+            <td style="border: 1px solid #ddd; padding: 10px">项目在单元格中的垂直位置</td>
+          </tr>
+        </table>
+      </div>
+
+      <h2>一、容器级对齐：justify-content（水平）</h2>
+      <p>控制整个网格在容器中的水平位置</p>
+
+      <h3>start（默认，左对齐）</h3>
+      <div class="grid justify-start">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+      </div>
+
+      <h3>center（水平居中）</h3>
+      <div class="grid justify-center">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+      </div>
+
+      <h3>end（右对齐）</h3>
+      <div class="grid justify-end">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+      </div>
+
+      <h3>space-between（两端对齐）</h3>
+      <div class="grid justify-space-between">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+      </div>
+
+      <h3>space-around（周围留白）</h3>
+      <div class="grid justify-space-around">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+      </div>
+
+      <h3>space-evenly（均匀分布）</h3>
+      <div class="grid justify-space-evenly">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+      </div>
+
+      <h2>二、容器级对齐：align-content（垂直）</h2>
+      <p>控制整个网格在容器中的垂直位置</p>
+
+      <h3>start（顶部对齐）</h3>
+      <div class="grid align-start">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+      </div>
+
+      <h3>center（垂直居中）</h3>
+      <div class="grid align-center">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+      </div>
+
+      <h3>end（底部对齐）</h3>
+      <div class="grid align-end">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+      </div>
+
+      <h2>三、组合使用：完美居中</h2>
+      <div class="grid justify-center align-center">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+      </div>
+      <div class="note-box">💡 <strong>提示：</strong>可以使用简写属性 <code>place-content: center center</code> 同时设置水平和垂直居中</div>
+
+      <h2>四、项目级对齐：justify-items & align-items</h2>
+      <p>控制每个项目在其网格单元格中的位置</p>
+
+      <h3>justify-items: start（项目左对齐）</h3>
+      <div class="grid-items justify-items-start">
+        <div class="item-small">1</div>
+        <div class="item-small">2</div>
+        <div class="item-small">3</div>
+        <div class="item-small">4</div>
+        <div class="item-small">5</div>
+        <div class="item-small">6</div>
+      </div>
+
+      <h3>justify-items: center（项目水平居中）</h3>
+      <div class="grid-items justify-items-center">
+        <div class="item-small">1</div>
+        <div class="item-small">2</div>
+        <div class="item-small">3</div>
+        <div class="item-small">4</div>
+        <div class="item-small">5</div>
+        <div class="item-small">6</div>
+      </div>
+
+      <h3>align-items: center（项目垂直居中）</h3>
+      <div class="grid-items align-items-center">
+        <div class="item-small">1</div>
+        <div class="item-small">2</div>
+        <div class="item-small">3</div>
+        <div class="item-small">4</div>
+        <div class="item-small">5</div>
+        <div class="item-small">6</div>
+      </div>
+
+      <h3>justify-items: stretch（默认，拉伸填充）</h3>
+      <div class="grid-items justify-items-stretch">
+        <div class="item-small">1</div>
+        <div class="item-small">2</div>
+        <div class="item-small">3</div>
+        <div class="item-small">4</div>
+        <div class="item-small">5</div>
+        <div class="item-small">6</div>
+      </div>
+
+      <div class="code-block" style="margin-top: 40px">
+        <strong>常用对齐组合：</strong><br /><br />
+        /* 整个网格居中 */<br />
+        .grid {<br />
+        &nbsp;&nbsp;<span class="keyword">justify-content</span>: <span class="value">center</span>;<br />
+        &nbsp;&nbsp;<span class="keyword">align-content</span>: <span class="value">center</span>;<br />
+        &nbsp;&nbsp;/* 简写：place-content: center; */<br />
+        }<br /><br />
+        /* 项目在单元格中居中 */<br />
+        .grid {<br />
+        &nbsp;&nbsp;<span class="keyword">justify-items</span>: <span class="value">center</span>;<br />
+        &nbsp;&nbsp;<span class="keyword">align-items</span>: <span class="value">center</span>;<br />
+        &nbsp;&nbsp;/* 简写：place-items: center; */<br />
+        }<br /><br />
+        /* 单个项目自定义对齐 */<br />
+        .item {<br />
+        &nbsp;&nbsp;<span class="keyword">justify-self</span>: <span class="value">end</span>;<br />
+        &nbsp;&nbsp;<span class="keyword">align-self</span>: <span class="value">start</span>;<br />
+        &nbsp;&nbsp;/* 简写：place-self: start end; */<br />
+        }
+      </div>
+
+      <a href="index.html" class="back-link">← 返回目录</a>
+    </div>
+  </body>
+</html>

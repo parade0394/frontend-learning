@@ -1,0 +1,240 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>rotate3d() - CSS 动画教程</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <script src="../../shared/theme-sync.js"></script>
+      <script src="../../shared/utils.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>CSS 动画教程</h1>
+        <a href="../index.html" class="back-home">← 返回首页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a href="coordinate.html" class="nav-item">坐标系统</a>
+        </div>
+        <div class="nav-section">
+          <h3>Transform 变换</h3>
+          <a href="translate.html" class="nav-item">translate() 平移</a>
+          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
+          <a href="scale.html" class="nav-item">scale() 缩放</a>
+        </div>
+        <div class="nav-section">
+          <h3>3D 变换</h3>
+          <a href="perspective.html" class="nav-item">perspective 透视</a>
+          <a href="rotate3d.html" class="nav-item active">rotate3d() 3D旋转</a>
+          <a href="translate3d.html" class="nav-item">translate3d() 3D平移</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>rotate3d() - 3D 旋转</h1>
+        <p class="subtitle">围绕自定义 3D 轴旋转元素</p>
+
+        <section class="section">
+          <h2>语法说明</h2>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">transform:</span> <span class="property">rotate3d</span>(<span class="value">x, y, z, angle</span>);</code></pre>
+
+          <ul>
+            <li><span class="highlight">x, y, z</span> - 定义旋转轴的 3D 向量（0-1 之间的数值）</li>
+            <li><span class="highlight">angle</span> - 旋转角度</li>
+            <li><strong>rotate3d(1, 0, 0, 45deg)</strong> = rotateX(45deg)</li>
+            <li><strong>rotate3d(0, 1, 0, 45deg)</strong> = rotateY(45deg)</li>
+            <li><strong>rotate3d(0, 0, 1, 45deg)</strong> = rotateZ(45deg)</li>
+            <li>可以组合多个轴创建对角线旋转</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：单轴旋转</h2>
+          <p>分别围绕 X、Y、Z 轴旋转</p>
+
+          <button class="play-button" onclick="playDemo1()" style="margin-bottom: 15px">播放演示</button>
+
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px">
+            <div>
+              <p><strong>X 轴旋转</strong></p>
+              <div class="demo-area perspective">
+                <div class="box" id="box-x" style="width: 80px; height: 80px; font-size: 14px">X轴</div>
+              </div>
+            </div>
+            <div>
+              <p><strong>Y 轴旋转</strong></p>
+              <div class="demo-area perspective">
+                <div class="box" id="box-y" style="width: 80px; height: 80px; font-size: 14px">Y轴</div>
+              </div>
+            </div>
+            <div>
+              <p><strong>Z 轴旋转</strong></p>
+              <div class="demo-area perspective">
+                <div class="box" id="box-z" style="width: 80px; height: 80px; font-size: 14px">Z轴</div>
+              </div>
+            </div>
+          </div>
+
+          <pre class="code-block"><code><span class="comment">/* X 轴旋转 */</span>
+<span class="keyword">.box-x</span> {
+  <span class="property">transform</span>: <span class="value">rotate3d(1, 0, 0, 60deg)</span>;
+}
+
+<span class="comment">/* Y 轴旋转 */</span>
+<span class="keyword">.box-y</span> {
+  <span class="property">transform</span>: <span class="value">rotate3d(0, 1, 0, 60deg)</span>;
+}
+
+<span class="comment">/* Z 轴旋转 */</span>
+<span class="keyword">.box-z</span> {
+  <span class="property">transform</span>: <span class="value">rotate3d(0, 0, 1, 60deg)</span>;
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：对角线旋转</h2>
+          <p>同时在多个轴上旋转，创建对角线旋转效果</p>
+
+          <button class="play-button" onclick="playDemo2()" style="margin-bottom: 15px">播放演示</button>
+
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px">
+            <div>
+              <p><strong>XY 对角线</strong></p>
+              <div class="demo-area perspective">
+                <div class="box" id="box-xy">XY</div>
+              </div>
+              <div class="code-block" style="margin-top: 10px; font-size: 0.85rem">
+                <span class="property">rotate3d</span>(<span class="value">1, 1, 0, 180deg</span>)
+              </div>
+            </div>
+            <div>
+              <p><strong>XYZ 全方向</strong></p>
+              <div class="demo-area perspective">
+                <div class="box" id="box-xyz">XYZ</div>
+              </div>
+              <div class="code-block" style="margin-top: 10px; font-size: 0.85rem">
+                <span class="property">rotate3d</span>(<span class="value">1, 1, 1, 180deg</span>)
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>示例 3：连续 3D 旋转动画</h2>
+          <p>创建立体旋转效果</p>
+
+          <div class="demo-area perspective">
+            <div class="box" id="box-continuous" style="animation: none">3D</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo3()">播放连续旋转</button>
+
+          <pre class="code-block"><code><span class="keyword">@keyframes</span> <span class="value">rotate3d-animation</span> {
+  <span class="keyword">0%</span> {
+    <span class="property">transform</span>: <span class="value">rotate3d(1, 1, 1, 0deg)</span>;
+  }
+  <span class="keyword">100%</span> {
+    <span class="property">transform</span>: <span class="value">rotate3d(1, 1, 1, 360deg)</span>;
+  }
+}
+
+<span class="keyword">.box</span> {
+  <span class="property">animation</span>: <span class="value">rotate3d-animation 3s linear</span>;
+}</code></pre>
+
+          <div class="info-box">
+            <p><strong>应用场景：</strong>产品 3D 展示、Logo 动画、加载动画、创意交互效果</p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      function playDemo1() {
+        const boxes = [
+          { id: 'box-x', transform: 'rotate3d(1, 0, 0, 60deg)' },
+          { id: 'box-y', transform: 'rotate3d(0, 1, 0, 60deg)' },
+          { id: 'box-z', transform: 'rotate3d(0, 0, 1, 60deg)' },
+        ];
+
+        boxes.forEach(({ id, transform }) => {
+          const box = document.getElementById(id);
+          box.style.transform = 'none';
+          box.style.transition = 'transform 1s';
+        });
+
+        setTimeout(() => {
+          boxes.forEach(({ id, transform }) => {
+            const box = document.getElementById(id);
+            box.style.transform = transform;
+          });
+        }, 50);
+
+        setTimeout(() => {
+          boxes.forEach(({ id }) => {
+            const box = document.getElementById(id);
+            box.style.transform = 'none';
+          });
+        }, 1500);
+      }
+
+      function playDemo2() {
+        const boxes = [
+          { id: 'box-xy', transform: 'rotate3d(1, 1, 0, 180deg)' },
+          { id: 'box-xyz', transform: 'rotate3d(1, 1, 1, 180deg)' },
+        ];
+
+        boxes.forEach(({ id }) => {
+          const box = document.getElementById(id);
+          box.style.transform = 'none';
+          box.style.transition = 'transform 1.5s';
+        });
+
+        setTimeout(() => {
+          boxes.forEach(({ id, transform }) => {
+            const box = document.getElementById(id);
+            box.style.transform = transform;
+          });
+        }, 50);
+
+        setTimeout(() => {
+          boxes.forEach(({ id }) => {
+            const box = document.getElementById(id);
+            box.style.transform = 'none';
+          });
+        }, 2000);
+      }
+
+      function playDemo3() {
+        const box = document.getElementById('box-continuous');
+        box.style.animation = 'none';
+        box.offsetHeight;
+
+        const keyframes = `
+                @keyframes rotate3d-temp {
+                    from { transform: rotate3d(1, 1, 1, 0deg); }
+                    to { transform: rotate3d(1, 1, 1, 360deg); }
+                }
+            `;
+
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = keyframes;
+        document.head.appendChild(styleSheet);
+
+        box.style.animation = 'rotate3d-temp 3s linear';
+
+        setTimeout(() => {
+          box.style.animation = 'none';
+          document.head.removeChild(styleSheet);
+        }, 3000);
+      }
+    </script>
+  </body>
+</html>

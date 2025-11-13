@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>translate() - CSS 动画教程</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <script src="../../shared/theme-sync.js"></script>
+    <script src="../../shared/utils.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>CSS 动画教程</h1>
+        <a href="../index.html" class="back-home">← 返回首页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a href="coordinate.html" class="nav-item">坐标系统</a>
+        </div>
+        <div class="nav-section">
+          <h3>Transform 变换</h3>
+          <a href="translate.html" class="nav-item active">translate() 平移</a>
+          <a href="translateX.html" class="nav-item">translateX() X轴平移</a>
+          <a href="translateY.html" class="nav-item">translateY() Y轴平移</a>
+          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
+          <a href="scale.html" class="nav-item">scale() 缩放</a>
+          <a href="skew.html" class="nav-item">skew() 倾斜</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>translate() - 平移变换</h1>
+        <p class="subtitle">在 X 和 Y 轴上同时移动元素</p>
+
+        <section class="section">
+          <h2>语法说明</h2>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">transform:</span> <span class="property">translate</span>(<span class="value">x, y</span>);</code></pre>
+
+          <ul>
+            <li><span class="highlight">x</span> - X 轴方向的偏移量（正值向右，负值向左）</li>
+            <li><span class="highlight">y</span> - Y 轴方向的偏移量（正值向下，负值向上）</li>
+            <li>如果只提供一个值，则 Y 轴偏移量默认为 0</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：向右下移动</h2>
+          <p>将元素向右移动 100px，向下移动 50px</p>
+
+          <div class="demo-area with-axis">
+            <span class="axis-label axis-x">X →</span>
+            <span class="axis-label axis-y">Y ↓</span>
+            <div class="box" id="demo-box-1">点击播放</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo1()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">translate(100px, 50px)</span>;
+  <span class="comment">/* 向右 100px，向下 50px */</span>
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：向左上移动</h2>
+          <p>使用负值可以向相反方向移动</p>
+
+          <div class="demo-area with-axis">
+            <span class="axis-label axis-x">X →</span>
+            <span class="axis-label axis-y">Y ↓</span>
+            <div class="box" id="demo-box-2">点击播放</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo2()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">translate(-100px, -50px)</span>;
+  <span class="comment">/* 向左 100px，向上 50px */</span>
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 3：使用百分比</h2>
+          <p>百分比值相对于元素自身的尺寸计算</p>
+
+          <div class="demo-area with-axis">
+            <span class="axis-label axis-x">X →</span>
+            <span class="axis-label axis-y">Y ↓</span>
+            <div class="box" id="demo-box-3">点击播放</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo3()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">translate(50%, 100%)</span>;
+  <span class="comment">/* 向右移动自身宽度的 50%，向下移动自身高度的 100% */</span>
+}</code></pre>
+
+          <div class="info-box">
+            <p><strong>提示：</strong>translate(50%, 50%) 常用于元素居中定位</p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      // 使用 utils.js 中的 playTransform 工具函数
+      function playDemo1() {
+        const box = document.getElementById('demo-box-1');
+        playTransform(box, 'translate(100px, 50px)', 1500);
+      }
+
+      function playDemo2() {
+        const box = document.getElementById('demo-box-2');
+        playTransform(box, 'translate(-100px, -50px)', 1500);
+      }
+
+      function playDemo3() {
+        const box = document.getElementById('demo-box-3');
+        playTransform(box, 'translate(50%, 100%)', 1500);
+      }
+    </script>
+  </body>
+</html>

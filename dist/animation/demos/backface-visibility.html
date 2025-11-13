@@ -1,0 +1,834 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>backface-visibility - CSS 动画教程</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <script src="../../shared/theme-sync.js"></script>
+    <style>
+      .card-demo {
+        width: 250px;
+        height: 180px;
+        perspective: 1000px;
+        margin: 0 auto;
+      }
+
+      .card-inner {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transition: transform 0.8s;
+        transform-style: preserve-3d;
+        cursor: pointer;
+      }
+
+      .card-demo:hover .card-inner {
+        transform: rotateY(180deg);
+      }
+
+      .card-face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+
+      .card-front {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+      }
+
+      .card-back {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        transform: rotateY(180deg);
+      }
+
+      /* 旋转立方体 */
+      .cube-demo {
+        width: 150px;
+        height: 150px;
+        perspective: 800px;
+        margin: 0 auto;
+      }
+
+      .cube {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+        animation: rotateCube 8s infinite linear;
+      }
+
+      @keyframes rotateCube {
+        from {
+          transform: rotateX(0deg) rotateY(0deg);
+        }
+        to {
+          transform: rotateX(360deg) rotateY(360deg);
+        }
+      }
+
+      .cube-face {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: white;
+        opacity: 0.9;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .cube-front {
+        background: #10b981;
+        transform: translateZ(75px);
+      }
+      .cube-back {
+        background: #059669;
+        transform: rotateY(180deg) translateZ(75px);
+      }
+      .cube-right {
+        background: #34d399;
+        transform: rotateY(90deg) translateZ(75px);
+      }
+      .cube-left {
+        background: #065f46;
+        transform: rotateY(-90deg) translateZ(75px);
+      }
+      .cube-top {
+        background: #6ee7b7;
+        transform: rotateX(90deg) translateZ(75px);
+      }
+      .cube-bottom {
+        background: #047857;
+        transform: rotateX(-90deg) translateZ(75px);
+      }
+    </style>
+      <script src="../../shared/utils.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>CSS 动画教程</h1>
+        <a href="../index.html" class="back-home">← 返回首页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>3D 变换</h3>
+          <a href="perspective.html" class="nav-item">perspective 透视</a>
+          <a href="transform-style.html" class="nav-item">transform-style 3D空间</a>
+          <a href="backface-visibility.html" class="nav-item active">backface-visibility 背面</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>backface-visibility - 背面可见性</h1>
+        <p class="subtitle">控制元素背面是否可见</p>
+
+        <section class="section">
+          <h2>什么是 backface-visibility？</h2>
+          <p>当元素通过 3D 变换旋转时，其背面可能会朝向观察者。backface-visibility 属性决定这个背面是否可见。</p>
+
+          <ul>
+            <li><strong>应用场景：</strong>卡片翻转、3D 立方体等需要隐藏背面的效果</li>
+            <li><strong>性能优化：</strong>隐藏背面可以提升渲染性能</li>
+            <li><strong>配合使用：</strong>通常与 transform-style: preserve-3d 一起使用</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>理解"背面"的概念</h2>
+
+          <div style="background: #fef3c7; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f59e0b">
+            <p style="margin: 0; line-height: 1.8; color: #92400e">
+              <strong>关键理解：</strong>每个 HTML 元素就像一张纸，有正面和背面。当你用 <code>rotateY(180deg)</code> 翻转它时，
+              你看到的是它的<strong>背面</strong>（就像纸翻过来，文字是镜像的）。<code>backface-visibility: hidden</code>
+              的作用就是：当背面朝向你时，让它变透明。
+            </p>
+          </div>
+
+          <h3 style="margin-top: 30px; font-size: 1.1rem">场景对比演示</h3>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0">
+            <!-- 场景 1 -->
+            <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1)">
+              <h4 style="margin-top: 0; text-align: center; color: #1f2937">场景 1：正常叠加</h4>
+              <div style="width: 180px; height: 120px; margin: 20px auto; position: relative; border: 2px dashed #d1d5db">
+                <div style="position: relative; width: 100%; height: 100%">
+                  <div
+                    style="
+                      position: absolute;
+                      width: 100%;
+                      height: 100%;
+                      background: linear-gradient(135deg, #10b981, #059669);
+                      color: white;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-weight: bold;
+                      border-radius: 8px;
+                    "
+                  >
+                    FRONT
+                  </div>
+                  <div
+                    style="
+                      position: absolute;
+                      width: 100%;
+                      height: 100%;
+                      background: linear-gradient(135deg, #3b82f6, #2563eb);
+                      color: white;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-weight: bold;
+                      border-radius: 8px;
+                    "
+                  >
+                    BACK
+                  </div>
+                </div>
+              </div>
+              <div style="background: #fef3c7; padding: 12px; border-radius: 6px; font-size: 0.85rem; line-height: 1.6">
+                <strong>结果：</strong>只看到 BACK<br />
+                <strong>原因：</strong>两个都是 absolute，BACK 在上层覆盖了 FRONT
+              </div>
+            </div>
+
+            <!-- 场景 2 -->
+            <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1)">
+              <h4 style="margin-top: 0; text-align: center; color: #1f2937">场景 2：BACK 翻转 180°</h4>
+              <div style="width: 180px; height: 120px; margin: 20px auto; position: relative; border: 2px dashed #d1d5db">
+                <div style="position: relative; width: 100%; height: 100%">
+                  <div
+                    style="
+                      position: absolute;
+                      width: 100%;
+                      height: 100%;
+                      background: linear-gradient(135deg, #10b981, #059669);
+                      color: white;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-weight: bold;
+                      border-radius: 8px;
+                    "
+                  >
+                    FRONT
+                  </div>
+                  <div
+                    style="
+                      position: absolute;
+                      width: 100%;
+                      height: 100%;
+                      background: linear-gradient(135deg, #3b82f6, #2563eb);
+                      color: white;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-weight: bold;
+                      border-radius: 8px;
+                      transform: rotateY(180deg);
+                    "
+                  >
+                    BACK
+                  </div>
+                </div>
+              </div>
+              <div style="background: #fef3c7; padding: 12px; border-radius: 6px; font-size: 0.85rem; line-height: 1.6">
+                <strong>结果：</strong>看到镜像的 BACK<br />
+                <strong>原因：</strong>BACK 翻转后，你看到的是它的<strong>背面</strong>（文字镜像）
+              </div>
+            </div>
+
+            <!-- 场景 3 -->
+            <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1)">
+              <h4 style="margin-top: 0; text-align: center; color: #1f2937">场景 3：隐藏背面</h4>
+              <div style="width: 180px; height: 120px; margin: 20px auto; position: relative; border: 2px dashed #d1d5db">
+                <div style="position: relative; width: 100%; height: 100%">
+                  <div
+                    style="
+                      position: absolute;
+                      width: 100%;
+                      height: 100%;
+                      background: linear-gradient(135deg, #10b981, #059669);
+                      color: white;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-weight: bold;
+                      border-radius: 8px;
+                    "
+                  >
+                    FRONT
+                  </div>
+                  <div
+                    style="
+                      position: absolute;
+                      width: 100%;
+                      height: 100%;
+                      background: linear-gradient(135deg, #3b82f6, #2563eb);
+                      color: white;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-weight: bold;
+                      border-radius: 8px;
+                      transform: rotateY(180deg);
+                      backface-visibility: hidden;
+                    "
+                  >
+                    BACK
+                  </div>
+                </div>
+              </div>
+              <div style="background: #d1fae5; padding: 12px; border-radius: 6px; font-size: 0.85rem; line-height: 1.6">
+                <strong>结果：</strong>✅ 只看到 FRONT<br />
+                <strong>原因：</strong>BACK 的背面被隐藏，露出下面的 FRONT
+              </div>
+            </div>
+
+            <!-- 场景 4 -->
+            <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1)">
+              <h4 style="margin-top: 0; text-align: center; color: #1f2937">场景 4：完美翻转</h4>
+              <div style="width: 180px; height: 120px; margin: 20px auto; position: relative; border: 2px dashed #d1d5db; perspective: 600px">
+                <div
+                  style="position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.6s; cursor: pointer"
+                  onmouseenter="this.style.transform='rotateY(180deg)'"
+                  onmouseleave="this.style.transform='rotateY(0deg)'"
+                >
+                  <div
+                    style="
+                      position: absolute;
+                      width: 100%;
+                      height: 100%;
+                      background: linear-gradient(135deg, #10b981, #059669);
+                      color: white;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-weight: bold;
+                      border-radius: 8px;
+                      backface-visibility: hidden;
+                    "
+                  >
+                    FRONT
+                  </div>
+                  <div
+                    style="
+                      position: absolute;
+                      width: 100%;
+                      height: 100%;
+                      background: linear-gradient(135deg, #3b82f6, #2563eb);
+                      color: white;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-weight: bold;
+                      border-radius: 8px;
+                      transform: rotateY(180deg);
+                      backface-visibility: hidden;
+                    "
+                  >
+                    BACK
+                  </div>
+                </div>
+              </div>
+              <div style="background: #d1fae5; padding: 12px; border-radius: 6px; font-size: 0.85rem; line-height: 1.6">
+                <strong>结果：</strong>✅ 悬停完美翻转<br />
+                <strong>原因：</strong>两面都隐藏背面，自动切换显示
+              </div>
+            </div>
+          </div>
+
+          <pre class="code-block"><code><span class="comment">/* 场景 1：正常叠加 - BACK 覆盖 FRONT */</span>
+<span class="keyword">.front, .back</span> {
+  <span class="property">position</span>: <span class="value">absolute</span>;
+}
+
+<span class="comment">/* 场景 2：BACK 翻转 - 看到镜像文字 */</span>
+<span class="keyword">.back</span> {
+  <span class="property">transform</span>: <span class="value">rotateY(180deg)</span>;
+}
+
+<span class="comment">/* 场景 3：隐藏 BACK 的背面 - 露出 FRONT */</span>
+<span class="keyword">.back</span> {
+  <span class="property">transform</span>: <span class="value">rotateY(180deg)</span>;
+  <span class="property">backface-visibility</span>: <span class="value">hidden</span>;
+}
+
+<span class="comment">/* 场景 4：完美翻转 - 两面都隐藏背面 */</span>
+<span class="keyword">.front, .back</span> {
+  <span class="property">backface-visibility</span>: <span class="value">hidden</span>;
+}
+<span class="keyword">.back</span> {
+  <span class="property">transform</span>: <span class="value">rotateY(180deg)</span>;
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>语法说明</h2>
+          <pre class="code-block"><code><span class="keyword">.element</span> {
+  <span class="property">backface-visibility</span>: <span class="value">visible | hidden</span>;
+}</code></pre>
+
+          <ul>
+            <li><span class="highlight">visible</span> - 默认值，背面可见</li>
+            <li><span class="highlight">hidden</span> - 背面不可见</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>对比演示：visible vs hidden</h2>
+          <p>悬停卡片查看翻转效果</p>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 30px 0">
+            <div>
+              <h3 style="text-align: center; margin-bottom: 20px">visible（默认）</h3>
+              <div class="card-demo">
+                <div class="card-inner">
+                  <div class="card-face card-front" style="backface-visibility: visible">正面</div>
+                  <div class="card-face card-back" style="backface-visibility: visible">背面</div>
+                </div>
+              </div>
+              <p style="text-align: center; margin-top: 15px; color: #6b7280; font-size: 0.9rem">❌ 翻转时两面都可见，产生重叠</p>
+            </div>
+
+            <div>
+              <h3 style="text-align: center; margin-bottom: 20px">hidden</h3>
+              <div class="card-demo">
+                <div class="card-inner">
+                  <div class="card-face card-front" style="backface-visibility: hidden">正面</div>
+                  <div class="card-face card-back" style="backface-visibility: hidden">背面</div>
+                </div>
+              </div>
+              <p style="text-align: center; margin-top: 15px; color: #6b7280; font-size: 0.9rem">✅ 背面隐藏，翻转效果完美</p>
+            </div>
+          </div>
+
+          <pre class="code-block"><code><span class="comment">/* 错误：背面可见，产生重叠 */</span>
+<span class="keyword">.card-face</span> {
+  <span class="property">backface-visibility</span>: <span class="value">visible</span>;
+}
+
+<span class="comment">/* 正确：隐藏背面 */</span>
+<span class="keyword">.card-face</span> {
+  <span class="property">backface-visibility</span>: <span class="value">hidden</span>;
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：完美的卡片翻转</h2>
+          <p>悬停查看翻转效果</p>
+
+          <div class="card-demo">
+            <div class="card-inner">
+              <div class="card-face card-front" style="backface-visibility: hidden">
+                <div>
+                  <div style="font-size: 2rem; margin-bottom: 10px">🎴</div>
+                  <div>悬停翻转</div>
+                </div>
+              </div>
+              <div class="card-face card-back" style="backface-visibility: hidden">
+                <div>
+                  <div style="font-size: 2rem; margin-bottom: 10px">✨</div>
+                  <div>背面内容</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <pre class="code-block"><code><span class="comment">/* 卡片容器 */</span>
+<span class="keyword">.card</span> {
+  <span class="property">perspective</span>: <span class="value">1000px</span>;
+}
+
+<span class="keyword">.card-inner</span> {
+  <span class="property">transform-style</span>: <span class="value">preserve-3d</span>;
+  <span class="property">transition</span>: <span class="value">transform 0.8s</span>;
+}
+
+<span class="keyword">.card:hover .card-inner</span> {
+  <span class="property">transform</span>: <span class="value">rotateY(180deg)</span>;
+}
+
+<span class="comment">/* 卡片两面 - 关键：隐藏背面 */</span>
+<span class="keyword">.card-face</span> {
+  <span class="property">backface-visibility</span>: <span class="value">hidden</span>;
+}
+
+<span class="keyword">.card-back</span> {
+  <span class="property">transform</span>: <span class="value">rotateY(180deg)</span>;
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：3D 立方体</h2>
+          <p>立方体的每个面都设置了 backface-visibility: hidden</p>
+
+          <div class="cube-demo">
+            <div class="cube" style="transform-style: preserve-3d">
+              <div class="cube-face cube-front" style="backface-visibility: hidden">前</div>
+              <div class="cube-face cube-back" style="backface-visibility: hidden">后</div>
+              <div class="cube-face cube-right" style="backface-visibility: hidden">右</div>
+              <div class="cube-face cube-left" style="backface-visibility: hidden">左</div>
+              <div class="cube-face cube-top" style="backface-visibility: hidden">上</div>
+              <div class="cube-face cube-bottom" style="backface-visibility: hidden">下</div>
+            </div>
+          </div>
+
+          <div class="info-box" style="margin-top: 20px">
+            <p><strong>观察：</strong>当某个面的背面朝向你时，它会自动隐藏，只显示正面朝向你的面</p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>工作原理</h2>
+
+          <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0">
+            <h3 style="font-size: 1.1rem; margin-bottom: 15px">什么是"背面"？</h3>
+            <p style="color: #374151; line-height: 1.8">
+              当元素通过 3D 旋转（如 rotateY(180deg)）翻转后，原本面向观察者的"正面"会转到背后， 而原本在背后的"背面"会转到前面。backface-visibility:
+              hidden 会让这个背面变得不可见。
+            </p>
+          </div>
+
+          <ul>
+            <li><strong>正面：</strong>元素初始状态下面向观察者的一面</li>
+            <li><strong>背面：</strong>元素旋转 180 度后，原本正面的反面</li>
+            <li><strong>判断依据：</strong>元素的法线方向是否朝向观察者</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>使用场景</h2>
+
+          <ul>
+            <li>🃏 <strong>卡片翻转：</strong>最常见的应用，如名片、产品卡片</li>
+            <li>🎲 <strong>3D 立方体：</strong>确保只看到面向观察者的面</li>
+            <li>📖 <strong>翻书效果：</strong>模拟真实的翻页动画</li>
+            <li>🎪 <strong>3D 轮播：</strong>旋转展示多个面板</li>
+            <li>🎮 <strong>游戏界面：</strong>3D 物体的正确渲染</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>重要注意事项</h2>
+
+          <div class="info-box">
+            <p><strong>必须配合 3D 变换：</strong>backface-visibility 只在 3D 变换（如 rotateY, rotateX）中有意义，2D 旋转（rotate）不会产生背面</p>
+          </div>
+
+          <ul style="margin-top: 20px">
+            <li><strong>性能优化：</strong>设置为 hidden 可以让浏览器跳过背面的渲染，提升性能</li>
+            <li><strong>浏览器兼容：</strong>现代浏览器都支持，旧版本可能需要 -webkit- 前缀</li>
+            <li><strong>调试技巧：</strong>如果翻转效果不正常，检查是否忘记设置 backface-visibility: hidden</li>
+            <li><strong>两面都要设置：</strong>卡片翻转时，正面和背面都应该设置 backface-visibility: hidden</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>为什么需要三层结构？深度解析</h2>
+
+          <div style="background: #eff6ff; padding: 25px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #3b82f6">
+            <h3 style="margin-top: 0; color: #1e40af; font-size: 1.1rem">标准三层结构</h3>
+            <pre
+              style="background: #1f2937; color: #10b981; padding: 15px; border-radius: 6px; overflow-x: auto"
+            ><code>&lt;div class="<span style="color: #fbbf24;">爷容器</span>"&gt;           <span style="color: #9ca3af;">← perspective（观察点）</span>
+  &lt;div class="<span style="color: #f59e0b;">父容器</span>"&gt;         <span style="color: #9ca3af;">← transform-style + rotateY（翻转者）</span>
+    &lt;div class="<span style="color: #10b981;">正面</span>"&gt;&lt;/div&gt;   <span style="color: #9ca3af;">← backface-visibility（被翻转的面）</span>
+    &lt;div class="<span style="color: #3b82f6;">背面</span>"&gt;&lt;/div&gt;   <span style="color: #9ca3af;">← backface-visibility（被翻转的面）</span>
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+
+          <h3 style="margin-top: 30px; font-size: 1.1rem">每一层的职责</h3>
+
+          <div style="display: grid; gap: 20px; margin: 20px 0">
+            <!-- 爷容器 -->
+            <div
+              style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); border-left: 4px solid #fbbf24"
+            >
+              <h4 style="margin-top: 0; color: #92400e">
+                <span style="background: #fef3c7; padding: 4px 12px; border-radius: 4px; font-size: 0.9rem">爷容器</span>
+                设置 perspective（透视点）
+              </h4>
+              <pre class="code-block" style="margin: 15px 0"><code><span class="keyword">.card-container</span> {
+  <span class="property">perspective</span>: <span class="value">1000px</span>;
+}</code></pre>
+              <ul style="margin: 10px 0; line-height: 1.8; color: #374151">
+                <li><strong>作用：</strong>定义观察者的位置，创建 3D 空间</li>
+                <li><strong>为什么在外层？</strong>perspective 必须设置在<strong>父元素</strong>上，才能对子元素的 3D 变换生效</li>
+                <li><strong>类比：</strong>就像你站在舞台前看表演，这个属性决定你站在哪里看</li>
+                <li><strong>如果不设置：</strong>翻转会是平面的，没有 3D 透视效果</li>
+              </ul>
+            </div>
+
+            <!-- 父容器 -->
+            <div
+              style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); border-left: 4px solid #f59e0b"
+            >
+              <h4 style="margin-top: 0; color: #92400e">
+                <span style="background: #fed7aa; padding: 4px 12px; border-radius: 4px; font-size: 0.9rem">父容器</span>
+                设置 transform-style 和执行 rotateY
+              </h4>
+              <pre class="code-block" style="margin: 15px 0"><code><span class="keyword">.card</span> {
+  <span class="property">transform-style</span>: <span class="value">preserve-3d</span>;
+  <span class="property">transition</span>: <span class="value">transform 0.6s</span>;
+}
+
+<span class="keyword">.card-container:hover .card</span> {
+  <span class="property">transform</span>: <span class="value">rotateY(180deg)</span>;
+}</code></pre>
+              <ul style="margin: 10px 0; line-height: 1.8; color: #374151">
+                <li><strong>transform-style: preserve-3d</strong> - 让子元素保持在 3D 空间中（而不是被压平）</li>
+                <li><strong>transform: rotateY(180deg)</strong> - 执行翻转动作</li>
+                <li><strong>为什么在这一层？</strong>需要同时翻转正面和背面，所以在它们的父元素上执行旋转</li>
+                <li><strong>类比：</strong>这是舞台上的转盘，带着上面的演员一起旋转</li>
+                <li><strong>如果不设置 preserve-3d：</strong>子元素会被压平成 2D，背面隐藏会失效</li>
+              </ul>
+            </div>
+
+            <!-- 子元素 -->
+            <div
+              style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); border-left: 4px solid #10b981"
+            >
+              <h4 style="margin-top: 0; color: #065f46">
+                <span style="background: #d1fae5; padding: 4px 12px; border-radius: 4px; font-size: 0.9rem">子元素</span>
+                正面和背面
+              </h4>
+              <pre class="code-block" style="margin: 15px 0"><code><span class="keyword">.card-front,
+.card-back</span> {
+  <span class="property">position</span>: <span class="value">absolute</span>;
+  <span class="property">backface-visibility</span>: <span class="value">hidden</span>;
+}
+
+<span class="keyword">.card-back</span> {
+  <span class="property">transform</span>: <span class="value">rotateY(180deg)</span>;
+}</code></pre>
+              <ul style="margin: 10px 0; line-height: 1.8; color: #374151">
+                <li><strong>position: absolute</strong> - 让两个面重叠在同一位置</li>
+                <li><strong>backface-visibility: hidden</strong> - 背面朝向观察者时隐藏</li>
+                <li><strong>背面预先翻转 180°</strong> - 这样当父容器翻转 180° 时，背面刚好正面朝向你</li>
+                <li><strong>类比：</strong>两个演员背靠背站在转盘上，转盘旋转时自动切换</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3 style="margin-top: 30px; font-size: 1.1rem">为什么不能少一层？</h3>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0">
+            <div style="background: #fef2f2; padding: 20px; border-radius: 8px; border: 2px solid #fca5a5">
+              <h4 style="margin-top: 0; color: #991b1b">❌ 错误：只有两层</h4>
+              <pre
+                style="background: #1f2937; color: #ef4444; padding: 12px; border-radius: 6px; font-size: 0.85rem; overflow-x: auto"
+              ><code>&lt;div class="card"&gt;
+  &lt;div class="front"&gt;&lt;/div&gt;
+  &lt;div class="back"&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+.card {
+  perspective: 1000px;
+  transform: rotateY(180deg);
+}</code></pre>
+              <p style="margin: 10px 0 0 0; color: #7f1d1d; line-height: 1.6">
+                <strong>问题：</strong>perspective 和 transform 在同一个元素上，perspective 不会对自己的 transform 生效，
+                只会对子元素生效。结果就是没有透视效果。
+              </p>
+            </div>
+
+            <div style="background: #f0fdf4; padding: 20px; border-radius: 8px; border: 2px solid #86efac">
+              <h4 style="margin-top: 0; color: #166534">✅ 正确：三层结构</h4>
+              <pre
+                style="background: #1f2937; color: #10b981; padding: 12px; border-radius: 6px; font-size: 0.85rem; overflow-x: auto"
+              ><code>&lt;div class="container"&gt;
+  &lt;div class="card"&gt;
+    &lt;div class="front"&gt;&lt;/div&gt;
+    &lt;div class="back"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+.container {
+  perspective: 1000px;
+}
+.card {
+  transform: rotateY(180deg);
+}</code></pre>
+              <p style="margin: 10px 0 0 0; color: #14532d; line-height: 1.6">
+                <strong>正确：</strong>perspective 在父元素，对子元素的 transform 生效，产生正确的 3D 透视效果。
+              </p>
+            </div>
+          </div>
+
+          <h3 style="margin-top: 30px; font-size: 1.1rem">完整的卡片翻转模板</h3>
+
+          <pre class="code-block"><code><span class="comment">/* ============ HTML 结构 ============ */</span>
+&lt;<span class="keyword">div</span> <span class="property">class</span>=<span class="value">"card-container"</span>&gt;  <span class="comment">&lt;!-- 爷容器：观察点 --&gt;</span>
+  &lt;<span class="keyword">div</span> <span class="property">class</span>=<span class="value">"card"</span>&gt;            <span class="comment">&lt;!-- 父容器：翻转者 --&gt;</span>
+    &lt;<span class="keyword">div</span> <span class="property">class</span>=<span class="value">"card-front"</span>&gt;正面内容&lt;/<span class="keyword">div</span>&gt;
+    &lt;<span class="keyword">div</span> <span class="property">class</span>=<span class="value">"card-back"</span>&gt;背面内容&lt;/<span class="keyword">div</span>&gt;
+  &lt;/<span class="keyword">div</span>&gt;
+&lt;/<span class="keyword">div</span>&gt;
+
+<span class="comment">/* ============ CSS 样式 ============ */</span>
+
+<span class="comment">/* 第 1 层：爷容器 - 设置观察点 */</span>
+<span class="keyword">.card-container</span> {
+  <span class="property">perspective</span>: <span class="value">1000px</span>;  <span class="comment">/* 必须在父元素上 */</span>
+}
+
+<span class="comment">/* 第 2 层：父容器 - 执行翻转 */</span>
+<span class="keyword">.card</span> {
+  <span class="property">transform-style</span>: <span class="value">preserve-3d</span>;  <span class="comment">/* 保持 3D 空间 */</span>
+  <span class="property">transition</span>: <span class="value">transform 0.6s</span>;
+}
+
+<span class="keyword">.card-container:hover .card</span> {
+  <span class="property">transform</span>: <span class="value">rotateY(180deg)</span>;  <span class="comment">/* 翻转整个卡片 */</span>
+}
+
+<span class="comment">/* 第 3 层：子元素 - 正面和背面 */</span>
+<span class="keyword">.card-front,
+.card-back</span> {
+  <span class="property">position</span>: <span class="value">absolute</span>;
+  <span class="property">width</span>: <span class="value">100%</span>;
+  <span class="property">height</span>: <span class="value">100%</span>;
+  <span class="property">backface-visibility</span>: <span class="value">hidden</span>;  <span class="comment">/* 关键！隐藏背面 */</span>
+}
+
+<span class="keyword">.card-back</span> {
+  <span class="property">transform</span>: <span class="value">rotateY(180deg)</span>;  <span class="comment">/* 背面预先翻转 */</span>
+}</code></pre>
+
+          <div class="info-box">
+            <p><strong>记住这个模板：</strong>这是实现完美卡片翻转的标准写法，三层结构缺一不可！</p>
+          </div>
+
+          <h3 style="margin-top: 30px; font-size: 1.1rem">深度理解：元素天生有正反面</h3>
+
+          <div style="background: #fef3c7; padding: 25px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f59e0b">
+            <h4 style="margin-top: 0; color: #92400e; font-size: 1rem">🔑 核心概念</h4>
+            <p style="color: #78350f; line-height: 1.8; margin: 15px 0">
+              在 CSS 3D 变换中，<strong>每个 HTML 元素天生就有正面和背面</strong>，就像一张纸。这不是我们模拟出来的，而是 CSS 3D 的底层机制。
+            </p>
+
+            <div style="background: white; padding: 20px; border-radius: 6px; margin: 20px 0">
+              <h5 style="margin-top: 0; color: #1f2937; font-size: 0.95rem">验证：单个元素的正反面</h5>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 15px 0">
+                <div>
+                  <div style="text-align: center; margin-bottom: 10px; font-weight: bold; color: #374151">正面（rotateY(0deg)）</div>
+                  <div
+                    style="
+                      width: 150px;
+                      height: 100px;
+                      margin: 0 auto;
+                      background: linear-gradient(135deg, #10b981, #059669);
+                      color: white;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-weight: bold;
+                      border-radius: 8px;
+                      transform: rotateY(0deg);
+                    "
+                  >
+                    HELLO
+                  </div>
+                </div>
+                <div>
+                  <div style="text-align: center; margin-bottom: 10px; font-weight: bold; color: #374151">背面（rotateY(180deg)）</div>
+                  <div
+                    style="
+                      width: 150px;
+                      height: 100px;
+                      margin: 0 auto;
+                      background: linear-gradient(135deg, #10b981, #059669);
+                      color: white;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-weight: bold;
+                      border-radius: 8px;
+                      transform: rotateY(180deg);
+                    "
+                  >
+                    HELLO
+                  </div>
+                </div>
+              </div>
+              <p style="color: #6b7280; font-size: 0.9rem; margin: 15px 0 0 0; line-height: 1.6">
+                👆 注意右边的文字是镜像的！这就是<strong>同一个元素</strong>的背面。每个元素都有这两面。
+              </p>
+            </div>
+
+            <h5 style="color: #92400e; font-size: 0.95rem; margin: 20px 0 10px 0">三层结构的真正作用</h5>
+            <ul style="color: #78350f; line-height: 1.8; margin: 10px 0">
+              <li><strong>不是创造正反面</strong>，而是<strong>组织和控制</strong>两个独立的元素</li>
+              <li><strong>front 元素</strong>：代表"卡片正面的内容"，初始 rotateY(0deg)</li>
+              <li><strong>back 元素</strong>：代表"卡片背面的内容"，预先 rotateY(180deg)</li>
+              <li><strong>card 父容器</strong>：作为"纸"，翻转时带着两个子元素一起转</li>
+            </ul>
+
+            <div style="background: #fffbeb; padding: 15px; border-radius: 6px; margin: 15px 0; border: 2px solid #fbbf24">
+              <p style="margin: 0; color: #78350f; line-height: 1.8">
+                <strong>类比：</strong>想象一张真实的卡片，正面贴着一张贴纸（front 元素），背面也贴着一张贴纸（back 元素）。
+                当你翻转卡片时，两张贴纸跟着一起翻转。<code>backface-visibility: hidden</code> 让贴纸在背面朝向你时变透明。
+              </p>
+            </div>
+          </div>
+
+          <h3 style="margin-top: 30px; font-size: 1.1rem">工作流程图解</h3>
+
+          <div style="background: #f9fafb; padding: 25px; border-radius: 8px; margin: 20px 0">
+            <div style="display: grid; gap: 15px">
+              <div style="display: flex; align-items: center; gap: 15px">
+                <div style="background: #fef3c7; padding: 10px 20px; border-radius: 6px; font-weight: bold; min-width: 120px; text-align: center">
+                  初始状态
+                </div>
+                <div style="flex: 1; color: #374151; line-height: 1.6">
+                  爷容器设置 perspective → 父容器 rotateY(0deg) → front 元素正面朝向你（显示），back 元素背面朝向你（隐藏）
+                </div>
+              </div>
+              <div style="text-align: center; color: #9ca3af; font-size: 1.5rem">↓</div>
+              <div style="display: flex; align-items: center; gap: 15px">
+                <div style="background: #dbeafe; padding: 10px 20px; border-radius: 6px; font-weight: bold; min-width: 120px; text-align: center">
+                  悬停触发
+                </div>
+                <div style="flex: 1; color: #374151; line-height: 1.6">父容器开始旋转 → transform: rotateY(180deg)，带着两个子元素一起转</div>
+              </div>
+              <div style="text-align: center; color: #9ca3af; font-size: 1.5rem">↓</div>
+              <div style="display: flex; align-items: center; gap: 15px">
+                <div style="background: #d1fae5; padding: 10px 20px; border-radius: 6px; font-weight: bold; min-width: 120px; text-align: center">
+                  翻转完成
+                </div>
+                <div style="flex: 1; color: #374151; line-height: 1.6">
+                  front 元素：0° + 180° = 180°（背面朝向你，隐藏）<br />
+                  back 元素：180° + 180° = 360° = 0°（正面朝向你，显示）
+                </div>
+              </div>
+            </div>
+
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #3b82f6">
+              <h5 style="margin-top: 0; color: #1e40af; font-size: 0.95rem">💡 关键理解</h5>
+              <p style="color: #1e3a8a; line-height: 1.8; margin: 0">
+                <strong>front</strong> 和 <strong>back</strong> 都是独立的元素，都有自己的正反面。 通过让它们初始角度相差 180°，并设置
+                <code>backface-visibility: hidden</code>， 当父容器翻转时，它们会自动切换显示，产生完美的卡片翻转效果。
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

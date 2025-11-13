@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CSS Grid 布局教程，从基础到高级示例，系统掌握网格列、行、间距、区域与响应式布局。">
+    <title>CSS Grid 布局教程</title>
+    <link rel="stylesheet" href="../shared/common.css">
+    <script src="../shared/theme.js"></script>
+    <style>
+        body {
+            padding: 40px 20px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .page-header {
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--text-primary);
+            margin: 20px 0 15px;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+        
+        .demo-list {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 35px;
+        }
+        
+        .demo-list h2 {
+            color: var(--text-primary);
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+        }
+        
+        .demo-list ul {
+            list-style: none;
+        }
+        
+        .demo-list li {
+            margin-bottom: 12px;
+        }
+        
+        .demo-list a {
+            display: block;
+            padding: 16px 20px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-base);
+            font-weight: 500;
+        }
+        
+        .demo-list a:hover {
+            background: var(--primary-dark);
+            transform: translateX(5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .demo-list {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <a href="../index.html" class="back-link">← 返回首页</a>
+        <h1>CSS Grid 布局教程</h1>
+        <p class="subtitle">从基础到高级，系统学习 CSS Grid 布局</p>
+    </div>
+    
+    <div class="card demo-list">
+        <h2>📚 选择一个 Demo 开始学习：</h2>
+        <ul>
+            <li><a href="demo1-basic.html">Demo 1: 基础网格 - display: grid</a></li>
+            <li><a href="demo2-columns-rows.html">Demo 2: 定义列和行 - grid-template-columns/rows</a></li>
+            <li><a href="demo3-gap.html">Demo 3: 网格间距 - gap</a></li>
+            <li><a href="demo4-grid-area.html">Demo 4: 网格区域 - grid-area</a></li>
+            <li><a href="demo5-span.html">Demo 5: 跨越单元格 - span</a></li>
+            <li><a href="demo6-auto-fill.html">Demo 6: 自动填充 - auto-fill & auto-fit</a></li>
+            <li><a href="demo7-minmax.html">Demo 7: 弹性尺寸 - minmax()</a></li>
+            <li><a href="demo8-align.html">Demo 8: 对齐方式 - align & justify</a></li>
+            <li><a href="demo9-template-areas.html">Demo 9: 模板区域 - grid-template-areas</a></li>
+            <li><a href="demo10-responsive.html">Demo 10: 响应式布局</a></li>
+        </ul>
+    </div>
+</body>
+</html>

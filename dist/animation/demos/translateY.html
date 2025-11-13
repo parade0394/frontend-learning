@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>translateY() - CSS 动画教程</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <script src="../../shared/theme-sync.js"></script>
+      <script src="../../shared/utils.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>CSS 动画教程</h1>
+        <a href="../index.html" class="back-home">← 返回首页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a href="coordinate.html" class="nav-item">坐标系统</a>
+        </div>
+        <div class="nav-section">
+          <h3>Transform 变换</h3>
+          <a href="translate.html" class="nav-item">translate() 平移</a>
+          <a href="translateX.html" class="nav-item">translateX() X轴平移</a>
+          <a href="translateY.html" class="nav-item active">translateY() Y轴平移</a>
+          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
+          <a href="scale.html" class="nav-item">scale() 缩放</a>
+          <a href="skew.html" class="nav-item">skew() 倾斜</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>translateY() - Y轴平移</h1>
+        <p class="subtitle">只在垂直方向（Y轴）上移动元素</p>
+
+        <section class="section">
+          <h2>语法说明</h2>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">transform:</span> <span class="property">translateY</span>(<span class="value">y</span>);</code></pre>
+
+          <ul>
+            <li><span class="highlight">y</span> - Y 轴方向的偏移量</li>
+            <li><strong>正值：</strong>向下移动（注意：CSS 的 Y 轴正方向是向下的）</li>
+            <li><strong>负值：</strong>向上移动</li>
+            <li>等价于 <span class="highlight">translate(0, y)</span></li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：向下移动</h2>
+          <p>translateY(100px) 将元素向下移动 100 像素</p>
+
+          <div class="demo-area with-axis">
+            <span class="axis-label axis-x">X →</span>
+            <span class="axis-label axis-y">Y ↓</span>
+            <div class="box" id="demo-box-1">向下</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo1()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">translateY(100px)</span>;
+  <span class="comment">/* 向下移动 100px */</span>
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：向上移动</h2>
+          <p>使用负值向上移动</p>
+
+          <div class="demo-area with-axis">
+            <span class="axis-label axis-x">X →</span>
+            <span class="axis-label axis-y">Y ↓</span>
+            <div class="box" id="demo-box-2">向上</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo2()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">translateY(-100px)</span>;
+  <span class="comment">/* 向上移动 100px */</span>
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>常见应用场景</h2>
+          <ul>
+            <li>下拉菜单展开效果</li>
+            <li>Toast 通知弹出</li>
+            <li>页面滚动视差效果</li>
+            <li>
+              元素垂直居中：<span class="highlight">translateY(-50%)</span> 配合
+              <span class="highlight">top: 50%</span>
+            </li>
+            <li>悬停上浮效果：<span class="highlight">:hover { transform: translateY(-5px); }</span></li>
+          </ul>
+
+          <div class="info-box">
+            <p><strong>记住：</strong>在 CSS 中，Y 轴的正方向是向下的，这与数学坐标系相反！</p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      // 使用 utils.js 中的 playTransform 工具函数
+      function playDemo1() {
+        const box = document.getElementById('demo-box-1');
+        playTransform(box, 'translateY(100px)', 1500);
+      }
+
+      function playDemo2() {
+        const box = document.getElementById('demo-box-2');
+        playTransform(box, 'translateY(-100px)', 1500);
+      }
+    </script>
+  </body>
+</html>

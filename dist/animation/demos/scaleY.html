@@ -1,0 +1,129 @@
+﻿<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>scaleY() - CSS 动画教程</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <script src="../../shared/theme-sync.js"></script>
+      <script src="../../shared/utils.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>CSS 动画教程</h1>
+        <a href="../index.html" class="back-home">← 返回首页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a href="coordinate.html" class="nav-item">坐标系统</a>
+        </div>
+        <div class="nav-section">
+          <h3>Transform 变换</h3>
+          <a href="translate.html" class="nav-item">translate() 平移</a>
+          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
+          <a href="scale.html" class="nav-item">scale() 缩放</a>
+          <a href="scaleX.html" class="nav-item">scaleX() X轴缩放</a>
+          <a href="scaleY.html" class="nav-item active">scaleY() Y轴缩放</a>
+          <a href="skew.html" class="nav-item">skew() 倾斜</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>scaleY() - Y轴缩放</h1>
+        <p class="subtitle">只在垂直方向缩放元素</p>
+
+        <section class="section">
+          <h2>语法说明</h2>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">transform:</span> <span class="property">scaleY</span>(<span class="value">y</span>);</code></pre>
+
+          <ul>
+            <li><span class="highlight">y</span> - Y 轴方向的缩放比例</li>
+            <li><strong>1：</strong>保持原始高度</li>
+            <li><strong>&gt; 1：</strong>垂直拉伸</li>
+            <li><strong>&lt; 1：</strong>垂直压缩</li>
+            <li><strong>-1：</strong>垂直翻转</li>
+            <li>等价于 <span class="highlight">scale(1, y)</span></li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：垂直拉伸</h2>
+          <p>scaleY(2) 将元素高度拉伸到 2 倍</p>
+
+          <div class="demo-area">
+            <div class="box" id="demo-box-1">2x</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo1()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">scaleY(2)</span>;
+  <span class="comment">/* 高度变为 2 倍，宽度不变 */</span>
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：垂直压缩</h2>
+          <p>scaleY(0.5) 将元素高度压缩到一半</p>
+
+          <div class="demo-area">
+            <div class="box" id="demo-box-2">0.5x</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo2()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">scaleY(0.5)</span>;
+  <span class="comment">/* 高度缩小到 50% */</span>
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 3：垂直翻转</h2>
+          <p>scaleY(-1) 垂直镜像翻转元素</p>
+
+          <div class="demo-area">
+            <div class="box" id="demo-box-3">-1x</div>
+          </div>
+
+          <button class="play-button" onclick="playDemo3()">播放动画</button>
+
+          <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">scaleY(-1)</span>;
+  <span class="comment">/* 垂直翻转 */</span>
+}</code></pre>
+
+          <div class="info-box">
+            <p>
+              <strong>应用场景：</strong>下拉菜单展开动画、手风琴效果、倒影效果
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      // 使用 utils.js 中的 playTransform 工具函数
+      function playDemo1() {
+        const box = document.getElementById("demo-box-1");
+        playTransform(box, "scaleY(2)", 1500);
+      }
+
+      function playDemo2() {
+        const box = document.getElementById("demo-box-2");
+        playTransform(box, "scaleY(0.5)", 1500);
+      }
+
+      function playDemo3() {
+        const box = document.getElementById("demo-box-3");
+        playTransform(box, "scaleY(-1)", 1500);
+      }
+    </script>
+  </body>
+</html>
