@@ -1,5 +1,5 @@
 /* Animation 模块专用样式 */
-@import url('../shared/common.css');
+@import url('/src/styles/common.css');
 
 body {
   display: flex;

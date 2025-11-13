@@ -108,30 +108,5 @@ export default defineConfig({
   },
 
   // 插件配置
-  plugins: [
-    // 自定义插件：复制 shared 目录的 CSS 文件
-    {
-      name: 'copy-shared-css',
-      closeBundle: async () => {
-        const sharedDir = path.resolve(__dirname, 'shared');
-        const distSharedDir = path.resolve(__dirname, 'dist/shared');
-
-        // 确保目标目录存在
-        await fs.ensureDir(distSharedDir);
-
-        // 只复制 CSS 文件（JS 文件由 Vite 打包）
-        const cssFiles = ['common.css'];
-
-        for (const file of cssFiles) {
-          const src = path.join(sharedDir, file);
-          const dest = path.join(distSharedDir, file);
-
-          if (await fs.pathExists(src)) {
-            await fs.copy(src, dest);
-            console.log(`✓ Copied ${file} to dist/shared/`);
-          }
-        }
-      },
-    },
-  ],
+  plugins: [],
 });
