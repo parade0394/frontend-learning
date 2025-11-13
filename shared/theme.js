@@ -154,9 +154,22 @@
     document.body.appendChild(themeModePanel);
     document.body.appendChild(colorPanel);
 
-    // 添加样式（如果还没有）
-    if (!document.getElementById('themeStyles')) {
-      addThemeStyles();
+    // ARIA 属性
+    themeModePanel.setAttribute('role', 'dialog');
+    themeModePanel.setAttribute('aria-modal', 'true');
+    themeModePanel.setAttribute('aria-hidden', 'true');
+    colorPanel.setAttribute('role', 'dialog');
+    colorPanel.setAttribute('aria-modal', 'true');
+    colorPanel.setAttribute('aria-hidden', 'true');
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const customizeBtnEl = document.getElementById('customizeBtn');
+    if (themeToggleBtn) {
+      themeToggleBtn.setAttribute('aria-controls', 'themeModePanel');
+      themeToggleBtn.setAttribute('aria-expanded', 'false');
+    }
+    if (customizeBtnEl) {
+      customizeBtnEl.setAttribute('aria-controls', 'colorPanel');
+      customizeBtnEl.setAttribute('aria-expanded', 'false');
     }
   }
 
@@ -370,9 +383,18 @@
         e.stopPropagation();
         if (themeModePanel) {
           themeModePanel.classList.toggle('active');
+          themeModePanel.setAttribute('aria-hidden', themeModePanel.classList.contains('active') ? 'false' : 'true');
+          themeToggle.setAttribute('aria-expanded', themeModePanel.classList.contains('active') ? 'true' : 'false');
           // 关闭颜色面板
           if (colorPanel) {
             colorPanel.classList.remove('active');
+            colorPanel.setAttribute('aria-hidden', 'true');
+            if (customizeBtn) customizeBtn.setAttribute('aria-expanded', 'false');
+          }
+          // 焦点管理
+          if (themeModePanel.classList.contains('active')) {
+            const firstRadio = themeModePanel.querySelector('input[name="themeMode"]');
+            if (firstRadio) firstRadio.focus();
           }
         }
       });
@@ -384,9 +406,18 @@
         e.stopPropagation();
         if (colorPanel) {
           colorPanel.classList.toggle('active');
+          colorPanel.setAttribute('aria-hidden', colorPanel.classList.contains('active') ? 'false' : 'true');
+          customizeBtn.setAttribute('aria-expanded', colorPanel.classList.contains('active') ? 'true' : 'false');
           // 关闭暗色模式面板
           if (themeModePanel) {
             themeModePanel.classList.remove('active');
+            themeModePanel.setAttribute('aria-hidden', 'true');
+            if (themeToggle) themeToggle.setAttribute('aria-expanded', 'false');
+          }
+          // 焦点管理
+          if (colorPanel.classList.contains('active')) {
+            const firstOption = colorPanel.querySelector('.theme-option');
+            if (firstOption) firstOption.focus();
           }
         }
       });
@@ -407,8 +438,32 @@
       const isClickOnButton = (themeToggle && themeToggle.contains(e.target)) || (customizeBtn && customizeBtn.contains(e.target));
 
       if (!isClickInsidePanel && !isClickOnButton) {
-        if (themeModePanel) themeModePanel.classList.remove('active');
-        if (colorPanel) colorPanel.classList.remove('active');
+        if (themeModePanel) {
+          themeModePanel.classList.remove('active');
+          themeModePanel.setAttribute('aria-hidden', 'true');
+          if (themeToggle) themeToggle.setAttribute('aria-expanded', 'false');
+        }
+        if (colorPanel) {
+          colorPanel.classList.remove('active');
+          colorPanel.setAttribute('aria-hidden', 'true');
+          if (customizeBtn) customizeBtn.setAttribute('aria-expanded', 'false');
+        }
+      }
+    });
+
+    // Esc 关闭面板
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (themeModePanel) {
+          themeModePanel.classList.remove('active');
+          themeModePanel.setAttribute('aria-hidden', 'true');
+          if (themeToggle) themeToggle.setAttribute('aria-expanded', 'false');
+        }
+        if (colorPanel) {
+          colorPanel.classList.remove('active');
+          colorPanel.setAttribute('aria-hidden', 'true');
+          if (customizeBtn) customizeBtn.setAttribute('aria-expanded', 'false');
+        }
       }
     });
 

@@ -297,3 +297,16 @@ if (!document.querySelector('#utils-animations')) {
   `;
   document.head.appendChild(style);
 }
+
+// 可访问性：为导航激活项设置 aria-current
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.nav-item.active').forEach((el) => {
+      el.setAttribute('aria-current', 'page');
+    });
+  });
+} else {
+  document.querySelectorAll('.nav-item.active').forEach((el) => {
+    el.setAttribute('aria-current', 'page');
+  });
+}
