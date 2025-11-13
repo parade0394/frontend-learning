@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>perspective - CSS 动画教程</title>
     <link rel="stylesheet" href="../styles.css" />
-    <script src="../../shared/theme-sync.js"></script>
-      <script src="../../shared/utils.js"></script>
+    <script type="module" src="/src/theme-sync.js"></script>
   </head>
   <body>
     <aside class="sidebar">
@@ -55,7 +54,7 @@
           <h2>示例 1：无透视 vs 有透视</h2>
           <p>对比没有透视和有透视的 rotateY 效果</p>
 
-          <button class="play-button" onclick="playDemo1()" style="margin-bottom: 15px">播放对比</button>
+          <button class="play-button" data-demo="demo1" style="margin-bottom: 15px">播放对比</button>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px">
             <div>
@@ -91,7 +90,7 @@
           <h2>示例 2：不同透视距离</h2>
           <p>观察不同 perspective 值的效果差异</p>
 
-          <button class="play-button" onclick="playDemo2()" style="margin-bottom: 15px">播放对比</button>
+          <button class="play-button" data-demo="demo2" style="margin-bottom: 15px">播放对比</button>
 
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px">
             <div>
@@ -129,7 +128,7 @@
             <div
               id="card-container"
               style="width: 200px; height: 150px; position: relative; transform-style: preserve-3d; transition: transform 0.8s; cursor: pointer"
-              onclick="flipCard()"
+              data-action="flip"
             >
               <div
                 style="
@@ -191,57 +190,76 @@
       </div>
     </main>
 
-    <script>
-      function playDemo1() {
-        const box1 = document.getElementById('box-no-perspective');
-        const box2 = document.getElementById('box-with-perspective');
+    <script type="module">
+      // 使用事件委托，避免全局命名冲突
+      const demos = {
+        demo1: () => {
+          const box1 = document.getElementById('box-no-perspective');
+          const box2 = document.getElementById('box-with-perspective');
 
-        box1.style.transform = 'none';
-        box2.style.transform = 'none';
-        box1.style.transition = 'transform 1s';
-        box2.style.transition = 'transform 1s';
-
-        setTimeout(() => {
-          box1.style.transform = 'rotateY(60deg)';
-          box2.style.transform = 'rotateY(60deg)';
-        }, 50);
-
-        setTimeout(() => {
           box1.style.transform = 'none';
           box2.style.transform = 'none';
-        }, 1500);
-      }
+          box1.style.transition = 'transform 1s';
+          box2.style.transition = 'transform 1s';
 
-      function playDemo2() {
-        const boxes = ['box-p300', 'box-p800', 'box-p1500'];
+          setTimeout(() => {
+            box1.style.transform = 'rotateY(60deg)';
+            box2.style.transform = 'rotateY(60deg)';
+          }, 50);
 
-        boxes.forEach((id) => {
-          const box = document.getElementById(id);
-          box.style.transform = 'none';
-          box.style.transition = 'transform 1s';
-        });
+          setTimeout(() => {
+            box1.style.transform = 'none';
+            box2.style.transform = 'none';
+          }, 1500);
+        },
+        demo2: () => {
+          const boxes = ['box-p300', 'box-p800', 'box-p1500'];
 
-        setTimeout(() => {
-          boxes.forEach((id) => {
-            const box = document.getElementById(id);
-            box.style.transform = 'rotateY(60deg)';
-          });
-        }, 50);
-
-        setTimeout(() => {
           boxes.forEach((id) => {
             const box = document.getElementById(id);
             box.style.transform = 'none';
+            box.style.transition = 'transform 1s';
           });
-        }, 1500);
-      }
 
+          setTimeout(() => {
+            boxes.forEach((id) => {
+              const box = document.getElementById(id);
+              box.style.transform = 'rotateY(60deg)';
+            });
+          }, 50);
+
+          setTimeout(() => {
+            boxes.forEach((id) => {
+              const box = document.getElementById(id);
+              box.style.transform = 'none';
+            });
+          }, 1500);
+        }
+      };
+
+      // 卡片翻转状态
       let isFlipped = false;
-      function flipCard() {
-        const card = document.getElementById('card-container');
-        isFlipped = !isFlipped;
-        card.style.transform = isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
-      }
+
+      // 事件委托：监听所有点击
+      document.addEventListener('click', (e) => {
+        // 处理 demo 按钮
+        const button = e.target.closest('[data-demo]');
+        if (button) {
+          const demoName = button.dataset.demo;
+          if (demos[demoName]) {
+            demos[demoName]();
+          }
+          return;
+        }
+
+        // 处理卡片翻转
+        const flipElement = e.target.closest('[data-action="flip"]');
+        if (flipElement) {
+          const card = document.getElementById('card-container');
+          isFlipped = !isFlipped;
+          card.style.transform = isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+        }
+      });
     </script>
   </body>
 </html>

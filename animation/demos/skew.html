@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>skew() - CSS 动画教程</title>
     <link rel="stylesheet" href="../styles.css" />
-    <script src="../../shared/theme-sync.js"></script>
-      <script src="../../shared/utils.js"></script>
+    <script type="module" src="/src/theme-sync.js"></script>
   </head>
   <body>
     <aside class="sidebar">
@@ -58,7 +57,7 @@
             <div class="box" id="demo-box-1">30°</div>
           </div>
 
-          <button class="play-button" onclick="playDemo1()">播放动画</button>
+          <button class="play-button" data-demo="demo1">播放动画</button>
 
           <pre class="code-block"><code>
             <span class="keyword">.box</span> { <span class="property">transform</span>: <span class="value">skewX(30deg)</span>;
@@ -75,7 +74,7 @@
             <div class="box" id="demo-box-2">20°</div>
           </div>
 
-          <button class="play-button" onclick="playDemo2()">播放动画</button>
+          <button class="play-button" data-demo="demo2">播放动画</button>
 
           <pre class="code-block"><code>
             <span class="keyword">.box</span> { <span class="property">transform</span>: <span class="value">skewY(20deg)</span>;
@@ -92,7 +91,7 @@
             <div class="box" id="demo-box-3">20°, 10°</div>
           </div>
 
-          <button class="play-button" onclick="playDemo3()">播放动画</button>
+          <button class="play-button" data-demo="demo3">播放动画</button>
 
           <pre class="code-block"><code>
             <span class="keyword">.box</span> { <span class="property">transform</span>: <span class="value">skew(20deg, 10deg)</span>;
@@ -107,22 +106,35 @@
       </div>
     </main>
 
-    <script>
-      // 使用 utils.js 中的 playTransform 工具函数
-      function playDemo1() {
-        const box = document.getElementById('demo-box-1');
-        playTransform(box, 'skewX(30deg)', 1500);
-      }
+    <script type="module">
+      import { playTransform } from '/src/utils.js';
 
-      function playDemo2() {
-        const box = document.getElementById('demo-box-2');
-        playTransform(box, 'skewY(20deg)', 1500);
-      }
+      // 使用事件委托，避免全局命名冲突
+      const demos = {
+        demo1: () => {
+          const box = document.getElementById('demo-box-1');
+          playTransform(box, 'skewX(30deg)', 1500);
+        },
+        demo2: () => {
+          const box = document.getElementById('demo-box-2');
+          playTransform(box, 'skewY(20deg)', 1500);
+        },
+        demo3: () => {
+          const box = document.getElementById('demo-box-3');
+          playTransform(box, 'skew(20deg, 10deg)', 1500);
+        }
+      };
 
-      function playDemo3() {
-        const box = document.getElementById('demo-box-3');
-        playTransform(box, 'skew(20deg, 10deg)', 1500);
-      }
+      // 事件委托：监听所有按钮点击
+      document.addEventListener('click', (e) => {
+        const button = e.target.closest('[data-demo]');
+        if (button) {
+          const demoName = button.dataset.demo;
+          if (demos[demoName]) {
+            demos[demoName]();
+          }
+        }
+      });
     </script>
   </body>
 </html>

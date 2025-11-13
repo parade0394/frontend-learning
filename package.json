@@ -9,7 +9,10 @@
     "build": "vite build",
     "preview": "vite preview",
     "build:analyze": "vite build --mode analyze",
-    "verify": "node scripts/verify-build.js"
+    "verify": "node scripts/verify-build.js",
+    "migrate": "node scripts/migrate-demos.js",
+    "add-imports": "node scripts/add-imports.js",
+    "fix-onclick": "node scripts/fix-onclick.js"
   },
   "devDependencies": {
     "fs-extra": "^11.2.0",

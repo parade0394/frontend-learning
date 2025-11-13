@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>transition-timing-function - CSS 动画教程</title>
     <link rel="stylesheet" href="../styles.css" />
-    <script src="../../shared/theme-sync.js"></script>
-      <script src="../../shared/utils.js"></script>
+    <script type="module" src="/src/theme-sync.js"></script>
   </head>
   <body>
     <aside class="sidebar">
@@ -59,7 +58,7 @@
           <h2>对比演示</h2>
           <p>点击"全部播放"按钮，观察不同缓动函数的效果差异</p>
 
-          <button class="play-button" onclick="playAll()" style="margin-bottom: 20px">全部播放</button>
+          <button class="play-button" data-demo="all" style="margin-bottom: 20px">全部播放</button>
 
           <div style="display: flex; flex-direction: column; gap: 15px">
             <div>
@@ -133,29 +132,25 @@
       </div>
     </main>
 
-    <script>
-      function playAll() {
-        const boxes = ['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out'];
+    <script type="module">
+      // 使用事件委托，避免全局命名冲突
+      const demos = {
+        all: (param) => {
 
-        boxes.forEach((id) => {
-          const box = document.getElementById('box-' + id);
-          box.style.transform = 'none';
-        });
+        }
+      };
 
-        setTimeout(() => {
-          boxes.forEach((id) => {
-            const box = document.getElementById('box-' + id);
-            box.style.transform = 'translateX(200px)';
-          });
-        }, 50);
-
-        setTimeout(() => {
-          boxes.forEach((id) => {
-            const box = document.getElementById('box-' + id);
-            box.style.transform = 'none';
-          });
-        }, 2000);
-      }
+      // 事件委托：监听所有点击
+      document.addEventListener('click', (e) => {
+        const button = e.target.closest('[data-demo]');
+        if (button) {
+          const demoName = button.dataset.demo;
+          const param = button.dataset.param;
+          if (demos[demoName]) {
+            demos[demoName](param);
+          }
+        }
+      });
     </script>
   </body>
 </html>

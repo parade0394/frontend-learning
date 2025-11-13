@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>transition-delay - CSS 动画教程</title>
     <link rel="stylesheet" href="../styles.css" />
-    <script src="../../shared/theme-sync.js"></script>
-      <script src="../../shared/utils.js"></script>
+    <script type="module" src="/src/theme-sync.js"></script>
   </head>
   <body>
     <aside class="sidebar">
@@ -56,7 +55,7 @@
           <h2>示例 1：无延迟 vs 有延迟</h2>
           <p>对比立即开始和延迟 0.5 秒开始的效果</p>
 
-          <button class="play-button" onclick="playDemo1()" style="margin-bottom: 15px">播放对比</button>
+          <button class="play-button" data-demo="demo1" style="margin-bottom: 15px">播放对比</button>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px">
             <div>
@@ -89,7 +88,7 @@
           <h2>示例 2：连续动画效果</h2>
           <p>通过不同的延迟时间创建依次出现的效果</p>
 
-          <button class="play-button" onclick="playDemo2()" style="margin-bottom: 15px">播放连续动画</button>
+          <button class="play-button" data-demo="demo2" style="margin-bottom: 15px">播放连续动画</button>
 
           <div style="display: flex; gap: 15px; justify-content: center">
             <div class="demo-area" style="width: 150px; height: 150px">
@@ -159,58 +158,27 @@
       </div>
     </main>
 
-    <script>
-      function playDemo1() {
-        const box1 = document.getElementById('box-no-delay');
-        const box2 = document.getElementById('box-delay');
+    <script type="module">
+      // 使用事件委托，避免全局命名冲突
+      const demos = {
+        demo1: (param) => {
 
-        box1.style.transform = 'none';
-        box2.style.transform = 'none';
+        },
+        demo2: (param) => {
 
-        setTimeout(() => {
-          box1.style.transform = 'translateX(100px)';
-          box2.style.transform = 'translateX(100px)';
-        }, 50);
+        }
+      };
 
-        setTimeout(() => {
-          box1.style.transform = 'none';
-          box2.style.transform = 'none';
-        }, 2000);
-      }
-
-      function playDemo2() {
-        const boxes = ['box-seq-1', 'box-seq-2', 'box-seq-3', 'box-seq-4'];
-
-        boxes.forEach((id) => {
-          const box = document.getElementById(id);
-          box.style.transform = 'none';
-        });
-
-        setTimeout(() => {
-          boxes.forEach((id) => {
-            const box = document.getElementById(id);
-            box.style.transform = 'translateY(50px) scale(1.2)';
-          });
-        }, 50);
-
-        setTimeout(() => {
-          boxes.forEach((id) => {
-            const box = document.getElementById(id);
-            box.style.transform = 'none';
-          });
-        }, 2000);
-      }
-
-      // 悬停效果
-      const hoverBox = document.getElementById('hover-box');
-      const tooltip = document.getElementById('tooltip');
-
-      hoverBox.addEventListener('mouseenter', () => {
-        tooltip.style.transform = 'translateX(-50%) scale(1)';
-      });
-
-      hoverBox.addEventListener('mouseleave', () => {
-        tooltip.style.transform = 'translateX(-50%) scale(0)';
+      // 事件委托：监听所有点击
+      document.addEventListener('click', (e) => {
+        const button = e.target.closest('[data-demo]');
+        if (button) {
+          const demoName = button.dataset.demo;
+          const param = button.dataset.param;
+          if (demos[demoName]) {
+            demos[demoName](param);
+          }
+        }
       });
     </script>
   </body>

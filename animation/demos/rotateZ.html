@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>rotateZ() - CSS 动画教程</title>
     <link rel="stylesheet" href="../styles.css" />
-    <script src="../../shared/theme-sync.js"></script>
-      <script src="../../shared/utils.js"></script>
+    <script type="module" src="/src/theme-sync.js"></script>
   </head>
   <body>
     <aside class="sidebar">
@@ -102,7 +101,7 @@
             <div class="box" id="box4">持续旋转</div>
           </div>
 
-          <button class="play-button" onclick="playAnimation()">播放动画</button>
+          <button class="play-button" data-demo="animation">播放动画</button>
 
           <pre class="code-block"><code><span class="keyword">@keyframes</span> <span class="value">spinZ</span> {
     <span class="keyword">from</span> { <span class="property">transform</span>: <span class="value">rotateZ(0deg)</span>; }
@@ -170,14 +169,29 @@
       }
     </style>
 
-    <script>
-      function playAnimation() {
-        const box = document.getElementById('box4');
-        box.classList.add('spinning');
-        setTimeout(() => {
+    <script type="module">
+      import { playAnimation } from '/src/utils.js';
+
+      // 使用事件委托，避免全局命名冲突
+      const demos = {
+        animation: () => {
+          const box = document.getElementById('box4');
+          box.classList.add('spinning');
+          setTimeout(() => {
           box.classList.remove('spinning');
-        }, 4000);
-      }
+        }
+      };
+
+      // 事件委托：监听所有按钮点击
+      document.addEventListener('click', (e) => {
+        const button = e.target.closest('[data-demo]');
+        if (button) {
+          const demoName = button.dataset.demo;
+          if (demos[demoName]) {
+            demos[demoName]();
+          }
+        }
+      });
     </script>
   </body>
 </html>

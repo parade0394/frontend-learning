@@ -53,15 +53,23 @@ export default defineConfig({
     },
 
     rollupOptions: {
-      input: Object.fromEntries(
-        glob
-          .sync('**/*.html', {
-            ignore: ['node_modules/**', 'dist/**', '.templates/**', '.examples/**', '.guides/**'],
-          })
-          .map((file) => [file.replace(/\.html$/, '').replace(/\//g, '-'), path.resolve(__dirname, file)])
-      ),
+      input: {
+        // HTML 入口
+        ...Object.fromEntries(
+          glob
+            .sync('**/*.html', {
+              ignore: ['node_modules/**', 'dist/**', '.templates/**', '.examples/**', '.guides/**'],
+            })
+            .map((file) => [file.replace(/\.html$/, '').replace(/\//g, '-'), path.resolve(__dirname, file)])
+        ),
+        // JS 模块入口
+        theme: path.resolve(__dirname, 'src/theme.js'),
+        'theme-sync': path.resolve(__dirname, 'src/theme-sync.js'),
+        utils: path.resolve(__dirname, 'src/utils.js'),
+      },
 
       output: {
+        format: 'es', // 使用 ES Module 格式
         assetFileNames: (assetInfo) => {
           // 确保 assetInfo 和 fileName 存在
           if (!assetInfo || !assetInfo.fileName) {
@@ -101,9 +109,9 @@ export default defineConfig({
 
   // 插件配置
   plugins: [
-    // 自定义插件：复制 shared 目录的 JS 文件
+    // 自定义插件：复制 shared 目录的 CSS 文件
     {
-      name: 'copy-shared-js',
+      name: 'copy-shared-css',
       closeBundle: async () => {
         const sharedDir = path.resolve(__dirname, 'shared');
         const distSharedDir = path.resolve(__dirname, 'dist/shared');
@@ -111,10 +119,10 @@ export default defineConfig({
         // 确保目标目录存在
         await fs.ensureDir(distSharedDir);
 
-        // 复制所有 JS 文件
-        const jsFiles = ['theme.js', 'theme-sync.js', 'utils.js', 'theme-utils.js'];
+        // 只复制 CSS 文件（JS 文件由 Vite 打包）
+        const cssFiles = ['common.css'];
 
-        for (const file of jsFiles) {
+        for (const file of cssFiles) {
           const src = path.join(sharedDir, file);
           const dest = path.join(distSharedDir, file);
 

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>animation-play-state - CSS 动画教程</title>
     <link rel="stylesheet" href="../styles.css" />
-    <script src="../../shared/theme-sync.js"></script>
+    <script type="module" src="/src/theme-sync.js"></script>
     <style>
       .demo-container {
         display: flex;
@@ -122,7 +122,6 @@
         color: #059669;
       }
     </style>
-      <script src="../../shared/utils.js"></script>
   </head>
   <body>
     <aside class="sidebar">
@@ -207,8 +206,8 @@
             </div>
 
             <div style="text-align: center; margin-top: 20px">
-              <button class="control-btn" onclick="playAnimation()">▶ 播放</button>
-              <button class="control-btn pause" onclick="pauseAnimation()">⏸ 暂停</button>
+              <button class="control-btn" data-demo="animation">▶ 播放</button>
+              <button class="control-btn pause" data-demo="pauseanimation">⏸ 暂停</button>
             </div>
           </div>
 
@@ -298,16 +297,29 @@
       </div>
     </main>
 
-    <script>
-      const box = document.getElementById('controlledBox');
+    <script type="module">
+      import { playAnimation } from '/src/utils.js';
 
-      function playAnimation() {
-        box.classList.remove('paused');
-      }
+      // 使用事件委托，避免全局命名冲突
+      const demos = {
+        animation: () => {
+          box.classList.remove('paused');
+        },
+        pauseanimation: () => {
+          box.classList.add('paused');
+        }
+      };
 
-      function pauseAnimation() {
-        box.classList.add('paused');
-      }
+      // 事件委托：监听所有按钮点击
+      document.addEventListener('click', (e) => {
+        const button = e.target.closest('[data-demo]');
+        if (button) {
+          const demoName = button.dataset.demo;
+          if (demos[demoName]) {
+            demos[demoName]();
+          }
+        }
+      });
     </script>
   </body>
 </html>

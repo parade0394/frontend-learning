@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>rotateY() - CSS 动画教程</title>
     <link rel="stylesheet" href="../styles.css" />
-    <script src="../../shared/theme-sync.js"></script>
-      <script src="../../shared/utils.js"></script>
+    <script type="module" src="/src/theme-sync.js"></script>
   </head>
   <body>
     <aside class="sidebar">
@@ -63,7 +62,7 @@
             <div class="box" id="demo-box-1">60°</div>
           </div>
 
-          <button class="play-button" onclick="playDemo1()">播放动画</button>
+          <button class="play-button" data-demo="demo1">播放动画</button>
 
           <pre
             class="code-block"
@@ -84,7 +83,7 @@
             <div class="box" id="demo-box-2">180°</div>
           </div>
 
-          <button class="play-button" onclick="playDemo2()">播放动画</button>
+          <button class="play-button" data-demo="demo2">播放动画</button>
 
           <pre class="code-block"><code><span class="keyword">.box</span> {
   <span class="property">transform</span>: <span class="value">rotateY(180deg)</span>;
@@ -100,7 +99,7 @@
             <div class="box" id="demo-box-3">360°</div>
           </div>
 
-          <button class="play-button" onclick="playDemo3()">播放动画</button>
+          <button class="play-button" data-demo="demo3">播放动画</button>
 
           <pre class="code-block"><code><span class="keyword">.box</span> {
   <span class="property">transform</span>: <span class="value">rotateY(360deg)</span>;
@@ -114,29 +113,41 @@
       </div>
     </main>
 
-    <script>
-      // 使用 utils.js 中的 playTransform 工具函数
-      function playDemo1() {
-        const box = document.getElementById("demo-box-1");
-        playTransform(box, "rotateY(60deg)", 1500);
-      }
+    <script type="module">
+      import { playTransform } from '/src/utils.js';
 
-      function playDemo2() {
-        const box = document.getElementById("demo-box-2");
-        playTransform(box, "rotateY(180deg)", 1500);
-      }
-
-      function playDemo3() {
-        const box = document.getElementById("demo-box-3");
-        // 这个 demo 有特殊的 transition 设置，保持原有逻辑
-        box.style.transform = "none";
-        box.style.transition = "transform 2s";
-        box.offsetHeight;
-        box.style.transform = "rotateY(360deg)";
-        setTimeout(() => {
+      // 使用事件委托，避免全局命名冲突
+      const demos = {
+        demo1: () => {
+          const box = document.getElementById("demo-box-1");
+          playTransform(box, "rotateY(60deg)", 1500);
+        },
+        demo2: () => {
+          const box = document.getElementById("demo-box-2");
+          playTransform(box, "rotateY(180deg)", 1500);
+        },
+        demo3: () => {
+          const box = document.getElementById("demo-box-3");
+          // 这个 demo 有特殊的 transition 设置，保持原有逻辑
           box.style.transform = "none";
-        }, 2500);
-      }
+          box.style.transition = "transform 2s";
+          box.offsetHeight;
+          box.style.transform = "rotateY(360deg)";
+          setTimeout(() => {
+          box.style.transform = "none";
+        }
+      };
+
+      // 事件委托：监听所有按钮点击
+      document.addEventListener('click', (e) => {
+        const button = e.target.closest('[data-demo]');
+        if (button) {
+          const demoName = button.dataset.demo;
+          if (demos[demoName]) {
+            demos[demoName]();
+          }
+        }
+      });
     </script>
   </body>
 </html>

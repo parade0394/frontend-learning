@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>transform-style - CSS 动画教程</title>
     <link rel="stylesheet" href="../styles.css" />
-    <script src="../../shared/theme-sync.js"></script>
+    <script type="module" src="/src/theme-sync.js"></script>
     <style>
       /* 3D 立方体样式 */
       .cube-container {
@@ -118,7 +118,6 @@
         transform: rotateY(180deg);
       }
     </style>
-      <script src="../../shared/utils.js"></script>
   </head>
   <body>
     <aside class="sidebar">
@@ -232,7 +231,7 @@
           </div>
 
           <div style="text-align: center; margin-top: 20px">
-            <button class="play-button" onclick="rotateCube()">旋转立方体</button>
+            <button class="play-button" data-demo="rotatecube">旋转立方体</button>
           </div>
 
           <pre class="code-block"><code><span class="comment">/* 父容器设置透视 */</span>
@@ -260,7 +259,7 @@
           <p>点击卡片查看翻转效果</p>
 
           <div class="card-container">
-            <div class="card-card" id="flip-card" style="transform-style: preserve-3d" onclick="flipCard()">
+            <div class="card-card" id="flip-card" style="transform-style: preserve-3d" data-demo="flipcard">
               <div class="card-side card-front">
                 <div>
                   <h3 style="font-size: 1.5rem; margin-bottom: 10px">正面</h3>
@@ -332,20 +331,28 @@
       </div>
     </main>
 
-    <script>
-      let cubeRotation = { x: 0, y: 0 };
+    <script type="module">
+      // 使用事件委托，避免全局命名冲突
+      const demos = {
+        rotatecube: (param) => {
 
-      function rotateCube() {
-        const cube = document.getElementById('demo-cube');
-        cubeRotation.x += 90;
-        cubeRotation.y += 90;
-        cube.style.transform = `rotateX(${cubeRotation.x}deg) rotateY(${cubeRotation.y}deg)`;
-      }
+        },
+        flipcard: (param) => {
 
-      function flipCard() {
-        const card = document.getElementById('flip-card');
-        card.classList.toggle('flipped');
-      }
+        }
+      };
+
+      // 事件委托：监听所有点击
+      document.addEventListener('click', (e) => {
+        const button = e.target.closest('[data-demo]');
+        if (button) {
+          const demoName = button.dataset.demo;
+          const param = button.dataset.param;
+          if (demos[demoName]) {
+            demos[demoName](param);
+          }
+        }
+      });
     </script>
   </body>
 </html>

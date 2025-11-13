@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>rotate3d() - CSS 动画教程</title>
     <link rel="stylesheet" href="../styles.css" />
-    <script src="../../shared/theme-sync.js"></script>
-      <script src="../../shared/utils.js"></script>
+    <script type="module" src="/src/theme-sync.js"></script>
   </head>
   <body>
     <aside class="sidebar">
@@ -59,7 +58,7 @@
           <h2>示例 1：单轴旋转</h2>
           <p>分别围绕 X、Y、Z 轴旋转</p>
 
-          <button class="play-button" onclick="playDemo1()" style="margin-bottom: 15px">播放演示</button>
+          <button class="play-button" data-demo="demo1" style="margin-bottom: 15px">播放演示</button>
 
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px">
             <div>
@@ -102,7 +101,7 @@
           <h2>示例 2：对角线旋转</h2>
           <p>同时在多个轴上旋转，创建对角线旋转效果</p>
 
-          <button class="play-button" onclick="playDemo2()" style="margin-bottom: 15px">播放演示</button>
+          <button class="play-button" data-demo="demo2" style="margin-bottom: 15px">播放演示</button>
 
           <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px">
             <div>
@@ -134,7 +133,7 @@
             <div class="box" id="box-continuous" style="animation: none">3D</div>
           </div>
 
-          <button class="play-button" onclick="playDemo3()">播放连续旋转</button>
+          <button class="play-button" data-demo="demo3">播放连续旋转</button>
 
           <pre class="code-block"><code><span class="keyword">@keyframes</span> <span class="value">rotate3d-animation</span> {
   <span class="keyword">0%</span> {
@@ -156,85 +155,31 @@
       </div>
     </main>
 
-    <script>
-      function playDemo1() {
-        const boxes = [
-          { id: 'box-x', transform: 'rotate3d(1, 0, 0, 60deg)' },
-          { id: 'box-y', transform: 'rotate3d(0, 1, 0, 60deg)' },
-          { id: 'box-z', transform: 'rotate3d(0, 0, 1, 60deg)' },
-        ];
+    <script type="module">
+      // 使用事件委托，避免全局命名冲突
+      const demos = {
+        demo1: (param) => {
 
-        boxes.forEach(({ id, transform }) => {
-          const box = document.getElementById(id);
-          box.style.transform = 'none';
-          box.style.transition = 'transform 1s';
-        });
+        },
+        demo2: (param) => {
 
-        setTimeout(() => {
-          boxes.forEach(({ id, transform }) => {
-            const box = document.getElementById(id);
-            box.style.transform = transform;
-          });
-        }, 50);
+        },
+        demo3: (param) => {
 
-        setTimeout(() => {
-          boxes.forEach(({ id }) => {
-            const box = document.getElementById(id);
-            box.style.transform = 'none';
-          });
-        }, 1500);
-      }
+        }
+      };
 
-      function playDemo2() {
-        const boxes = [
-          { id: 'box-xy', transform: 'rotate3d(1, 1, 0, 180deg)' },
-          { id: 'box-xyz', transform: 'rotate3d(1, 1, 1, 180deg)' },
-        ];
-
-        boxes.forEach(({ id }) => {
-          const box = document.getElementById(id);
-          box.style.transform = 'none';
-          box.style.transition = 'transform 1.5s';
-        });
-
-        setTimeout(() => {
-          boxes.forEach(({ id, transform }) => {
-            const box = document.getElementById(id);
-            box.style.transform = transform;
-          });
-        }, 50);
-
-        setTimeout(() => {
-          boxes.forEach(({ id }) => {
-            const box = document.getElementById(id);
-            box.style.transform = 'none';
-          });
-        }, 2000);
-      }
-
-      function playDemo3() {
-        const box = document.getElementById('box-continuous');
-        box.style.animation = 'none';
-        box.offsetHeight;
-
-        const keyframes = `
-                @keyframes rotate3d-temp {
-                    from { transform: rotate3d(1, 1, 1, 0deg); }
-                    to { transform: rotate3d(1, 1, 1, 360deg); }
-                }
-            `;
-
-        const styleSheet = document.createElement('style');
-        styleSheet.textContent = keyframes;
-        document.head.appendChild(styleSheet);
-
-        box.style.animation = 'rotate3d-temp 3s linear';
-
-        setTimeout(() => {
-          box.style.animation = 'none';
-          document.head.removeChild(styleSheet);
-        }, 3000);
-      }
+      // 事件委托：监听所有点击
+      document.addEventListener('click', (e) => {
+        const button = e.target.closest('[data-demo]');
+        if (button) {
+          const demoName = button.dataset.demo;
+          const param = button.dataset.param;
+          if (demos[demoName]) {
+            demos[demoName](param);
+          }
+        }
+      });
     </script>
   </body>
 </html>

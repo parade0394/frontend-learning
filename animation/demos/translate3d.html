@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>translate3d() - CSS 动画教程</title>
     <link rel="stylesheet" href="../styles.css" />
-    <script src="../../shared/theme-sync.js"></script>
-      <script src="../../shared/utils.js"></script>
+    <script type="module" src="/src/theme-sync.js"></script>
   </head>
   <body>
     <aside class="sidebar">
@@ -62,7 +61,7 @@
           <h2>示例 1：Z 轴移动（前后）</h2>
           <p>需要配合 perspective 才能看到 Z 轴的效果</p>
 
-          <button class="play-button" onclick="playDemo1()" style="margin-bottom: 15px">播放演示</button>
+          <button class="play-button" data-demo="demo1" style="margin-bottom: 15px">播放演示</button>
 
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px">
             <div>
@@ -104,7 +103,7 @@
             <div class="box" id="box-3d">3D 移动</div>
           </div>
 
-          <button class="play-button" onclick="playDemo2()">播放动画</button>
+          <button class="play-button" data-demo="demo2">播放动画</button>
 
           <pre class="code-block"><code><span class="keyword">.box</span> {
   <span class="property">transform</span>: <span class="value">translate3d(100px, 50px, 100px)</span>;
@@ -161,37 +160,28 @@
       }
     </style>
 
-    <script>
-      function playDemo1() {
-        const forward = document.getElementById('box-forward');
-        const backward = document.getElementById('box-backward');
+    <script type="module">
+      // 使用事件委托，避免全局命名冲突
+      const demos = {
+        demo1: (param) => {
 
-        forward.style.transform = 'none';
-        backward.style.transform = 'none';
-        forward.style.transition = 'transform 1s';
-        backward.style.transition = 'transform 1s';
+        },
+        demo2: (param) => {
 
-        setTimeout(() => {
-          forward.style.transform = 'translateZ(100px)';
-          backward.style.transform = 'translateZ(-100px)';
-        }, 50);
+        }
+      };
 
-        setTimeout(() => {
-          forward.style.transform = 'none';
-          backward.style.transform = 'none';
-        }, 1500);
-      }
-
-      function playDemo2() {
-        const box = document.getElementById('box-3d');
-        box.style.transform = 'none';
-        box.style.transition = 'transform 1.5s';
-        box.offsetHeight;
-        box.style.transform = 'translate3d(100px, 50px, 100px)';
-        setTimeout(() => {
-          box.style.transform = 'none';
-        }, 2000);
-      }
+      // 事件委托：监听所有点击
+      document.addEventListener('click', (e) => {
+        const button = e.target.closest('[data-demo]');
+        if (button) {
+          const demoName = button.dataset.demo;
+          const param = button.dataset.param;
+          if (demos[demoName]) {
+            demos[demoName](param);
+          }
+        }
+      });
     </script>
   </body>
 </html>

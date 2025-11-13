@@ -6,22 +6,27 @@
     <title>animation-fill-mode 详细演示 - CSS 动画教程</title>
     <link rel="stylesheet" href="../styles.css" />
     <!-- 防止主题闪烁 -->
-    <script>
-      (function() {
-        try {
-          const theme = localStorage.getItem('themeMode') || 'light';
-          const color = localStorage.getItem('primaryColor') || '#10b981';
-          let actualTheme = theme;
-          if (theme === 'auto') {
-            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    <script type="module">
+      // 使用事件委托，避免全局命名冲突
+      const demos = {
+        function: (param) => {
+          try {
+        }
+      };
+
+      // 事件委托：监听所有点击
+      document.addEventListener('click', (e) => {
+        const button = e.target.closest('[data-demo]');
+        if (button) {
+          const demoName = button.dataset.demo;
+          const param = button.dataset.param;
+          if (demos[demoName]) {
+            demos[demoName](param);
           }
-          document.documentElement.setAttribute('data-theme', actualTheme);
-          document.documentElement.style.setProperty('--primary', color);
-        } catch (e) {}
-      })();
+        }
+      });
     </script>
-    <script src="../../shared/theme-sync.js"></script>
-    <script src="../../shared/utils.js"></script>
+    <script type="module" src="/src/theme-sync.js"></script>
     <style>
       /* 页面特定样式 */
       .subtitle {
@@ -246,7 +251,7 @@
           <div class="demo-area">
             <div class="box" id="box-none">中间</div>
           </div>
-          <button class="play-btn" onclick="playDemo('none')">播放动画</button>
+          <button class="play-btn" data-demo="demo" data-param="none">播放动画</button>
           <div class="description">
             <strong>点击后：</strong><br />
             • 0-2秒：方块在中间（绿色）等待<br />
@@ -261,7 +266,7 @@
           <div class="demo-area">
             <div class="box" id="box-backwards">中间</div>
           </div>
-          <button class="play-btn" onclick="playDemo('backwards')">播放动画</button>
+          <button class="play-btn" data-demo="demo" data-param="backwards">播放动画</button>
           <div class="description">
             <strong>点击后：</strong><br />
             • <strong>立即：</strong>方块跳到左边（红色）<br />
@@ -293,7 +298,7 @@
           <div class="demo-area">
             <div class="box" id="box-none-2">中间</div>
           </div>
-          <button class="play-btn" onclick="playDemo2('none')">播放动画</button>
+          <button class="play-btn" data-demo="demo2" data-param="none">播放动画</button>
           <div class="description">
             <strong>动画结束后：</strong><br />
             回到原始状态（中间，绿色）
@@ -305,7 +310,7 @@
           <div class="demo-area">
             <div class="box" id="box-forwards">中间</div>
           </div>
-          <button class="play-btn" onclick="playDemo2('forwards')">播放动画</button>
+          <button class="play-btn" data-demo="demo2" data-param="forwards">播放动画</button>
           <div class="description">
             <strong>动画结束后：</strong><br />
             保持最后一帧状态（中间，绿色）
@@ -324,7 +329,7 @@
           <div class="demo-area">
             <div class="box" id="box-both">中间</div>
           </div>
-          <button class="play-btn" onclick="playDemo('both')">播放动画</button>
+          <button class="play-btn" data-demo="demo" data-param="both">播放动画</button>
           <div class="description">
             <strong>点击后：</strong><br />
             • <strong>立即：</strong>跳到左边（backwards）<br />
