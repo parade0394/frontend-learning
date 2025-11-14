@@ -3,12 +3,14 @@
 ## 为什么使用 Iconify？
 
 ### 当前问题（使用 Emoji）
+
 - ❌ 不同操作系统显示不一致
 - ❌ 无法精确控制大小和颜色
 - ❌ 可访问性支持有限
 - ❌ 无法使用专业图标
 
 ### Iconify 优势
+
 - ✅ 统一的跨平台显示
 - ✅ 100,000+ 开源图标
 - ✅ 按需加载，性能优秀
@@ -75,23 +77,20 @@ const icons = [
 
 async function extractIcons() {
   const svgs = {};
-  
+
   for (const icon of icons) {
     const [prefix, name] = icon.split(':');
     const filename = locate(prefix);
     const data = JSON.parse(await fs.readFile(filename, 'utf8'));
     const iconData = getIconData(data, name);
-    
+
     if (iconData) {
       const svg = iconToSVG(iconData);
       svgs[icon] = iconToHTML(svg.body, svg.attributes);
     }
   }
-  
-  await fs.writeFile(
-    'shared/icons.json',
-    JSON.stringify(svgs, null, 2)
-  );
+
+  await fs.writeFile('shared/icons.json', JSON.stringify(svgs, null, 2));
 }
 
 extractIcons();
@@ -101,13 +100,13 @@ extractIcons();
 
 ```javascript
 // shared/icon.js
-const icons = await fetch('shared/icons.json').then(r => r.json());
+const icons = await fetch('shared/icons.json').then((r) => r.json());
 
 class Icon extends HTMLElement {
   connectedCallback() {
     const name = this.getAttribute('name');
     const size = this.getAttribute('size') || '24';
-    
+
     if (icons[name]) {
       this.innerHTML = icons[name]
         .replace(/width="\d+"/, `width="${size}"`)
@@ -130,24 +129,24 @@ customElements.define('app-icon', Icon);
 
 ### 当前 Emoji → Iconify 图标
 
-| 当前 | Emoji | Iconify 图标 | 说明 |
-|------|-------|--------------|------|
-| 主页 | 🎬 | `mdi:animation` | CSS 动画 |
-| 主页 | 📐 | `mdi:grid` | Grid 布局 |
-| 主页 | 💡 | `mdi:lightbulb-on` | Box-Shadow |
-| 主页 | 🎨 | `mdi:palette` | SVG 图形 |
-| 动画 | 📍 | `mdi:map-marker` | 坐标系统 |
-| 动画 | ↔️ | `mdi:arrow-expand-horizontal` | translate |
-| 动画 | 🔄 | `mdi:rotate-right` | rotate |
-| 动画 | 🔍 | `mdi:magnify` | scale |
-| 动画 | 📐 | `mdi:angle-acute` | skew |
-| 动画 | ⏰ | `mdi:clock-outline` | duration |
-| 动画 | 📈 | `mdi:chart-line` | timing |
-| 动画 | ⏳ | `mdi:timer-sand` | delay |
-| 动画 | 🎞️ | `mdi:filmstrip` | keyframes |
-| 动画 | 👁️ | `mdi:eye` | perspective |
-| 动画 | 🎯 | `mdi:target` | transform-origin |
-| 动画 | ⚡ | `mdi:flash` | will-change |
+| 当前 | Emoji | Iconify 图标                  | 说明             |
+| ---- | ----- | ----------------------------- | ---------------- |
+| 主页 | 🎬    | `mdi:animation`               | CSS 动画         |
+| 主页 | 📐    | `mdi:grid`                    | Grid 布局        |
+| 主页 | 💡    | `mdi:lightbulb-on`            | Box-Shadow       |
+| 主页 | 🎨    | `mdi:palette`                 | SVG 图形         |
+| 动画 | 📍    | `mdi:map-marker`              | 坐标系统         |
+| 动画 | ↔️    | `mdi:arrow-expand-horizontal` | translate        |
+| 动画 | 🔄    | `mdi:rotate-right`            | rotate           |
+| 动画 | 🔍    | `mdi:magnify`                 | scale            |
+| 动画 | 📐    | `mdi:angle-acute`             | skew             |
+| 动画 | ⏰    | `mdi:clock-outline`           | duration         |
+| 动画 | 📈    | `mdi:chart-line`              | timing           |
+| 动画 | ⏳    | `mdi:timer-sand`              | delay            |
+| 动画 | 🎞️    | `mdi:filmstrip`               | keyframes        |
+| 动画 | 👁️    | `mdi:eye`                     | perspective      |
+| 动画 | 🎯    | `mdi:target`                  | transform-origin |
+| 动画 | ⚡    | `mdi:flash`                   | will-change      |
 
 ### 推荐图标集
 
@@ -218,7 +217,7 @@ iconify-icon {
 
 ```css
 /* 暗色模式 */
-[data-theme="dark"] iconify-icon {
+[data-theme='dark'] iconify-icon {
   filter: brightness(1.2);
 }
 
@@ -235,16 +234,19 @@ iconify-icon {
 ## 性能考虑
 
 ### CDN 方案
+
 - **优点**：简单快速，自动缓存
 - **缺点**：依赖外部服务，首次加载稍慢
 - **适用**：快速原型，小型项目
 
 ### 本地方案
+
 - **优点**：完全控制，无外部依赖
 - **缺点**：需要构建步骤
 - **适用**：生产环境，大型项目
 
 ### 混合方案
+
 - 常用图标本地化
 - 不常用图标使用 CDN
 - 最佳性能和灵活性
@@ -258,10 +260,7 @@ iconify-icon {
 <iconify-icon icon="mdi:animation" aria-hidden="true"></iconify-icon>
 
 <!-- 功能性图标 -->
-<iconify-icon 
-  icon="mdi:close" 
-  role="img" 
-  aria-label="关闭"></iconify-icon>
+<iconify-icon icon="mdi:close" role="img" aria-label="关闭"></iconify-icon>
 ```
 
 ### 与文本结合
@@ -276,6 +275,7 @@ iconify-icon {
 ## 浏览器兼容性
 
 Iconify Web Component 支持：
+
 - ✅ Chrome 54+
 - ✅ Firefox 63+
 - ✅ Safari 10.1+

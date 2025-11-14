@@ -183,8 +183,6 @@ npx serve
 3. 使用 `src/utils.js` 中的工具函数
 4. 在 `index.html` 中添加模块入口
 
-详细指南：[.templates/README.md](.templates/README.md)
-
 ### 自定义样式
 
 - 修改 `src/styles/common.css` 中的 CSS 变量
@@ -208,7 +206,7 @@ npm run lint:js      # JavaScript
 npm run lint:css     # CSS
 ```
 
-详细文档：[FORMAT.md](FORMAT.md) 或 [.guides/code-formatting.md](.guides/code-formatting.md)
+详细文档：[.guides/code-formatting.md](.guides/code-formatting.md)
 
 ### CSS 规范
 
@@ -238,12 +236,6 @@ npm run lint:css     # CSS
 - [ ] 添加代码复制与示例分享功能
 - [ ] 添加搜索功能
 - [ ] 增强动画示例的可访问性
-
-## 🧰 辅助脚本
-
-- `scripts/batch-update-demos.js`：批量为动画示例引入公共工具与优化代码片段
-- 运行方式：`node scripts/batch-update-demos.js`
-- 如果遇到 `require is not defined`（项目 `type: module`），可改名为 `.cjs` 或在独立目录运行
 
 ## 📄 许可
 
