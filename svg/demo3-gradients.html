@@ -6,7 +6,6 @@
     <title>SVG 渐变填充 - 前端学习中心</title>
     <link href="/src/styles/common.css" rel="stylesheet" />
     <script src="../shared/theme-sync.js"></script>
-    <script src="../shared/utils.js"></script>
     <style>
       .gradient-grid {
         display: grid;
@@ -283,8 +282,10 @@
       </div>
     </div>
 
-    <script>
-      (function () {
+    <script type="module">
+      import { copyToClipboard, showToast } from '/src/utils.js';
+
+      (() => {
         'use strict';
 
         // 线性渐变控制

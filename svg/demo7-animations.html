@@ -6,7 +6,6 @@
     <title>SVG 动画效果 - 前端学习中心</title>
     <link href="/src/styles/common.css" rel="stylesheet" />
     <script src="../shared/theme-sync.js"></script>
-    <script src="../shared/utils.js"></script>
     <style>
       .animation-grid {
         display: grid;
@@ -325,8 +324,10 @@
       </div>
     </div>
 
-    <script>
-      (function () {
+    <script type="module">
+      import { showToast } from '/src/utils.js';
+
+      (() => {
         'use strict';
 
         // JavaScript 动画控制
@@ -336,7 +337,9 @@
 
         function animate() {
           position += 2;
-          if (position > 450) position = 50;
+          if (position > 450) {
+            position = 50;
+          }
           jsCircle.setAttribute('cx', position);
           animationId = requestAnimationFrame(animate);
         }

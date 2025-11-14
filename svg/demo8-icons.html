@@ -6,7 +6,6 @@
     <title>SVG 图标系统 - 前端学习中心</title>
     <link href="/src/styles/common.css" rel="stylesheet" />
     <script src="../shared/theme-sync.js"></script>
-    <script src="../shared/utils.js"></script>
     <style>
       .icon-section {
         background: var(--bg-secondary);
@@ -344,8 +343,10 @@
       </div>
     </div>
 
-    <script>
-      (function () {
+    <script type="module">
+      import { copyToClipboard, showToast } from '/src/utils.js';
+
+      (() => {
         'use strict';
 
         window.changeSize = function (size) {

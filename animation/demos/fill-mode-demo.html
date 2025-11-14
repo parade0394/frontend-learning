@@ -366,12 +366,14 @@
         box.style.animation = 'none';
         box.style.transform = 'translate(-50%, -50%)';
         box.style.background = '';
-        box.offsetHeight; // 触发重排
+        void box.offsetHeight; // 触发重排
       }
 
       function playDemo(mode) {
         const box = document.getElementById('box-' + mode);
-        if (!box) return;
+        if (!box) {
+          return;
+        }
 
         resetBox(box);
 

@@ -11,7 +11,9 @@
 export function debounce(fn, delay = 300) {
   let timer = null;
   return function (...args) {
-    if (timer) {clearTimeout(timer);}
+    if (timer) {
+      clearTimeout(timer);
+    }
     timer = setTimeout(() => {
       fn.apply(this, args);
     }, delay);
@@ -42,7 +44,7 @@ export function throttle(fn, interval = 300) {
 export function prefersReducedMotion() {
   try {
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  } catch (e) {
+  } catch {
     return false;
   }
 }
@@ -62,7 +64,9 @@ export function isMobile() {
  */
 export function scrollToElement(target, offset = 0) {
   const element = typeof target === 'string' ? document.querySelector(target) : target;
-  if (!element) {return;}
+  if (!element) {
+    return;
+  }
 
   const top = element.getBoundingClientRect().top + window.pageYOffset - offset;
   window.scrollTo({

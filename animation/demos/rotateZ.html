@@ -179,10 +179,7 @@
       const demos = {
         animation: () => {
           const box = document.getElementById('box4');
-          box.classList.add('spinning');
-          setTimeout(() => {
-            box.classList.remove('spinning');
-          }, 4000);
+          playAnimation(box, 'spinning', 4000);
         },
       };
 

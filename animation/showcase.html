@@ -616,19 +616,23 @@
       // 使用事件委托处理所有交互
       document.addEventListener('click', (e) => {
         const target = e.target.closest('[data-action]');
-        if (!target) return;
+        if (!target) {
+          return;
+        }
 
         const action = target.dataset.action;
 
         switch (action) {
-          case 'toggle-modal':
+          case 'toggle-modal': {
             const overlay = document.getElementById('modalOverlay');
             overlay.classList.toggle('active');
             break;
+          }
 
-          case 'stop-propagation':
+          case 'stop-propagation': {
             e.stopPropagation();
             break;
+          }
         }
       });
     </script>

@@ -241,8 +241,8 @@
         cssArea = $('css');
       const lightCanvas = $('lightCanvas');
       const ctx = lightCanvas.getContext('2d');
-      let angle = Math.PI / 4,
-        distance = 40;
+      let angle = Math.PI / 4;
+      const distance = 40;
 
       const blur = $('blur'),
         spread = $('spread'),
@@ -358,11 +358,15 @@
 
       function scheduleUpdate(e) {
         lastEvent = e;
-        if (rafPending) return;
+        if (rafPending) {
+          return;
+        }
         rafPending = true;
         requestAnimationFrame(() => {
           rafPending = false;
-          if (!dragging || !lastEvent) return;
+          if (!dragging || !lastEvent) {
+            return;
+          }
           const rect = lightCanvas.getBoundingClientRect();
           const x = lastEvent.clientX - rect.left - 100;
           const y = lastEvent.clientY - rect.top - 100;

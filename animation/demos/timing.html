@@ -133,7 +133,30 @@
     </main>
 
     <script type="module">
-      import { playTransform } from '/src/utils.js';
+      // 工具函数：播放多个元素的 transform 动画
+      function playMultipleTransforms(elements, transformValue, duration) {
+        // 重置所有元素
+        elements.forEach((element) => {
+          element.style.transform = 'none';
+        });
+
+        // 强制重排
+        void elements[0]?.offsetHeight;
+
+        // 应用 transform
+        setTimeout(() => {
+          elements.forEach((element) => {
+            element.style.transform = transformValue;
+          });
+        }, 50);
+
+        // 动画结束后重置
+        setTimeout(() => {
+          elements.forEach((element) => {
+            element.style.transform = 'none';
+          });
+        }, duration + 100);
+      }
 
       // 使用事件委托，避免全局命名冲突
       const demos = {
@@ -146,24 +169,7 @@
             document.getElementById('box-ease-in-out'),
           ];
 
-          // 重置所有盒子
-          boxes.forEach((box) => {
-            box.style.transform = 'translateX(0)';
-          });
-
-          // 触发动画
-          setTimeout(() => {
-            boxes.forEach((box) => {
-              box.style.transform = 'translateX(300px)';
-            });
-          }, 50);
-
-          // 1.5 秒后重置
-          setTimeout(() => {
-            boxes.forEach((box) => {
-              box.style.transform = 'translateX(0)';
-            });
-          }, 1600);
+          playMultipleTransforms(boxes, 'translateX(300px)', 1500);
         },
       };
 

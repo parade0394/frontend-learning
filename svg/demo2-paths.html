@@ -6,7 +6,6 @@
     <title>SVG 路径绘制 - 前端学习中心</title>
     <link href="/src/styles/common.css" rel="stylesheet" />
     <script src="../shared/theme-sync.js"></script>
-    <script src="../shared/utils.js"></script>
     <style>
       .path-demo {
         background: var(--bg-secondary);
@@ -343,8 +342,10 @@
       </div>
     </div>
 
-    <script>
-      (function () {
+    <script type="module">
+      import { copyToClipboard, showToast } from '/src/utils.js';
+
+      (() => {
         'use strict';
 
         // 交互式路径编辑器
@@ -356,7 +357,7 @@
         const codeDisplay = document.getElementById('interactive-code');
 
         let selectedPoint = null;
-        let offset = { x: 0, y: 0 };
+        const offset = { x: 0, y: 0 };
 
         // 初始坐标
         const initialCoords = [
@@ -382,7 +383,9 @@
         }
 
         function drag(e) {
-          if (!selectedPoint) return;
+          if (!selectedPoint) {
+            return;
+          }
 
           const pt = getMousePosition(e);
           const x = pt.x - offset.x;

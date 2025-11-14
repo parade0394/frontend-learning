@@ -603,7 +603,7 @@
           const box = document.getElementById('demo-box-2');
           // bounce 是无限循环，手动控制
           box.classList.remove('animate-bounce');
-          box.offsetHeight;
+          void box.offsetHeight;
           box.classList.add('animate-bounce');
           // 3 秒后停止
           setTimeout(() => {
@@ -614,7 +614,7 @@
           const box = document.getElementById('demo-box-3');
           // colorChange 是无限循环，手动控制
           box.classList.remove('animate-color');
-          box.offsetHeight;
+          void box.offsetHeight;
           box.classList.add('animate-color');
           // 6 秒后停止（2 个完整循环）
           setTimeout(() => {
@@ -625,7 +625,7 @@
           const box = document.getElementById('demo-box-4');
           // rotate3d 是无限循环，手动控制
           box.classList.remove('animate-rotate3d');
-          box.offsetHeight;
+          void box.offsetHeight;
           box.classList.add('animate-rotate3d');
           // 6 秒后停止（2 个完整循环）
           setTimeout(() => {
@@ -634,7 +634,9 @@
         },
         direction: (param) => {
           const box = document.getElementById('direction-' + param);
-          if (!box) return;
+          if (!box) {
+            return;
+          }
 
           // 重置
           box.style.animation = 'none';
@@ -652,7 +654,9 @@
         },
         fillmode: (param) => {
           const box = document.getElementById('fill-' + param);
-          if (!box) return;
+          if (!box) {
+            return;
+          }
 
           // 重置
           box.style.animation = 'none';
@@ -674,7 +678,9 @@
         },
         fillmodedemo: (param) => {
           const box = document.getElementById('fill-' + param + '-demo');
-          if (!box) return;
+          if (!box) {
+            return;
+          }
 
           // 重置
           box.style.animation = 'none';
