@@ -133,9 +133,38 @@
     </main>
 
     <script type="module">
+      import { playTransform } from '/src/utils.js';
+
       // 使用事件委托，避免全局命名冲突
       const demos = {
-        all: (param) => {},
+        all: () => {
+          const boxes = [
+            document.getElementById('box-linear'),
+            document.getElementById('box-ease'),
+            document.getElementById('box-ease-in'),
+            document.getElementById('box-ease-out'),
+            document.getElementById('box-ease-in-out'),
+          ];
+
+          // 重置所有盒子
+          boxes.forEach((box) => {
+            box.style.transform = 'translateX(0)';
+          });
+
+          // 触发动画
+          setTimeout(() => {
+            boxes.forEach((box) => {
+              box.style.transform = 'translateX(300px)';
+            });
+          }, 50);
+
+          // 1.5 秒后重置
+          setTimeout(() => {
+            boxes.forEach((box) => {
+              box.style.transform = 'translateX(0)';
+            });
+          }, 1600);
+        },
       };
 
       // 事件委托：监听所有点击

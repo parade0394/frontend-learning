@@ -249,7 +249,7 @@
 
           <pre class="code-block"><code><span class="comment">/* 多个动画 */</span>
 <span class="keyword">.box</span> {
-  <span class="property">animation</span>: 
+  <span class="property">animation</span>:
     <span class="value">rotate360 2s linear infinite</span>,
     <span class="value">pulse 1.5s ease-in-out infinite</span>;
 }
@@ -305,14 +305,14 @@
     </main>
 
     <script type="module">
-      import { playAnimation } from '/src/utils.js';
-
       // 使用事件委托，避免全局命名冲突
       const demos = {
         animation: () => {
+          const box = document.getElementById('controlledBox');
           box.classList.remove('paused');
         },
         pauseanimation: () => {
+          const box = document.getElementById('controlledBox');
           box.classList.add('paused');
         },
       };

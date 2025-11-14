@@ -590,12 +590,110 @@
     </main>
 
     <script type="module">
+      import { playAnimation } from '/src/utils.js';
+
       // 使用事件委托，避免全局命名冲突
       const demos = {
-        demo1: (param) => {},
-        demo2: (param) => {},
-        demo3: (param) => {},
-        demo4: (param) => {},
+        demo1: () => {
+          const box = document.getElementById('demo-box-1');
+          // slideIn 动画持续 1 秒
+          playAnimation(box, 'animate-slide', 1000);
+        },
+        demo2: () => {
+          const box = document.getElementById('demo-box-2');
+          // bounce 是无限循环，手动控制
+          box.classList.remove('animate-bounce');
+          box.offsetHeight;
+          box.classList.add('animate-bounce');
+          // 3 秒后停止
+          setTimeout(() => {
+            box.classList.remove('animate-bounce');
+          }, 3000);
+        },
+        demo3: () => {
+          const box = document.getElementById('demo-box-3');
+          // colorChange 是无限循环，手动控制
+          box.classList.remove('animate-color');
+          box.offsetHeight;
+          box.classList.add('animate-color');
+          // 6 秒后停止（2 个完整循环）
+          setTimeout(() => {
+            box.classList.remove('animate-color');
+          }, 6000);
+        },
+        demo4: () => {
+          const box = document.getElementById('demo-box-4');
+          // rotate3d 是无限循环，手动控制
+          box.classList.remove('animate-rotate3d');
+          box.offsetHeight;
+          box.classList.add('animate-rotate3d');
+          // 6 秒后停止（2 个完整循环）
+          setTimeout(() => {
+            box.classList.remove('animate-rotate3d');
+          }, 6000);
+        },
+        direction: (param) => {
+          const box = document.getElementById('direction-' + param);
+          if (!box) return;
+
+          // 重置
+          box.style.animation = 'none';
+          box.offsetHeight;
+
+          // 应用动画
+          setTimeout(() => {
+            box.style.animation = `moveRight 1s ease-in-out 0s 3 ${param}`;
+          }, 10);
+
+          // 3 次循环后重置
+          setTimeout(() => {
+            box.style.animation = 'none';
+          }, 3100);
+        },
+        fillmode: (param) => {
+          const box = document.getElementById('fill-' + param);
+          if (!box) return;
+
+          // 重置
+          box.style.animation = 'none';
+          box.style.opacity = '1';
+          box.offsetHeight;
+
+          // 应用动画
+          setTimeout(() => {
+            box.style.animation = `fadeOut 1s linear 2s 1 ${param}`;
+          }, 10);
+
+          // 如果是 none 或 backwards，动画结束后重置
+          if (param === 'none' || param === 'backwards') {
+            setTimeout(() => {
+              box.style.animation = 'none';
+              box.style.opacity = '1';
+            }, 3100);
+          }
+        },
+        fillmodedemo: (param) => {
+          const box = document.getElementById('fill-' + param + '-demo');
+          if (!box) return;
+
+          // 重置
+          box.style.animation = 'none';
+          box.style.opacity = '1';
+          box.style.background = '#10b981';
+          box.offsetHeight;
+
+          // 应用动画
+          setTimeout(() => {
+            box.style.animation = `fadeOut 1s linear 2s 1 ${param}`;
+          }, 10);
+
+          // 动画结束后重置
+          setTimeout(() => {
+            box.style.animation = 'none';
+            box.style.opacity = '1';
+            box.style.background = '#10b981';
+          }, 3100);
+        },
       };
 
       // 事件委托：监听所有点击

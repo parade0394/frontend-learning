@@ -416,13 +416,13 @@
         <p class="section-desc">使用 translate(-50%, -50%) 实现完美居中</p>
 
         <div class="modal-demo">
-          <button class="modal-trigger" onclick="toggleModal()">打开对话框</button>
-          <div id="modalOverlay" class="modal-overlay" onclick="toggleModal()">
-            <div class="modal-box" onclick="event.stopPropagation()">
+          <button class="modal-trigger" data-action="toggle-modal">打开对话框</button>
+          <div id="modalOverlay" class="modal-overlay" data-action="toggle-modal">
+            <div class="modal-box" data-action="stop-propagation">
               <h3 style="margin-bottom: 10px">欢迎！</h3>
               <p style="color: #6b7280; margin-bottom: 20px">这是一个完美居中的对话框</p>
               <button
-                onclick="toggleModal()"
+                data-action="toggle-modal"
                 style="
                   padding: 8px 20px;
                   background: #10b981;
@@ -612,11 +612,25 @@
       </div>
     </div>
 
-    <script>
-      function toggleModal() {
-        const overlay = document.getElementById('modalOverlay');
-        overlay.classList.toggle('active');
-      }
+    <script type="module">
+      // 使用事件委托处理所有交互
+      document.addEventListener('click', (e) => {
+        const target = e.target.closest('[data-action]');
+        if (!target) return;
+
+        const action = target.dataset.action;
+
+        switch (action) {
+          case 'toggle-modal':
+            const overlay = document.getElementById('modalOverlay');
+            overlay.classList.toggle('active');
+            break;
+
+          case 'stop-propagation':
+            e.stopPropagation();
+            break;
+        }
+      });
     </script>
   </body>
 </html>

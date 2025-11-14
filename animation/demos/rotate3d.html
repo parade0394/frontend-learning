@@ -6,6 +6,16 @@
     <title>rotate3d() - CSS 动画教程</title>
     <link href="../styles.css" rel="stylesheet" />
     <script type="module" src="/src/theme-sync.js"></script>
+    <style>
+      @keyframes rotate3d-animation {
+        0% {
+          transform: rotate3d(1, 1, 1, 0deg);
+        }
+        100% {
+          transform: rotate3d(1, 1, 1, 360deg);
+        }
+      }
+    </style>
   </head>
   <body>
     <aside class="sidebar">
@@ -158,11 +168,41 @@
     </main>
 
     <script type="module">
+      import { playTransform } from '/src/utils.js';
+
       // 使用事件委托，避免全局命名冲突
       const demos = {
-        demo1: (param) => {},
-        demo2: (param) => {},
-        demo3: (param) => {},
+        demo1: () => {
+          const boxX = document.getElementById('box-x');
+          const boxY = document.getElementById('box-y');
+          const boxZ = document.getElementById('box-z');
+
+          playTransform(boxX, 'rotate3d(1, 0, 0, 60deg)', 1500);
+          playTransform(boxY, 'rotate3d(0, 1, 0, 60deg)', 1500);
+          playTransform(boxZ, 'rotate3d(0, 0, 1, 60deg)', 1500);
+        },
+        demo2: () => {
+          const boxXY = document.getElementById('box-xy');
+          const boxXYZ = document.getElementById('box-xyz');
+
+          playTransform(boxXY, 'rotate3d(1, 1, 0, 180deg)', 1500);
+          playTransform(boxXYZ, 'rotate3d(1, 1, 1, 180deg)', 1500);
+        },
+        demo3: () => {
+          const box = document.getElementById('box-continuous');
+
+          // 重置动画
+          box.style.animation = 'none';
+          box.offsetHeight;
+
+          // 应用动画
+          box.style.animation = 'rotate3d-animation 3s linear';
+
+          // 3 秒后重置
+          setTimeout(() => {
+            box.style.animation = 'none';
+          }, 3000);
+        },
       };
 
       // 事件委托：监听所有点击

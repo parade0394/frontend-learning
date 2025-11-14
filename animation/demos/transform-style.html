@@ -342,8 +342,29 @@
     <script type="module">
       // 使用事件委托，避免全局命名冲突
       const demos = {
-        rotatecube: (param) => {},
-        flipcard: (param) => {},
+        rotatecube: () => {
+          const cube = document.getElementById('demo-cube');
+
+          // 重置
+          cube.style.transform = 'rotateX(0deg) rotateY(0deg)';
+          cube.offsetHeight;
+
+          // 应用旋转
+          setTimeout(() => {
+            cube.style.transition = 'transform 2s ease-in-out';
+            cube.style.transform = 'rotateX(360deg) rotateY(360deg)';
+          }, 50);
+
+          // 2 秒后重置
+          setTimeout(() => {
+            cube.style.transition = 'none';
+            cube.style.transform = 'rotateX(0deg) rotateY(0deg)';
+          }, 2100);
+        },
+        flipcard: () => {
+          const card = document.getElementById('flip-card');
+          card.classList.toggle('flipped');
+        },
       };
 
       // 事件委托：监听所有点击

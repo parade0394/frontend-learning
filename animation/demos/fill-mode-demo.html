@@ -5,27 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>animation-fill-mode 详细演示 - CSS 动画教程</title>
     <link href="../styles.css" rel="stylesheet" />
-    <!-- 防止主题闪烁 -->
-    <script type="module">
-      // 使用事件委托，避免全局命名冲突
-      const demos = {
-        function: (param) => {
-          try {
-        }
-      };
-
-      // 事件委托：监听所有点击
-      document.addEventListener('click', (e) => {
-        const button = e.target.closest('[data-demo]');
-        if (button) {
-          const demoName = button.dataset.demo;
-          const param = button.dataset.param;
-          if (demos[demoName]) {
-            demos[demoName](param);
-          }
-        }
-      });
-    </script>
     <script type="module" src="/src/theme-sync.js"></script>
     <style>
       /* 页面特定样式 */
@@ -381,9 +360,19 @@
       </div>
     </main>
 
-    <script>
+    <script type="module">
+      // 工具函数
+      function resetBox(box) {
+        box.style.animation = 'none';
+        box.style.transform = 'translate(-50%, -50%)';
+        box.style.background = '';
+        box.offsetHeight; // 触发重排
+      }
+
       function playDemo(mode) {
         const box = document.getElementById('box-' + mode);
+        if (!box) return;
+
         resetBox(box);
 
         // 应用动画
@@ -398,7 +387,6 @@
       }
 
       function playDemo2(mode) {
-        // forwards 使用 box-forwards，none 使用 box-none-2
         const boxId = mode === 'forwards' ? 'box-forwards' : 'box-' + mode + '-2';
         const box = document.getElementById(boxId);
 
@@ -420,13 +408,27 @@
         }
       }
 
-      function resetBox(box) {
-        box.style.animation = 'none';
-        box.style.transform = 'translate(-50%, -50%)';
-        // 重置为使用 CSS 变量（让浏览器自动应用当前主题色）
-        box.style.background = '';
-        box.offsetHeight; // 触发重排
-      }
+      // 使用事件委托，避免全局命名冲突
+      const demos = {
+        demo: (param) => {
+          playDemo(param);
+        },
+        demo2: (param) => {
+          playDemo2(param);
+        },
+      };
+
+      // 事件委托：监听所有按钮点击
+      document.addEventListener('click', (e) => {
+        const button = e.target.closest('[data-demo]');
+        if (button) {
+          const demoName = button.dataset.demo;
+          const param = button.dataset.param;
+          if (demos[demoName]) {
+            demos[demoName](param);
+          }
+        }
+      });
     </script>
   </body>
 </html>

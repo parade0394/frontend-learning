@@ -161,11 +161,65 @@
     </main>
 
     <script type="module">
+      // 获取元素
+      const boxNoDelay = document.getElementById('box-no-delay');
+      const boxDelay = document.getElementById('box-delay');
+      const boxSeq1 = document.getElementById('box-seq-1');
+      const boxSeq2 = document.getElementById('box-seq-2');
+      const boxSeq3 = document.getElementById('box-seq-3');
+      const boxSeq4 = document.getElementById('box-seq-4');
+      const hoverBox = document.getElementById('hover-box');
+      const tooltip = document.getElementById('tooltip');
+
       // 使用事件委托，避免全局命名冲突
       const demos = {
-        demo1: (param) => {},
-        demo2: (param) => {},
+        demo1: () => {
+          // 重置
+          boxNoDelay.style.transform = 'translateX(0)';
+          boxDelay.style.transform = 'translateX(0)';
+
+          // 触发动画
+          setTimeout(() => {
+            boxNoDelay.style.transform = 'translateX(200px)';
+            boxDelay.style.transform = 'translateX(200px)';
+          }, 50);
+
+          // 自动重置
+          setTimeout(() => {
+            boxNoDelay.style.transform = 'translateX(0)';
+            boxDelay.style.transform = 'translateX(0)';
+          }, 2000);
+        },
+        demo2: () => {
+          // 重置
+          [boxSeq1, boxSeq2, boxSeq3, boxSeq4].forEach((box) => {
+            box.style.transform = 'translateY(0)';
+          });
+
+          // 触发动画
+          setTimeout(() => {
+            [boxSeq1, boxSeq2, boxSeq3, boxSeq4].forEach((box) => {
+              box.style.transform = 'translateY(80px)';
+            });
+          }, 50);
+
+          // 自动重置
+          setTimeout(() => {
+            [boxSeq1, boxSeq2, boxSeq3, boxSeq4].forEach((box) => {
+              box.style.transform = 'translateY(0)';
+            });
+          }, 2500);
+        },
       };
+
+      // 悬停效果
+      hoverBox.addEventListener('mouseenter', () => {
+        tooltip.style.transform = 'translateX(-50%) scale(1)';
+      });
+
+      hoverBox.addEventListener('mouseleave', () => {
+        tooltip.style.transform = 'translateX(-50%) scale(0)';
+      });
 
       // 事件委托：监听所有点击
       document.addEventListener('click', (e) => {

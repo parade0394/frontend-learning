@@ -197,10 +197,21 @@
     </style>
 
     <script type="module">
+      import { playTransform } from '/src/utils.js';
+
       // 使用事件委托，避免全局命名冲突
       const demos = {
-        demo1: (param) => {},
-        demo2: (param) => {},
+        demo1: () => {
+          const boxForward = document.getElementById('box-forward');
+          const boxBackward = document.getElementById('box-backward');
+
+          playTransform(boxForward, 'translateZ(100px)', 1500);
+          playTransform(boxBackward, 'translateZ(-100px)', 1500);
+        },
+        demo2: () => {
+          const box = document.getElementById('box-3d');
+          playTransform(box, 'translate3d(100px, 50px, 100px)', 1500);
+        },
       };
 
       // 事件委托：监听所有点击

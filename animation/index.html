@@ -21,7 +21,9 @@
           }
           document.documentElement.setAttribute('data-theme', actualTheme);
           document.documentElement.style.setProperty('--primary', color);
-        } catch (e) {}
+        } catch (e) {
+          console.log(e);
+        }
       })();
     </script>
     <script type="module" src="/src/theme.js"></script>
