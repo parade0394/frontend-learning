@@ -33,40 +33,41 @@ frontend-learning/
 
 ### ⚠️ 重要提示
 
-**请使用 HTTP 服务器访问，不要直接双击 HTML 文件！**
+**本项目使用 ES Modules，必须通过 HTTP 服务器访问，不能直接双击 HTML 文件！**
 
-原因：浏览器安全限制（CORS、JavaScript 模块加载等）
-详见：[WHY_HTTP_SERVER.md](WHY_HTTP_SERVER.md)
+**原因**：
 
-### 方式 1：使用 Vite 本地开发（推荐）
+- ES Modules (`import/export`) 在 `file://` 协议下无法工作
+- 浏览器 CORS 安全限制会阻止资源加载
+- 相对路径引用可能失效
+
+### 方式 1：使用 Vite 开发服务器（推荐）
 
 ```bash
+# 安装依赖
 npm install
 
-# 启动本地开发服务器（默认端口 5173）
+# 启动开发服务器（默认 http://localhost:5173）
 npm run dev
 
-# 生产构建到 dist/
+# 生产构建
 npm run build
 
-# 本地预览构建结果
+# 预览构建结果
 npm run preview
 ```
 
-### 方式 2：直接打开静态文件
-
-1. 双击 `index.html`
-2. 在浏览器中打开即可离线学习
-3. 选择一个模块开始学习
-
-### 方式 3：使用任意静态服务器
+### 方式 2：使用其他静态服务器
 
 ```bash
 # 使用 Python
 python -m http.server 8000
 
-# 或使用 Node.js
+# 使用 Node.js serve
 npx serve
+
+# 使用 Node.js http-server
+npx http-server
 
 # 然后在浏览器打开 http://localhost:8000
 ```
