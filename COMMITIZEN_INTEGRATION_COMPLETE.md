@@ -202,7 +202,7 @@ git add index.html styles.css
       "path": "cz-customizable" // 使用自定义适配器
     },
     "cz-customizable": {
-      "config": ".cz-config.js" // 指定配置文件路径
+      "config": ".cz-config.cjs" // 指定配置文件路径
     }
   }
 }
@@ -212,7 +212,7 @@ git add index.html styles.css
 
 - 运行 `npm run commit` 时，Commitizen 读取这个配置
 - 加载 `cz-customizable` 适配器
-- 适配器读取 `.cz-config.js` 获取自定义配置
+- 适配器读取 `.cz-config.cjs` 获取自定义配置
 
 ---
 
@@ -385,9 +385,9 @@ git commit -m "fix:添加功能"         # 缺少空格
 
 ---
 
-### 5. .cz-config.js - Commitizen 交互式配置
+### 5. .cz-config.cjs - Commitizen 交互式配置
 
-**位置**: `.cz-config.js`
+**位置**: `.cz-config.cjs`
 
 **完整配置解析**:
 
@@ -520,10 +520,10 @@ $ npm run commit
 
 **与 commitlint 的关系**:
 
-`.cz-config.js` 中的 `types[].value` 必须与 `commitlint.config.js` 中的 `type-enum` 保持一致：
+`.cz-config.cjs` 中的 `types[].value` 必须与 `commitlint.config.js` 中的 `type-enum` 保持一致：
 
 ```javascript
-// .cz-config.js
+// .cz-config.cjs
 types: [
   { value: 'feat', ... },
   { value: 'fix', ... },
