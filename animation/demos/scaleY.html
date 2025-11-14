@@ -1,31 +1,31 @@
 ﻿<!doctype html>
-<html lang="zh-CN" data-theme="light">
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>scaleY() - CSS 动画教程</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link href="../styles.css" rel="stylesheet" />
     <script type="module" src="/src/theme-sync.js"></script>
   </head>
   <body>
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1>CSS 动画教程</h1>
-        <a href="../index.html" class="back-home">← 返回首页</a>
+        <a class="back-home" href="../index.html">← 返回首页</a>
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section">
           <h3>基础概念</h3>
-          <a href="coordinate.html" class="nav-item">坐标系统</a>
+          <a class="nav-item" href="coordinate.html">坐标系统</a>
         </div>
         <div class="nav-section">
           <h3>Transform 变换</h3>
-          <a href="translate.html" class="nav-item">translate() 平移</a>
-          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
-          <a href="scale.html" class="nav-item">scale() 缩放</a>
-          <a href="scaleX.html" class="nav-item">scaleX() X轴缩放</a>
-          <a href="scaleY.html" class="nav-item active">scaleY() Y轴缩放</a>
-          <a href="skew.html" class="nav-item">skew() 倾斜</a>
+          <a class="nav-item" href="translate.html">translate() 平移</a>
+          <a class="nav-item" href="rotate.html">rotate() 旋转</a>
+          <a class="nav-item" href="scale.html">scale() 缩放</a>
+          <a class="nav-item" href="scaleX.html">scaleX() X轴缩放</a>
+          <a class="nav-item active" href="scaleY.html">scaleY() Y轴缩放</a>
+          <a class="nav-item" href="skew.html">skew() 倾斜</a>
         </div>
       </nav>
     </aside>
@@ -56,7 +56,7 @@
           <p>scaleY(2) 将元素高度拉伸到 2 倍</p>
 
           <div class="demo-area">
-            <div class="box" id="demo-box-1">2x</div>
+            <div id="demo-box-1" class="box">2x</div>
           </div>
 
           <button class="play-button" data-demo="demo1">播放动画</button>
@@ -72,7 +72,7 @@
           <p>scaleY(0.5) 将元素高度压缩到一半</p>
 
           <div class="demo-area">
-            <div class="box" id="demo-box-2">0.5x</div>
+            <div id="demo-box-2" class="box">0.5x</div>
           </div>
 
           <button class="play-button" data-demo="demo2">播放动画</button>
@@ -88,7 +88,7 @@
           <p>scaleY(-1) 垂直镜像翻转元素</p>
 
           <div class="demo-area">
-            <div class="box" id="demo-box-3">-1x</div>
+            <div id="demo-box-3" class="box">-1x</div>
           </div>
 
           <button class="play-button" data-demo="demo3">播放动画</button>
@@ -99,9 +99,7 @@
 }</code></pre>
 
           <div class="info-box">
-            <p>
-              <strong>应用场景：</strong>下拉菜单展开动画、手风琴效果、倒影效果
-            </p>
+            <p><strong>应用场景：</strong>下拉菜单展开动画、手风琴效果、倒影效果</p>
           </div>
         </section>
       </div>
@@ -113,17 +111,17 @@
       // 使用事件委托，避免全局命名冲突
       const demos = {
         demo1: () => {
-          const box = document.getElementById("demo-box-1");
-          playTransform(box, "scaleY(2)", 1500);
+          const box = document.getElementById('demo-box-1');
+          playTransform(box, 'scaleY(2)', 1500);
         },
         demo2: () => {
-          const box = document.getElementById("demo-box-2");
-          playTransform(box, "scaleY(0.5)", 1500);
+          const box = document.getElementById('demo-box-2');
+          playTransform(box, 'scaleY(0.5)', 1500);
         },
         demo3: () => {
-          const box = document.getElementById("demo-box-3");
-          playTransform(box, "scaleY(-1)", 1500);
-        }
+          const box = document.getElementById('demo-box-3');
+          playTransform(box, 'scaleY(-1)', 1500);
+        },
       };
 
       // 事件委托：监听所有按钮点击

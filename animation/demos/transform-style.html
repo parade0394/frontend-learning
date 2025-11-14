@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+﻿<!doctype html>
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>transform-style - CSS 动画教程</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link href="../styles.css" rel="stylesheet" />
     <script type="module" src="/src/theme-sync.js"></script>
     <style>
       /* 3D 立方体样式 */
@@ -123,19 +123,19 @@
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1>CSS 动画教程</h1>
-        <a href="../index.html" class="back-home">← 返回首页</a>
+        <a class="back-home" href="../index.html">← 返回首页</a>
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section">
           <h3>基础概念</h3>
-          <a href="coordinate.html" class="nav-item">坐标系统</a>
+          <a class="nav-item" href="coordinate.html">坐标系统</a>
         </div>
         <div class="nav-section">
           <h3>3D 变换</h3>
-          <a href="perspective.html" class="nav-item">perspective 透视</a>
-          <a href="rotate3d.html" class="nav-item">rotate3d() 3D旋转</a>
-          <a href="translate3d.html" class="nav-item">translate3d() 3D平移</a>
-          <a href="transform-style.html" class="nav-item active">transform-style 3D空间</a>
+          <a class="nav-item" href="perspective.html">perspective 透视</a>
+          <a class="nav-item" href="rotate3d.html">rotate3d() 3D旋转</a>
+          <a class="nav-item" href="translate3d.html">translate3d() 3D平移</a>
+          <a class="nav-item active" href="transform-style.html">transform-style 3D空间</a>
         </div>
       </nav>
     </aside>
@@ -185,7 +185,9 @@
                   <div class="cube-face face-bottom">下</div>
                 </div>
               </div>
-              <p style="text-align: center; margin-top: 15px; color: #6b7280; font-size: 0.9rem">❌ 子元素被扁平化，看不到 3D 效果</p>
+              <p style="text-align: center; margin-top: 15px; color: #6b7280; font-size: 0.9rem">
+                ❌ 子元素被扁平化，看不到 3D 效果
+              </p>
             </div>
 
             <div>
@@ -200,7 +202,9 @@
                   <div class="cube-face face-bottom">下</div>
                 </div>
               </div>
-              <p style="text-align: center; margin-top: 15px; color: #6b7280; font-size: 0.9rem">✅ 子元素在 3D 空间中，形成真正的立方体</p>
+              <p style="text-align: center; margin-top: 15px; color: #6b7280; font-size: 0.9rem">
+                ✅ 子元素在 3D 空间中，形成真正的立方体
+              </p>
             </div>
           </div>
 
@@ -220,7 +224,7 @@
           <p>创建一个可以旋转的 3D 立方体</p>
 
           <div class="cube-container">
-            <div class="cube" id="demo-cube" style="transform-style: preserve-3d">
+            <div id="demo-cube" class="cube" style="transform-style: preserve-3d">
               <div class="cube-face face-front">前</div>
               <div class="cube-face face-back">后</div>
               <div class="cube-face face-right">右</div>
@@ -259,7 +263,7 @@
           <p>点击卡片查看翻转效果</p>
 
           <div class="card-container">
-            <div class="card-card" id="flip-card" style="transform-style: preserve-3d" data-demo="flipcard">
+            <div id="flip-card" class="card-card" data-demo="flipcard" style="transform-style: preserve-3d">
               <div class="card-side card-front">
                 <div>
                   <h3 style="font-size: 1.5rem; margin-bottom: 10px">正面</h3>
@@ -300,7 +304,10 @@
           <h2>重要注意事项</h2>
 
           <div class="info-box">
-            <p><strong>必须设置在父元素上：</strong>transform-style 要设置在包含 3D 变换子元素的父元素上，而不是子元素本身</p>
+            <p>
+              <strong>必须设置在父元素上：</strong>transform-style 要设置在包含 3D
+              变换子元素的父元素上，而不是子元素本身
+            </p>
           </div>
 
           <ul style="margin-top: 20px">
@@ -324,7 +331,8 @@
 
           <div class="info-box" style="margin-top: 20px">
             <p>
-              <strong>最佳实践：</strong>创建 3D 效果时，记住这个三层结构：祖父元素设置 perspective（透视点）→ 父元素设置 transform-style: preserve-3d（3D空间）→ 子元素应用 3D 变换（具体变换）
+              <strong>最佳实践：</strong>创建 3D 效果时，记住这个三层结构：祖父元素设置 perspective（透视点）→
+              父元素设置 transform-style: preserve-3d（3D空间）→ 子元素应用 3D 变换（具体变换）
             </p>
           </div>
         </section>
@@ -334,12 +342,8 @@
     <script type="module">
       // 使用事件委托，避免全局命名冲突
       const demos = {
-        rotatecube: (param) => {
-
-        },
-        flipcard: (param) => {
-
-        }
+        rotatecube: (param) => {},
+        flipcard: (param) => {},
       };
 
       // 事件委托：监听所有点击

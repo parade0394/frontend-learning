@@ -1,223 +1,232 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SVG 文本处理 - 前端学习中心</title>
-  <link rel="stylesheet" href="/src/styles/common.css">
-  <script src="../shared/theme-sync.js"></script>
-  <style>
-    .text-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: var(--spacing-lg);
-      margin: var(--spacing-lg) 0;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SVG 文本处理 - 前端学习中心</title>
+    <link href="/src/styles/common.css" rel="stylesheet" />
+    <script src="../shared/theme-sync.js"></script>
+    <style>
+      .text-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: var(--spacing-lg);
+        margin: var(--spacing-lg) 0;
+      }
 
-    .text-demo {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: var(--spacing-md);
-    }
+      .text-demo {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-md);
+      }
 
-    .text-demo h3 {
-      margin-top: 0;
-      color: var(--primary);
-    }
+      .text-demo h3 {
+        margin-top: 0;
+        color: var(--primary);
+      }
 
-    .svg-container {
-      background: var(--bg-primary);
-      border-radius: var(--radius-sm);
-      padding: var(--spacing-md);
-      margin: var(--spacing-md) 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 200px;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <a href="index.html" class="back-link">← 返回 SVG 模块</a>
-    
-    <h1>SVG 文本处理</h1>
-    <p>SVG 提供了强大的文本处理能力，支持样式化、路径文本和多行文本。</p>
+      .svg-container {
+        background: var(--bg-primary);
+        border-radius: var(--radius-sm);
+        padding: var(--spacing-md);
+        margin: var(--spacing-md) 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a class="back-link" href="index.html">← 返回 SVG 模块</a>
 
-    <div class="text-grid">
-      <!-- 基础文本 -->
-      <div class="text-demo">
-        <h3>基础文本</h3>
-        <div class="svg-container">
-          <svg width="300" height="150" viewBox="0 0 300 150">
-            <text x="150" y="75" text-anchor="middle" 
-                  fill="var(--primary)" font-size="24" font-weight="bold">
-              Hello SVG!
-            </text>
-          </svg>
+      <h1>SVG 文本处理</h1>
+      <p>SVG 提供了强大的文本处理能力，支持样式化、路径文本和多行文本。</p>
+
+      <div class="text-grid">
+        <!-- 基础文本 -->
+        <div class="text-demo">
+          <h3>基础文本</h3>
+          <div class="svg-container">
+            <svg width="300" height="150" viewBox="0 0 300 150">
+              <text x="150" y="75" text-anchor="middle" fill="var(--primary)" font-size="24" font-weight="bold">
+                Hello SVG!
+              </text>
+            </svg>
+          </div>
+          <div class="code-block">
+            <code
+              >&lt;text x="150" y="75" text-anchor="middle" fill="var(--primary)" font-size="24"&gt; Hello SVG!
+              &lt;/text&gt;</code
+            >
+          </div>
         </div>
-        <div class="code-block">
-          <code>&lt;text x="150" y="75" text-anchor="middle" 
-      fill="var(--primary)" 
-      font-size="24"&gt;
-  Hello SVG!
-&lt;/text&gt;</code>
+
+        <!-- 路径文本 -->
+        <div class="text-demo">
+          <h3>路径文本</h3>
+          <div class="svg-container">
+            <svg width="300" height="150" viewBox="0 0 300 150">
+              <defs>
+                <path id="curve" d="M 30,100 Q 150,30 270,100" />
+              </defs>
+              <path
+                d="M 30,100 Q 150,30 270,100"
+                stroke="var(--text-secondary)"
+                stroke-width="1"
+                fill="none"
+                opacity="0.3"
+              />
+              <text fill="var(--primary)" font-size="18" font-weight="600">
+                <textPath href="#curve" startOffset="50%" text-anchor="middle">沿着曲线的文本</textPath>
+              </text>
+            </svg>
+          </div>
+          <div class="code-block">
+            <code
+              >&lt;text&gt; &lt;textPath href="#curve" startOffset="50%" text-anchor="middle"&gt; 沿着曲线的文本
+              &lt;/textPath&gt; &lt;/text&gt;</code
+            >
+          </div>
+        </div>
+
+        <!-- 多行文本 -->
+        <div class="text-demo">
+          <h3>多行文本 (tspan)</h3>
+          <div class="svg-container">
+            <svg width="300" height="150" viewBox="0 0 300 150">
+              <text x="150" y="50" text-anchor="middle" fill="var(--text-primary)">
+                <tspan x="150" dy="0" font-size="24" font-weight="bold" fill="var(--primary)">SVG 文本</tspan>
+                <tspan x="150" dy="30" font-size="16">第二行文本</tspan>
+                <tspan x="150" dy="25" font-size="14" fill="var(--text-secondary)">第三行文本</tspan>
+              </text>
+            </svg>
+          </div>
+          <div class="code-block">
+            <code
+              >&lt;text x="150" y="50" text-anchor="middle"&gt; &lt;tspan x="150" dy="0"
+              font-size="24"&gt;标题&lt;/tspan&gt; &lt;tspan x="150" dy="30" font-size="16"&gt;副标题&lt;/tspan&gt;
+              &lt;/text&gt;</code
+            >
+          </div>
+        </div>
+
+        <!-- 描边文本 -->
+        <div class="text-demo">
+          <h3>描边文本</h3>
+          <div class="svg-container">
+            <svg width="300" height="150" viewBox="0 0 300 150">
+              <text
+                x="150"
+                y="85"
+                text-anchor="middle"
+                font-size="36"
+                font-weight="bold"
+                fill="none"
+                stroke="var(--primary)"
+                stroke-width="2"
+              >
+                STROKE
+              </text>
+            </svg>
+          </div>
+          <div class="code-block">
+            <code
+              >&lt;text fill="none" stroke="var(--primary)" stroke-width="2" font-size="36"&gt; STROKE
+              &lt;/text&gt;</code
+            >
+          </div>
+        </div>
+
+        <!-- 渐变文本 -->
+        <div class="text-demo">
+          <h3>渐变文本</h3>
+          <div class="svg-container">
+            <svg width="300" height="150" viewBox="0 0 300 150">
+              <defs>
+                <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color: #10b981" />
+                  <stop offset="50%" style="stop-color: #3b82f6" />
+                  <stop offset="100%" style="stop-color: #8b5cf6" />
+                </linearGradient>
+              </defs>
+              <text x="150" y="85" text-anchor="middle" fill="url(#textGrad)" font-size="32" font-weight="bold">
+                GRADIENT
+              </text>
+            </svg>
+          </div>
+          <div class="code-block">
+            <code
+              >&lt;linearGradient id="grad"&gt; &lt;stop offset="0%" stop-color="#10b981"/&gt; &lt;stop offset="100%"
+              stop-color="#8b5cf6"/&gt; &lt;/linearGradient&gt; &lt;text
+              fill="url(#grad)"&gt;GRADIENT&lt;/text&gt;</code
+            >
+          </div>
+        </div>
+
+        <!-- 阴影文本 -->
+        <div class="text-demo">
+          <h3>阴影文本</h3>
+          <div class="svg-container">
+            <svg width="300" height="150" viewBox="0 0 300 150">
+              <defs>
+                <filter id="textShadow">
+                  <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+                  <feOffset dx="2" dy="2" result="offsetblur" />
+                  <feComponentTransfer>
+                    <feFuncA type="linear" slope="0.5" />
+                  </feComponentTransfer>
+                  <feMerge>
+                    <feMergeNode />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              <text
+                x="150"
+                y="85"
+                text-anchor="middle"
+                fill="var(--primary)"
+                font-size="32"
+                font-weight="bold"
+                filter="url(#textShadow)"
+              >
+                SHADOW
+              </text>
+            </svg>
+          </div>
+          <div class="code-block">
+            <code
+              >&lt;filter id="shadow"&gt; &lt;feGaussianBlur stdDeviation="3"/&gt; &lt;feOffset dx="2" dy="2"/&gt;
+              &lt;/filter&gt; &lt;text filter="url(#shadow)"&gt;SHADOW&lt;/text&gt;</code
+            >
+          </div>
         </div>
       </div>
 
-      <!-- 路径文本 -->
-      <div class="text-demo">
-        <h3>路径文本</h3>
-        <div class="svg-container">
-          <svg width="300" height="150" viewBox="0 0 300 150">
-            <defs>
-              <path id="curve" d="M 30,100 Q 150,30 270,100"/>
-            </defs>
-            <path d="M 30,100 Q 150,30 270,100" 
-                  stroke="var(--text-secondary)" stroke-width="1" 
-                  fill="none" opacity="0.3"/>
-            <text fill="var(--primary)" font-size="18" font-weight="600">
-              <textPath href="#curve" startOffset="50%" text-anchor="middle">
-                沿着曲线的文本
-              </textPath>
-            </text>
-          </svg>
-        </div>
-        <div class="code-block">
-          <code>&lt;text&gt;
-  &lt;textPath href="#curve" 
-            startOffset="50%" 
-            text-anchor="middle"&gt;
-    沿着曲线的文本
-  &lt;/textPath&gt;
-&lt;/text&gt;</code>
-        </div>
-      </div>
-
-      <!-- 多行文本 -->
-      <div class="text-demo">
-        <h3>多行文本 (tspan)</h3>
-        <div class="svg-container">
-          <svg width="300" height="150" viewBox="0 0 300 150">
-            <text x="150" y="50" text-anchor="middle" fill="var(--text-primary)">
-              <tspan x="150" dy="0" font-size="24" font-weight="bold" fill="var(--primary)">
-                SVG 文本
-              </tspan>
-              <tspan x="150" dy="30" font-size="16">
-                第二行文本
-              </tspan>
-              <tspan x="150" dy="25" font-size="14" fill="var(--text-secondary)">
-                第三行文本
-              </tspan>
-            </text>
-          </svg>
-        </div>
-        <div class="code-block">
-          <code>&lt;text x="150" y="50" text-anchor="middle"&gt;
-  &lt;tspan x="150" dy="0" font-size="24"&gt;标题&lt;/tspan&gt;
-  &lt;tspan x="150" dy="30" font-size="16"&gt;副标题&lt;/tspan&gt;
-&lt;/text&gt;</code>
-        </div>
-      </div>
-
-      <!-- 描边文本 -->
-      <div class="text-demo">
-        <h3>描边文本</h3>
-        <div class="svg-container">
-          <svg width="300" height="150" viewBox="0 0 300 150">
-            <text x="150" y="85" text-anchor="middle" 
-                  font-size="36" font-weight="bold"
-                  fill="none" stroke="var(--primary)" stroke-width="2">
-              STROKE
-            </text>
-          </svg>
-        </div>
-        <div class="code-block">
-          <code>&lt;text fill="none" 
-      stroke="var(--primary)" 
-      stroke-width="2"
-      font-size="36"&gt;
-  STROKE
-&lt;/text&gt;</code>
-        </div>
-      </div>
-
-      <!-- 渐变文本 -->
-      <div class="text-demo">
-        <h3>渐变文本</h3>
-        <div class="svg-container">
-          <svg width="300" height="150" viewBox="0 0 300 150">
-            <defs>
-              <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:#10b981"/>
-                <stop offset="50%" style="stop-color:#3b82f6"/>
-                <stop offset="100%" style="stop-color:#8b5cf6"/>
-              </linearGradient>
-            </defs>
-            <text x="150" y="85" text-anchor="middle" 
-                  fill="url(#textGrad)" font-size="32" font-weight="bold">
-              GRADIENT
-            </text>
-          </svg>
-        </div>
-        <div class="code-block">
-          <code>&lt;linearGradient id="grad"&gt;
-  &lt;stop offset="0%" stop-color="#10b981"/&gt;
-  &lt;stop offset="100%" stop-color="#8b5cf6"/&gt;
-&lt;/linearGradient&gt;
-&lt;text fill="url(#grad)"&gt;GRADIENT&lt;/text&gt;</code>
-        </div>
-      </div>
-
-      <!-- 阴影文本 -->
-      <div class="text-demo">
-        <h3>阴影文本</h3>
-        <div class="svg-container">
-          <svg width="300" height="150" viewBox="0 0 300 150">
-            <defs>
-              <filter id="textShadow">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
-                <feOffset dx="2" dy="2" result="offsetblur"/>
-                <feComponentTransfer>
-                  <feFuncA type="linear" slope="0.5"/>
-                </feComponentTransfer>
-                <feMerge>
-                  <feMergeNode/>
-                  <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-              </filter>
-            </defs>
-            <text x="150" y="85" text-anchor="middle" 
-                  fill="var(--primary)" font-size="32" font-weight="bold"
-                  filter="url(#textShadow)">
-              SHADOW
-            </text>
-          </svg>
-        </div>
-        <div class="code-block">
-          <code>&lt;filter id="shadow"&gt;
-  &lt;feGaussianBlur stdDeviation="3"/&gt;
-  &lt;feOffset dx="2" dy="2"/&gt;
-&lt;/filter&gt;
-&lt;text filter="url(#shadow)"&gt;SHADOW&lt;/text&gt;</code>
-        </div>
+      <div
+        class="info-section"
+        style="
+          margin-top: var(--spacing-xl);
+          padding: var(--spacing-md);
+          background: var(--bg-secondary);
+          border-radius: var(--radius-md);
+        "
+      >
+        <h2>💡 关键知识点</h2>
+        <ul>
+          <li><strong>x, y</strong>: 文本的起始位置坐标</li>
+          <li><strong>text-anchor</strong>: 文本对齐方式（start, middle, end）</li>
+          <li><strong>textPath</strong>: 让文本沿着路径排列</li>
+          <li><strong>tspan</strong>: 在文本中创建子元素，实现多行和样式变化</li>
+          <li><strong>dy</strong>: 相对于前一个字符的垂直偏移</li>
+          <li><strong>dx</strong>: 相对于前一个字符的水平偏移</li>
+          <li><strong>startOffset</strong>: 文本在路径上的起始位置（百分比或长度）</li>
+          <li>文本可以应用填充、描边、渐变和滤镜效果</li>
+        </ul>
       </div>
     </div>
-
-    <div class="info-section" style="margin-top: var(--spacing-xl); padding: var(--spacing-md); background: var(--bg-secondary); border-radius: var(--radius-md);">
-      <h2>💡 关键知识点</h2>
-      <ul>
-        <li><strong>x, y</strong>: 文本的起始位置坐标</li>
-        <li><strong>text-anchor</strong>: 文本对齐方式（start, middle, end）</li>
-        <li><strong>textPath</strong>: 让文本沿着路径排列</li>
-        <li><strong>tspan</strong>: 在文本中创建子元素，实现多行和样式变化</li>
-        <li><strong>dy</strong>: 相对于前一个字符的垂直偏移</li>
-        <li><strong>dx</strong>: 相对于前一个字符的水平偏移</li>
-        <li><strong>startOffset</strong>: 文本在路径上的起始位置（百分比或长度）</li>
-        <li>文本可以应用填充、描边、渐变和滤镜效果</li>
-      </ul>
-    </div>
-  </div>
-</body>
+  </body>
 </html>

@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+﻿<!doctype html>
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@keyframes - CSS 动画教程</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link href="../styles.css" rel="stylesheet" />
     <script type="module" src="/src/theme-sync.js"></script>
     <style>
       /* 示例动画定义 */
@@ -91,16 +91,16 @@
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1>CSS 动画教程</h1>
-        <a href="../index.html" class="back-home">← 返回首页</a>
+        <a class="back-home" href="../index.html">← 返回首页</a>
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section">
           <h3>基础概念</h3>
-          <a href="coordinate.html" class="nav-item">坐标系统</a>
+          <a class="nav-item" href="coordinate.html">坐标系统</a>
         </div>
         <div class="nav-section">
           <h3>Animation 动画</h3>
-          <a href="keyframes.html" class="nav-item active">@keyframes 关键帧</a>
+          <a class="nav-item active" href="keyframes.html">@keyframes 关键帧</a>
         </div>
       </nav>
     </aside>
@@ -112,7 +112,10 @@
 
         <section class="section">
           <h2>什么是 @keyframes？</h2>
-          <p>@keyframes 用于定义动画的关键帧，可以创建比 transition 更复杂的动画效果。它允许你精确控制动画在不同时间点的状态。</p>
+          <p>
+            @keyframes 用于定义动画的关键帧，可以创建比 transition
+            更复杂的动画效果。它允许你精确控制动画在不同时间点的状态。
+          </p>
 
           <ul>
             <li><strong>关键帧：</strong>定义动画在特定时间点的样式</li>
@@ -178,7 +181,10 @@
           </code></pre>
 
           <div class="info-box">
-            <p><strong>选择建议：</strong>如果只有开始和结束两个状态，使用 from/to 更简洁；如果需要多个中间状态，使用百分比更灵活</p>
+            <p>
+              <strong>选择建议：</strong>如果只有开始和结束两个状态，使用 from/to
+              更简洁；如果需要多个中间状态，使用百分比更灵活
+            </p>
           </div>
         </section>
 
@@ -193,9 +199,9 @@
               </p>
               <div class="code-block" style="font-size: 0.85rem">
                 <span class="keyword">@keyframes</span>
-                <span class="value">simple</span> { <span class="keyword">from</span> { <span class="property">opacity</span>:
-                <span class="value">0</span>; } <span class="keyword">to</span> { <span class="property">opacity</span>: <span class="value">1</span>;
-                } }
+                <span class="value">simple</span> { <span class="keyword">from</span> {
+                <span class="property">opacity</span>: <span class="value">0</span>; } <span class="keyword">to</span> {
+                <span class="property">opacity</span>: <span class="value">1</span>; } }
               </div>
             </div>
             <div>
@@ -204,9 +210,10 @@
               </p>
               <div class="code-block" style="font-size: 0.85rem">
                 <span class="keyword">@keyframes</span>
-                <span class="value">simple</span> { <span class="keyword">0%</span> { <span class="property">opacity</span>:
-                <span class="value">0</span>; } <span class="keyword">100%</span> { <span class="property">opacity</span>:
-                <span class="value">1</span>; } }
+                <span class="value">simple</span> { <span class="keyword">0%</span> {
+                <span class="property">opacity</span>: <span class="value">0</span>; }
+                <span class="keyword">100%</span> { <span class="property">opacity</span>: <span class="value">1</span>;
+                } }
               </div>
             </div>
           </div>
@@ -221,7 +228,7 @@
           <p>元素从左侧滑入并淡入</p>
 
           <div class="demo-area">
-            <div class="box" id="demo-box-1">滑入</div>
+            <div id="demo-box-1" class="box">滑入</div>
           </div>
 
           <button class="play-button" data-demo="demo1">播放动画</button>
@@ -241,7 +248,7 @@
           <p>元素持续上下弹跳</p>
 
           <div class="demo-area">
-            <div class="box" id="demo-box-2">弹跳</div>
+            <div id="demo-box-2" class="box">弹跳</div>
           </div>
 
           <button class="play-button" data-demo="demo2">播放动画</button>
@@ -262,7 +269,7 @@
           <p>背景色在多个颜色之间循环变化</p>
 
           <div class="demo-area">
-            <div class="box" id="demo-box-3">颜色</div>
+            <div id="demo-box-3" class="box">颜色</div>
           </div>
 
           <button class="play-button" data-demo="demo3">播放动画</button>
@@ -284,7 +291,7 @@
           <p>元素在 3D 空间中持续旋转</p>
 
           <div class="demo-area perspective">
-            <div class="box" id="demo-box-4">3D</div>
+            <div id="demo-box-4" class="box">3D</div>
           </div>
 
           <button class="play-button" data-demo="demo4">播放动画</button>
@@ -307,7 +314,11 @@
 
           <ul>
             <li><span class="highlight">animation-name</span> - 动画名称（@keyframes 定义的名称）</li>
-            <li><span class="highlight">animation-duration</span> - 持续时间（如 2s, 500ms）<strong>决定动画何时结束</strong></li>
+            <li>
+              <span class="highlight">animation-duration</span> - 持续时间（如 2s, 500ms）<strong
+                >决定动画何时结束</strong
+              >
+            </li>
             <li><span class="highlight">animation-timing-function</span> - 缓动函数（ease, linear, ease-in-out 等）</li>
             <li><span class="highlight">animation-delay</span> - 延迟时间（如 1s）</li>
             <li><span class="highlight">animation-iteration-count</span> - 播放次数（数字或 infinite）</li>
@@ -317,8 +328,8 @@
 
           <div class="info-box">
             <p>
-              <strong>重要：</strong>动画从 0% 到 100% 的时间由 animation-duration 决定。例如 duration: 2s 表示动画会在 2 秒内完成从 0% 到 100%
-              的所有关键帧
+              <strong>重要：</strong>动画从 0% 到 100% 的时间由 animation-duration 决定。例如 duration: 2s 表示动画会在
+              2 秒内完成从 0% 到 100% 的所有关键帧
             </p>
           </div>
         </section>
@@ -331,7 +342,7 @@
             <div>
               <h3 style="font-size: 1.1rem; margin-bottom: 10px">normal（默认）</h3>
               <div class="demo-area" style="min-height: 150px">
-                <div class="box" id="direction-normal" style="animation: none">→</div>
+                <div id="direction-normal" class="box" style="animation: none">→</div>
               </div>
               <button class="play-button" data-demo="direction" data-param="normal" style="width: 100%">播放</button>
               <p style="margin-top: 10px; color: #6b7280; font-size: 0.9rem">正常播放：0% → 100%</p>
@@ -340,7 +351,7 @@
             <div>
               <h3 style="font-size: 1.1rem; margin-bottom: 10px">reverse</h3>
               <div class="demo-area" style="min-height: 150px">
-                <div class="box" id="direction-reverse" style="animation: none">←</div>
+                <div id="direction-reverse" class="box" style="animation: none">←</div>
               </div>
               <button class="play-button" data-demo="direction" data-param="reverse" style="width: 100%">播放</button>
               <p style="margin-top: 10px; color: #6b7280; font-size: 0.9rem">反向播放：100% → 0%</p>
@@ -349,7 +360,7 @@
             <div>
               <h3 style="font-size: 1.1rem; margin-bottom: 10px">alternate</h3>
               <div class="demo-area" style="min-height: 150px">
-                <div class="box" id="direction-alternate" style="animation: none">⇄</div>
+                <div id="direction-alternate" class="box" style="animation: none">⇄</div>
               </div>
               <button class="play-button" data-demo="direction" data-param="alternate" style="width: 100%">播放</button>
               <p style="margin-top: 10px; color: #6b7280; font-size: 0.9rem">交替播放：正向 → 反向 → 正向...</p>
@@ -358,9 +369,11 @@
             <div>
               <h3 style="font-size: 1.1rem; margin-bottom: 10px">alternate-reverse</h3>
               <div class="demo-area" style="min-height: 150px">
-                <div class="box" id="direction-alternate-reverse" style="animation: none">⇄</div>
+                <div id="direction-alternate-reverse" class="box" style="animation: none">⇄</div>
               </div>
-              <button class="play-button" data-demo="direction" data-param="alternate-reverse" style="width: 100%">播放</button>
+              <button class="play-button" data-demo="direction" data-param="alternate-reverse" style="width: 100%">
+                播放
+              </button>
               <p style="margin-top: 10px; color: #6b7280; font-size: 0.9rem">反向交替：反向 → 正向 → 反向...</p>
             </div>
           </div>
@@ -381,7 +394,10 @@
           <div class="info-box" style="background: #ecfdf5; border-left-color: #10b981; margin-bottom: 20px">
             <h3 style="color: #059669">🎯 想看更清晰的演示？</h3>
             <p style="color: #065f46">
-              <a href="fill-mode-demo.html" style="color: #10b981; font-weight: 600; text-decoration: none; border-bottom: 2px solid #10b981">
+              <a
+                href="fill-mode-demo.html"
+                style="color: #10b981; font-weight: 600; text-decoration: none; border-bottom: 2px solid #10b981"
+              >
                 👉 点击这里查看 animation-fill-mode 详细演示页面
               </a>
               <br />
@@ -397,7 +413,16 @@
               当你设置
               <code>animation-delay: 2s</code> 时，动画不会立即开始，而是等待 2 秒。这 2 秒就是"延迟期间"。
             </p>
-            <div style="background: white; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 0.9rem; color: #92400e">
+            <div
+              style="
+                background: white;
+                padding: 15px;
+                border-radius: 8px;
+                font-family: monospace;
+                font-size: 0.9rem;
+                color: #92400e;
+              "
+            >
               <div>点击按钮 → <span style="color: #f59e0b">【延迟 2 秒】</span> → 动画开始播放 → 动画结束</div>
               <div style="margin-top: 5px; padding-left: 20px">↑ 这 2 秒就是延迟期间</div>
             </div>
@@ -410,10 +435,28 @@
             <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px">
               <h4 style="font-size: 1.1rem; margin-bottom: 15px; color: #ef4444">❌ none（默认）</h4>
               <div class="demo-area" style="min-height: 150px; background: #fef2f2">
-                <div class="box" id="fill-none-demo" style="animation: none; opacity: 1; background: #10b981">不透明</div>
+                <div id="fill-none-demo" class="box" style="animation: none; opacity: 1; background: #10b981">
+                  不透明
+                </div>
               </div>
-              <button class="play-button" data-demo="fillmodedemo" data-param="none" style="width: 100%; margin-top: 10px">播放（有 2 秒延迟）</button>
-              <div style="margin-top: 15px; padding: 15px; background: #fef2f2; border-radius: 8px; font-size: 0.9rem; color: #991b1b">
+              <button
+                class="play-button"
+                data-demo="fillmodedemo"
+                data-param="none"
+                style="width: 100%; margin-top: 10px"
+              >
+                播放（有 2 秒延迟）
+              </button>
+              <div
+                style="
+                  margin-top: 15px;
+                  padding: 15px;
+                  background: #fef2f2;
+                  border-radius: 8px;
+                  font-size: 0.9rem;
+                  color: #991b1b;
+                "
+              >
                 <strong>延迟期间：</strong>保持原始样式（不透明）<br />
                 <strong>动画结束：</strong>回到原始样式（不透明）
               </div>
@@ -422,10 +465,28 @@
             <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px">
               <h4 style="font-size: 1.1rem; margin-bottom: 15px; color: #10b981">✅ backwards</h4>
               <div class="demo-area" style="min-height: 150px; background: #f0fdf4">
-                <div class="box" id="fill-backwards-demo" style="animation: none; opacity: 1; background: #10b981">不透明</div>
+                <div id="fill-backwards-demo" class="box" style="animation: none; opacity: 1; background: #10b981">
+                  不透明
+                </div>
               </div>
-              <button class="play-button" data-demo="fillmodedemo" data-param="backwards" style="width: 100%; margin-top: 10px">播放（有 2 秒延迟）</button>
-              <div style="margin-top: 15px; padding: 15px; background: #f0fdf4; border-radius: 8px; font-size: 0.9rem; color: #065f46">
+              <button
+                class="play-button"
+                data-demo="fillmodedemo"
+                data-param="backwards"
+                style="width: 100%; margin-top: 10px"
+              >
+                播放（有 2 秒延迟）
+              </button>
+              <div
+                style="
+                  margin-top: 15px;
+                  padding: 15px;
+                  background: #f0fdf4;
+                  border-radius: 8px;
+                  font-size: 0.9rem;
+                  color: #065f46;
+                "
+              >
                 <strong>延迟期间：</strong>立即变透明（应用第一帧）<br />
                 <strong>动画结束：</strong>回到原始样式（不透明）
               </div>
@@ -438,7 +499,7 @@
             <div>
               <h3 style="font-size: 1.1rem; margin-bottom: 10px">none（默认）</h3>
               <div class="demo-area" style="min-height: 150px">
-                <div class="box" id="fill-none" style="animation: none; opacity: 1">None</div>
+                <div id="fill-none" class="box" style="animation: none; opacity: 1">None</div>
               </div>
               <button class="play-button" data-demo="fillmode" data-param="none" style="width: 100%">播放</button>
               <p style="margin-top: 10px; color: #6b7280; font-size: 0.9rem">延迟期间和结束后都不应用动画样式</p>
@@ -447,7 +508,7 @@
             <div>
               <h3 style="font-size: 1.1rem; margin-bottom: 10px">forwards</h3>
               <div class="demo-area" style="min-height: 150px">
-                <div class="box" id="fill-forwards" style="animation: none; opacity: 1">Forwards</div>
+                <div id="fill-forwards" class="box" style="animation: none; opacity: 1">Forwards</div>
               </div>
               <button class="play-button" data-demo="fillmode" data-param="forwards" style="width: 100%">播放</button>
               <p style="margin-top: 10px; color: #6b7280; font-size: 0.9rem">动画结束后保持最后一帧的状态</p>
@@ -456,7 +517,7 @@
             <div>
               <h3 style="font-size: 1.1rem; margin-bottom: 10px">backwards</h3>
               <div class="demo-area" style="min-height: 150px">
-                <div class="box" id="fill-backwards" style="animation: none; opacity: 1">Backwards</div>
+                <div id="fill-backwards" class="box" style="animation: none; opacity: 1">Backwards</div>
               </div>
               <button class="play-button" data-demo="fillmode" data-param="backwards" style="width: 100%">播放</button>
               <p style="margin-top: 10px; color: #6b7280; font-size: 0.9rem">延迟期间应用第一帧样式</p>
@@ -465,7 +526,7 @@
             <div>
               <h3 style="font-size: 1.1rem; margin-bottom: 10px">both</h3>
               <div class="demo-area" style="min-height: 150px">
-                <div class="box" id="fill-both" style="animation: none; opacity: 1">Both</div>
+                <div id="fill-both" class="box" style="animation: none; opacity: 1">Both</div>
               </div>
               <button class="play-button" data-demo="fillmode" data-param="both" style="width: 100%">播放</button>
               <p style="margin-top: 10px; color: #6b7280; font-size: 0.9rem">延迟期间应用第一帧 + 结束后保持最后一帧</p>
@@ -531,18 +592,10 @@
     <script type="module">
       // 使用事件委托，避免全局命名冲突
       const demos = {
-        demo1: (param) => {
-
-        },
-        demo2: (param) => {
-
-        },
-        demo3: (param) => {
-
-        },
-        demo4: (param) => {
-
-        }
+        demo1: (param) => {},
+        demo2: (param) => {},
+        demo3: (param) => {},
+        demo4: (param) => {},
       };
 
       // 事件委托：监听所有点击

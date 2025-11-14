@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+﻿<!doctype html>
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>scaleZ() - CSS 动画教程</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link href="../styles.css" rel="stylesheet" />
     <script type="module" src="/src/theme-sync.js"></script>
     <style>
       .perspective-container {
@@ -70,25 +70,25 @@
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1>CSS 动画教程</h1>
-        <a href="../index.html" class="back-home">← 返回首页</a>
+        <a class="back-home" href="../index.html">← 返回首页</a>
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section">
           <h3>基础概念</h3>
-          <a href="coordinate.html" class="nav-item">坐标系统</a>
+          <a class="nav-item" href="coordinate.html">坐标系统</a>
         </div>
         <div class="nav-section">
           <h3>Transform 变换</h3>
-          <a href="translate.html" class="nav-item">translate() 平移</a>
-          <a href="scale.html" class="nav-item">scale() 缩放</a>
-          <a href="scaleX.html" class="nav-item">scaleX() X轴缩放</a>
-          <a href="scaleY.html" class="nav-item">scaleY() Y轴缩放</a>
-          <a href="scaleZ.html" class="nav-item active">scaleZ() Z轴缩放</a>
+          <a class="nav-item" href="translate.html">translate() 平移</a>
+          <a class="nav-item" href="scale.html">scale() 缩放</a>
+          <a class="nav-item" href="scaleX.html">scaleX() X轴缩放</a>
+          <a class="nav-item" href="scaleY.html">scaleY() Y轴缩放</a>
+          <a class="nav-item active" href="scaleZ.html">scaleZ() Z轴缩放</a>
         </div>
         <div class="nav-section">
           <h3>3D 变换</h3>
-          <a href="perspective.html" class="nav-item">perspective 透视</a>
-          <a href="transform-style.html" class="nav-item">transform-style</a>
+          <a class="nav-item" href="perspective.html">perspective 透视</a>
+          <a class="nav-item" href="transform-style.html">transform-style</a>
         </div>
       </nav>
     </aside>
@@ -102,7 +102,10 @@
           <h2>什么是 scaleZ()？</h2>
           <p><code>scaleZ()</code> 函数沿 Z 轴缩放元素。</p>
           <div class="info-box" style="background: #fef3c7; border-left-color: #f59e0b">
-            <p style="color: #92400e"><strong>⚠️ 重要：</strong>单独使用 scaleZ() 看不到效果，必须配合其他 3D 变换（如 rotateX/Y）才能观察到变化。</p>
+            <p style="color: #92400e">
+              <strong>⚠️ 重要：</strong>单独使用 scaleZ() 看不到效果，必须配合其他 3D 变换（如
+              rotateX/Y）才能观察到变化。
+            </p>
           </div>
         </section>
 

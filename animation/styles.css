@@ -1,5 +1,5 @@
 /* Animation 模块专用样式 */
-@import url('/src/styles/common.css');
+@import url("/src/styles/common.css");
 
 body {
   display: flex;
@@ -7,7 +7,9 @@ body {
   overflow: hidden;
   background: var(--bg-secondary);
   color: var(--text-primary);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* 侧边栏样式 */
@@ -175,7 +177,7 @@ body {
 
 .demo-area.with-axis::before,
 .demo-area.with-axis::after {
-  content: '';
+  content: "";
   position: absolute;
   background: #dee2e6;
 }
@@ -211,7 +213,9 @@ body {
   transition: transform 0.8s ease;
   position: relative;
   z-index: 10;
-  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2), 0 2px 4px -1px rgba(16, 185, 129, 0.1);
+  box-shadow:
+    0 4px 6px -1px rgba(16, 185, 129, 0.2),
+    0 2px 4px -1px rgba(16, 185, 129, 0.1);
 }
 
 .play-button {

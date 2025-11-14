@@ -60,7 +60,10 @@ export default defineConfig({
             .sync('**/*.html', {
               ignore: ['node_modules/**', 'dist/**', '.templates/**', '.examples/**', '.guides/**'],
             })
-            .map((file) => [file.replace(/\.html$/, '').replace(/\//g, '-'), path.resolve(__dirname, file)])
+            .map((file) => [
+              file.replace(/\.html$/, '').replace(/\//g, '-'),
+              path.resolve(__dirname, file),
+            ])
         ),
         // JS 模块入口
         theme: path.resolve(__dirname, 'src/theme.js'),

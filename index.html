@@ -1,14 +1,17 @@
-<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="前端学习实验室：CSS 动画、Grid、SVG 等模块，提供 150+ 交互示例与主题系统，支持移动端与暗色模式，助你系统掌握前端基础。">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="前端学习实验室：CSS 动画、Grid、SVG 等模块，提供 150+ 交互示例与主题系统，支持移动端与暗色模式，助你系统掌握前端基础。"
+    />
     <title>前端学习中心 - Frontend Learning Hub</title>
-    <link rel="stylesheet" href="/src/styles/common.css">
+    <link href="/src/styles/common.css" rel="stylesheet" />
     <!-- 防止主题闪烁：在页面加载前立即应用主题 -->
     <script>
-      (function() {
+      (function () {
         try {
           const theme = localStorage.getItem('themeMode') || 'light';
           const color = localStorage.getItem('primaryColor') || '#10b981';
@@ -21,416 +24,422 @@
         } catch (e) {}
       })();
     </script>
-  <style>
-
-    body {
-      background: var(--bg-secondary);
-      color: var(--text-primary);
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    /* 工具栏样式由 theme.js 提供 */
-
-    /* Hero 区域 - 重新设计 */
-    .hero {
-      padding: 80px 20px 60px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, 
-        var(--primary) 0%, 
-        var(--primary) 100%
-      );
-      opacity: 0.8;
-    }
-
-    .hero-content {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      padding: 6px 16px;
-      background: var(--primary-light);
-      color: var(--primary);
-      border-radius: 20px;
-      font-size: 0.875rem;
-      font-weight: 600;
-      margin-bottom: 20px;
-      border: 1px solid var(--primary);
-    }
-
-    .hero h1 {
-      font-size: 3.5rem;
-      margin-bottom: 20px;
-      font-weight: 800;
-      color: var(--text-primary);
-      line-height: 1.2;
-    }
-
-    .hero h1 .highlight {
-      color: var(--primary);
-    }
-
-    .hero p {
-      font-size: 1.25rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: 30px;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .hero-btn {
-      padding: 12px 28px;
-      border-radius: 10px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .hero-btn-primary {
-      background: var(--primary);
-      color: white !important;
-      box-shadow: 0 4px 12px var(--card-hover-shadow);
-    }
-
-    .hero-btn-primary:hover {
-      background: var(--primary-dark);
-      color: white !important;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px var(--card-hover-shadow), 0 0 0 3px var(--primary-light);
-    }
-
-    .hero-btn-secondary {
-      background: var(--card-bg);
-      color: var(--text-primary);
-      border: 1px solid var(--border-color);
-    }
-
-    .hero-btn-secondary:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-      transform: translateY(-2px);
-    }
-
-    .modules-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 30px;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px 20px 60px;
-      content-visibility: auto;
-      contain-intrinsic-size: 800px 600px;
-    }
-
-    /* 首页模块卡片特定样式 */
-    .module-card {
-      padding: 35px;
-    }
-
-    .module-card:hover {
-      transform: translateY(-8px);
-    }
-
-    .module-icon {
-      font-size: 3.5rem;
-      margin-bottom: 20px;
-      display: block;
-      filter: grayscale(0.3);
-      transition: filter 0.3s ease;
-    }
-
-    .module-card:hover .module-icon {
-      filter: grayscale(0);
-    }
-
-    .module-card h2 {
-      font-size: 1.8rem;
-    }
-
-    .module-meta {
-      display: flex;
-      gap: 15px;
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border-color);
-    }
-
-    .module-meta span {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .stats {
-      padding: 40px 20px;
-      text-align: center;
-      margin-top: 40px;
-      border-top: 1px solid var(--border-color);
-    }
-
-    .stats h2 {
-      color: var(--text-primary);
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 30px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .stat-item {
-      padding: 20px;
-      border-radius: 12px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      transition: all 0.3s ease;
-    }
-
-    .stat-item:hover {
-      transform: translateY(-4px);
-      border-color: var(--primary);
-      box-shadow: 0 8px 16px var(--card-hover-shadow);
-    }
-
-    .stat-item h3 {
-      font-size: 2.5rem;
-      color: var(--primary);
-      margin-bottom: 8px;
-      font-weight: 700;
-    }
-
-    .stat-item p {
-      color: var(--text-secondary);
-      font-size: 1rem;
-      font-weight: 500;
-    }
-
-    /* 主题面板样式由 theme.js 提供 */
-
-    /* 链接样式 */
-    a {
-      color: var(--primary);
-      transition: color 0.2s ease;
-    }
-
-    a:hover {
-      color: var(--primary-dark);
-    }
-
-    /* 滚动条样式 */
-    ::-webkit-scrollbar {
-      width: 10px;
-      height: 10px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: var(--bg-secondary);
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: var(--border-color);
-      border-radius: 5px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--primary);
-    }
-
-    @media (max-width: 768px) {
-      .toolbar {
-        top: 10px;
-        right: 10px;
+    <style>
+      body {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
       }
 
-      .toolbar-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 18px;
-      }
+      /* 工具栏样式由 theme.js 提供 */
 
+      /* Hero 区域 - 重新设计 */
       .hero {
-        padding: 60px 20px 40px;
+        padding: 80px 20px 60px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary) 0%, var(--primary) 100%);
+        opacity: 0.8;
+      }
+
+      .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .hero-badge {
+        display: inline-block;
+        padding: 6px 16px;
+        background: var(--primary-light);
+        color: var(--primary);
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        border: 1px solid var(--primary);
       }
 
       .hero h1 {
-        font-size: 2.2rem;
+        font-size: 3.5rem;
+        margin-bottom: 20px;
+        font-weight: 800;
+        color: var(--text-primary);
+        line-height: 1.2;
+      }
+
+      .hero h1 .highlight {
+        color: var(--primary);
       }
 
       .hero p {
-        font-size: 1.1rem;
+        font-size: 1.25rem;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin-bottom: 30px;
       }
 
       .hero-actions {
-        flex-direction: column;
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
       }
 
       .hero-btn {
-        width: 100%;
-        justify-content: center;
+        padding: 12px 28px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .hero-btn-primary {
+        background: var(--primary);
+        color: white !important;
+        box-shadow: 0 4px 12px var(--card-hover-shadow);
+      }
+
+      .hero-btn-primary:hover {
+        background: var(--primary-dark);
+        color: white !important;
+        transform: translateY(-2px);
+        box-shadow:
+          0 6px 16px var(--card-hover-shadow),
+          0 0 0 3px var(--primary-light);
+      }
+
+      .hero-btn-secondary {
+        background: var(--card-bg);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+      }
+
+      .hero-btn-secondary:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+        transform: translateY(-2px);
       }
 
       .modules-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px 20px 60px;
+        content-visibility: auto;
+        contain-intrinsic-size: 800px 600px;
       }
 
+      /* 首页模块卡片特定样式 */
       .module-card {
-        padding: 25px;
+        padding: 35px;
+      }
+
+      .module-card:hover {
+        transform: translateY(-8px);
       }
 
       .module-icon {
-        font-size: 2.5rem;
+        font-size: 3.5rem;
+        margin-bottom: 20px;
+        display: block;
+        filter: grayscale(0.3);
+        transition: filter 0.3s ease;
+      }
+
+      .module-card:hover .module-icon {
+        filter: grayscale(0);
       }
 
       .module-card h2 {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
       }
 
-      .theme-panel {
-        right: 10px;
-        left: 10px;
-        width: auto;
+      .module-meta {
+        display: flex;
+        gap: 15px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border-color);
       }
-    }
-  </style>
-</head>
-<body>
-  <!-- 工具栏和主题面板由 theme.js 自动创建 -->
 
-  <!-- Hero 区域 -->
-  <div class="hero">
-    <div class="hero-content">
-      <div class="hero-badge">✨ 开源学习项目</div>
-      <h1>
-        前端学习<span class="highlight">实验室</span>
-      </h1>
-      <p>
-        一个精心整理的前端知识库，包含 CSS 动画、Grid 布局等核心技术。<br>
-        通过 120+ 个交互式示例，让学习变得简单有趣。
-      </p>
-      <div class="hero-actions">
-        <a href="#modules" class="hero-btn hero-btn-primary">
-          <span>开始学习</span>
-          <span>→</span>
-        </a>
-        <a href="README.md" class="hero-btn hero-btn-secondary">
-          <span>📖</span>
-          <span>查看文档</span>
-        </a>
-      </div>
-    </div>
-  </div>
+      .module-meta span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
 
-  <div class="modules-grid" id="modules">
-    <a href="animation/index.html" class="card module-card">
-      <span class="module-icon">🎬</span>
-      <h2>CSS 动画教程</h2>
-      <p>完整的 Transform、Transition 和 Animation 教程，包含 32 个核心知识点和 120+ 个交互式演示。</p>
-      <div class="module-meta">
-        <span>📚 32 个知识点</span>
-        <span>🎮 120+ 演示</span>
-        <span>⏱️ 4-6 小时</span>
-      </div>
-    </a>
+      .stats {
+        padding: 40px 20px;
+        text-align: center;
+        margin-top: 40px;
+        border-top: 1px solid var(--border-color);
+      }
 
-    <a href="grid/index.html" class="card module-card">
-      <span class="module-icon">📐</span>
-      <h2>CSS Grid 布局</h2>
-      <p>从基础到高级的 Grid 布局教程，涵盖网格系统的所有核心概念和实际应用场景。</p>
-      <div class="module-meta">
-        <span>📚 10 个示例</span>
-        <span>🎯 实战导向</span>
-        <span>⏱️ 2-3 小时</span>
-      </div>
-    </a>
+      .stats h2 {
+        color: var(--text-primary);
+      }
 
-    <a href="box-shadow/index.html" class="card module-card">
-      <span class="module-icon">💡</span>
-      <h2>Box-Shadow 工具</h2>
-      <p>交互式阴影生成器，通过可视化方式学习和调试 CSS 阴影效果，支持多层阴影和光源控制。</p>
-      <div class="module-meta">
-        <span>🛠️ 交互工具</span>
-        <span>🎨 实时预览</span>
-        <span>⏱️ 随时使用</span>
-      </div>
-    </a>
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 30px;
+        max-width: 900px;
+        margin: 0 auto;
+      }
 
-    <a href="svg/index.html" class="card module-card">
-      <span class="module-icon">🎨</span>
-      <h2>SVG 图形</h2>
-      <p>从基础形状到高级动画的完整 SVG 教程，学习创建可缩放、可交互的矢量图形。</p>
-      <div class="module-meta">
-        <span>📚 10 个知识点</span>
-        <span>🎮 30+ 演示</span>
-        <span>⏱️ 3-4 小时</span>
-      </div>
-    </a>
-  </div>
+      .stat-item {
+        padding: 20px;
+        border-radius: 12px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+      }
 
-  <div class="stats">
-    <h2 style="margin-bottom: 30px; color: var(--text-primary);">学习统计</h2>
-    <div class="stats-grid">
-      <div class="stat-item">
-        <h3>52+</h3>
-        <p>知识点</p>
-      </div>
-      <div class="stat-item">
-        <h3>150+</h3>
-        <p>交互演示</p>
-      </div>
-      <div class="stat-item">
-        <h3>4</h3>
-        <p>学习模块</p>
-      </div>
-    </div>
-  </div>
+      .stat-item:hover {
+        transform: translateY(-4px);
+        border-color: var(--primary);
+        box-shadow: 0 8px 16px var(--card-hover-shadow);
+      }
 
-  <footer style="text-align: center; padding: 40px 20px; color: var(--text-secondary); border-top: 1px solid var(--border-color); margin-top: 40px;">
-    <p>💡 选择一个模块开始学习之旅</p>
-    <p style="margin-top: 10px; font-size: 0.9rem;">持续更新中 · 更多模块即将推出</p>
-  </footer>
+      .stat-item h3 {
+        font-size: 2.5rem;
+        color: var(--primary);
+        margin-bottom: 8px;
+        font-weight: 700;
+      }
 
-  <!-- 全局主题系统 -->
-  <script type="module" src="/src/theme.js"></script>
+      .stat-item p {
+        color: var(--text-secondary);
+        font-size: 1rem;
+        font-weight: 500;
+      }
 
-  <script>
-    // 平滑滚动
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
+      /* 主题面板样式由 theme.js 提供 */
+
+      /* 链接样式 */
+      a {
+        color: var(--primary);
+        transition: color 0.2s ease;
+      }
+
+      a:hover {
+        color: var(--primary-dark);
+      }
+
+      /* 滚动条样式 */
+      ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--bg-secondary);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 5px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--primary);
+      }
+
+      @media (max-width: 768px) {
+        .toolbar {
+          top: 10px;
+          right: 10px;
         }
+
+        .toolbar-btn {
+          width: 40px;
+          height: 40px;
+          font-size: 18px;
+        }
+
+        .hero {
+          padding: 60px 20px 40px;
+        }
+
+        .hero h1 {
+          font-size: 2.2rem;
+        }
+
+        .hero p {
+          font-size: 1.1rem;
+        }
+
+        .hero-actions {
+          flex-direction: column;
+        }
+
+        .hero-btn {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .modules-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+
+        .module-card {
+          padding: 25px;
+        }
+
+        .module-icon {
+          font-size: 2.5rem;
+        }
+
+        .module-card h2 {
+          font-size: 1.5rem;
+        }
+
+        .theme-panel {
+          right: 10px;
+          left: 10px;
+          width: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 工具栏和主题面板由 theme.js 自动创建 -->
+
+    <!-- Hero 区域 -->
+    <div class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">✨ 开源学习项目</div>
+        <h1>前端学习<span class="highlight">实验室</span></h1>
+        <p>
+          一个精心整理的前端知识库，包含 CSS 动画、Grid 布局等核心技术。<br />
+          通过 120+ 个交互式示例，让学习变得简单有趣。
+        </p>
+        <div class="hero-actions">
+          <a class="hero-btn hero-btn-primary" href="#modules">
+            <span>开始学习</span>
+            <span>→</span>
+          </a>
+          <a class="hero-btn hero-btn-secondary" href="README.md">
+            <span>📖</span>
+            <span>查看文档</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div id="modules" class="modules-grid">
+      <a class="card module-card" href="animation/index.html">
+        <span class="module-icon">🎬</span>
+        <h2>CSS 动画教程</h2>
+        <p>完整的 Transform、Transition 和 Animation 教程，包含 32 个核心知识点和 120+ 个交互式演示。</p>
+        <div class="module-meta">
+          <span>📚 32 个知识点</span>
+          <span>🎮 120+ 演示</span>
+          <span>⏱️ 4-6 小时</span>
+        </div>
+      </a>
+
+      <a class="card module-card" href="grid/index.html">
+        <span class="module-icon">📐</span>
+        <h2>CSS Grid 布局</h2>
+        <p>从基础到高级的 Grid 布局教程，涵盖网格系统的所有核心概念和实际应用场景。</p>
+        <div class="module-meta">
+          <span>📚 10 个示例</span>
+          <span>🎯 实战导向</span>
+          <span>⏱️ 2-3 小时</span>
+        </div>
+      </a>
+
+      <a class="card module-card" href="box-shadow/index.html">
+        <span class="module-icon">💡</span>
+        <h2>Box-Shadow 工具</h2>
+        <p>交互式阴影生成器，通过可视化方式学习和调试 CSS 阴影效果，支持多层阴影和光源控制。</p>
+        <div class="module-meta">
+          <span>🛠️ 交互工具</span>
+          <span>🎨 实时预览</span>
+          <span>⏱️ 随时使用</span>
+        </div>
+      </a>
+
+      <a class="card module-card" href="svg/index.html">
+        <span class="module-icon">🎨</span>
+        <h2>SVG 图形</h2>
+        <p>从基础形状到高级动画的完整 SVG 教程，学习创建可缩放、可交互的矢量图形。</p>
+        <div class="module-meta">
+          <span>📚 10 个知识点</span>
+          <span>🎮 30+ 演示</span>
+          <span>⏱️ 3-4 小时</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="stats">
+      <h2 style="margin-bottom: 30px; color: var(--text-primary)">学习统计</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <h3>52+</h3>
+          <p>知识点</p>
+        </div>
+        <div class="stat-item">
+          <h3>150+</h3>
+          <p>交互演示</p>
+        </div>
+        <div class="stat-item">
+          <h3>4</h3>
+          <p>学习模块</p>
+        </div>
+      </div>
+    </div>
+
+    <footer
+      style="
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--text-secondary);
+        border-top: 1px solid var(--border-color);
+        margin-top: 40px;
+      "
+    >
+      <p>💡 选择一个模块开始学习之旅</p>
+      <p style="margin-top: 10px; font-size: 0.9rem">持续更新中 · 更多模块即将推出</p>
+    </footer>
+
+    <!-- 全局主题系统 -->
+    <script type="module" src="/src/theme.js"></script>
+
+    <script>
+      // 平滑滚动
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start',
+            });
+          }
+        });
       });
-    });
-  </script>
-</body>
+    </script>
+  </body>
 </html>

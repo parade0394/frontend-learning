@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Demo 9: 模板区域</title>
-        <link rel="stylesheet" href="/src/styles/common.css">
+    <link href="/src/styles/common.css" rel="stylesheet" />
     <!-- 防止主题闪烁 -->
     <script>
-      (function() {
+      (function () {
         try {
           const theme = localStorage.getItem('themeMode') || 'light';
           const color = localStorage.getItem('primaryColor') || '#10b981';
@@ -22,183 +22,187 @@
     </script>
     <script type="module" src="/src/theme-sync.js"></script>
     <style>
-        /* 主题适配 */
-        body {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
-        .container {
-            background: var(--card-bg);
-            color: var(--text-primary);
-        }
-        
-        h1, h2 {
-            color: var(--text-primary);
-        }
-        
-        .description {
-            color: var(--text-secondary);
-        }
-        
-        .code-block {
-            background: var(--gray-800);
-            color: var(--gray-200);
-            border: 1px solid var(--gray-700);
-        }
-        
-        .syntax-note, .info-box {
-            background: var(--primary-light);
-            border-left-color: var(--primary);
-            color: var(--text-primary);
-        }
-        
-        .syntax-note code, .info-box code {
-            background: var(--bg-primary);
-            color: var(--primary);
-        }
+      /* 主题适配 */
+      body {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      .container {
+        background: var(--card-bg);
+        color: var(--text-primary);
+      }
+
+      h1,
+      h2 {
+        color: var(--text-primary);
+      }
+
+      .description {
+        color: var(--text-secondary);
+      }
+
+      .code-block {
+        background: var(--gray-800);
+        color: var(--gray-200);
+        border: 1px solid var(--gray-700);
+      }
+
+      .syntax-note,
+      .info-box {
+        background: var(--primary-light);
+        border-left-color: var(--primary);
+        color: var(--text-primary);
+      }
+
+      .syntax-note code,
+      .info-box code {
+        background: var(--bg-primary);
+        color: var(--primary);
+      }
     </style>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background: var(--bg-secondary);
-        }
-        
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 8px;
-        }
-        
-        h1 {
-            color: var(--text-primary);
-            margin-bottom: 10px;
-        }
-        
-        .description {
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-        
-        .code-block {
-            background: var(--gray-800);
-            color: var(--gray-200);
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 30px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.6;
-            overflow-x: auto;
-        }
-        
-        .code-block .keyword {
-            color: #e74c3c;
-        }
-        
-        .code-block .value {
-            color: var(--primary);
-        }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: 200px 1fr 200px;
-            grid-template-rows: 80px 1fr 60px;
-            grid-template-areas:
-                "header header header"
-                "sidebar main aside"
-                "footer footer footer";
-            gap: 15px;
-            height: 500px;
-            background: var(--bg-secondary);
-            padding: 15px;
-        }
-        
-        .header {
-            grid-area: header;
-            background: #3498db;
-        }
-        
-        .sidebar {
-            grid-area: sidebar;
-            background: #2ecc71;
-        }
-        
-        .main {
-            grid-area: main;
-            background: #e74c3c;
-        }
-        
-        .aside {
-            grid-area: aside;
-            background: #f39c12;
-        }
-        
-        .footer {
-            grid-area: footer;
-            background: #9b59b6;
-        }
-        
-        .item {
-            color: white;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        
-        .back-link {
-            display: inline-block;
-            margin-top: 30px;
-            color: var(--primary);
-            text-decoration: none;
-        }
-        
-        code {
-            background: #f8f9fa;
-            padding: 2px 6px;
-            border-radius: 3px;
-            color: #e74c3c;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <a href="index.html" class="back-link">← 返回 Grid 教程</a>
-        
-        <h1>Demo 9: 模板区域 - grid-template-areas</h1>
-        <div class="description">
-            <p><strong>知识点：</strong>使用 <code>grid-template-areas</code> 创建命名的网格区域。</p>
-            <p>这是创建复杂布局最直观的方式，代码可读性极高！</p>
-            <p>每个项目使用 <code>grid-area</code> 指定它所属的区域名称。</p>
-        </div>
-        
-        <div class="code-block">
-.grid {<br>
-&nbsp;&nbsp;<span class="keyword">grid-template-areas</span>:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="value">"header header header"</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="value">"sidebar main aside"</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="value">"footer footer footer"</span>;<br>
-}<br>
-<br>
-.header { <span class="keyword">grid-area</span>: <span class="value">header</span>; }
-        </div>
-        
-        <div class="grid">
-            <div class="item header">Header</div>
-            <div class="item sidebar">Sidebar</div>
-            <div class="item main">Main Content</div>
-            <div class="item aside">Aside</div>
-            <div class="item footer">Footer</div>
-        </div>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: var(--bg-secondary);
+      }
 
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: var(--card-bg);
+        padding: 30px;
+        border-radius: 8px;
+      }
+
+      h1 {
+        color: var(--text-primary);
+        margin-bottom: 10px;
+      }
+
+      .description {
+        color: var(--text-secondary);
+        margin-bottom: 30px;
+        line-height: 1.6;
+      }
+
+      .code-block {
+        background: var(--gray-800);
+        color: var(--gray-200);
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 30px;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        overflow-x: auto;
+      }
+
+      .code-block .keyword {
+        color: #e74c3c;
+      }
+
+      .code-block .value {
+        color: var(--primary);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 200px 1fr 200px;
+        grid-template-rows: 80px 1fr 60px;
+        grid-template-areas:
+          'header header header'
+          'sidebar main aside'
+          'footer footer footer';
+        gap: 15px;
+        height: 500px;
+        background: var(--bg-secondary);
+        padding: 15px;
+      }
+
+      .header {
+        grid-area: header;
+        background: #3498db;
+      }
+
+      .sidebar {
+        grid-area: sidebar;
+        background: #2ecc71;
+      }
+
+      .main {
+        grid-area: main;
+        background: #e74c3c;
+      }
+
+      .aside {
+        grid-area: aside;
+        background: #f39c12;
+      }
+
+      .footer {
+        grid-area: footer;
+        background: #9b59b6;
+      }
+
+      .item {
+        color: white;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+      .back-link {
+        display: inline-block;
+        margin-top: 30px;
+        color: var(--primary);
+        text-decoration: none;
+      }
+
+      code {
+        background: #f8f9fa;
+        padding: 2px 6px;
+        border-radius: 3px;
+        color: #e74c3c;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a class="back-link" href="index.html">← 返回 Grid 教程</a>
+
+      <h1>Demo 9: 模板区域 - grid-template-areas</h1>
+      <div class="description">
+        <p><strong>知识点：</strong>使用 <code>grid-template-areas</code> 创建命名的网格区域。</p>
+        <p>这是创建复杂布局最直观的方式，代码可读性极高！</p>
+        <p>每个项目使用 <code>grid-area</code> 指定它所属的区域名称。</p>
+      </div>
+
+      <div class="code-block">
+        .grid {<br />
+        &nbsp;&nbsp;<span class="keyword">grid-template-areas</span>:<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="value">"header header header"</span><br />
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="value">"sidebar main aside"</span><br />
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="value">"footer footer footer"</span>;<br />
+        }<br />
+        <br />
+        .header { <span class="keyword">grid-area</span>: <span class="value">header</span>; }
+      </div>
+
+      <div class="grid">
+        <div class="item header">Header</div>
+        <div class="item sidebar">Sidebar</div>
+        <div class="item main">Main Content</div>
+        <div class="item aside">Aside</div>
+        <div class="item footer">Footer</div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

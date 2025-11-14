@@ -1,33 +1,33 @@
 ﻿<!doctype html>
-<html lang="zh-CN" data-theme="light">
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>rotateY() - CSS 动画教程</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link href="../styles.css" rel="stylesheet" />
     <script type="module" src="/src/theme-sync.js"></script>
   </head>
   <body>
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1>CSS 动画教程</h1>
-        <a href="../index.html" class="back-home">← 返回首页</a>
+        <a class="back-home" href="../index.html">← 返回首页</a>
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section">
           <h3>基础概念</h3>
-          <a href="coordinate.html" class="nav-item">坐标系统</a>
+          <a class="nav-item" href="coordinate.html">坐标系统</a>
         </div>
         <div class="nav-section">
           <h3>Transform 变换</h3>
-          <a href="translate.html" class="nav-item">translate() 平移</a>
-          <a href="translateX.html" class="nav-item">translateX() X轴平移</a>
-          <a href="translateY.html" class="nav-item">translateY() Y轴平移</a>
-          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
-          <a href="rotateX.html" class="nav-item">rotateX() X轴旋转</a>
-          <a href="rotateY.html" class="nav-item active">rotateY() Y轴旋转</a>
-          <a href="scale.html" class="nav-item">scale() 缩放</a>
-          <a href="skew.html" class="nav-item">skew() 倾斜</a>
+          <a class="nav-item" href="translate.html">translate() 平移</a>
+          <a class="nav-item" href="translateX.html">translateX() X轴平移</a>
+          <a class="nav-item" href="translateY.html">translateY() Y轴平移</a>
+          <a class="nav-item" href="rotate.html">rotate() 旋转</a>
+          <a class="nav-item" href="rotateX.html">rotateX() X轴旋转</a>
+          <a class="nav-item active" href="rotateY.html">rotateY() Y轴旋转</a>
+          <a class="nav-item" href="scale.html">scale() 缩放</a>
+          <a class="nav-item" href="skew.html">skew() 倾斜</a>
         </div>
       </nav>
     </aside>
@@ -47,10 +47,7 @@
             <li><span class="highlight">angle</span> - 旋转角度</li>
             <li><strong>正值：</strong>右侧向后旋转（远离你）</li>
             <li><strong>负值：</strong>右侧向前旋转（靠近你）</li>
-            <li>
-              需要配合 <span class="highlight">perspective</span> 属性才能看到
-              3D 效果
-            </li>
+            <li>需要配合 <span class="highlight">perspective</span> 属性才能看到 3D 效果</li>
           </ul>
         </section>
 
@@ -59,14 +56,12 @@
           <p>rotateY(60deg) 让元素右侧向后倾斜</p>
 
           <div class="demo-area perspective">
-            <div class="box" id="demo-box-1">60°</div>
+            <div id="demo-box-1" class="box">60°</div>
           </div>
 
           <button class="play-button" data-demo="demo1">播放动画</button>
 
-          <pre
-            class="code-block"
-          ><code><span class="keyword">.container</span> {
+          <pre class="code-block"><code><span class="keyword">.container</span> {
   <span class="property">perspective</span>: <span class="value">800px</span>;
 }
 
@@ -80,7 +75,7 @@
           <p>rotateY(180deg) 完全翻转元素，像翻书一样</p>
 
           <div class="demo-area perspective">
-            <div class="box" id="demo-box-2">180°</div>
+            <div id="demo-box-2" class="box">180°</div>
           </div>
 
           <button class="play-button" data-demo="demo2">播放动画</button>
@@ -96,7 +91,7 @@
           <p>rotateY(360deg) 完整旋转一圈</p>
 
           <div class="demo-area perspective">
-            <div class="box" id="demo-box-3">360°</div>
+            <div id="demo-box-3" class="box">360°</div>
           </div>
 
           <button class="play-button" data-demo="demo3">播放动画</button>
@@ -119,23 +114,24 @@
       // 使用事件委托，避免全局命名冲突
       const demos = {
         demo1: () => {
-          const box = document.getElementById("demo-box-1");
-          playTransform(box, "rotateY(60deg)", 1500);
+          const box = document.getElementById('demo-box-1');
+          playTransform(box, 'rotateY(60deg)', 1500);
         },
         demo2: () => {
-          const box = document.getElementById("demo-box-2");
-          playTransform(box, "rotateY(180deg)", 1500);
+          const box = document.getElementById('demo-box-2');
+          playTransform(box, 'rotateY(180deg)', 1500);
         },
         demo3: () => {
-          const box = document.getElementById("demo-box-3");
+          const box = document.getElementById('demo-box-3');
           // 这个 demo 有特殊的 transition 设置，保持原有逻辑
-          box.style.transform = "none";
-          box.style.transition = "transform 2s";
+          box.style.transform = 'none';
+          box.style.transition = 'transform 2s';
           box.offsetHeight;
-          box.style.transform = "rotateY(360deg)";
+          box.style.transform = 'rotateY(360deg)';
           setTimeout(() => {
-          box.style.transform = "none";
-        }
+            box.style.transform = 'none';
+          }, 2000);
+        },
       };
 
       // 事件委托：监听所有按钮点击

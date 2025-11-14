@@ -101,11 +101,11 @@ export class ThemeSystem {
     l = Math.max(0, Math.min(1, l + percent / 100));
 
     const hue2rgb = (p, q, t) => {
-      if (t < 0) t += 1;
-      if (t > 1) t -= 1;
-      if (t < 1 / 6) return p + (q - p) * 6 * t;
-      if (t < 1 / 2) return q;
-      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+      if (t < 0) {t += 1;}
+      if (t > 1) {t -= 1;}
+      if (t < 1 / 6) {return p + (q - p) * 6 * t;}
+      if (t < 1 / 2) {return q;}
+      if (t < 2 / 3) {return p + (q - p) * (2 / 3 - t) * 6;}
       return p;
     };
 
@@ -128,7 +128,7 @@ export class ThemeSystem {
   }
 
   createThemeUI() {
-    if (document.getElementById('themeToolbar')) return;
+    if (document.getElementById('themeToolbar')) {return;}
 
     const currentTheme = document.documentElement.getAttribute('data-theme');
 
@@ -278,7 +278,8 @@ export class ThemeSystem {
 
     // 点击外部关闭面板
     document.addEventListener('click', (e) => {
-      const isClickInsidePanel = themeModePanel?.contains(e.target) || colorPanel?.contains(e.target);
+      const isClickInsidePanel =
+        themeModePanel?.contains(e.target) || colorPanel?.contains(e.target);
       const isClickOnButton = themeToggle?.contains(e.target) || customizeBtn?.contains(e.target);
 
       if (!isClickInsidePanel && !isClickOnButton) {
@@ -296,8 +297,14 @@ export class ThemeSystem {
 
   togglePanel(panelToOpen, btnToOpen, panelToClose, btnToClose) {
     panelToOpen.classList.toggle('active');
-    panelToOpen.setAttribute('aria-hidden', panelToOpen.classList.contains('active') ? 'false' : 'true');
-    btnToOpen.setAttribute('aria-expanded', panelToOpen.classList.contains('active') ? 'true' : 'false');
+    panelToOpen.setAttribute(
+      'aria-hidden',
+      panelToOpen.classList.contains('active') ? 'false' : 'true'
+    );
+    btnToOpen.setAttribute(
+      'aria-expanded',
+      panelToOpen.classList.contains('active') ? 'true' : 'false'
+    );
 
     panelToClose?.classList.remove('active');
     panelToClose?.setAttribute('aria-hidden', 'true');

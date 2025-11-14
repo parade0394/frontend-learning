@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Demo 8: 对齐方式</title>
-        <link rel="stylesheet" href="/src/styles/common.css">
+    <link href="/src/styles/common.css" rel="stylesheet" />
     <!-- 防止主题闪烁 -->
     <script>
-      (function() {
+      (function () {
         try {
           const theme = localStorage.getItem('themeMode') || 'light';
           const color = localStorage.getItem('primaryColor') || '#10b981';
@@ -22,42 +22,47 @@
     </script>
     <script type="module" src="/src/theme-sync.js"></script>
     <style>
-        /* 主题适配 */
-        body {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
-        .container {
-            background: var(--card-bg);
-            color: var(--text-primary);
-        }
-        
-        h1, h2 {
-            color: var(--text-primary);
-        }
-        
-        .description {
-            color: var(--text-secondary);
-        }
-        
-        .code-block {
-            background: var(--gray-800);
-            color: var(--gray-200);
-            border: 1px solid var(--gray-700);
-        }
-        
-        .syntax-note, .info-box {
-            background: var(--primary-light);
-            border-left-color: var(--primary);
-            color: var(--text-primary);
-        }
-        
-        .syntax-note code, .info-box code {
-            background: var(--bg-primary);
-            color: var(--primary);
-        }
+      /* 主题适配 */
+      body {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      .container {
+        background: var(--card-bg);
+        color: var(--text-primary);
+      }
+
+      h1,
+      h2 {
+        color: var(--text-primary);
+      }
+
+      .description {
+        color: var(--text-secondary);
+      }
+
+      .code-block {
+        background: var(--gray-800);
+        color: var(--gray-200);
+        border: 1px solid var(--gray-700);
+      }
+
+      .syntax-note,
+      .info-box {
+        background: var(--primary-light);
+        border-left-color: var(--primary);
+        color: var(--text-primary);
+      }
+
+      .syntax-note code,
+      .info-box code {
+        background: var(--bg-primary);
+        color: var(--primary);
+      }
     </style>
     <style>
       body {
@@ -222,7 +227,7 @@
       }
 
       .note-box {
-        background: var(--card-bg)3cd;
+        background: var(--card-bg) 3cd;
         border-left: 4px solid var(--primary);
         padding: 15px;
         margin: 20px 0;
@@ -251,8 +256,8 @@
   </head>
   <body>
     <div class="container">
-        <a href="index.html" class="back-link">← 返回 Grid 教程</a>
-        
+      <a class="back-link" href="index.html">← 返回 Grid 教程</a>
+
       <h1>Demo 8: 对齐方式 - align & justify</h1>
       <div class="description">
         <p><strong>知识点：</strong>Grid 提供了强大的对齐控制，分为两类：</p>
@@ -371,7 +376,9 @@
         <div class="item">2</div>
         <div class="item">3</div>
       </div>
-      <div class="note-box">💡 <strong>提示：</strong>可以使用简写属性 <code>place-content: center center</code> 同时设置水平和垂直居中</div>
+      <div class="note-box">
+        💡 <strong>提示：</strong>可以使用简写属性 <code>place-content: center center</code> 同时设置水平和垂直居中
+      </div>
 
       <h2>四、项目级对齐：justify-items & align-items</h2>
       <p>控制每个项目在其网格单元格中的位置</p>
@@ -437,7 +444,6 @@
         &nbsp;&nbsp;/* 简写：place-self: start end; */<br />
         }
       </div>
-
     </div>
   </body>
 </html>

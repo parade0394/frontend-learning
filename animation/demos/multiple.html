@@ -1,30 +1,30 @@
-﻿<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+﻿<!doctype html>
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>组合变换 - CSS 动画教程</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link href="../styles.css" rel="stylesheet" />
     <script type="module" src="/src/theme-sync.js"></script>
   </head>
   <body>
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1>CSS 动画教程</h1>
-        <a href="../index.html" class="back-home">← 返回首页</a>
+        <a class="back-home" href="../index.html">← 返回首页</a>
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section">
           <h3>基础概念</h3>
-          <a href="coordinate.html" class="nav-item">坐标系统</a>
+          <a class="nav-item" href="coordinate.html">坐标系统</a>
         </div>
         <div class="nav-section">
           <h3>Transform 变换</h3>
-          <a href="translate.html" class="nav-item">translate() 平移</a>
-          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
-          <a href="scale.html" class="nav-item">scale() 缩放</a>
-          <a href="skew.html" class="nav-item">skew() 倾斜</a>
-          <a href="multiple.html" class="nav-item active">组合变换</a>
+          <a class="nav-item" href="translate.html">translate() 平移</a>
+          <a class="nav-item" href="rotate.html">rotate() 旋转</a>
+          <a class="nav-item" href="scale.html">scale() 缩放</a>
+          <a class="nav-item" href="skew.html">skew() 倾斜</a>
+          <a class="nav-item active" href="multiple.html">组合变换</a>
         </div>
       </nav>
     </aside>
@@ -53,7 +53,7 @@
           <p>先移动，再旋转，最后放大</p>
 
           <div class="demo-area">
-            <div class="box" id="demo-box-1">组合</div>
+            <div id="demo-box-1" class="box">组合</div>
           </div>
 
           <button class="play-button" data-demo="demo1">播放动画</button>
@@ -74,14 +74,14 @@
             <div>
               <p><strong>先旋转后平移</strong></p>
               <div class="demo-area">
-                <div class="box" id="demo-box-2a">A</div>
+                <div id="demo-box-2a" class="box">A</div>
               </div>
               <button class="play-button" data-demo="demo2a">播放</button>
             </div>
             <div>
               <p><strong>先平移后旋转</strong></p>
               <div class="demo-area">
-                <div class="box" id="demo-box-2b">B</div>
+                <div id="demo-box-2b" class="box">B</div>
               </div>
               <button class="play-button" data-demo="demo2b">播放</button>
             </div>
@@ -103,7 +103,7 @@
           <p>结合所有变换类型</p>
 
           <div class="demo-area">
-            <div class="box" id="demo-box-3">全部</div>
+            <div id="demo-box-3" class="box">全部</div>
           </div>
 
           <button class="play-button" data-demo="demo3">播放动画</button>
@@ -143,7 +143,7 @@
         demo3: () => {
           const box = document.getElementById('demo-box-3');
           playTransform(box, 'translate(80px, 30px) rotate(30deg) scale(1.3) skewX(10deg)', 1500);
-        }
+        },
       };
 
       // 事件委托：监听所有按钮点击

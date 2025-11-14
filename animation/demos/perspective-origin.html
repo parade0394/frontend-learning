@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+﻿<!doctype html>
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>perspective-origin - CSS 动画教程</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link href="../styles.css" rel="stylesheet" />
     <script type="module" src="/src/theme-sync.js"></script>
     <style>
       .demo-container {
@@ -84,27 +84,27 @@
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1>CSS 动画教程</h1>
-        <a href="../index.html" class="back-home">← 返回首页</a>
+        <a class="back-home" href="../index.html">← 返回首页</a>
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section">
           <h3>基础概念</h3>
-          <a href="coordinate.html" class="nav-item">坐标系统</a>
+          <a class="nav-item" href="coordinate.html">坐标系统</a>
         </div>
         <div class="nav-section">
           <h3>Transform 变换</h3>
-          <a href="translate.html" class="nav-item">translate() 平移</a>
-          <a href="translateX.html" class="nav-item">translateX() X轴平移</a>
-          <a href="translateY.html" class="nav-item">translateY() Y轴平移</a>
-          <a href="translateZ.html" class="nav-item">translateZ() Z轴平移</a>
-          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
-          <a href="scale.html" class="nav-item">scale() 缩放</a>
-          <a href="skew.html" class="nav-item">skew() 倾斜</a>
+          <a class="nav-item" href="translate.html">translate() 平移</a>
+          <a class="nav-item" href="translateX.html">translateX() X轴平移</a>
+          <a class="nav-item" href="translateY.html">translateY() Y轴平移</a>
+          <a class="nav-item" href="translateZ.html">translateZ() Z轴平移</a>
+          <a class="nav-item" href="rotate.html">rotate() 旋转</a>
+          <a class="nav-item" href="scale.html">scale() 缩放</a>
+          <a class="nav-item" href="skew.html">skew() 倾斜</a>
         </div>
         <div class="nav-section">
           <h3>3D 变换</h3>
-          <a href="perspective.html" class="nav-item">perspective 透视</a>
-          <a href="perspective-origin.html" class="nav-item active">perspective-origin 透视原点</a>
+          <a class="nav-item" href="perspective.html">perspective 透视</a>
+          <a class="nav-item active" href="perspective-origin.html">perspective-origin 透视原点</a>
         </div>
       </nav>
     </aside>
@@ -194,8 +194,8 @@
               <li><strong>必须配合 perspective 使用：</strong>单独设置 perspective-origin 无效</li>
               <li><strong>默认值：</strong>center center (50% 50%)</li>
               <li>
-                <strong>坐标系统：</strong>第一个值为水平位置（left / center / right / 百分比 / 像素），第二个值为垂直位置（top / center / bottom /
-                百分比 / 像素）
+                <strong>坐标系统：</strong>第一个值为水平位置（left / center / right / 百分比 /
+                像素），第二个值为垂直位置（top / center / bottom / 百分比 / 像素）
               </li>
               <li><strong>应用场景：</strong>创建更真实的 3D 效果，模拟不同角度的观察</li>
             </ul>
@@ -204,8 +204,12 @@
           <div class="info-box">
             <p><strong>⚠️ 与 transform-origin 的区别：</strong></p>
             <ul>
-              <li><strong>perspective-origin：</strong>设置在<strong>父容器</strong>上，控制<strong>观察者</strong>的位置</li>
-              <li><strong>transform-origin：</strong>设置在<strong>变换元素</strong>上，控制<strong>变换的原点</strong></li>
+              <li>
+                <strong>perspective-origin：</strong>设置在<strong>父容器</strong>上，控制<strong>观察者</strong>的位置
+              </li>
+              <li>
+                <strong>transform-origin：</strong>设置在<strong>变换元素</strong>上，控制<strong>变换的原点</strong>
+              </li>
               <li>两者经常一起使用，但作用完全不同</li>
             </ul>
           </div>

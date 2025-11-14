@@ -7,7 +7,13 @@
 export { playAnimation, resetAnimation, playTransform } from './utils/animations.js';
 
 // 通用工具
-export { debounce, throttle, isMobile, scrollToElement, prefersReducedMotion } from './utils/helpers.js';
+export {
+  debounce,
+  throttle,
+  isMobile,
+  scrollToElement,
+  prefersReducedMotion,
+} from './utils/helpers.js';
 
 // 剪贴板
 export { copyToClipboard } from './utils/clipboard.js';

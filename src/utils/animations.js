@@ -11,7 +11,7 @@ import { prefersReducedMotion } from './helpers.js';
  * @param {number} duration - 动画持续时间（毫秒）
  */
 export function playAnimation(element, className, duration = 1500) {
-  if (prefersReducedMotion()) return;
+  if (prefersReducedMotion()) {return;}
 
   // 移除类名，重置动画
   element.classList.remove(className);
@@ -54,7 +54,7 @@ export function resetAnimation(element, classNames = null) {
  * @param {number} duration - 动画持续时间（毫秒）
  */
 export function playTransform(element, transformValue, duration = 1500) {
-  if (prefersReducedMotion()) return;
+  if (prefersReducedMotion()) {return;}
 
   // 重置 transform
   element.style.transform = 'none';

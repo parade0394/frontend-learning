@@ -1,34 +1,34 @@
-﻿<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+﻿<!doctype html>
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>translate3d() - CSS 动画教程</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link href="../styles.css" rel="stylesheet" />
     <script type="module" src="/src/theme-sync.js"></script>
   </head>
   <body>
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1>CSS 动画教程</h1>
-        <a href="../index.html" class="back-home">← 返回首页</a>
+        <a class="back-home" href="../index.html">← 返回首页</a>
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section">
           <h3>基础概念</h3>
-          <a href="coordinate.html" class="nav-item">坐标系统</a>
+          <a class="nav-item" href="coordinate.html">坐标系统</a>
         </div>
         <div class="nav-section">
           <h3>Transform 变换</h3>
-          <a href="translate.html" class="nav-item">translate() 平移</a>
-          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
-          <a href="scale.html" class="nav-item">scale() 缩放</a>
+          <a class="nav-item" href="translate.html">translate() 平移</a>
+          <a class="nav-item" href="rotate.html">rotate() 旋转</a>
+          <a class="nav-item" href="scale.html">scale() 缩放</a>
         </div>
         <div class="nav-section">
           <h3>3D 变换</h3>
-          <a href="perspective.html" class="nav-item">perspective 透视</a>
-          <a href="rotate3d.html" class="nav-item">rotate3d() 3D旋转</a>
-          <a href="translate3d.html" class="nav-item active">translate3d() 3D平移</a>
+          <a class="nav-item" href="perspective.html">perspective 透视</a>
+          <a class="nav-item" href="rotate3d.html">rotate3d() 3D旋转</a>
+          <a class="nav-item active" href="translate3d.html">translate3d() 3D平移</a>
         </div>
       </nav>
     </aside>
@@ -67,7 +67,7 @@
             <div>
               <p><strong>向前 (Z: 100px)</strong></p>
               <div class="demo-area perspective">
-                <div class="box" id="box-forward" style="width: 80px; height: 80px; font-size: 14px">向前</div>
+                <div id="box-forward" class="box" style="width: 80px; height: 80px; font-size: 14px">向前</div>
               </div>
             </div>
             <div>
@@ -79,7 +79,7 @@
             <div>
               <p><strong>向后 (Z: -100px)</strong></p>
               <div class="demo-area perspective">
-                <div class="box" id="box-backward" style="width: 80px; height: 80px; font-size: 14px">向后</div>
+                <div id="box-backward" class="box" style="width: 80px; height: 80px; font-size: 14px">向后</div>
               </div>
             </div>
           </div>
@@ -100,7 +100,7 @@
           <p>同时在 X、Y、Z 三个方向移动</p>
 
           <div class="demo-area perspective">
-            <div class="box" id="box-3d">3D 移动</div>
+            <div id="box-3d" class="box">3D 移动</div>
           </div>
 
           <button class="play-button" data-demo="demo2">播放动画</button>
@@ -118,14 +118,50 @@
           <div class="demo-area perspective" style="height: 300px">
             <div
               id="cube"
-              style="width: 100px; height: 100px; position: relative; transform-style: preserve-3d; animation: rotateCube 8s infinite linear"
+              style="
+                width: 100px;
+                height: 100px;
+                position: relative;
+                transform-style: preserve-3d;
+                animation: rotateCube 8s infinite linear;
+              "
             >
-              <div class="cube-face" style="transform: rotateY(0deg) translateZ(50px); background: rgba(16, 185, 129, 0.9)">前</div>
-              <div class="cube-face" style="transform: rotateY(180deg) translateZ(50px); background: rgba(5, 150, 105, 0.9)">后</div>
-              <div class="cube-face" style="transform: rotateY(90deg) translateZ(50px); background: rgba(52, 211, 153, 0.9)">右</div>
-              <div class="cube-face" style="transform: rotateY(-90deg) translateZ(50px); background: rgba(6, 95, 70, 0.9)">左</div>
-              <div class="cube-face" style="transform: rotateX(90deg) translateZ(50px); background: rgba(16, 185, 129, 0.7)">上</div>
-              <div class="cube-face" style="transform: rotateX(-90deg) translateZ(50px); background: rgba(5, 150, 105, 0.7)">下</div>
+              <div
+                class="cube-face"
+                style="transform: rotateY(0deg) translateZ(50px); background: rgba(16, 185, 129, 0.9)"
+              >
+                前
+              </div>
+              <div
+                class="cube-face"
+                style="transform: rotateY(180deg) translateZ(50px); background: rgba(5, 150, 105, 0.9)"
+              >
+                后
+              </div>
+              <div
+                class="cube-face"
+                style="transform: rotateY(90deg) translateZ(50px); background: rgba(52, 211, 153, 0.9)"
+              >
+                右
+              </div>
+              <div
+                class="cube-face"
+                style="transform: rotateY(-90deg) translateZ(50px); background: rgba(6, 95, 70, 0.9)"
+              >
+                左
+              </div>
+              <div
+                class="cube-face"
+                style="transform: rotateX(90deg) translateZ(50px); background: rgba(16, 185, 129, 0.7)"
+              >
+                上
+              </div>
+              <div
+                class="cube-face"
+                style="transform: rotateX(-90deg) translateZ(50px); background: rgba(5, 150, 105, 0.7)"
+              >
+                下
+              </div>
             </div>
           </div>
 
@@ -163,12 +199,8 @@
     <script type="module">
       // 使用事件委托，避免全局命名冲突
       const demos = {
-        demo1: (param) => {
-
-        },
-        demo2: (param) => {
-
-        }
+        demo1: (param) => {},
+        demo2: (param) => {},
       };
 
       // 事件委托：监听所有点击

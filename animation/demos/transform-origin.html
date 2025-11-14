@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+﻿<!doctype html>
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>transform-origin - CSS 动画教程</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link href="../styles.css" rel="stylesheet" />
     <script type="module" src="/src/theme-sync.js"></script>
     <style>
       .origin-demo {
@@ -119,15 +119,15 @@
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1>CSS 动画教程</h1>
-        <a href="../index.html" class="back-home">← 返回首页</a>
+        <a class="back-home" href="../index.html">← 返回首页</a>
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section">
           <h3>Transform 变换</h3>
-          <a href="translate.html" class="nav-item">translate() 平移</a>
-          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
-          <a href="scale.html" class="nav-item">scale() 缩放</a>
-          <a href="transform-origin.html" class="nav-item active">transform-origin 原点</a>
+          <a class="nav-item" href="translate.html">translate() 平移</a>
+          <a class="nav-item" href="rotate.html">rotate() 旋转</a>
+          <a class="nav-item" href="scale.html">scale() 缩放</a>
+          <a class="nav-item active" href="transform-origin.html">transform-origin 原点</a>
         </div>
       </nav>
     </aside>
@@ -139,7 +139,9 @@
 
         <section class="section">
           <h2>什么是 transform-origin？</h2>
-          <p>transform-origin 定义了变换的原点（中心点）。所有的 transform 变换（旋转、缩放、倾斜）都围绕这个点进行。</p>
+          <p>
+            transform-origin 定义了变换的原点（中心点）。所有的 transform 变换（旋转、缩放、倾斜）都围绕这个点进行。
+          </p>
 
           <ul>
             <li><strong>默认值：</strong>center center（元素的中心点，即 50% 50%）</li>
@@ -363,7 +365,9 @@
           <h2>重要注意事项</h2>
 
           <div class="info-box">
-            <p><strong>translate 不受影响：</strong>transform-origin 只影响 rotate、scale、skew，不影响 translate 平移</p>
+            <p>
+              <strong>translate 不受影响：</strong>transform-origin 只影响 rotate、scale、skew，不影响 translate 平移
+            </p>
           </div>
 
           <ul style="margin-top: 20px">
@@ -377,7 +381,9 @@
         <section class="section">
           <h2>等价写法对照表</h2>
 
-          <pre class="code-block"><code><span class="comment">/* 关键字 vs 百分比 vs 像素（假设元素 100x100px） */</span>
+          <pre
+            class="code-block"
+          ><code><span class="comment">/* 关键字 vs 百分比 vs 像素（假设元素 100x100px） */</span>
 <span class="property">transform-origin</span>: <span class="value">top left</span>      = <span class="value">0% 0%</span>       = <span class="value">0px 0px</span>
 <span class="property">transform-origin</span>: <span class="value">top center</span>    = <span class="value">50% 0%</span>      = <span class="value">50px 0px</span>
 <span class="property">transform-origin</span>: <span class="value">top right</span>     = <span class="value">100% 0%</span>     = <span class="value">100px 0px</span>

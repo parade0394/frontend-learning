@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Demo 5: 跨越单元格</title>
-        <link rel="stylesheet" href="/src/styles/common.css">
+    <link href="/src/styles/common.css" rel="stylesheet" />
     <!-- 防止主题闪烁 -->
     <script>
-      (function() {
+      (function () {
         try {
           const theme = localStorage.getItem('themeMode') || 'light';
           const color = localStorage.getItem('primaryColor') || '#10b981';
@@ -22,42 +22,47 @@
     </script>
     <script type="module" src="/src/theme-sync.js"></script>
     <style>
-        /* 主题适配 */
-        body {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
-        .container {
-            background: var(--card-bg);
-            color: var(--text-primary);
-        }
-        
-        h1, h2 {
-            color: var(--text-primary);
-        }
-        
-        .description {
-            color: var(--text-secondary);
-        }
-        
-        .code-block {
-            background: var(--gray-800);
-            color: var(--gray-200);
-            border: 1px solid var(--gray-700);
-        }
-        
-        .syntax-note, .info-box {
-            background: var(--primary-light);
-            border-left-color: var(--primary);
-            color: var(--text-primary);
-        }
-        
-        .syntax-note code, .info-box code {
-            background: var(--bg-primary);
-            color: var(--primary);
-        }
+      /* 主题适配 */
+      body {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      .container {
+        background: var(--card-bg);
+        color: var(--text-primary);
+      }
+
+      h1,
+      h2 {
+        color: var(--text-primary);
+      }
+
+      .description {
+        color: var(--text-secondary);
+      }
+
+      .code-block {
+        background: var(--gray-800);
+        color: var(--gray-200);
+        border: 1px solid var(--gray-700);
+      }
+
+      .syntax-note,
+      .info-box {
+        background: var(--primary-light);
+        border-left-color: var(--primary);
+        color: var(--text-primary);
+      }
+
+      .syntax-note code,
+      .info-box code {
+        background: var(--bg-primary);
+        color: var(--primary);
+      }
     </style>
     <style>
       body {
@@ -247,8 +252,8 @@
   </head>
   <body>
     <div class="container">
-        <a href="index.html" class="back-link">← 返回 Grid 教程</a>
-        
+      <a class="back-link" href="index.html">← 返回 Grid 教程</a>
+
       <h1>Demo 5: 跨越单元格 - span</h1>
       <div class="description">
         <p><strong>知识点：</strong>使用 <code>span</code> 关键字让项目跨越多个单元格。</p>
@@ -328,7 +333,8 @@
         <strong>总结：何时使用哪种方式？</strong><br /><br />
         /* 使用 span：不关心具体位置，只关心跨越几列 */<br />
         .item {<br />
-        &nbsp;&nbsp;<span class="keyword">grid-column</span>: <span class="value">span 2</span>; /* 跨2列，位置自动 */<br />
+        &nbsp;&nbsp;<span class="keyword">grid-column</span>: <span class="value">span 2</span>; /* 跨2列，位置自动
+        */<br />
         }<br /><br />
         /* 使用网格线：需要精确控制位置 */<br />
         .item {<br />
@@ -336,10 +342,10 @@
         }<br /><br />
         /* 组合使用：指定起始位置 + 跨越列数 */<br />
         .item {<br />
-        &nbsp;&nbsp;<span class="keyword">grid-column</span>: <span class="value">2 / span 3</span>; /* 从第2列开始，跨3列 */<br />
+        &nbsp;&nbsp;<span class="keyword">grid-column</span>: <span class="value">2 / span 3</span>; /*
+        从第2列开始，跨3列 */<br />
         }
       </div>
-
     </div>
   </body>
 </html>

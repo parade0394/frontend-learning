@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+﻿<!doctype html>
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>animation-fill-mode 详细演示 - CSS 动画教程</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link href="../styles.css" rel="stylesheet" />
     <!-- 防止主题闪烁 -->
     <script type="module">
       // 使用事件委托，避免全局命名冲突
@@ -196,28 +196,28 @@
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1>CSS 动画教程</h1>
-        <a href="../index.html" class="back-home">← 返回首页</a>
+        <a class="back-home" href="../index.html">← 返回首页</a>
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section">
           <h3>基础概念</h3>
-          <a href="coordinate.html" class="nav-item">坐标系统</a>
+          <a class="nav-item" href="coordinate.html">坐标系统</a>
         </div>
         <div class="nav-section">
           <h3>Transform 变换</h3>
-          <a href="translate.html" class="nav-item">translate() 平移</a>
-          <a href="translateX.html" class="nav-item">translateX() X轴平移</a>
-          <a href="translateY.html" class="nav-item">translateY() Y轴平移</a>
-          <a href="translateZ.html" class="nav-item">translateZ() Z轴平移</a>
-          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
-          <a href="scale.html" class="nav-item">scale() 缩放</a>
-          <a href="skew.html" class="nav-item">skew() 倾斜</a>
+          <a class="nav-item" href="translate.html">translate() 平移</a>
+          <a class="nav-item" href="translateX.html">translateX() X轴平移</a>
+          <a class="nav-item" href="translateY.html">translateY() Y轴平移</a>
+          <a class="nav-item" href="translateZ.html">translateZ() Z轴平移</a>
+          <a class="nav-item" href="rotate.html">rotate() 旋转</a>
+          <a class="nav-item" href="scale.html">scale() 缩放</a>
+          <a class="nav-item" href="skew.html">skew() 倾斜</a>
         </div>
         <div class="nav-section">
           <h3>Animation 动画</h3>
-          <a href="keyframes.html" class="nav-item">@keyframes 关键帧</a>
-          <a href="animation-play-state.html" class="nav-item">animation-play-state 播放状态</a>
-          <a href="fill-mode-demo.html" class="nav-item active">animation-fill-mode 填充模式</a>
+          <a class="nav-item" href="keyframes.html">@keyframes 关键帧</a>
+          <a class="nav-item" href="animation-play-state.html">animation-play-state 播放状态</a>
+          <a class="nav-item active" href="fill-mode-demo.html">animation-fill-mode 填充模式</a>
         </div>
       </nav>
     </aside>
@@ -232,7 +232,9 @@
             <p><strong>💡 什么是"延迟期间"？</strong></p>
             <p>
               当你设置
-              <code>animation-delay: 2s</code> 时，动画不会立即开始，而是等待 2 秒。<strong>这 2 秒就是"延迟期间"。</strong>
+              <code>animation-delay: 2s</code> 时，动画不会立即开始，而是等待 2 秒。<strong
+                >这 2 秒就是"延迟期间"。</strong
+              >
             </p>
             <p style="margin-top: 10px">
               下面的演示中，所有动画都有
@@ -245,37 +247,37 @@
           <h2>backwards 的作用对比</h2>
           <p class="section-intro">动画：从左侧（红色）滑到中间（绿色），有 2 秒延迟</p>
 
-      <div class="demo-grid">
-        <div class="demo-card">
-          <h3>❌ none（默认）</h3>
-          <div class="demo-area">
-            <div class="box" id="box-none">中间</div>
-          </div>
-          <button class="play-btn" data-demo="demo" data-param="none">播放动画</button>
-          <div class="description">
-            <strong>点击后：</strong><br />
-            • 0-2秒：方块在中间（绿色）等待<br />
-            • 2秒时：突然跳到左边（红色）<br />
-            • 2-3.5秒：从左边滑到中间<br />
-            • 3.5秒后：回到中间（绿色）
-          </div>
-        </div>
+          <div class="demo-grid">
+            <div class="demo-card">
+              <h3>❌ none（默认）</h3>
+              <div class="demo-area">
+                <div id="box-none" class="box">中间</div>
+              </div>
+              <button class="play-btn" data-demo="demo" data-param="none">播放动画</button>
+              <div class="description">
+                <strong>点击后：</strong><br />
+                • 0-2秒：方块在中间（绿色）等待<br />
+                • 2秒时：突然跳到左边（红色）<br />
+                • 2-3.5秒：从左边滑到中间<br />
+                • 3.5秒后：回到中间（绿色）
+              </div>
+            </div>
 
-        <div class="demo-card">
-          <h3>✅ backwards</h3>
-          <div class="demo-area">
-            <div class="box" id="box-backwards">中间</div>
+            <div class="demo-card">
+              <h3>✅ backwards</h3>
+              <div class="demo-area">
+                <div id="box-backwards" class="box">中间</div>
+              </div>
+              <button class="play-btn" data-demo="demo" data-param="backwards">播放动画</button>
+              <div class="description">
+                <strong>点击后：</strong><br />
+                • <strong>立即：</strong>方块跳到左边（红色）<br />
+                • 0-2秒：在左边等待<br />
+                • 2-3.5秒：从左边滑到中间<br />
+                • 3.5秒后：回到中间（绿色）
+              </div>
+            </div>
           </div>
-          <button class="play-btn" data-demo="demo" data-param="backwards">播放动画</button>
-          <div class="description">
-            <strong>点击后：</strong><br />
-            • <strong>立即：</strong>方块跳到左边（红色）<br />
-            • 0-2秒：在左边等待<br />
-            • 2-3.5秒：从左边滑到中间<br />
-            • 3.5秒后：回到中间（绿色）
-          </div>
-        </div>
-      </div>
 
           <div class="info-box">
             <p><strong>🎯 关键区别</strong></p>
@@ -292,63 +294,68 @@
           <h2>forwards 的作用对比</h2>
           <p class="section-intro">观察动画结束后的状态</p>
 
-      <div class="demo-grid">
-        <div class="demo-card">
-          <h3>❌ none（默认）</h3>
-          <div class="demo-area">
-            <div class="box" id="box-none-2">中间</div>
-          </div>
-          <button class="play-btn" data-demo="demo2" data-param="none">播放动画</button>
-          <div class="description">
-            <strong>动画结束后：</strong><br />
-            回到原始状态（中间，绿色）
-          </div>
-        </div>
+          <div class="demo-grid">
+            <div class="demo-card">
+              <h3>❌ none（默认）</h3>
+              <div class="demo-area">
+                <div id="box-none-2" class="box">中间</div>
+              </div>
+              <button class="play-btn" data-demo="demo2" data-param="none">播放动画</button>
+              <div class="description">
+                <strong>动画结束后：</strong><br />
+                回到原始状态（中间，绿色）
+              </div>
+            </div>
 
-        <div class="demo-card">
-          <h3>✅ forwards</h3>
-          <div class="demo-area">
-            <div class="box" id="box-forwards">中间</div>
+            <div class="demo-card">
+              <h3>✅ forwards</h3>
+              <div class="demo-area">
+                <div id="box-forwards" class="box">中间</div>
+              </div>
+              <button class="play-btn" data-demo="demo2" data-param="forwards">播放动画</button>
+              <div class="description">
+                <strong>动画结束后：</strong><br />
+                保持最后一帧状态（中间，绿色）
+              </div>
+            </div>
           </div>
-          <button class="play-btn" data-demo="demo2" data-param="forwards">播放动画</button>
-          <div class="description">
-            <strong>动画结束后：</strong><br />
-            保持最后一帧状态（中间，绿色）
-          </div>
-        </div>
-      </div>
-
         </section>
 
         <section class="section">
           <h2>both = backwards + forwards</h2>
 
           <div class="demo-grid">
-        <div class="demo-card">
-          <h3>both</h3>
-          <div class="demo-area">
-            <div class="box" id="box-both">中间</div>
-          </div>
-          <button class="play-btn" data-demo="demo" data-param="both">播放动画</button>
-          <div class="description">
-            <strong>点击后：</strong><br />
-            • <strong>立即：</strong>跳到左边（backwards）<br />
-            • 0-2秒：在左边等待<br />
-            • 2-3.5秒：从左边滑到中间<br />
-            • 3.5秒后：<strong>保持在中间</strong>（forwards）
-          </div>
-        </div>
+            <div class="demo-card">
+              <h3>both</h3>
+              <div class="demo-area">
+                <div id="box-both" class="box">中间</div>
+              </div>
+              <button class="play-btn" data-demo="demo" data-param="both">播放动画</button>
+              <div class="description">
+                <strong>点击后：</strong><br />
+                • <strong>立即：</strong>跳到左边（backwards）<br />
+                • 0-2秒：在左边等待<br />
+                • 2-3.5秒：从左边滑到中间<br />
+                • 3.5秒后：<strong>保持在中间</strong>（forwards）
+              </div>
+            </div>
 
-        <div class="demo-card">
-          <h3>完整对比</h3>
-          <div class="description" style="font-size: 0.9rem; line-height: 2;">
-            <strong>none:</strong> 延迟期间：原始状态 | 结束后：原始状态<br>
-            <strong>backwards:</strong> 延迟期间：<span style="color: var(--primary);">第一帧 ✨</span> | 结束后：原始状态<br>
-            <strong>forwards:</strong> 延迟期间：原始状态 | 结束后：<span style="color: var(--primary);">最后一帧 ✨</span><br>
-            <strong>both:</strong> 延迟期间：<span style="color: var(--primary);">第一帧 ✨</span> | 结束后：<span style="color: var(--primary);">最后一帧 ✨</span>
+            <div class="demo-card">
+              <h3>完整对比</h3>
+              <div class="description" style="font-size: 0.9rem; line-height: 2">
+                <strong>none:</strong> 延迟期间：原始状态 | 结束后：原始状态<br />
+                <strong>backwards:</strong> 延迟期间：<span style="color: var(--primary)">第一帧 ✨</span> |
+                结束后：原始状态<br />
+                <strong>forwards:</strong> 延迟期间：原始状态 | 结束后：<span style="color: var(--primary)"
+                  >最后一帧 ✨</span
+                ><br />
+                <strong>both:</strong> 延迟期间：<span style="color: var(--primary)">第一帧 ✨</span> | 结束后：<span
+                  style="color: var(--primary)"
+                  >最后一帧 ✨</span
+                >
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
         </section>
 
         <section class="section">
@@ -394,12 +401,12 @@
         // forwards 使用 box-forwards，none 使用 box-none-2
         const boxId = mode === 'forwards' ? 'box-forwards' : 'box-' + mode + '-2';
         const box = document.getElementById(boxId);
-        
+
         if (!box) {
           console.error('找不到元素:', boxId);
           return;
         }
-        
+
         resetBox(box);
 
         // 应用动画

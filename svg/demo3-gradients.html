@@ -1,389 +1,390 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SVG 渐变填充 - 前端学习中心</title>
-  <link rel="stylesheet" href="/src/styles/common.css">
-  <script src="../shared/theme-sync.js"></script>
-  <script src="../shared/utils.js"></script>
-  <style>
-    .gradient-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: var(--spacing-lg);
-      margin: var(--spacing-lg) 0;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SVG 渐变填充 - 前端学习中心</title>
+    <link href="/src/styles/common.css" rel="stylesheet" />
+    <script src="../shared/theme-sync.js"></script>
+    <script src="../shared/utils.js"></script>
+    <style>
+      .gradient-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: var(--spacing-lg);
+        margin: var(--spacing-lg) 0;
+      }
 
-    .gradient-demo {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: var(--spacing-md);
-    }
+      .gradient-demo {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-md);
+      }
 
-    .gradient-demo h3 {
-      margin-top: 0;
-      color: var(--primary);
-    }
+      .gradient-demo h3 {
+        margin-top: 0;
+        color: var(--primary);
+      }
 
-    .svg-container {
-      background: var(--bg-primary);
-      border-radius: var(--radius-sm);
-      padding: var(--spacing-md);
-      margin: var(--spacing-md) 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 200px;
-    }
+      .svg-container {
+        background: var(--bg-primary);
+        border-radius: var(--radius-sm);
+        padding: var(--spacing-md);
+        margin: var(--spacing-md) 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 200px;
+      }
 
-    .controls {
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-sm);
-      margin-top: var(--spacing-md);
-    }
+      .controls {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        margin-top: var(--spacing-md);
+      }
 
-    .control-row {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-sm);
-    }
+      .control-row {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+      }
 
-    .control-row label {
-      min-width: 80px;
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-    }
+      .control-row label {
+        min-width: 80px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+      }
 
-    .control-row input[type="range"] {
-      flex: 1;
-    }
+      .control-row input[type='range'] {
+        flex: 1;
+      }
 
-    .control-row input[type="color"] {
-      width: 50px;
-      height: 30px;
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-    }
+      .control-row input[type='color'] {
+        width: 50px;
+        height: 30px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+      }
 
-    .value-display {
-      min-width: 40px;
-      text-align: right;
-      font-weight: 600;
-      color: var(--primary);
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <a href="index.html" class="back-link">← 返回 SVG 模块</a>
-    
-    <h1>SVG 渐变填充</h1>
-    <p>SVG 支持线性渐变和径向渐变，可以创建丰富的视觉效果。</p>
+      .value-display {
+        min-width: 40px;
+        text-align: right;
+        font-weight: 600;
+        color: var(--primary);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a class="back-link" href="index.html">← 返回 SVG 模块</a>
 
-    <div class="gradient-grid">
-      <!-- 线性渐变 -->
-      <div class="gradient-demo">
-        <h3>线性渐变 (linearGradient)</h3>
-        <div class="svg-container">
-          <svg width="250" height="200" viewBox="0 0 250 200">
-            <defs>
-              <linearGradient id="linear1" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
-              </linearGradient>
-            </defs>
-            <rect x="25" y="25" width="200" height="150" fill="url(#linear1)" rx="10"/>
-          </svg>
+      <h1>SVG 渐变填充</h1>
+      <p>SVG 支持线性渐变和径向渐变，可以创建丰富的视觉效果。</p>
+
+      <div class="gradient-grid">
+        <!-- 线性渐变 -->
+        <div class="gradient-demo">
+          <h3>线性渐变 (linearGradient)</h3>
+          <div class="svg-container">
+            <svg width="250" height="200" viewBox="0 0 250 200">
+              <defs>
+                <linearGradient id="linear1" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color: #10b981; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #3b82f6; stop-opacity: 1" />
+                </linearGradient>
+              </defs>
+              <rect x="25" y="25" width="200" height="150" fill="url(#linear1)" rx="10" />
+            </svg>
+          </div>
+          <div class="code-block">
+            <code
+              >&lt;linearGradient id="linear1" x1="0%" y1="0%" x2="100%" y2="0%"&gt; &lt;stop offset="0%"
+              stop-color="#10b981"/&gt; &lt;stop offset="100%" stop-color="#3b82f6"/&gt; &lt;/linearGradient&gt;</code
+            >
+          </div>
         </div>
-        <div class="code-block">
-          <code>&lt;linearGradient id="linear1" x1="0%" y1="0%" x2="100%" y2="0%"&gt;
-  &lt;stop offset="0%" stop-color="#10b981"/&gt;
-  &lt;stop offset="100%" stop-color="#3b82f6"/&gt;
-&lt;/linearGradient&gt;</code>
+
+        <!-- 径向渐变 -->
+        <div class="gradient-demo">
+          <h3>径向渐变 (radialGradient)</h3>
+          <div class="svg-container">
+            <svg width="250" height="200" viewBox="0 0 250 200">
+              <defs>
+                <radialGradient id="radial1">
+                  <stop offset="0%" style="stop-color: #fbbf24; stop-opacity: 1" />
+                  <stop offset="100%" style="stop-color: #f59e0b; stop-opacity: 0.3" />
+                </radialGradient>
+              </defs>
+              <circle cx="125" cy="100" r="75" fill="url(#radial1)" />
+            </svg>
+          </div>
+          <div class="code-block">
+            <code
+              >&lt;radialGradient id="radial1"&gt; &lt;stop offset="0%" stop-color="#fbbf24"/&gt; &lt;stop offset="100%"
+              stop-color="#f59e0b" stop-opacity="0.3"/&gt; &lt;/radialGradient&gt;</code
+            >
+          </div>
+        </div>
+
+        <!-- 多色渐变 -->
+        <div class="gradient-demo">
+          <h3>多色渐变</h3>
+          <div class="svg-container">
+            <svg width="250" height="200" viewBox="0 0 250 200">
+              <defs>
+                <linearGradient id="multi1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color: #ef4444" />
+                  <stop offset="33%" style="stop-color: #f59e0b" />
+                  <stop offset="66%" style="stop-color: #10b981" />
+                  <stop offset="100%" style="stop-color: #3b82f6" />
+                </linearGradient>
+              </defs>
+              <rect x="25" y="25" width="200" height="150" fill="url(#multi1)" rx="10" />
+            </svg>
+          </div>
+          <div class="code-block">
+            <code
+              >&lt;linearGradient id="multi1"&gt; &lt;stop offset="0%" stop-color="#ef4444"/&gt; &lt;stop offset="33%"
+              stop-color="#f59e0b"/&gt; &lt;stop offset="66%" stop-color="#10b981"/&gt; &lt;stop offset="100%"
+              stop-color="#3b82f6"/&gt; &lt;/linearGradient&gt;</code
+            >
+          </div>
+        </div>
+
+        <!-- 对角渐变 -->
+        <div class="gradient-demo">
+          <h3>对角渐变</h3>
+          <div class="svg-container">
+            <svg width="250" height="200" viewBox="0 0 250 200">
+              <defs>
+                <linearGradient id="diagonal1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color: #8b5cf6" />
+                  <stop offset="100%" style="stop-color: #ec4899" />
+                </linearGradient>
+              </defs>
+              <rect x="25" y="25" width="200" height="150" fill="url(#diagonal1)" rx="10" />
+            </svg>
+          </div>
+          <div class="code-block">
+            <code
+              >&lt;linearGradient id="diagonal1" x1="0%" y1="0%" x2="100%" y2="100%"&gt; &lt;stop offset="0%"
+              stop-color="#8b5cf6"/&gt; &lt;stop offset="100%" stop-color="#ec4899"/&gt; &lt;/linearGradient&gt;</code
+            >
+          </div>
         </div>
       </div>
 
-      <!-- 径向渐变 -->
-      <div class="gradient-demo">
-        <h3>径向渐变 (radialGradient)</h3>
+      <!-- 交互式渐变编辑器 -->
+      <div class="gradient-demo" style="margin-top: var(--spacing-xl)">
+        <h3>🎮 交互式线性渐变编辑器</h3>
         <div class="svg-container">
-          <svg width="250" height="200" viewBox="0 0 250 200">
+          <svg id="interactive-svg" width="100%" height="250" viewBox="0 0 400 250">
             <defs>
-              <radialGradient id="radial1">
-                <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0.3" />
+              <linearGradient id="interactive-gradient" x1="0%" y1="50%" x2="100%" y2="50%">
+                <stop id="stop1" offset="0%" style="stop-color: #10b981; stop-opacity: 1" />
+                <stop id="stop2" offset="100%" style="stop-color: #3b82f6; stop-opacity: 1" />
+              </linearGradient>
+            </defs>
+            <rect x="50" y="50" width="300" height="150" fill="url(#interactive-gradient)" rx="15" />
+          </svg>
+        </div>
+
+        <div class="controls">
+          <div class="control-row">
+            <label>方向 (x2):</label>
+            <input id="gradient-x2" type="range" value="100" min="0" max="100" />
+            <span id="x2-value" class="value-display">100%</span>
+          </div>
+          <div class="control-row">
+            <label>方向 (y2):</label>
+            <input id="gradient-y2" type="range" value="50" min="0" max="100" />
+            <span id="y2-value" class="value-display">50%</span>
+          </div>
+          <div class="control-row">
+            <label>起始颜色:</label>
+            <input id="color1" type="color" value="#10b981" />
+            <label style="min-width: auto; margin-left: var(--spacing-md)">透明度:</label>
+            <input id="opacity1" type="range" value="100" min="0" max="100" style="max-width: 150px" />
+            <span id="opacity1-value" class="value-display">100%</span>
+          </div>
+          <div class="control-row">
+            <label>结束颜色:</label>
+            <input id="color2" type="color" value="#3b82f6" />
+            <label style="min-width: auto; margin-left: var(--spacing-md)">透明度:</label>
+            <input id="opacity2" type="range" value="100" min="0" max="100" style="max-width: 150px" />
+            <span id="opacity2-value" class="value-display">100%</span>
+          </div>
+        </div>
+
+        <div class="code-block" style="margin-top: var(--spacing-md)">
+          <code id="gradient-code"
+            >&lt;linearGradient id="gradient" x1="0%" y1="50%" x2="100%" y2="50%"&gt; &lt;stop offset="0%"
+            stop-color="#10b981" stop-opacity="1"/&gt; &lt;stop offset="100%" stop-color="#3b82f6" stop-opacity="1"/&gt;
+            &lt;/linearGradient&gt;</code
+          >
+        </div>
+
+        <button class="btn" onclick="copyGradientCode()" style="margin-top: var(--spacing-md)">复制代码</button>
+      </div>
+
+      <!-- 径向渐变编辑器 -->
+      <div class="gradient-demo" style="margin-top: var(--spacing-xl)">
+        <h3>🎮 交互式径向渐变编辑器</h3>
+        <div class="svg-container">
+          <svg id="radial-svg" width="100%" height="250" viewBox="0 0 400 250">
+            <defs>
+              <radialGradient id="interactive-radial" cx="50%" cy="50%" r="50%">
+                <stop id="radial-stop1" offset="0%" style="stop-color: #fbbf24; stop-opacity: 1" />
+                <stop id="radial-stop2" offset="100%" style="stop-color: #f59e0b; stop-opacity: 0.3" />
               </radialGradient>
             </defs>
-            <circle cx="125" cy="100" r="75" fill="url(#radial1)"/>
+            <circle cx="200" cy="125" r="100" fill="url(#interactive-radial)" />
           </svg>
         </div>
-        <div class="code-block">
-          <code>&lt;radialGradient id="radial1"&gt;
-  &lt;stop offset="0%" stop-color="#fbbf24"/&gt;
-  &lt;stop offset="100%" stop-color="#f59e0b" stop-opacity="0.3"/&gt;
-&lt;/radialGradient&gt;</code>
-        </div>
-      </div>
 
-      <!-- 多色渐变 -->
-      <div class="gradient-demo">
-        <h3>多色渐变</h3>
-        <div class="svg-container">
-          <svg width="250" height="200" viewBox="0 0 250 200">
-            <defs>
-              <linearGradient id="multi1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#ef4444"/>
-                <stop offset="33%" style="stop-color:#f59e0b"/>
-                <stop offset="66%" style="stop-color:#10b981"/>
-                <stop offset="100%" style="stop-color:#3b82f6"/>
-              </linearGradient>
-            </defs>
-            <rect x="25" y="25" width="200" height="150" fill="url(#multi1)" rx="10"/>
-          </svg>
+        <div class="controls">
+          <div class="control-row">
+            <label>中心 X:</label>
+            <input id="radial-cx" type="range" value="50" min="0" max="100" />
+            <span id="cx-value" class="value-display">50%</span>
+          </div>
+          <div class="control-row">
+            <label>中心 Y:</label>
+            <input id="radial-cy" type="range" value="50" min="0" max="100" />
+            <span id="cy-value" class="value-display">50%</span>
+          </div>
+          <div class="control-row">
+            <label>半径:</label>
+            <input id="radial-r" type="range" value="50" min="10" max="100" />
+            <span id="r-value" class="value-display">50%</span>
+          </div>
+          <div class="control-row">
+            <label>内部颜色:</label>
+            <input id="radial-color1" type="color" value="#fbbf24" />
+          </div>
+          <div class="control-row">
+            <label>外部颜色:</label>
+            <input id="radial-color2" type="color" value="#f59e0b" />
+          </div>
         </div>
-        <div class="code-block">
-          <code>&lt;linearGradient id="multi1"&gt;
-  &lt;stop offset="0%" stop-color="#ef4444"/&gt;
-  &lt;stop offset="33%" stop-color="#f59e0b"/&gt;
-  &lt;stop offset="66%" stop-color="#10b981"/&gt;
-  &lt;stop offset="100%" stop-color="#3b82f6"/&gt;
-&lt;/linearGradient&gt;</code>
-        </div>
-      </div>
 
-      <!-- 对角渐变 -->
-      <div class="gradient-demo">
-        <h3>对角渐变</h3>
-        <div class="svg-container">
-          <svg width="250" height="200" viewBox="0 0 250 200">
-            <defs>
-              <linearGradient id="diagonal1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#8b5cf6"/>
-                <stop offset="100%" style="stop-color:#ec4899"/>
-              </linearGradient>
-            </defs>
-            <rect x="25" y="25" width="200" height="150" fill="url(#diagonal1)" rx="10"/>
-          </svg>
+        <div class="code-block" style="margin-top: var(--spacing-md)">
+          <code id="radial-code"
+            >&lt;radialGradient id="gradient" cx="50%" cy="50%" r="50%"&gt; &lt;stop offset="0%" stop-color="#fbbf24"
+            stop-opacity="1"/&gt; &lt;stop offset="100%" stop-color="#f59e0b" stop-opacity="0.3"/&gt;
+            &lt;/radialGradient&gt;</code
+          >
         </div>
-        <div class="code-block">
-          <code>&lt;linearGradient id="diagonal1" x1="0%" y1="0%" x2="100%" y2="100%"&gt;
-  &lt;stop offset="0%" stop-color="#8b5cf6"/&gt;
-  &lt;stop offset="100%" stop-color="#ec4899"/&gt;
-&lt;/linearGradient&gt;</code>
-        </div>
+
+        <button class="btn" onclick="copyRadialCode()" style="margin-top: var(--spacing-md)">复制代码</button>
       </div>
     </div>
 
-    <!-- 交互式渐变编辑器 -->
-    <div class="gradient-demo" style="margin-top: var(--spacing-xl);">
-      <h3>🎮 交互式线性渐变编辑器</h3>
-      <div class="svg-container">
-        <svg id="interactive-svg" width="100%" height="250" viewBox="0 0 400 250">
-          <defs>
-            <linearGradient id="interactive-gradient" x1="0%" y1="50%" x2="100%" y2="50%">
-              <stop id="stop1" offset="0%" style="stop-color:#10b981;stop-opacity:1" />
-              <stop id="stop2" offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
-            </linearGradient>
-          </defs>
-          <rect x="50" y="50" width="300" height="150" fill="url(#interactive-gradient)" rx="15"/>
-        </svg>
-      </div>
-      
-      <div class="controls">
-        <div class="control-row">
-          <label>方向 (x2):</label>
-          <input type="range" id="gradient-x2" min="0" max="100" value="100">
-          <span class="value-display" id="x2-value">100%</span>
-        </div>
-        <div class="control-row">
-          <label>方向 (y2):</label>
-          <input type="range" id="gradient-y2" min="0" max="100" value="50">
-          <span class="value-display" id="y2-value">50%</span>
-        </div>
-        <div class="control-row">
-          <label>起始颜色:</label>
-          <input type="color" id="color1" value="#10b981">
-          <label style="min-width: auto; margin-left: var(--spacing-md);">透明度:</label>
-          <input type="range" id="opacity1" min="0" max="100" value="100" style="max-width: 150px;">
-          <span class="value-display" id="opacity1-value">100%</span>
-        </div>
-        <div class="control-row">
-          <label>结束颜色:</label>
-          <input type="color" id="color2" value="#3b82f6">
-          <label style="min-width: auto; margin-left: var(--spacing-md);">透明度:</label>
-          <input type="range" id="opacity2" min="0" max="100" value="100" style="max-width: 150px;">
-          <span class="value-display" id="opacity2-value">100%</span>
-        </div>
-      </div>
+    <script>
+      (function () {
+        'use strict';
 
-      <div class="code-block" style="margin-top: var(--spacing-md);">
-        <code id="gradient-code">&lt;linearGradient id="gradient" x1="0%" y1="50%" x2="100%" y2="50%"&gt;
-  &lt;stop offset="0%" stop-color="#10b981" stop-opacity="1"/&gt;
-  &lt;stop offset="100%" stop-color="#3b82f6" stop-opacity="1"/&gt;
-&lt;/linearGradient&gt;</code>
-      </div>
+        // 线性渐变控制
+        const gradient = document.getElementById('interactive-gradient');
+        const stop1 = document.getElementById('stop1');
+        const stop2 = document.getElementById('stop2');
+        const gradientCode = document.getElementById('gradient-code');
 
-      <button class="btn" onclick="copyGradientCode()" style="margin-top: var(--spacing-md);">复制代码</button>
-    </div>
+        const x2Input = document.getElementById('gradient-x2');
+        const y2Input = document.getElementById('gradient-y2');
+        const color1Input = document.getElementById('color1');
+        const color2Input = document.getElementById('color2');
+        const opacity1Input = document.getElementById('opacity1');
+        const opacity2Input = document.getElementById('opacity2');
 
-    <!-- 径向渐变编辑器 -->
-    <div class="gradient-demo" style="margin-top: var(--spacing-xl);">
-      <h3>🎮 交互式径向渐变编辑器</h3>
-      <div class="svg-container">
-        <svg id="radial-svg" width="100%" height="250" viewBox="0 0 400 250">
-          <defs>
-            <radialGradient id="interactive-radial" cx="50%" cy="50%" r="50%">
-              <stop id="radial-stop1" offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
-              <stop id="radial-stop2" offset="100%" style="stop-color:#f59e0b;stop-opacity:0.3" />
-            </radialGradient>
-          </defs>
-          <circle cx="200" cy="125" r="100" fill="url(#interactive-radial)"/>
-        </svg>
-      </div>
-      
-      <div class="controls">
-        <div class="control-row">
-          <label>中心 X:</label>
-          <input type="range" id="radial-cx" min="0" max="100" value="50">
-          <span class="value-display" id="cx-value">50%</span>
-        </div>
-        <div class="control-row">
-          <label>中心 Y:</label>
-          <input type="range" id="radial-cy" min="0" max="100" value="50">
-          <span class="value-display" id="cy-value">50%</span>
-        </div>
-        <div class="control-row">
-          <label>半径:</label>
-          <input type="range" id="radial-r" min="10" max="100" value="50">
-          <span class="value-display" id="r-value">50%</span>
-        </div>
-        <div class="control-row">
-          <label>内部颜色:</label>
-          <input type="color" id="radial-color1" value="#fbbf24">
-        </div>
-        <div class="control-row">
-          <label>外部颜色:</label>
-          <input type="color" id="radial-color2" value="#f59e0b">
-        </div>
-      </div>
+        x2Input.addEventListener('input', updateLinearGradient);
+        y2Input.addEventListener('input', updateLinearGradient);
+        color1Input.addEventListener('input', updateLinearGradient);
+        color2Input.addEventListener('input', updateLinearGradient);
+        opacity1Input.addEventListener('input', updateLinearGradient);
+        opacity2Input.addEventListener('input', updateLinearGradient);
 
-      <div class="code-block" style="margin-top: var(--spacing-md);">
-        <code id="radial-code">&lt;radialGradient id="gradient" cx="50%" cy="50%" r="50%"&gt;
-  &lt;stop offset="0%" stop-color="#fbbf24" stop-opacity="1"/&gt;
-  &lt;stop offset="100%" stop-color="#f59e0b" stop-opacity="0.3"/&gt;
-&lt;/radialGradient&gt;</code>
-      </div>
+        function updateLinearGradient() {
+          const x2 = x2Input.value;
+          const y2 = y2Input.value;
+          const color1 = color1Input.value;
+          const color2 = color2Input.value;
+          const opacity1 = opacity1Input.value / 100;
+          const opacity2 = opacity2Input.value / 100;
 
-      <button class="btn" onclick="copyRadialCode()" style="margin-top: var(--spacing-md);">复制代码</button>
-    </div>
-  </div>
+          gradient.setAttribute('x2', x2 + '%');
+          gradient.setAttribute('y2', y2 + '%');
+          stop1.style.stopColor = color1;
+          stop1.style.stopOpacity = opacity1;
+          stop2.style.stopColor = color2;
+          stop2.style.stopOpacity = opacity2;
 
-  <script>
-    (function() {
-      'use strict';
+          document.getElementById('x2-value').textContent = x2 + '%';
+          document.getElementById('y2-value').textContent = y2 + '%';
+          document.getElementById('opacity1-value').textContent = Math.round(opacity1 * 100) + '%';
+          document.getElementById('opacity2-value').textContent = Math.round(opacity2 * 100) + '%';
 
-      // 线性渐变控制
-      const gradient = document.getElementById('interactive-gradient');
-      const stop1 = document.getElementById('stop1');
-      const stop2 = document.getElementById('stop2');
-      const gradientCode = document.getElementById('gradient-code');
-
-      const x2Input = document.getElementById('gradient-x2');
-      const y2Input = document.getElementById('gradient-y2');
-      const color1Input = document.getElementById('color1');
-      const color2Input = document.getElementById('color2');
-      const opacity1Input = document.getElementById('opacity1');
-      const opacity2Input = document.getElementById('opacity2');
-
-      x2Input.addEventListener('input', updateLinearGradient);
-      y2Input.addEventListener('input', updateLinearGradient);
-      color1Input.addEventListener('input', updateLinearGradient);
-      color2Input.addEventListener('input', updateLinearGradient);
-      opacity1Input.addEventListener('input', updateLinearGradient);
-      opacity2Input.addEventListener('input', updateLinearGradient);
-
-      function updateLinearGradient() {
-        const x2 = x2Input.value;
-        const y2 = y2Input.value;
-        const color1 = color1Input.value;
-        const color2 = color2Input.value;
-        const opacity1 = opacity1Input.value / 100;
-        const opacity2 = opacity2Input.value / 100;
-
-        gradient.setAttribute('x2', x2 + '%');
-        gradient.setAttribute('y2', y2 + '%');
-        stop1.style.stopColor = color1;
-        stop1.style.stopOpacity = opacity1;
-        stop2.style.stopColor = color2;
-        stop2.style.stopOpacity = opacity2;
-
-        document.getElementById('x2-value').textContent = x2 + '%';
-        document.getElementById('y2-value').textContent = y2 + '%';
-        document.getElementById('opacity1-value').textContent = Math.round(opacity1 * 100) + '%';
-        document.getElementById('opacity2-value').textContent = Math.round(opacity2 * 100) + '%';
-
-        gradientCode.textContent = `<linearGradient id="gradient" x1="0%" y1="50%" x2="${x2}%" y2="${y2}%">
+          gradientCode.textContent = `<linearGradient id="gradient" x1="0%" y1="50%" x2="${x2}%" y2="${y2}%">
   <stop offset="0%" stop-color="${color1}" stop-opacity="${opacity1}"/>
   <stop offset="100%" stop-color="${color2}" stop-opacity="${opacity2}"/>
 </linearGradient>`;
-      }
+        }
 
-      // 径向渐变控制
-      const radialGradient = document.getElementById('interactive-radial');
-      const radialStop1 = document.getElementById('radial-stop1');
-      const radialStop2 = document.getElementById('radial-stop2');
-      const radialCode = document.getElementById('radial-code');
+        // 径向渐变控制
+        const radialGradient = document.getElementById('interactive-radial');
+        const radialStop1 = document.getElementById('radial-stop1');
+        const radialStop2 = document.getElementById('radial-stop2');
+        const radialCode = document.getElementById('radial-code');
 
-      const cxInput = document.getElementById('radial-cx');
-      const cyInput = document.getElementById('radial-cy');
-      const rInput = document.getElementById('radial-r');
-      const radialColor1 = document.getElementById('radial-color1');
-      const radialColor2 = document.getElementById('radial-color2');
+        const cxInput = document.getElementById('radial-cx');
+        const cyInput = document.getElementById('radial-cy');
+        const rInput = document.getElementById('radial-r');
+        const radialColor1 = document.getElementById('radial-color1');
+        const radialColor2 = document.getElementById('radial-color2');
 
-      cxInput.addEventListener('input', updateRadialGradient);
-      cyInput.addEventListener('input', updateRadialGradient);
-      rInput.addEventListener('input', updateRadialGradient);
-      radialColor1.addEventListener('input', updateRadialGradient);
-      radialColor2.addEventListener('input', updateRadialGradient);
+        cxInput.addEventListener('input', updateRadialGradient);
+        cyInput.addEventListener('input', updateRadialGradient);
+        rInput.addEventListener('input', updateRadialGradient);
+        radialColor1.addEventListener('input', updateRadialGradient);
+        radialColor2.addEventListener('input', updateRadialGradient);
 
-      function updateRadialGradient() {
-        const cx = cxInput.value;
-        const cy = cyInput.value;
-        const r = rInput.value;
-        const color1 = radialColor1.value;
-        const color2 = radialColor2.value;
+        function updateRadialGradient() {
+          const cx = cxInput.value;
+          const cy = cyInput.value;
+          const r = rInput.value;
+          const color1 = radialColor1.value;
+          const color2 = radialColor2.value;
 
-        radialGradient.setAttribute('cx', cx + '%');
-        radialGradient.setAttribute('cy', cy + '%');
-        radialGradient.setAttribute('r', r + '%');
-        radialStop1.style.stopColor = color1;
-        radialStop2.style.stopColor = color2;
+          radialGradient.setAttribute('cx', cx + '%');
+          radialGradient.setAttribute('cy', cy + '%');
+          radialGradient.setAttribute('r', r + '%');
+          radialStop1.style.stopColor = color1;
+          radialStop2.style.stopColor = color2;
 
-        document.getElementById('cx-value').textContent = cx + '%';
-        document.getElementById('cy-value').textContent = cy + '%';
-        document.getElementById('r-value').textContent = r + '%';
+          document.getElementById('cx-value').textContent = cx + '%';
+          document.getElementById('cy-value').textContent = cy + '%';
+          document.getElementById('r-value').textContent = r + '%';
 
-        radialCode.textContent = `<radialGradient id="gradient" cx="${cx}%" cy="${cy}%" r="${r}%">
+          radialCode.textContent = `<radialGradient id="gradient" cx="${cx}%" cy="${cy}%" r="${r}%">
   <stop offset="0%" stop-color="${color1}" stop-opacity="1"/>
   <stop offset="100%" stop-color="${color2}" stop-opacity="0.3"/>
 </radialGradient>`;
-      }
+        }
 
-      // 全局函数
-      window.copyGradientCode = function() {
-        copyToClipboard(gradientCode.textContent);
-        showToast('线性渐变代码已复制', 'success');
-      };
+        // 全局函数
+        window.copyGradientCode = function () {
+          copyToClipboard(gradientCode.textContent);
+          showToast('线性渐变代码已复制', 'success');
+        };
 
-      window.copyRadialCode = function() {
-        copyToClipboard(radialCode.textContent);
-        showToast('径向渐变代码已复制', 'success');
-      };
-    })();
-  </script>
-</body>
+        window.copyRadialCode = function () {
+          copyToClipboard(radialCode.textContent);
+          showToast('径向渐变代码已复制', 'success');
+        };
+      })();
+    </script>
+  </body>
 </html>

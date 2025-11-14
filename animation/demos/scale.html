@@ -1,31 +1,31 @@
-﻿<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+﻿<!doctype html>
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>scale() - CSS 动画教程</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link href="../styles.css" rel="stylesheet" />
     <script type="module" src="/src/theme-sync.js"></script>
   </head>
   <body>
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1>CSS 动画教程</h1>
-        <a href="../index.html" class="back-home">← 返回首页</a>
+        <a class="back-home" href="../index.html">← 返回首页</a>
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section">
           <h3>基础概念</h3>
-          <a href="coordinate.html" class="nav-item">坐标系统</a>
+          <a class="nav-item" href="coordinate.html">坐标系统</a>
         </div>
         <div class="nav-section">
           <h3>Transform 变换</h3>
-          <a href="translate.html" class="nav-item">translate() 平移</a>
-          <a href="translateX.html" class="nav-item">translateX() X轴平移</a>
-          <a href="translateY.html" class="nav-item">translateY() Y轴平移</a>
-          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
-          <a href="scale.html" class="nav-item active">scale() 缩放</a>
-          <a href="skew.html" class="nav-item">skew() 倾斜</a>
+          <a class="nav-item" href="translate.html">translate() 平移</a>
+          <a class="nav-item" href="translateX.html">translateX() X轴平移</a>
+          <a class="nav-item" href="translateY.html">translateY() Y轴平移</a>
+          <a class="nav-item" href="rotate.html">rotate() 旋转</a>
+          <a class="nav-item active" href="scale.html">scale() 缩放</a>
+          <a class="nav-item" href="skew.html">skew() 倾斜</a>
         </div>
       </nav>
     </aside>
@@ -56,7 +56,7 @@
           <p>scale(1.5) 将元素放大到原来的 1.5 倍</p>
 
           <div class="demo-area">
-            <div class="box" id="demo-box-1">1.5x</div>
+            <div id="demo-box-1" class="box">1.5x</div>
           </div>
 
           <button class="play-button" data-demo="demo1">播放动画</button>
@@ -72,7 +72,7 @@
           <p>scale(2, 0.5) 水平放大 2 倍，垂直缩小到 0.5 倍</p>
 
           <div class="demo-area">
-            <div class="box" id="demo-box-2">2x, 0.5x</div>
+            <div id="demo-box-2" class="box">2x, 0.5x</div>
           </div>
 
           <button class="play-button" data-demo="demo2">播放动画</button>
@@ -88,7 +88,7 @@
           <p>scale(0.5) 将元素缩小到原来的一半</p>
 
           <div class="demo-area">
-            <div class="box" id="demo-box-3">0.5x</div>
+            <div id="demo-box-3" class="box">0.5x</div>
           </div>
 
           <button class="play-button" data-demo="demo3">播放动画</button>
@@ -121,7 +121,7 @@
         demo3: () => {
           const box = document.getElementById('demo-box-3');
           playTransform(box, 'scale(0.5)', 1500);
-        }
+        },
       };
 
       // 事件委托：监听所有按钮点击

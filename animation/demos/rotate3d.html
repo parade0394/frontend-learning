@@ -1,34 +1,34 @@
-﻿<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+﻿<!doctype html>
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>rotate3d() - CSS 动画教程</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link href="../styles.css" rel="stylesheet" />
     <script type="module" src="/src/theme-sync.js"></script>
   </head>
   <body>
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1>CSS 动画教程</h1>
-        <a href="../index.html" class="back-home">← 返回首页</a>
+        <a class="back-home" href="../index.html">← 返回首页</a>
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section">
           <h3>基础概念</h3>
-          <a href="coordinate.html" class="nav-item">坐标系统</a>
+          <a class="nav-item" href="coordinate.html">坐标系统</a>
         </div>
         <div class="nav-section">
           <h3>Transform 变换</h3>
-          <a href="translate.html" class="nav-item">translate() 平移</a>
-          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
-          <a href="scale.html" class="nav-item">scale() 缩放</a>
+          <a class="nav-item" href="translate.html">translate() 平移</a>
+          <a class="nav-item" href="rotate.html">rotate() 旋转</a>
+          <a class="nav-item" href="scale.html">scale() 缩放</a>
         </div>
         <div class="nav-section">
           <h3>3D 变换</h3>
-          <a href="perspective.html" class="nav-item">perspective 透视</a>
-          <a href="rotate3d.html" class="nav-item active">rotate3d() 3D旋转</a>
-          <a href="translate3d.html" class="nav-item">translate3d() 3D平移</a>
+          <a class="nav-item" href="perspective.html">perspective 透视</a>
+          <a class="nav-item active" href="rotate3d.html">rotate3d() 3D旋转</a>
+          <a class="nav-item" href="translate3d.html">translate3d() 3D平移</a>
         </div>
       </nav>
     </aside>
@@ -64,19 +64,19 @@
             <div>
               <p><strong>X 轴旋转</strong></p>
               <div class="demo-area perspective">
-                <div class="box" id="box-x" style="width: 80px; height: 80px; font-size: 14px">X轴</div>
+                <div id="box-x" class="box" style="width: 80px; height: 80px; font-size: 14px">X轴</div>
               </div>
             </div>
             <div>
               <p><strong>Y 轴旋转</strong></p>
               <div class="demo-area perspective">
-                <div class="box" id="box-y" style="width: 80px; height: 80px; font-size: 14px">Y轴</div>
+                <div id="box-y" class="box" style="width: 80px; height: 80px; font-size: 14px">Y轴</div>
               </div>
             </div>
             <div>
               <p><strong>Z 轴旋转</strong></p>
               <div class="demo-area perspective">
-                <div class="box" id="box-z" style="width: 80px; height: 80px; font-size: 14px">Z轴</div>
+                <div id="box-z" class="box" style="width: 80px; height: 80px; font-size: 14px">Z轴</div>
               </div>
             </div>
           </div>
@@ -107,7 +107,7 @@
             <div>
               <p><strong>XY 对角线</strong></p>
               <div class="demo-area perspective">
-                <div class="box" id="box-xy">XY</div>
+                <div id="box-xy" class="box">XY</div>
               </div>
               <div class="code-block" style="margin-top: 10px; font-size: 0.85rem">
                 <span class="property">rotate3d</span>(<span class="value">1, 1, 0, 180deg</span>)
@@ -116,7 +116,7 @@
             <div>
               <p><strong>XYZ 全方向</strong></p>
               <div class="demo-area perspective">
-                <div class="box" id="box-xyz">XYZ</div>
+                <div id="box-xyz" class="box">XYZ</div>
               </div>
               <div class="code-block" style="margin-top: 10px; font-size: 0.85rem">
                 <span class="property">rotate3d</span>(<span class="value">1, 1, 1, 180deg</span>)
@@ -130,12 +130,14 @@
           <p>创建立体旋转效果</p>
 
           <div class="demo-area perspective">
-            <div class="box" id="box-continuous" style="animation: none">3D</div>
+            <div id="box-continuous" class="box" style="animation: none">3D</div>
           </div>
 
           <button class="play-button" data-demo="demo3">播放连续旋转</button>
 
-          <pre class="code-block"><code><span class="keyword">@keyframes</span> <span class="value">rotate3d-animation</span> {
+          <pre
+            class="code-block"
+          ><code><span class="keyword">@keyframes</span> <span class="value">rotate3d-animation</span> {
   <span class="keyword">0%</span> {
     <span class="property">transform</span>: <span class="value">rotate3d(1, 1, 1, 0deg)</span>;
   }
@@ -158,15 +160,9 @@
     <script type="module">
       // 使用事件委托，避免全局命名冲突
       const demos = {
-        demo1: (param) => {
-
-        },
-        demo2: (param) => {
-
-        },
-        demo3: (param) => {
-
-        }
+        demo1: (param) => {},
+        demo2: (param) => {},
+        demo3: (param) => {},
       };
 
       // 事件委托：监听所有点击

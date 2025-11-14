@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Demo 7: 弹性尺寸</title>
-        <link rel="stylesheet" href="/src/styles/common.css">
+    <link href="/src/styles/common.css" rel="stylesheet" />
     <!-- 防止主题闪烁 -->
     <script>
-      (function() {
+      (function () {
         try {
           const theme = localStorage.getItem('themeMode') || 'light';
           const color = localStorage.getItem('primaryColor') || '#10b981';
@@ -22,168 +22,172 @@
     </script>
     <script type="module" src="/src/theme-sync.js"></script>
     <style>
-        /* 主题适配 */
-        body {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
-        .container {
-            background: var(--card-bg);
-            color: var(--text-primary);
-        }
-        
-        h1, h2 {
-            color: var(--text-primary);
-        }
-        
-        .description {
-            color: var(--text-secondary);
-        }
-        
-        .code-block {
-            background: var(--gray-800);
-            color: var(--gray-200);
-            border: 1px solid var(--gray-700);
-        }
-        
-        .syntax-note, .info-box {
-            background: var(--primary-light);
-            border-left-color: var(--primary);
-            color: var(--text-primary);
-        }
-        
-        .syntax-note code, .info-box code {
-            background: var(--bg-primary);
-            color: var(--primary);
-        }
+      /* 主题适配 */
+      body {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      .container {
+        background: var(--card-bg);
+        color: var(--text-primary);
+      }
+
+      h1,
+      h2 {
+        color: var(--text-primary);
+      }
+
+      .description {
+        color: var(--text-secondary);
+      }
+
+      .code-block {
+        background: var(--gray-800);
+        color: var(--gray-200);
+        border: 1px solid var(--gray-700);
+      }
+
+      .syntax-note,
+      .info-box {
+        background: var(--primary-light);
+        border-left-color: var(--primary);
+        color: var(--text-primary);
+      }
+
+      .syntax-note code,
+      .info-box code {
+        background: var(--bg-primary);
+        color: var(--primary);
+      }
     </style>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background: var(--bg-secondary);
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 8px;
-        }
-        
-        h1 {
-            color: var(--text-primary);
-            margin-bottom: 10px;
-        }
-        
-        .description {
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-        
-        .code-block {
-            background: var(--gray-800);
-            color: var(--gray-200);
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 30px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.6;
-            overflow-x: auto;
-        }
-        
-        .code-block .keyword {
-            color: #e74c3c;
-        }
-        
-        .code-block .value {
-            color: var(--primary);
-        }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: minmax(100px, 200px) minmax(150px, 1fr) minmax(100px, 300px);
-            gap: 15px;
-            background: var(--bg-secondary);
-            padding: 15px;
-        }
-        
-        .item {
-            background: #e67e22;
-            color: white;
-            padding: 30px 20px;
-            text-align: center;
-            min-height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-        
-        .item small {
-            display: block;
-            margin-top: 10px;
-            font-size: 12px;
-            opacity: 0.9;
-        }
-        
-        .back-link {
-            display: inline-block;
-            margin-top: 30px;
-            color: var(--primary);
-            text-decoration: none;
-        }
-        
-        code {
-            background: #f8f9fa;
-            padding: 2px 6px;
-            border-radius: 3px;
-            color: #e74c3c;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <a href="index.html" class="back-link">← 返回 Grid 教程</a>
-        
-        <h1>Demo 7: 弹性尺寸 - minmax()</h1>
-        <div class="description">
-            <p><strong>知识点：</strong>使用 <code>minmax(最小值, 最大值)</code> 定义弹性尺寸。</p>
-            <p>列1：<code>minmax(100px, 200px)</code> - 最小100px，最大200px</p>
-            <p>列2：<code>minmax(150px, 1fr)</code> - 最小150px，最大占据剩余空间</p>
-            <p>列3：<code>minmax(100px, 300px)</code> - 最小100px，最大300px</p>
-            <p>试着调整窗口大小，观察列宽变化！</p>
-        </div>
-        
-        <div class="code-block">
-.grid {<br>
-&nbsp;&nbsp;<span class="keyword">grid-template-columns</span>: <br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="value">minmax(100px, 200px)</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="value">minmax(150px, 1fr)</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="value">minmax(100px, 300px)</span>;<br>
-}
-        </div>
-        
-        <div class="grid">
-            <div class="item">
-                列 1
-                <small>100-200px</small>
-            </div>
-            <div class="item">
-                列 2
-                <small>150px-1fr</small>
-            </div>
-            <div class="item">
-                列 3
-                <small>100-300px</small>
-            </div>
-        </div>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: var(--bg-secondary);
+      }
 
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: var(--card-bg);
+        padding: 30px;
+        border-radius: 8px;
+      }
+
+      h1 {
+        color: var(--text-primary);
+        margin-bottom: 10px;
+      }
+
+      .description {
+        color: var(--text-secondary);
+        margin-bottom: 30px;
+        line-height: 1.6;
+      }
+
+      .code-block {
+        background: var(--gray-800);
+        color: var(--gray-200);
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 30px;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        overflow-x: auto;
+      }
+
+      .code-block .keyword {
+        color: #e74c3c;
+      }
+
+      .code-block .value {
+        color: var(--primary);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: minmax(100px, 200px) minmax(150px, 1fr) minmax(100px, 300px);
+        gap: 15px;
+        background: var(--bg-secondary);
+        padding: 15px;
+      }
+
+      .item {
+        background: #e67e22;
+        color: white;
+        padding: 30px 20px;
+        text-align: center;
+        min-height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      .item small {
+        display: block;
+        margin-top: 10px;
+        font-size: 12px;
+        opacity: 0.9;
+      }
+
+      .back-link {
+        display: inline-block;
+        margin-top: 30px;
+        color: var(--primary);
+        text-decoration: none;
+      }
+
+      code {
+        background: #f8f9fa;
+        padding: 2px 6px;
+        border-radius: 3px;
+        color: #e74c3c;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a class="back-link" href="index.html">← 返回 Grid 教程</a>
+
+      <h1>Demo 7: 弹性尺寸 - minmax()</h1>
+      <div class="description">
+        <p><strong>知识点：</strong>使用 <code>minmax(最小值, 最大值)</code> 定义弹性尺寸。</p>
+        <p>列1：<code>minmax(100px, 200px)</code> - 最小100px，最大200px</p>
+        <p>列2：<code>minmax(150px, 1fr)</code> - 最小150px，最大占据剩余空间</p>
+        <p>列3：<code>minmax(100px, 300px)</code> - 最小100px，最大300px</p>
+        <p>试着调整窗口大小，观察列宽变化！</p>
+      </div>
+
+      <div class="code-block">
+        .grid {<br />
+        &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>: <br />
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="value">minmax(100px, 200px)</span><br />
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="value">minmax(150px, 1fr)</span><br />
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="value">minmax(100px, 300px)</span>;<br />
+        }
+      </div>
+
+      <div class="grid">
+        <div class="item">
+          列 1
+          <small>100-200px</small>
+        </div>
+        <div class="item">
+          列 2
+          <small>150px-1fr</small>
+        </div>
+        <div class="item">
+          列 3
+          <small>100-300px</small>
+        </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

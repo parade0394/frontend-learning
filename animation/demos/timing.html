@@ -1,34 +1,34 @@
-﻿<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+﻿<!doctype html>
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>transition-timing-function - CSS 动画教程</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link href="../styles.css" rel="stylesheet" />
     <script type="module" src="/src/theme-sync.js"></script>
   </head>
   <body>
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1>CSS 动画教程</h1>
-        <a href="../index.html" class="back-home">← 返回首页</a>
+        <a class="back-home" href="../index.html">← 返回首页</a>
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section">
           <h3>基础概念</h3>
-          <a href="coordinate.html" class="nav-item">坐标系统</a>
+          <a class="nav-item" href="coordinate.html">坐标系统</a>
         </div>
         <div class="nav-section">
           <h3>Transform 变换</h3>
-          <a href="translate.html" class="nav-item">translate() 平移</a>
-          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
-          <a href="scale.html" class="nav-item">scale() 缩放</a>
+          <a class="nav-item" href="translate.html">translate() 平移</a>
+          <a class="nav-item" href="rotate.html">rotate() 旋转</a>
+          <a class="nav-item" href="scale.html">scale() 缩放</a>
         </div>
         <div class="nav-section">
           <h3>Transition 过渡</h3>
-          <a href="duration.html" class="nav-item">transition-duration</a>
-          <a href="timing.html" class="nav-item active">transition-timing-function</a>
-          <a href="delay.html" class="nav-item">transition-delay</a>
+          <a class="nav-item" href="duration.html">transition-duration</a>
+          <a class="nav-item active" href="timing.html">transition-timing-function</a>
+          <a class="nav-item" href="delay.html">transition-delay</a>
         </div>
       </nav>
     </aside>
@@ -64,35 +64,35 @@
             <div>
               <p><strong>linear - 匀速</strong></p>
               <div class="demo-area">
-                <div class="box" id="box-linear" style="transition: transform 1.5s linear">linear</div>
+                <div id="box-linear" class="box" style="transition: transform 1.5s linear">linear</div>
               </div>
             </div>
 
             <div>
               <p><strong>ease - 默认（慢-快-慢）</strong></p>
               <div class="demo-area">
-                <div class="box" id="box-ease" style="transition: transform 1.5s ease">ease</div>
+                <div id="box-ease" class="box" style="transition: transform 1.5s ease">ease</div>
               </div>
             </div>
 
             <div>
               <p><strong>ease-in - 慢速开始</strong></p>
               <div class="demo-area">
-                <div class="box" id="box-ease-in" style="transition: transform 1.5s ease-in">ease-in</div>
+                <div id="box-ease-in" class="box" style="transition: transform 1.5s ease-in">ease-in</div>
               </div>
             </div>
 
             <div>
               <p><strong>ease-out - 慢速结束</strong></p>
               <div class="demo-area">
-                <div class="box" id="box-ease-out" style="transition: transform 1.5s ease-out">ease-out</div>
+                <div id="box-ease-out" class="box" style="transition: transform 1.5s ease-out">ease-out</div>
               </div>
             </div>
 
             <div>
               <p><strong>ease-in-out - 慢速开始和结束</strong></p>
               <div class="demo-area">
-                <div class="box" id="box-ease-in-out" style="transition: transform 1.5s ease-in-out">ease-in-out</div>
+                <div id="box-ease-in-out" class="box" style="transition: transform 1.5s ease-in-out">ease-in-out</div>
               </div>
             </div>
           </div>
@@ -135,9 +135,7 @@
     <script type="module">
       // 使用事件委托，避免全局命名冲突
       const demos = {
-        all: (param) => {
-
-        }
+        all: (param) => {},
       };
 
       // 事件委托：监听所有点击

@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+﻿<!doctype html>
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>translateZ() - CSS 动画教程</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link href="../styles.css" rel="stylesheet" />
     <script type="module" src="/src/theme-sync.js"></script>
     <style>
       /* 演示 1：基础 Z 轴移动 */
@@ -182,22 +182,22 @@
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1>CSS 动画教程</h1>
-        <a href="../index.html" class="back-home">← 返回首页</a>
+        <a class="back-home" href="../index.html">← 返回首页</a>
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section">
           <h3>基础概念</h3>
-          <a href="coordinate.html" class="nav-item">坐标系统</a>
+          <a class="nav-item" href="coordinate.html">坐标系统</a>
         </div>
         <div class="nav-section">
           <h3>Transform 变换</h3>
-          <a href="translate.html" class="nav-item">translate() 平移</a>
-          <a href="translateX.html" class="nav-item">translateX() X轴平移</a>
-          <a href="translateY.html" class="nav-item">translateY() Y轴平移</a>
-          <a href="translateZ.html" class="nav-item active">translateZ() Z轴平移</a>
-          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
-          <a href="scale.html" class="nav-item">scale() 缩放</a>
-          <a href="skew.html" class="nav-item">skew() 倾斜</a>
+          <a class="nav-item" href="translate.html">translate() 平移</a>
+          <a class="nav-item" href="translateX.html">translateX() X轴平移</a>
+          <a class="nav-item" href="translateY.html">translateY() Y轴平移</a>
+          <a class="nav-item active" href="translateZ.html">translateZ() Z轴平移</a>
+          <a class="nav-item" href="rotate.html">rotate() 旋转</a>
+          <a class="nav-item" href="scale.html">scale() 缩放</a>
+          <a class="nav-item" href="skew.html">skew() 倾斜</a>
         </div>
       </nav>
     </aside>
@@ -312,15 +312,15 @@
 
           <div class="demo-area">
             <div class="perspective-container" style="min-height: 300px">
-              <div class="z-box" id="interactiveBox" style="transform: translateZ(0px)">
+              <div id="interactiveBox" class="z-box" style="transform: translateZ(0px)">
                 <span id="zValue">0px</span>
               </div>
             </div>
 
             <div class="slider-container">
               <label for="zSlider">translateZ 值：</label>
-              <span class="value-display" id="sliderValue">0px</span>
-              <input type="range" id="zSlider" class="slider" min="-200" max="200" value="0" />
+              <span id="sliderValue" class="value-display">0px</span>
+              <input id="zSlider" class="slider" type="range" value="0" min="-200" max="200" />
             </div>
           </div>
 
@@ -328,7 +328,10 @@
             <p><strong>💡 重要说明：</strong></p>
             <ul>
               <li><strong>必须配合 perspective：</strong>父元素必须设置 perspective，否则看不到效果</li>
-              <li><strong>正值 vs 负值：</strong>正值（如 100px）向前移动，看起来更大；负值（如 -100px）向后移动，看起来更小</li>
+              <li>
+                <strong>正值 vs 负值：</strong>正值（如 100px）向前移动，看起来更大；负值（如
+                -100px）向后移动，看起来更小
+              </li>
               <li>
                 <strong>与 translate3d() 的关系：</strong><code>translateZ(100px)</code> =
                 <code>translate3d(0, 0, 100px)</code>

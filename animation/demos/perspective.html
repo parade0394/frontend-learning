@@ -1,34 +1,34 @@
-﻿<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+﻿<!doctype html>
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>perspective - CSS 动画教程</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link href="../styles.css" rel="stylesheet" />
     <script type="module" src="/src/theme-sync.js"></script>
   </head>
   <body>
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1>CSS 动画教程</h1>
-        <a href="../index.html" class="back-home">← 返回首页</a>
+        <a class="back-home" href="../index.html">← 返回首页</a>
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section">
           <h3>基础概念</h3>
-          <a href="coordinate.html" class="nav-item">坐标系统</a>
+          <a class="nav-item" href="coordinate.html">坐标系统</a>
         </div>
         <div class="nav-section">
           <h3>Transform 变换</h3>
-          <a href="translate.html" class="nav-item">translate() 平移</a>
-          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
-          <a href="scale.html" class="nav-item">scale() 缩放</a>
+          <a class="nav-item" href="translate.html">translate() 平移</a>
+          <a class="nav-item" href="rotate.html">rotate() 旋转</a>
+          <a class="nav-item" href="scale.html">scale() 缩放</a>
         </div>
         <div class="nav-section">
           <h3>3D 变换</h3>
-          <a href="perspective.html" class="nav-item active">perspective 透视</a>
-          <a href="rotate3d.html" class="nav-item">rotate3d() 3D旋转</a>
-          <a href="translate3d.html" class="nav-item">translate3d() 3D平移</a>
+          <a class="nav-item active" href="perspective.html">perspective 透视</a>
+          <a class="nav-item" href="rotate3d.html">rotate3d() 3D旋转</a>
+          <a class="nav-item" href="translate3d.html">translate3d() 3D平移</a>
         </div>
       </nav>
     </aside>
@@ -40,7 +40,10 @@
 
         <section class="section">
           <h2>什么是透视？</h2>
-          <p>透视（perspective）定义了观察者与 3D 元素之间的距离。它让元素产生近大远小的视觉效果，是实现真实 3D 效果的关键。</p>
+          <p>
+            透视（perspective）定义了观察者与 3D 元素之间的距离。它让元素产生近大远小的视觉效果，是实现真实 3D
+            效果的关键。
+          </p>
 
           <ul>
             <li><strong>值越小：</strong>透视效果越强烈（观察者离得越近）</li>
@@ -60,13 +63,13 @@
             <div>
               <p><strong>无透视</strong></p>
               <div class="demo-area">
-                <div class="box" id="box-no-perspective">无透视</div>
+                <div id="box-no-perspective" class="box">无透视</div>
               </div>
             </div>
             <div>
               <p><strong>有透视 (800px)</strong></p>
               <div class="demo-area perspective">
-                <div class="box" id="box-with-perspective">有透视</div>
+                <div id="box-with-perspective" class="box">有透视</div>
               </div>
             </div>
           </div>
@@ -96,19 +99,19 @@
             <div>
               <p><strong>300px（近）</strong></p>
               <div class="demo-area" style="perspective: 300px">
-                <div class="box" id="box-p300" style="width: 80px; height: 80px; font-size: 14px">300px</div>
+                <div id="box-p300" class="box" style="width: 80px; height: 80px; font-size: 14px">300px</div>
               </div>
             </div>
             <div>
               <p><strong>800px（中）</strong></p>
               <div class="demo-area" style="perspective: 800px">
-                <div class="box" id="box-p800" style="width: 80px; height: 80px; font-size: 14px">800px</div>
+                <div id="box-p800" class="box" style="width: 80px; height: 80px; font-size: 14px">800px</div>
               </div>
             </div>
             <div>
               <p><strong>1500px（远）</strong></p>
               <div class="demo-area" style="perspective: 1500px">
-                <div class="box" id="box-p1500" style="width: 80px; height: 80px; font-size: 14px">1500px</div>
+                <div id="box-p1500" class="box" style="width: 80px; height: 80px; font-size: 14px">1500px</div>
               </div>
             </div>
           </div>
@@ -127,8 +130,15 @@
           <div class="demo-area perspective">
             <div
               id="card-container"
-              style="width: 200px; height: 150px; position: relative; transform-style: preserve-3d; transition: transform 0.8s; cursor: pointer"
               data-action="flip"
+              style="
+                width: 200px;
+                height: 150px;
+                position: relative;
+                transform-style: preserve-3d;
+                transition: transform 0.8s;
+                cursor: pointer;
+              "
             >
               <div
                 style="
@@ -234,7 +244,7 @@
               box.style.transform = 'none';
             });
           }, 1500);
-        }
+        },
       };
 
       // 卡片翻转状态

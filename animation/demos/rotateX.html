@@ -1,33 +1,33 @@
-﻿<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+﻿<!doctype html>
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>rotateX() - CSS 动画教程</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link href="../styles.css" rel="stylesheet" />
     <script type="module" src="/src/theme-sync.js"></script>
   </head>
   <body>
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1>CSS 动画教程</h1>
-        <a href="../index.html" class="back-home">← 返回首页</a>
+        <a class="back-home" href="../index.html">← 返回首页</a>
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section">
           <h3>基础概念</h3>
-          <a href="coordinate.html" class="nav-item">坐标系统</a>
+          <a class="nav-item" href="coordinate.html">坐标系统</a>
         </div>
         <div class="nav-section">
           <h3>Transform 变换</h3>
-          <a href="translate.html" class="nav-item">translate() 平移</a>
-          <a href="translateX.html" class="nav-item">translateX() X轴平移</a>
-          <a href="translateY.html" class="nav-item">translateY() Y轴平移</a>
-          <a href="rotate.html" class="nav-item">rotate() 旋转</a>
-          <a href="rotateX.html" class="nav-item active">rotateX() X轴旋转</a>
-          <a href="rotateY.html" class="nav-item">rotateY() Y轴旋转</a>
-          <a href="scale.html" class="nav-item">scale() 缩放</a>
-          <a href="skew.html" class="nav-item">skew() 倾斜</a>
+          <a class="nav-item" href="translate.html">translate() 平移</a>
+          <a class="nav-item" href="translateX.html">translateX() X轴平移</a>
+          <a class="nav-item" href="translateY.html">translateY() Y轴平移</a>
+          <a class="nav-item" href="rotate.html">rotate() 旋转</a>
+          <a class="nav-item active" href="rotateX.html">rotateX() X轴旋转</a>
+          <a class="nav-item" href="rotateY.html">rotateY() Y轴旋转</a>
+          <a class="nav-item" href="scale.html">scale() 缩放</a>
+          <a class="nav-item" href="skew.html">skew() 倾斜</a>
         </div>
       </nav>
     </aside>
@@ -56,7 +56,7 @@
           <p>rotateX(60deg) 让元素顶部向后倾斜</p>
 
           <div class="demo-area perspective">
-            <div class="box" id="demo-box-1">60°</div>
+            <div id="demo-box-1" class="box">60°</div>
           </div>
 
           <button class="play-button" data-demo="demo1">播放动画</button>
@@ -75,7 +75,7 @@
           <p>rotateX(180deg) 完全翻转元素</p>
 
           <div class="demo-area perspective">
-            <div class="box" id="demo-box-2">180°</div>
+            <div id="demo-box-2" class="box">180°</div>
           </div>
 
           <button class="play-button" data-demo="demo2">播放动画</button>
@@ -91,7 +91,7 @@
           <p>使用负值让顶部向前旋转</p>
 
           <div class="demo-area perspective">
-            <div class="box" id="demo-box-3">-45°</div>
+            <div id="demo-box-3" class="box">-45°</div>
           </div>
 
           <button class="play-button" data-demo="demo3">播放动画</button>
@@ -124,7 +124,7 @@
         demo3: () => {
           const box = document.getElementById('demo-box-3');
           playTransform(box, 'rotateX(-45deg)', 1500);
-        }
+        },
       };
 
       // 事件委托：监听所有按钮点击

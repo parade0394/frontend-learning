@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Demo 3: 网格间距</title>
-        <link rel="stylesheet" href="/src/styles/common.css">
+    <link href="/src/styles/common.css" rel="stylesheet" />
     <!-- 防止主题闪烁 -->
     <script>
-      (function() {
+      (function () {
         try {
           const theme = localStorage.getItem('themeMode') || 'light';
           const color = localStorage.getItem('primaryColor') || '#10b981';
@@ -22,148 +22,152 @@
     </script>
     <script type="module" src="/src/theme-sync.js"></script>
     <style>
-        /* 主题适配 */
-        body {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
-        .container {
-            background: var(--card-bg);
-            color: var(--text-primary);
-        }
-        
-        h1, h2 {
-            color: var(--text-primary);
-        }
-        
-        .description {
-            color: var(--text-secondary);
-        }
-        
-        .code-block {
-            background: var(--gray-800);
-            color: var(--gray-200);
-            border: 1px solid var(--gray-700);
-        }
-        
-        .syntax-note, .info-box {
-            background: var(--primary-light);
-            border-left-color: var(--primary);
-            color: var(--text-primary);
-        }
-        
-        .syntax-note code, .info-box code {
-            background: var(--bg-primary);
-            color: var(--primary);
-        }
+      /* 主题适配 */
+      body {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      .container {
+        background: var(--card-bg);
+        color: var(--text-primary);
+      }
+
+      h1,
+      h2 {
+        color: var(--text-primary);
+      }
+
+      .description {
+        color: var(--text-secondary);
+      }
+
+      .code-block {
+        background: var(--gray-800);
+        color: var(--gray-200);
+        border: 1px solid var(--gray-700);
+      }
+
+      .syntax-note,
+      .info-box {
+        background: var(--primary-light);
+        border-left-color: var(--primary);
+        color: var(--text-primary);
+      }
+
+      .syntax-note code,
+      .info-box code {
+        background: var(--bg-primary);
+        color: var(--primary);
+      }
     </style>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background: var(--bg-secondary);
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 8px;
-        }
-        
-        h1 {
-            color: var(--text-primary);
-            margin-bottom: 10px;
-        }
-        
-        .description {
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-        
-        .code-block {
-            background: var(--gray-800);
-            color: var(--gray-200);
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 30px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.6;
-            overflow-x: auto;
-        }
-        
-        .code-block .keyword {
-            color: #e74c3c;
-        }
-        
-        .code-block .value {
-            color: var(--primary);
-        }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            background: var(--bg-secondary);
-            padding: 20px;
-        }
-        
-        .item {
-            background: #e74c3c;
-            color: white;
-            padding: 30px;
-            text-align: center;
-            font-size: 18px;
-        }
-        
-        .back-link {
-            display: inline-block;
-            margin-top: 30px;
-            color: var(--primary);
-            text-decoration: none;
-        }
-        
-        code {
-            background: #f8f9fa;
-            padding: 2px 6px;
-            border-radius: 3px;
-            color: #e74c3c;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <a href="index.html" class="back-link">← 返回 Grid 教程</a>
-        
-        <h1>Demo 3: 网格间距 - gap</h1>
-        <div class="description">
-            <p><strong>知识点：</strong>使用 <code>gap</code> 设置网格项之间的间距。</p>
-            <p>可以分别设置：<code>row-gap</code> 和 <code>column-gap</code>，或使用简写 <code>gap: 20px</code></p>
-            <p>本例使用 <code>repeat(3, 1fr)</code> 创建3个等宽列，<code>1fr</code> 表示可用空间的一份。</p>
-        </div>
-        
-        <div class="code-block">
-.grid {<br>
-&nbsp;&nbsp;<span class="keyword">display</span>: <span class="value">grid</span>;<br>
-&nbsp;&nbsp;<span class="keyword">grid-template-columns</span>: <span class="value">repeat(3, 1fr)</span>;<br>
-&nbsp;&nbsp;<span class="keyword">gap</span>: <span class="value">20px</span>;<br>
-}
-        </div>
-        
-        <div class="grid">
-            <div class="item">1</div>
-            <div class="item">2</div>
-            <div class="item">3</div>
-            <div class="item">4</div>
-            <div class="item">5</div>
-            <div class="item">6</div>
-        </div>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: var(--bg-secondary);
+      }
 
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: var(--card-bg);
+        padding: 30px;
+        border-radius: 8px;
+      }
+
+      h1 {
+        color: var(--text-primary);
+        margin-bottom: 10px;
+      }
+
+      .description {
+        color: var(--text-secondary);
+        margin-bottom: 30px;
+        line-height: 1.6;
+      }
+
+      .code-block {
+        background: var(--gray-800);
+        color: var(--gray-200);
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 30px;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        overflow-x: auto;
+      }
+
+      .code-block .keyword {
+        color: #e74c3c;
+      }
+
+      .code-block .value {
+        color: var(--primary);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        background: var(--bg-secondary);
+        padding: 20px;
+      }
+
+      .item {
+        background: #e74c3c;
+        color: white;
+        padding: 30px;
+        text-align: center;
+        font-size: 18px;
+      }
+
+      .back-link {
+        display: inline-block;
+        margin-top: 30px;
+        color: var(--primary);
+        text-decoration: none;
+      }
+
+      code {
+        background: #f8f9fa;
+        padding: 2px 6px;
+        border-radius: 3px;
+        color: #e74c3c;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a class="back-link" href="index.html">← 返回 Grid 教程</a>
+
+      <h1>Demo 3: 网格间距 - gap</h1>
+      <div class="description">
+        <p><strong>知识点：</strong>使用 <code>gap</code> 设置网格项之间的间距。</p>
+        <p>可以分别设置：<code>row-gap</code> 和 <code>column-gap</code>，或使用简写 <code>gap: 20px</code></p>
+        <p>本例使用 <code>repeat(3, 1fr)</code> 创建3个等宽列，<code>1fr</code> 表示可用空间的一份。</p>
+      </div>
+
+      <div class="code-block">
+        .grid {<br />
+        &nbsp;&nbsp;<span class="keyword">display</span>: <span class="value">grid</span>;<br />
+        &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>: <span class="value">repeat(3, 1fr)</span>;<br />
+        &nbsp;&nbsp;<span class="keyword">gap</span>: <span class="value">20px</span>;<br />
+        }
+      </div>
+
+      <div class="grid">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+        <div class="item">4</div>
+        <div class="item">5</div>
+        <div class="item">6</div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

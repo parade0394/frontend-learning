@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Demo 2: 定义列和行</title>
-        <link rel="stylesheet" href="/src/styles/common.css">
+    <link href="/src/styles/common.css" rel="stylesheet" />
     <!-- 防止主题闪烁 -->
     <script>
-      (function() {
+      (function () {
         try {
           const theme = localStorage.getItem('themeMode') || 'light';
           const color = localStorage.getItem('primaryColor') || '#10b981';
@@ -22,42 +22,47 @@
     </script>
     <script type="module" src="/src/theme-sync.js"></script>
     <style>
-        /* 主题适配 */
-        body {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
-        .container {
-            background: var(--card-bg);
-            color: var(--text-primary);
-        }
-        
-        h1, h2 {
-            color: var(--text-primary);
-        }
-        
-        .description {
-            color: var(--text-secondary);
-        }
-        
-        .code-block {
-            background: var(--gray-800);
-            color: var(--gray-200);
-            border: 1px solid var(--gray-700);
-        }
-        
-        .syntax-note, .info-box {
-            background: var(--primary-light);
-            border-left-color: var(--primary);
-            color: var(--text-primary);
-        }
-        
-        .syntax-note code, .info-box code {
-            background: var(--bg-primary);
-            color: var(--primary);
-        }
+      /* 主题适配 */
+      body {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      .container {
+        background: var(--card-bg);
+        color: var(--text-primary);
+      }
+
+      h1,
+      h2 {
+        color: var(--text-primary);
+      }
+
+      .description {
+        color: var(--text-secondary);
+      }
+
+      .code-block {
+        background: var(--gray-800);
+        color: var(--gray-200);
+        border: 1px solid var(--gray-700);
+      }
+
+      .syntax-note,
+      .info-box {
+        background: var(--primary-light);
+        border-left-color: var(--primary);
+        color: var(--text-primary);
+      }
+
+      .syntax-note code,
+      .info-box code {
+        background: var(--bg-primary);
+        color: var(--primary);
+      }
     </style>
     <style>
       body {
@@ -198,7 +203,7 @@
       }
 
       .syntax-note {
-        background: var(--card-bg)3cd;
+        background: var(--card-bg) 3cd;
         border-left: 4px solid var(--primary);
         padding: 15px;
         margin: 15px 0;
@@ -223,18 +228,22 @@
   </head>
   <body>
     <div class="container">
-        <a href="index.html" class="back-link">← 返回 Grid 教程</a>
-        
+      <a class="back-link" href="index.html">← 返回 Grid 教程</a>
+
       <h1>Demo 2: 定义列和行</h1>
       <div class="description">
-        <p><strong>知识点：</strong>使用 <code>grid-template-columns</code> 和 <code>grid-template-rows</code> 定义网格的列和行。</p>
+        <p>
+          <strong>知识点：</strong>使用 <code>grid-template-columns</code> 和
+          <code>grid-template-rows</code> 定义网格的列和行。
+        </p>
         <p>本例：3列（100px, 200px, 100px），2行（80px, 120px）</p>
       </div>
 
       <div class="code-block">
         .grid {<br />
         &nbsp;&nbsp;<span class="keyword">display</span>: <span class="value">grid</span>;<br />
-        &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>: <span class="value">100px 200px 100px</span>;<br />
+        &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>:
+        <span class="value">100px 200px 100px</span>;<br />
         &nbsp;&nbsp;<span class="keyword">grid-template-rows</span>: <span class="value">80px 120px</span>;<br />
         }
       </div>
@@ -342,14 +351,16 @@
         <span class="keyword">grid-template-columns</span>: <span class="value">repeat(3, 1fr)</span>;<br /><br />
         /* auto-fill / auto-fit */<br />
         <span class="keyword">grid-template-columns</span>: <span class="value">repeat(auto-fill, 100px)</span>;<br />
-        <span class="keyword">grid-template-columns</span>: <span class="value">repeat(auto-fit, minmax(200px, 1fr))</span>;<br /><br />
+        <span class="keyword">grid-template-columns</span>:
+        <span class="value">repeat(auto-fit, minmax(200px, 1fr))</span>;<br /><br />
         /* 命名网格线 */<br />
-        <span class="keyword">grid-template-columns</span>: <span class="value">[line-name] 100px [line-name2]</span>;<br /><br />
+        <span class="keyword">grid-template-columns</span>:
+        <span class="value">[line-name] 100px [line-name2]</span>;<br /><br />
         /* 混合使用 */<br />
-        <span class="keyword">grid-template-columns</span>: <span class="value">200px repeat(auto-fill, 100px) 300px</span>;<br />
+        <span class="keyword">grid-template-columns</span>:
+        <span class="value">200px repeat(auto-fill, 100px) 300px</span>;<br />
         <span class="keyword">grid-template-columns</span>: <span class="value">100px 1fr 2fr 100px</span>;
       </div>
-
     </div>
   </body>
 </html>

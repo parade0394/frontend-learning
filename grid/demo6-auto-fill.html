@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Demo 6: 自动填充</title>
-        <link rel="stylesheet" href="/src/styles/common.css">
+    <link href="/src/styles/common.css" rel="stylesheet" />
     <!-- 防止主题闪烁 -->
     <script>
-      (function() {
+      (function () {
         try {
           const theme = localStorage.getItem('themeMode') || 'light';
           const color = localStorage.getItem('primaryColor') || '#10b981';
@@ -22,42 +22,47 @@
     </script>
     <script type="module" src="/src/theme-sync.js"></script>
     <style>
-        /* 主题适配 */
-        body {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
-        .container {
-            background: var(--card-bg);
-            color: var(--text-primary);
-        }
-        
-        h1, h2 {
-            color: var(--text-primary);
-        }
-        
-        .description {
-            color: var(--text-secondary);
-        }
-        
-        .code-block {
-            background: var(--gray-800);
-            color: var(--gray-200);
-            border: 1px solid var(--gray-700);
-        }
-        
-        .syntax-note, .info-box {
-            background: var(--primary-light);
-            border-left-color: var(--primary);
-            color: var(--text-primary);
-        }
-        
-        .syntax-note code, .info-box code {
-            background: var(--bg-primary);
-            color: var(--primary);
-        }
+      /* 主题适配 */
+      body {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      .container {
+        background: var(--card-bg);
+        color: var(--text-primary);
+      }
+
+      h1,
+      h2 {
+        color: var(--text-primary);
+      }
+
+      .description {
+        color: var(--text-secondary);
+      }
+
+      .code-block {
+        background: var(--gray-800);
+        color: var(--gray-200);
+        border: 1px solid var(--gray-700);
+      }
+
+      .syntax-note,
+      .info-box {
+        background: var(--primary-light);
+        border-left-color: var(--primary);
+        color: var(--text-primary);
+      }
+
+      .syntax-note code,
+      .info-box code {
+        background: var(--bg-primary);
+        color: var(--primary);
+      }
     </style>
     <style>
       body {
@@ -162,7 +167,7 @@
       }
 
       .explanation-box {
-        background: var(--card-bg)3cd;
+        background: var(--card-bg) 3cd;
         border: 2px solid #ffc107;
         border-radius: 8px;
         padding: 20px;
@@ -271,8 +276,8 @@
   </head>
   <body>
     <div class="container">
-        <a href="index.html" class="back-link">← 返回 Grid 教程</a>
-        
+      <a class="back-link" href="index.html">← 返回 Grid 教程</a>
+
       <h1>Demo 6: 自动填充 - auto-fill & auto-fit</h1>
       <div class="description">
         <p><strong>知识点：</strong>使用 <code>auto-fill</code> 和 <code>auto-fit</code> 创建响应式网格。</p>
@@ -284,12 +289,14 @@
       <div class="code-block">
         /* auto-fill */<br />
         .grid {<br />
-        &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>: <span class="value">repeat(auto-fill, minmax(150px, 1fr))</span>;<br />
+        &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>:
+        <span class="value">repeat(auto-fill, minmax(150px, 1fr))</span>;<br />
         }<br />
         <br />
         /* auto-fit */<br />
         .grid {<br />
-        &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>: <span class="value">repeat(auto-fit, minmax(150px, 1fr))</span>;<br />
+        &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>:
+        <span class="value">repeat(auto-fit, minmax(150px, 1fr))</span>;<br />
         }
       </div>
 
@@ -306,7 +313,8 @@
           &nbsp;&nbsp;&nbsp;• 3列：(870px - gap 30px) ÷ 3 = 280px ✅<br />
           &nbsp;&nbsp;&nbsp;• 4列：(870px - gap 45px) ÷ 4 = 206.25px ✅<br />
           &nbsp;&nbsp;&nbsp;• 5列：(870px - gap 60px) ÷ 5 = 162px ✅<br />
-          &nbsp;&nbsp;&nbsp;• <span class="highlight">6列：(870px - gap 75px) ÷ 6 = 132.5px ❌ (&lt;150px)</span><br /><br />
+          &nbsp;&nbsp;&nbsp;• <span class="highlight">6列：(870px - gap 75px) ÷ 6 = 132.5px ❌ (&lt;150px)</span
+          ><br /><br />
           <strong>结论：最多创建 5 列！</strong><br /><br />
           但是只有 4 个项目，所以显示 4 列 + 1 个空列（auto-fill 保留空列）
         </div>
@@ -357,7 +365,7 @@
         <p class="note">💡 提示：调整窗口宽度到很宽时，auto-fit 的项目会拉伸，而 auto-fill 会留白！</p>
       </div>
 
-      <div class="visual-box"></div>
+      <div class="visual-box">
         <h3>📊 auto-fill vs auto-fit 可视化对比</h3>
         <p><strong>窄容器（450px）：</strong>两者效果相同，因为没有空列</p>
 
@@ -429,19 +437,20 @@
         <strong>使用场景：</strong><br /><br />
         /* 响应式卡片布局 - 推荐使用 auto-fit */<br />
         .card-grid {<br />
-        &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>: <span class="value">repeat(auto-fit, minmax(250px, 1fr))</span>;<br />
+        &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>:
+        <span class="value">repeat(auto-fit, minmax(250px, 1fr))</span>;<br />
         &nbsp;&nbsp;/* 卡片会自动拉伸填充空间 */<br />
         }<br /><br />
         /* 固定尺寸的图标网格 - 可以使用 auto-fill */<br />
         .icon-grid {<br />
-        &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>: <span class="value">repeat(auto-fill, minmax(80px, 80px))</span>;<br />
+        &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>:
+        <span class="value">repeat(auto-fill, minmax(80px, 80px))</span>;<br />
         &nbsp;&nbsp;/* 图标保持固定大小，不拉伸 */<br />
         }<br /><br />
         <strong>关键区别：</strong><br />
         • <span class="highlight">auto-fill</span>：保留空列，适合固定尺寸的项目<br />
         • <span class="highlight">auto-fit</span>：折叠空列，适合需要拉伸的项目
       </div>
-
     </div>
   </body>
 </html>
