@@ -209,6 +209,31 @@ npm run lint:css     # CSS
 
 详细文档：[.guides/code-formatting.md](.guides/code-formatting.md)
 
+### Git 钩子与提交规范
+
+项目集成了完整的 Git 工作流工具：
+
+**Husky + lint-staged**：提交前自动格式化和检查代码
+**commitlint**：验证提交信息格式
+**Commitizen**：交互式生成标准化提交信息
+
+```bash
+# 方式 1：使用 Commitizen（推荐）
+git add .
+npm run commit  # 交互式提示，自动生成规范的 commit message
+
+# 方式 2：手动提交
+git commit -m "feat: 添加新功能"
+git commit -m "fix: 修复 bug"
+```
+
+详细文档：
+
+- [Git 工作流完整配置](GIT_WORKFLOW_SETUP.md) - 总览
+- [Commitizen 使用指南](.guides/commitizen-guide.md) - 交互式提交
+- [Commit 速查表](.guides/commit-cheatsheet.md) - 快速参考
+- [Git 钩子配置](.guides/git-hooks.md) - 钩子详情
+
 ### CSS 规范
 
 - 使用 CSS 变量（`var(--primary)`）
