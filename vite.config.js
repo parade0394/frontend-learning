@@ -3,13 +3,13 @@
  * 多页面应用构建配置
  *
  * 功能：
- * - 多入口页面配置
+ * - 多入口页面配置（HTML + JS 模块）
  * - CSS 代码分割和压缩
- * - 静态资源复制（JS/CSS）
+ * - ES 模块打包和优化
  * - 开发服务器配置
  *
- * 注意：本项目使用传统的 IIFE JS 文件，不是 ES 模块
- * 因此 JS 文件作为静态资源复制，不经过 Vite 打包
+ * 注意：本项目使用 ES 模块（import/export）
+ * JS 文件通过 Vite 打包，输出为 ES Module 格式
  */
 
 import { defineConfig } from 'vite';
@@ -46,7 +46,7 @@ export default defineConfig({
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: false, // 保留 console（JS 不经过打包）
+        drop_console: false, // 保留 console 用于调试
         drop_debugger: true,
       },
     },

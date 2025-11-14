@@ -7,10 +7,21 @@
 ```
 frontend-learning/
 ├── index.html              # 主入口页面
-├── shared/                 # 公共资源
-│   ├── common.css          # 公共样式（CSS变量、通用组件）
-│   ├── utils.js            # 公共工具函数
-│   └── theme.js            # 主题系统（亮/暗/跟随系统 + 主色定制）
+├── src/                    # 公共资源
+│   ├── styles/
+│   │   └── common.css      # 公共样式（CSS变量、通用组件）
+│   ├── components/         # 可复用组件
+│   │   ├── BackToTop.js    # 返回顶部组件
+│   │   └── ThemeSystem.js  # 主题系统组件
+│   ├── utils/              # 工具函数模块
+│   │   ├── animations.js   # 动画工具
+│   │   ├── clipboard.js    # 剪贴板工具
+│   │   ├── helpers.js      # 通用辅助函数
+│   │   ├── storage.js      # 本地存储工具
+│   │   └── toast.js        # 提示消息工具
+│   ├── utils.js            # 工具函数入口
+│   ├── theme.js            # 主题系统（亮/暗/跟随系统 + 主色定制）
+│   └── theme-sync.js       # 主题同步脚本
 ├── animation/              # CSS 动画模块
 │   ├── index.html          # 动画模块主页
 │   ├── styles.css          # 动画模块专用样式
@@ -22,8 +33,11 @@ frontend-learning/
 │   └── demo*.html          # 10 个 Grid 演示
 ├── box-shadow/             # Box-Shadow 工具模块
 │   └── index.html          # 交互式阴影生成器
-├── scripts/                # 辅助脚本
-│   └── batch-update-demos.js
+├── svg/                    # SVG 教程模块
+│   └── demo*.html          # 10 个 SVG 演示
+├── .guides/                # 项目指南文档
+│   ├── code-formatting.md  # 代码格式化指南
+│   └── iconify-integration.md  # 图标集成指南
 ├── vite.config.js          # Vite 配置（多页面构建）
 ├── package.json            # 项目元数据与脚本
 └── dist/                   # 构建产物（由 Vite 生成）
@@ -113,7 +127,28 @@ npx http-server
 - 模板区域
 - 响应式布局
 
-### 3. Box-Shadow 工具 💡
+### 3. SVG 图形教程 🎨
+
+- **内容**：SVG 基础到高级应用
+- **知识点**：10 个核心演示
+- **特点**：交互式学习
+- **时长**：2-3 小时
+- **入口**：`svg/` 目录下的各个演示
+
+**包含内容**：
+
+- 基础形状
+- 路径绘制
+- 渐变填充
+- 变换操作
+- 文本处理
+- 滤镜效果
+- 动画效果
+- 图标系统
+- 交互图表
+- 响应式 SVG
+
+### 4. Box-Shadow 工具 💡
 
 - **内容**：交互式阴影生成器
 - **特点**：可视化调试、实时预览
@@ -134,38 +169,43 @@ npx http-server
 - **模式**：亮色、暗色、跟随系统自动切换
 - **主色定制**：预设多种主题色，实时应用并持久化
 - **可访问性**：ARIA 属性与键盘可达性完善
-- **入口**：在页面中引入 `shared/theme.js`
+- **入口**：在页面中引入 `src/theme.js`
 
 ### 公共资源
 
 所有模块共享以下资源：
 
 - `src/styles/common.css`：基础样式、CSS 变量、通用组件
-- `src/utils.js`：工具函数（动画控制、存储、提示等）
+- `src/components/`：可复用组件（返回顶部、主题系统等）
+- `src/utils/`：模块化工具函数（动画、剪贴板、存储、提示等）
+- `src/utils.js`：工具函数统一入口
 - `src/theme.js`：主题工具栏与面板（暗色模式与主题色）
+- `src/theme-sync.js`：主题同步脚本
 
 ## 🛠️ 技术栈
 
 - **HTML5**：语义化结构
 - **CSS3**：Transform、Transition、Animation、Grid、Flexbox、CSS Variables
-- **Vanilla JavaScript**：无依赖框架，纯原生 JS
+- **Vanilla JavaScript**：无依赖框架，纯原生 JS，模块化组织
 - **响应式设计**：移动端优先
 - **Vite 5**：本地开发与多页面构建
-- **vite-plugin-static-copy**：拷贝 `shared/`、各模块静态资源至构建产物
 - **代码格式化**：Prettier + ESLint + Stylelint 统一代码风格
+- **Git 工作流**：Husky + lint-staged + Commitizen + commitlint
 
 ### 多页面构建说明
 
-- 通过 `vite.config.js` 的 `rollupOptions.input` 配置多入口：`index.html`、`animation/index.html`、`grid/index.html`、`svg/index.html`、`box-shadow/index.html`
+- 通过 `vite.config.js` 的 `rollupOptions.input` 配置多入口
+- 主要页面：`index.html`、`animation/index.html`、`grid/index.html`、`box-shadow/index.html`
+- SVG 模块包含 10 个独立演示页面
 - 构建后在 `dist/` 生成对应页面与资源，适合静态托管
 
 ## 📊 项目统计
 
-- **总模块数**：3 个
-- **知识点**：42+ 个
-- **交互演示**：120+ 个
+- **总模块数**：4 个（动画、Grid、SVG、Box-Shadow）
+- **知识点**：52+ 个
+- **交互演示**：130+ 个
 - **代码行数**：10,000+ 行
-- **文件数量**：50+ 个
+- **文件数量**：60+ 个
 
 ## 🎯 适用人群
 
@@ -179,15 +219,18 @@ npx http-server
 
 ### 添加新模块
 
-1. 复制 `.templates/module-page.html` 到新模块目录
-2. 使用 `src/styles/common.css` 作为基础样式
+1. 创建新模块目录和入口页面
+2. 引入 `src/styles/common.css` 作为基础样式
 3. 使用 `src/utils.js` 中的工具函数
-4. 在 `index.html` 中添加模块入口
+4. 使用 `src/components/` 中的可复用组件
+5. 在 `index.html` 中添加模块入口
+6. 在 `vite.config.js` 中添加构建入口（如需要）
 
 ### 自定义样式
 
 - 修改 `src/styles/common.css` 中的 CSS 变量
-- 每个模块可以有自己的 `styles.css` 扩展样式
+- 每个模块可以有自己的独立样式文件
+- 使用模块化的组件和工具函数
 
 ## 📝 开发规范
 
@@ -227,12 +270,7 @@ git commit -m "feat: 添加新功能"
 git commit -m "fix: 修复 bug"
 ```
 
-详细文档：
-
-- [Git 工作流完整配置](GIT_WORKFLOW_SETUP.md) - 总览
-- [Commitizen 使用指南](.guides/commitizen-guide.md) - 交互式提交
-- [Commit 速查表](.guides/commit-cheatsheet.md) - 快速参考
-- [Git 钩子配置](.guides/git-hooks.md) - 钩子详情
+详细文档：[COMMITIZEN_INTEGRATION_COMPLETE.md](COMMITIZEN_INTEGRATION_COMPLETE.md)
 
 ### CSS 规范
 
@@ -250,7 +288,8 @@ git commit -m "fix: 修复 bug"
 
 ### 文件组织
 
-- 公共资源放在 `shared/`
+- 公共资源放在 `src/` 目录
+- 组件和工具函数模块化组织
 - 模块独立，互不依赖
 - 保持文件结构清晰
 
@@ -258,10 +297,12 @@ git commit -m "fix: 修复 bug"
 
 - [ ] 添加 Flexbox 布局模块
 - [ ] 添加响应式设计模块
+- [ ] 完善 SVG 模块的主入口页面
 - [ ] 添加学习进度追踪
 - [ ] 添加代码复制与示例分享功能
 - [ ] 添加搜索功能
 - [ ] 增强动画示例的可访问性
+- [ ] 集成图标系统（Iconify）
 
 ## 📄 许可
 
@@ -302,15 +343,10 @@ netlify deploy --prod
 # 或将 dist/ 目录上传到任意静态服务器
 ```
 
-详细指南：
-
-- [BUILD_AND_DEPLOY.md](BUILD_AND_DEPLOY.md) - 构建和部署完整指南
-- [DEPLOYMENT.md](DEPLOYMENT.md) - 详细部署方案
-
 ---
 
-**项目状态**：✅ 基础版本完成（支持 Vite 多页面）
-**最后更新**：2025-11-13
+**项目状态**：✅ 基础版本完成（支持 Vite 多页面构建）
+**最后更新**：2025-11-14
 
 ## 💡 使用提示
 
