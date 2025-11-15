@@ -244,7 +244,7 @@ p { color: blue; }
               <div class="specificity-demo-2">
                 <div class="container">
                   <div class="box">
-                    权重 (0,2,1) 胜出 ✓
+                    权重 (0,2,0) 胜出 ✓
                     <div style="font-size: 0.85rem; margin-top: 5px; opacity: 0.8">.container .box 覆盖了 div.box</div>
                   </div>
                   <div id="special-box" class="box">
@@ -261,7 +261,7 @@ div.box {
   color: darkblue; 
 }
 
-<span class="code-comment">/* 权重: (0, 2, 1) = 21 - 更高 ✓ */</span>
+<span class="code-comment">/* 权重: (0, 2, 0) = 20 - 更高 ✓ */</span>
 .container .box { 
   background: lightgreen; 
   color: darkgreen; 
