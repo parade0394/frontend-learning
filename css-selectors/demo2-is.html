@@ -1,0 +1,799 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>:is() 伪类 - CSS 现代选择器</title>
+    <link href="/src/styles/common.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+    <script>
+      (function () {
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    </script>
+    <script type="module" src="/src/theme.js"></script>
+    <script src="compatibility-check.js"></script>
+  </head>
+  <body data-demo="is">
+    <!-- 左侧边栏导航 -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>CSS 现代选择器</h1>
+        <a class="back-home" href="index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a class="nav-item" href="demo1-specificity.html">选择器优先级</a>
+        </div>
+        <div class="nav-section">
+          <h3>逻辑选择器</h3>
+          <a class="nav-item active" href="demo2-is.html">:is() 伪类</a>
+          <a class="nav-item" href="demo3-where.html">:where() 伪类</a>
+          <a class="nav-item" href="demo4-not.html">:not() 伪类</a>
+        </div>
+        <div class="nav-section">
+          <h3>父子关系选择器</h3>
+          <a class="nav-item" href="demo5-has-basics.html">:has() 基础</a>
+          <a class="nav-item" href="demo6-has-practical.html">:has() 实战</a>
+        </div>
+        <div class="nav-section">
+          <h3>状态选择器</h3>
+          <a class="nav-item" href="demo7-focus-within.html">:focus-within</a>
+          <a class="nav-item" href="demo8-focus-visible.html">:focus-visible</a>
+        </div>
+        <div class="nav-section">
+          <h3>结构选择器进阶</h3>
+          <a class="nav-item" href="demo9-nth-child.html">:nth-child() 高级</a>
+          <a class="nav-item" href="demo10-nth-comparison.html">结构选择器对比</a>
+        </div>
+        <div class="nav-section">
+          <h3>综合实战</h3>
+          <a class="nav-item" href="demo11-combinations.html">选择器组合实战</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- 右侧主内容区 -->
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>:is() 伪类</h1>
+        <p class="subtitle">简化选择器列表，提高代码可读性</p>
+
+        <!-- 概念介绍 -->
+        <section class="concept-section">
+          <h2>什么是 :is() 伪类？</h2>
+          <p>
+            <code>:is()</code> 伪类允许你将多个选择器组合成一个列表，避免重复编写相同的选择器部分。 它可以大幅简化 CSS
+            代码，提高可读性和可维护性。
+          </p>
+          <p>
+            在 <code>:is()</code> 出现之前，如果要为多个不同区域的相同元素设置样式，需要重复编写完整的选择器。
+            现在，你可以使用 <code>:is()</code> 将这些选择器合并为一个简洁的规则。
+          </p>
+          <ul>
+            <li><strong>简化代码</strong> - 减少重复的选择器模式</li>
+            <li><strong>提高可读性</strong> - 更清晰地表达选择器的意图</li>
+            <li><strong>易于维护</strong> - 修改时只需更新一处</li>
+            <li><strong>灵活组合</strong> - 可以在选择器的任何位置使用</li>
+          </ul>
+        </section>
+
+        <!-- 语法说明 -->
+        <section class="syntax-section">
+          <h2>基础语法</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 20px">
+            <code>:is()</code> 接受一个选择器列表作为参数，匹配列表中任意一个选择器。
+          </p>
+          <pre><code><span class="code-comment">/* 基础语法 */</span>
+:is(selector1, selector2, selector3) {
+  /* 样式规则 */
+}
+
+<span class="code-comment">/* 等价于传统写法 */</span>
+selector1,
+selector2,
+selector3 {
+  /* 样式规则 */
+}
+
+<span class="code-comment">/* 在复杂选择器中使用 */</span>
+:is(.header, .sidebar, .footer) a {
+  /* 匹配 .header a, .sidebar a, .footer a */
+}
+
+<span class="code-comment">/* 可以在任何位置使用 */</span>
+article :is(h1, h2, h3) {
+  /* 匹配 article 内的所有 h1, h2, h3 */
+}
+
+<span class="code-comment">/* 多个 :is() 组合使用 */</span>
+:is(.dark, .light) :is(button, a) {
+  /* 匹配 .dark button, .dark a, .light button, .light a */
+}</code></pre>
+
+          <div
+            style="
+              background: var(--info-light);
+              border-left: 4px solid var(--info);
+              padding: 15px;
+              border-radius: var(--radius-md);
+              margin-top: 20px;
+            "
+          >
+            <strong style="color: var(--info-dark)">💡 优先级计算规则</strong>
+            <p style="color: var(--text-primary); margin-top: 8px; line-height: 1.6">
+              <code>:is()</code> 的优先级由其参数列表中<strong>优先级最高</strong>的选择器决定。
+              即使实际匹配的是低优先级选择器，整个 <code>:is()</code> 的权重也会取最高值。
+            </p>
+            <pre
+              style="margin-top: 10px; background: var(--bg-primary); padding: 10px; border-radius: 4px"
+            ><code><span class="code-comment">/* :is() 的权重取决于参数中的最高权重 */</span>
+:is(#id, .class, div) { }  <span class="code-comment">/* 权重: (1,0,0) - 取 #id 的权重 */</span>
+:is(.class, div) { }       <span class="code-comment">/* 权重: (0,1,0) - 取 .class 的权重 */</span></code></pre>
+          </div>
+
+          <div
+            style="
+              background: var(--warning-light);
+              border-left: 4px solid var(--warning);
+              padding: 15px;
+              border-radius: var(--radius-md);
+              margin-top: 20px;
+            "
+          >
+            <strong style="color: var(--warning-dark)">⚠️ 容错性</strong>
+            <p style="color: var(--text-primary); margin-top: 8px; line-height: 1.6">
+              <code>:is()</code> 具有容错性。如果列表中某个选择器无效，浏览器会忽略它，继续处理其他有效选择器。
+              这与传统的选择器列表不同，传统列表中一个无效选择器会导致整个规则失效。
+            </p>
+          </div>
+        </section>
+
+        <!-- 对比示例 -->
+        <section class="demo-section">
+          <h2>传统写法 vs :is() 对比</h2>
+
+          <h3>示例 1: 多区域链接样式</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览</div>
+              <style>
+                .is-demo-1 {
+                  display: grid;
+                  grid-template-columns: repeat(3, 1fr);
+                  gap: 20px;
+                }
+                .is-demo-1 > div {
+                  padding: 15px;
+                  border-radius: 8px;
+                  border: 2px solid var(--border-color);
+                }
+                .is-demo-1 .header {
+                  background: #dbeafe;
+                }
+                .is-demo-1 .sidebar {
+                  background: #d1fae5;
+                }
+                .is-demo-1 .footer {
+                  background: #fce7f3;
+                }
+                .is-demo-1 :is(.header, .sidebar, .footer) a {
+                  color: #7c3aed;
+                  text-decoration: none;
+                  font-weight: 600;
+                  padding: 4px 8px;
+                  border-radius: 4px;
+                  transition: all 0.2s;
+                }
+                .is-demo-1 :is(.header, .sidebar, .footer) a:hover {
+                  background: #7c3aed;
+                  color: white;
+                }
+              </style>
+              <div class="is-demo-1">
+                <div class="header">
+                  <strong>Header</strong><br />
+                  <a href="#">链接 1</a>
+                  <a href="#">链接 2</a>
+                </div>
+                <div class="sidebar">
+                  <strong>Sidebar</strong><br />
+                  <a href="#">链接 1</a>
+                  <a href="#">链接 2</a>
+                </div>
+                <div class="footer">
+                  <strong>Footer</strong><br />
+                  <a href="#">链接 1</a>
+                  <a href="#">链接 2</a>
+                </div>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">💡 悬停在链接上查看效果</p>
+            </div>
+            <div class="demo-code">
+              <div style="margin-bottom: 15px">
+                <strong style="color: var(--error)">❌ 传统写法 - 重复代码</strong>
+              </div>
+              <pre><code><span class="code-comment">/* 需要重复写三次完整的选择器 */</span>
+.header a:hover,
+.sidebar a:hover,
+.footer a:hover {
+  background: purple;
+  color: white;
+}</code></pre>
+
+              <div style="margin: 20px 0 15px">
+                <strong style="color: var(--success)">✅ 使用 :is() - 简洁清晰</strong>
+              </div>
+              <pre><code><span class="code-comment">/* 只需写一次，代码更简洁 */</span>
+:is(.header, .sidebar, .footer) a:hover {
+  background: purple;
+  color: white;
+}
+
+<span class="code-comment">/* 代码量减少 60%+ */</span></code></pre>
+            </div>
+          </div>
+
+          <h3>示例 2: 嵌套选择器简化</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览</div>
+              <style>
+                .is-demo-2 article {
+                  background: var(--bg-secondary);
+                  padding: 20px;
+                  border-radius: 8px;
+                  border: 1px solid var(--border-color);
+                }
+                .is-demo-2 article :is(h1, h2, h3, h4, h5, h6) {
+                  color: #2563eb;
+                  margin: 15px 0 10px;
+                  padding-left: 12px;
+                  border-left: 4px solid #2563eb;
+                }
+                .is-demo-2 article :is(h1, h2, h3, h4, h5, h6):first-child {
+                  margin-top: 0;
+                }
+              </style>
+              <div class="is-demo-2">
+                <article>
+                  <h1>一级标题</h1>
+                  <p>这是一段文本内容。</p>
+                  <h2>二级标题</h2>
+                  <p>这是另一段文本内容。</p>
+                  <h3>三级标题</h3>
+                  <p>所有标题都有统一的样式。</p>
+                </article>
+              </div>
+            </div>
+            <div class="demo-code">
+              <div style="margin-bottom: 15px">
+                <strong style="color: var(--error)">❌ 传统写法 - 冗长重复</strong>
+              </div>
+              <pre><code><span class="code-comment">/* 需要列出所有标题标签 */</span>
+article h1,
+article h2,
+article h3,
+article h4,
+article h5,
+article h6 {
+  color: blue;
+  border-left: 4px solid blue;
+}
+
+<span class="code-comment">/* 修改时需要改两处 */</span>
+article h1:first-child,
+article h2:first-child,
+article h3:first-child,
+article h4:first-child,
+article h5:first-child,
+article h6:first-child {
+  margin-top: 0;
+}</code></pre>
+
+              <div style="margin: 20px 0 15px">
+                <strong style="color: var(--success)">✅ 使用 :is() - 一目了然</strong>
+              </div>
+              <pre><code><span class="code-comment">/* 清晰表达"所有标题"的意图 */</span>
+article :is(h1, h2, h3, h4, h5, h6) {
+  color: blue;
+  border-left: 4px solid blue;
+}
+
+<span class="code-comment">/* 易于组合其他伪类 */</span>
+article :is(h1, h2, h3, h4, h5, h6):first-child {
+  margin-top: 0;
+}</code></pre>
+            </div>
+          </div>
+
+          <h3>示例 3: 复杂选择器组合</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览</div>
+              <style>
+                .is-demo-3 {
+                  display: grid;
+                  gap: 15px;
+                }
+                .is-demo-3 :is(.card, .panel, .widget) :is(button, a.btn) {
+                  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                  color: white;
+                  padding: 8px 16px;
+                  border: none;
+                  border-radius: 6px;
+                  text-decoration: none;
+                  display: inline-block;
+                  font-weight: 600;
+                  cursor: pointer;
+                  transition:
+                    transform 0.2s,
+                    box-shadow 0.2s;
+                }
+                .is-demo-3 :is(.card, .panel, .widget) :is(button, a.btn):hover {
+                  transform: translateY(-2px);
+                  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+                }
+                .is-demo-3 > div {
+                  padding: 15px;
+                  background: var(--bg-secondary);
+                  border-radius: 8px;
+                  border: 1px solid var(--border-color);
+                }
+              </style>
+              <div class="is-demo-3">
+                <div class="card">
+                  <strong>Card:</strong>
+                  <button>按钮</button>
+                  <a class="btn" href="#">链接按钮</a>
+                </div>
+                <div class="panel">
+                  <strong>Panel:</strong>
+                  <button>按钮</button>
+                  <a class="btn" href="#">链接按钮</a>
+                </div>
+                <div class="widget">
+                  <strong>Widget:</strong>
+                  <button>按钮</button>
+                  <a class="btn" href="#">链接按钮</a>
+                </div>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 所有容器内的按钮和链接都有统一样式
+              </p>
+            </div>
+            <div class="demo-code">
+              <div style="margin-bottom: 15px">
+                <strong style="color: var(--error)">❌ 传统写法 - 6 个选择器</strong>
+              </div>
+              <pre><code><span class="code-comment">/* 需要写 3×2=6 个选择器组合 */</span>
+.card button,
+.card a.btn,
+.panel button,
+.panel a.btn,
+.widget button,
+.widget a.btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 8px 16px;
+  <span class="code-comment">/* ... 更多样式 */</span>
+}</code></pre>
+
+              <div style="margin: 20px 0 15px">
+                <strong style="color: var(--success)">✅ 使用 :is() - 1 个选择器</strong>
+              </div>
+              <pre><code><span class="code-comment">/* 两个 :is() 组合，清晰表达意图 */</span>
+:is(.card, .panel, .widget) :is(button, a.btn) {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 8px 16px;
+  <span class="code-comment">/* ... 更多样式 */</span>
+}
+
+<span class="code-comment">/* 代码量减少 83%！ */</span></code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 实际应用场景 -->
+        <section class="demo-section">
+          <h2>实际应用场景</h2>
+
+          <h3>场景 1: 导航链接悬停样式</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览</div>
+              <style>
+                .is-practical-1 {
+                  background: var(--bg-secondary);
+                  padding: 20px;
+                  border-radius: 8px;
+                }
+                .is-practical-1 nav {
+                  display: flex;
+                  gap: 30px;
+                  flex-wrap: wrap;
+                }
+                .is-practical-1 nav a {
+                  color: var(--text-primary);
+                  text-decoration: none;
+                  padding: 8px 16px;
+                  border-radius: 6px;
+                  transition: all 0.3s;
+                  font-weight: 500;
+                }
+                .is-practical-1 :is(nav, .menu, .breadcrumb) a:hover {
+                  background: var(--primary);
+                  color: white;
+                  transform: translateY(-2px);
+                  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+                }
+                .is-practical-1 :is(nav, .menu, .breadcrumb) a:active {
+                  transform: translateY(0);
+                }
+                .is-practical-1 .menu {
+                  margin-top: 15px;
+                  padding-top: 15px;
+                  border-top: 1px solid var(--border-color);
+                }
+                .is-practical-1 .menu a {
+                  display: inline-block;
+                  margin: 5px;
+                  color: var(--text-primary);
+                  text-decoration: none;
+                  padding: 8px 16px;
+                  border-radius: 6px;
+                  transition: all 0.3s;
+                  font-weight: 500;
+                }
+                .is-practical-1 .breadcrumb {
+                  margin-top: 15px;
+                  padding-top: 15px;
+                  border-top: 1px solid var(--border-color);
+                  display: flex;
+                  gap: 10px;
+                  align-items: center;
+                }
+                .is-practical-1 .breadcrumb a {
+                  color: var(--text-primary);
+                  text-decoration: none;
+                  padding: 8px 16px;
+                  border-radius: 6px;
+                  transition: all 0.3s;
+                  font-weight: 500;
+                }
+                .is-practical-1 .breadcrumb span {
+                  color: var(--text-secondary);
+                }
+              </style>
+              <div class="is-practical-1">
+                <nav>
+                  <a href="#">首页</a>
+                  <a href="#">产品</a>
+                  <a href="#">文档</a>
+                  <a href="#">关于</a>
+                </nav>
+                <div class="menu">
+                  <a href="#">菜单项 1</a>
+                  <a href="#">菜单项 2</a>
+                  <a href="#">菜单项 3</a>
+                </div>
+                <div class="breadcrumb">
+                  <a href="#">首页</a>
+                  <span>›</span>
+                  <a href="#">分类</a>
+                  <span>›</span>
+                  <a href="#">当前页</a>
+                </div>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 所有导航区域的链接都有统一的悬停效果
+              </p>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 为所有导航相关区域的链接设置统一样式 */</span>
+:is(nav, .menu, .breadcrumb) a:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+}
+
+:is(nav, .menu, .breadcrumb) a:active {
+  transform: translateY(0);
+}
+
+<span class="code-comment">/* 如果不用 :is()，需要写 6 个选择器（3个容器 × 2个状态） */</span></code></pre>
+            </div>
+          </div>
+
+          <h3>场景 2: 表单元素统一样式</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览</div>
+              <style>
+                .is-practical-2 form {
+                  background: var(--bg-secondary);
+                  padding: 25px;
+                  border-radius: 8px;
+                  max-width: 500px;
+                }
+                .is-practical-2 .form-group {
+                  margin-bottom: 20px;
+                }
+                .is-practical-2 label {
+                  display: block;
+                  margin-bottom: 8px;
+                  font-weight: 600;
+                  color: var(--text-primary);
+                }
+                .is-practical-2 :is(input[type='text'], input[type='email'], input[type='password'], textarea, select) {
+                  width: 100%;
+                  padding: 10px 12px;
+                  border: 2px solid var(--border-color);
+                  border-radius: 6px;
+                  font-size: 1rem;
+                  transition: all 0.3s;
+                  background: var(--bg-primary);
+                  color: var(--text-primary);
+                  box-sizing: border-box;
+                }
+                .is-practical-2
+                  :is(input[type='text'], input[type='email'], input[type='password'], textarea, select):focus {
+                  outline: none;
+                  border-color: var(--primary);
+                  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+                }
+                .is-practical-2
+                  :is(input[type='text'], input[type='email'], input[type='password'], textarea, select):hover:not(
+                    :focus
+                  ) {
+                  border-color: var(--text-secondary);
+                }
+                .is-practical-2 textarea {
+                  resize: vertical;
+                  min-height: 80px;
+                }
+              </style>
+              <div class="is-practical-2">
+                <form>
+                  <div class="form-group">
+                    <label for="name">姓名</label>
+                    <input id="name" type="text" placeholder="请输入姓名" />
+                  </div>
+                  <div class="form-group">
+                    <label for="email">邮箱</label>
+                    <input id="email" type="email" placeholder="请输入邮箱" />
+                  </div>
+                  <div class="form-group">
+                    <label for="password">密码</label>
+                    <input id="password" type="password" placeholder="请输入密码" />
+                  </div>
+                  <div class="form-group">
+                    <label for="country">国家</label>
+                    <select id="country">
+                      <option>中国</option>
+                      <option>美国</option>
+                      <option>日本</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="message">留言</label>
+                    <textarea id="message" placeholder="请输入留言"></textarea>
+                  </div>
+                </form>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 所有输入元素都有统一的样式和交互效果
+              </p>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 为所有输入类元素设置统一的基础样式 */</span>
+:is(input[type="text"], 
+    input[type="email"], 
+    input[type="password"], 
+    textarea, 
+    select) {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+
+<span class="code-comment">/* 统一的焦点样式 */</span>
+:is(input[type="text"], 
+    input[type="email"], 
+    input[type="password"], 
+    textarea, 
+    select):focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+<span class="code-comment">/* 如果不用 :is()，需要重复写 5 次每个规则 */</span></code></pre>
+            </div>
+          </div>
+
+          <h3>场景 3: 多区域标题样式</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览</div>
+              <style>
+                .is-practical-3 {
+                  display: grid;
+                  gap: 20px;
+                }
+                .is-practical-3 > div {
+                  padding: 20px;
+                  border-radius: 8px;
+                  border: 1px solid var(--border-color);
+                }
+                .is-practical-3 .article-section {
+                  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+                }
+                .is-practical-3 .sidebar-section {
+                  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+                }
+                .is-practical-3 .footer-section {
+                  background: linear-gradient(135deg, #e9d5ff 0%, #d8b4fe 100%);
+                }
+                .is-practical-3 :is(.article-section, .sidebar-section, .footer-section) :is(h2, h3) {
+                  color: #1f2937;
+                  margin: 0 0 12px 0;
+                  padding-bottom: 8px;
+                  border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+                  font-weight: 700;
+                }
+                .is-practical-3 :is(.article-section, .sidebar-section, .footer-section) :is(h2, h3)::before {
+                  content: '▸ ';
+                  color: #7c3aed;
+                  font-weight: 900;
+                }
+                .is-practical-3 p {
+                  color: #374151;
+                  line-height: 1.6;
+                  margin: 0;
+                }
+              </style>
+              <div class="is-practical-3">
+                <div class="article-section">
+                  <h2>文章标题</h2>
+                  <p>这是文章区域的内容。所有标题都有统一的样式。</p>
+                  <h3>文章小节</h3>
+                  <p>小节内容也遵循相同的样式规则。</p>
+                </div>
+                <div class="sidebar-section">
+                  <h2>侧边栏标题</h2>
+                  <p>侧边栏的标题样式与文章区域保持一致。</p>
+                  <h3>侧边栏小节</h3>
+                  <p>提供额外的信息和链接。</p>
+                </div>
+                <div class="footer-section">
+                  <h2>页脚标题</h2>
+                  <p>页脚区域的标题也使用相同的样式。</p>
+                  <h3>页脚小节</h3>
+                  <p>版权信息和其他链接。</p>
+                </div>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 不同区域的标题都有统一的视觉风格
+              </p>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 为多个区域的标题设置统一样式 */</span>
+:is(.article-section, .sidebar-section, .footer-section) :is(h2, h3) {
+  color: #1f2937;
+  margin: 0 0 12px 0;
+  padding-bottom: 8px;
+  border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+  font-weight: 700;
+}
+
+<span class="code-comment">/* 添加装饰性前缀 */</span>
+:is(.article-section, .sidebar-section, .footer-section) :is(h2, h3)::before {
+  content: "▸ ";
+  color: #7c3aed;
+  font-weight: 900;
+}
+
+<span class="code-comment">/* 两个 :is() 组合：3个区域 × 2个标题 = 6个选择器
+   如果不用 :is()，需要写 12 个选择器（6个基础 + 6个伪元素） */</span></code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 浏览器兼容性 -->
+        <section class="compatibility-section">
+          <h2>浏览器兼容性</h2>
+          <div
+            style="
+              background: var(--bg-secondary);
+              padding: 20px;
+              border-radius: 8px;
+              border: 1px solid var(--border-color);
+            "
+          >
+            <p style="margin-bottom: 15px"><code>:is()</code> 伪类在现代浏览器中得到了广泛支持：</p>
+            <table style="width: 100%; border-collapse: collapse">
+              <thead>
+                <tr style="background: var(--bg-primary); border-bottom: 2px solid var(--border-color)">
+                  <th style="padding: 12px; text-align: left">浏览器</th>
+                  <th style="padding: 12px; text-align: left">支持版本</th>
+                  <th style="padding: 12px; text-align: center">状态</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom: 1px solid var(--border-color)">
+                  <td style="padding: 12px">Chrome / Edge</td>
+                  <td style="padding: 12px">88+</td>
+                  <td style="padding: 12px; text-align: center">
+                    <span style="color: var(--success); font-size: 1.2rem">✓</span>
+                  </td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color)">
+                  <td style="padding: 12px">Firefox</td>
+                  <td style="padding: 12px">78+</td>
+                  <td style="padding: 12px; text-align: center">
+                    <span style="color: var(--success); font-size: 1.2rem">✓</span>
+                  </td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color)">
+                  <td style="padding: 12px">Safari</td>
+                  <td style="padding: 12px">14+</td>
+                  <td style="padding: 12px; text-align: center">
+                    <span style="color: var(--success); font-size: 1.2rem">✓</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px">Opera</td>
+                  <td style="padding: 12px">74+</td>
+                  <td style="padding: 12px; text-align: center">
+                    <span style="color: var(--success); font-size: 1.2rem">✓</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div
+              style="
+                margin-top: 20px;
+                padding: 15px;
+                background: var(--info-light);
+                border-left: 4px solid var(--info);
+                border-radius: 4px;
+              "
+            >
+              <strong style="color: var(--info-dark)">💡 历史说明</strong>
+              <p style="margin-top: 8px; color: var(--text-primary); line-height: 1.6">
+                <code>:is()</code> 最初被称为 <code>:matches()</code> 和 <code>:any()</code>。
+                如果需要支持旧版浏览器，可以使用传统的选择器列表作为降级方案。
+              </p>
+            </div>
+            <p style="margin-top: 15px">
+              <a
+                href="https://caniuse.com/css-matches-pseudo"
+                target="_blank"
+                rel="noopener"
+                style="color: var(--primary); text-decoration: none; font-weight: 600"
+              >
+                查看详细兼容性数据 →
+              </a>
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

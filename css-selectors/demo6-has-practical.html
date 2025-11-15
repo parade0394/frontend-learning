@@ -1,0 +1,1086 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>:has() 实战 - CSS 现代选择器</title>
+    <link href="/src/styles/common.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+    <script>
+      (function () {
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    </script>
+    <script type="module" src="/src/theme.js"></script>
+    <script src="compatibility-check.js"></script>
+    <script src="accessibility-enhancements.js"></script>
+  </head>
+  <body data-demo="has-practical">
+    <!-- Skip to main content link for accessibility -->
+    <a class="skip-link" href="#main-content">跳转到主要内容</a>
+    <!-- 左侧边栏导航 -->
+    <aside class="sidebar" aria-label="演示导航" role="navigation">
+      <div class="sidebar-header">
+        <h1>CSS 现代选择器</h1>
+        <a class="back-home" href="index.html" aria-label="返回主页">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav" aria-label="主导航">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a class="nav-item" href="demo1-specificity.html">选择器优先级</a>
+        </div>
+        <div class="nav-section">
+          <h3>逻辑选择器</h3>
+          <a class="nav-item" href="demo2-is.html">:is() 伪类</a>
+          <a class="nav-item" href="demo3-where.html">:where() 伪类</a>
+          <a class="nav-item" href="demo4-not.html">:not() 伪类</a>
+        </div>
+        <div class="nav-section">
+          <h3>父子关系选择器</h3>
+          <a class="nav-item" href="demo5-has-basics.html">:has() 基础</a>
+          <a class="nav-item active" href="demo6-has-practical.html">:has() 实战</a>
+        </div>
+        <div class="nav-section">
+          <h3>状态选择器</h3>
+          <a class="nav-item" href="demo7-focus-within.html">:focus-within</a>
+          <a class="nav-item" href="demo8-focus-visible.html">:focus-visible</a>
+        </div>
+        <div class="nav-section">
+          <h3>结构选择器进阶</h3>
+          <a class="nav-item" href="demo9-nth-child.html">:nth-child() 高级</a>
+          <a class="nav-item" href="demo10-nth-comparison.html">结构选择器对比</a>
+        </div>
+        <div class="nav-section">
+          <h3>综合实战</h3>
+          <a class="nav-item" href="demo11-combinations.html">选择器组合实战</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- 右侧主内容区 -->
+    <main id="main-content" class="main-content" role="main">
+      <div class="demo-page">
+        <h1>:has() 实战</h1>
+        <p class="subtitle">真实项目中的 :has() 应用案例</p>
+
+        <!-- 概念介绍 -->
+        <section class="concept-section">
+          <h2>实战应用场景</h2>
+          <p>
+            <code>:has()</code> 伪类在实际项目中有着广泛的应用场景。
+            通过根据子元素的状态来改变父元素的样式，我们可以实现许多以前需要 JavaScript 才能完成的功能。
+          </p>
+          <p>
+            本页面展示了 4 个真实的应用案例，涵盖了表单验证、卡片状态管理、导航菜单和购物车等常见场景。
+            这些案例都是可以直接应用到实际项目中的实用技巧。
+          </p>
+          <ul>
+            <li><strong>表单验证</strong> - 根据输入框状态改变表单容器样式</li>
+            <li><strong>卡片状态</strong> - 根据内容和选中状态调整卡片布局</li>
+            <li><strong>导航菜单</strong> - 智能高亮和子菜单指示</li>
+            <li><strong>购物车</strong> - 根据商品数量显示不同状态</li>
+          </ul>
+        </section>
+
+        <!-- 案例 1: 表单验证状态 -->
+        <section class="demo-section">
+          <h2>案例 1: 表单验证状态</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 20px">
+            使用 <code>:has()</code> 根据表单内输入框的验证状态，动态改变表单容器的样式，提供实时的视觉反馈。
+          </p>
+
+          <div class="demo-container single-column">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览 - 尝试填写表单</div>
+              <style>
+                .form-validation-demo {
+                  max-width: 600px;
+                  margin: 0 auto;
+                }
+
+                .validation-form {
+                  background: var(--bg-primary);
+                  border: 3px solid var(--border-color);
+                  border-radius: 12px;
+                  padding: 30px;
+                  transition: all 0.3s ease;
+                }
+
+                /* 表单包含无效输入时显示错误样式 */
+                .validation-form:has(input:invalid) {
+                  border-color: var(--error);
+                  background: var(--error-light);
+                }
+
+                /* 表单全部有效时显示成功样式 */
+                .validation-form:has(input:valid):not(:has(input:placeholder-shown)) {
+                  border-color: var(--success);
+                  background: var(--success-light);
+                }
+
+                .validation-form h3 {
+                  margin-top: 0;
+                  color: var(--text-primary);
+                  font-size: 1.3rem;
+                }
+
+                .form-status {
+                  padding: 12px 16px;
+                  border-radius: 8px;
+                  margin-bottom: 20px;
+                  font-weight: 600;
+                  display: none;
+                }
+
+                /* 显示错误状态 */
+                .validation-form:has(input:invalid) .form-status.error {
+                  display: block;
+                  background: var(--error);
+                  color: white;
+                }
+
+                /* 显示成功状态 */
+                .validation-form:has(input:valid):not(:has(input:placeholder-shown)) .form-status.success {
+                  display: block;
+                  background: var(--success);
+                  color: white;
+                }
+
+                .form-group {
+                  margin-bottom: 20px;
+                }
+
+                .form-group label {
+                  display: block;
+                  margin-bottom: 8px;
+                  font-weight: 600;
+                  color: var(--text-primary);
+                }
+
+                .form-group input {
+                  width: 100%;
+                  padding: 12px 15px;
+                  border: 2px solid var(--border-color);
+                  border-radius: 8px;
+                  font-size: 1rem;
+                  background: var(--bg-secondary);
+                  color: var(--text-primary);
+                  box-sizing: border-box;
+                  transition: all 0.3s;
+                }
+
+                .form-group input:focus {
+                  outline: none;
+                  border-color: var(--primary);
+                  box-shadow: 0 0 0 3px var(--primary-light);
+                }
+
+                .form-group input:invalid {
+                  border-color: var(--error);
+                }
+
+                .form-group input:valid:not(:placeholder-shown) {
+                  border-color: var(--success);
+                }
+
+                .submit-btn {
+                  width: 100%;
+                  padding: 14px;
+                  background: var(--primary);
+                  color: white;
+                  border: none;
+                  border-radius: 8px;
+                  font-size: 1.1rem;
+                  font-weight: 600;
+                  cursor: pointer;
+                  transition: all 0.3s;
+                }
+
+                .submit-btn:hover {
+                  background: var(--primary-dark);
+                  transform: translateY(-2px);
+                  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+                }
+              </style>
+
+              <div class="form-validation-demo">
+                <form class="validation-form" aria-label="用户注册表单">
+                  <h3>用户注册</h3>
+
+                  <div class="form-status error" aria-live="assertive" role="alert">⚠️ 请检查表单输入</div>
+                  <div class="form-status success" aria-live="polite" role="status">✓ 表单填写完整，可以提交</div>
+
+                  <div class="form-group">
+                    <label for="username">用户名（至少 3 个字符）</label>
+                    <input
+                      id="username"
+                      type="text"
+                      placeholder="请输入用户名"
+                      required
+                      aria-required="true"
+                      aria-describedby="username-help"
+                      minlength="3"
+                    />
+                    <span id="username-help" class="sr-only">用户名必须至少包含 3 个字符</span>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="email">邮箱</label>
+                    <input
+                      id="email"
+                      type="email"
+                      placeholder="请输入邮箱"
+                      required
+                      aria-required="true"
+                      aria-describedby="email-help"
+                    />
+                    <span id="email-help" class="sr-only">请输入有效的电子邮箱地址</span>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="password">密码（至少 6 个字符）</label>
+                    <input
+                      id="password"
+                      type="password"
+                      placeholder="请输入密码"
+                      required
+                      aria-required="true"
+                      aria-describedby="password-help"
+                      minlength="6"
+                    />
+                    <span id="password-help" class="sr-only">密码必须至少包含 6 个字符</span>
+                  </div>
+
+                  <button class="submit-btn" type="submit" aria-label="提交注册表单">提交注册</button>
+                </form>
+              </div>
+
+              <p style="margin-top: 20px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 尝试填写表单，观察表单容器的边框和背景色变化
+              </p>
+            </div>
+
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 表单包含无效输入时显示错误样式 */</span>
+.validation-form:has(input:invalid) {
+  border-color: red;
+  background: #fee;
+}
+
+<span class="code-comment">/* 显示错误提示 */</span>
+.validation-form:has(input:invalid) .form-status.error {
+  display: block;
+}
+
+<span class="code-comment">/* 表单全部有效时显示成功样式 */</span>
+.validation-form:has(input:valid):not(:has(input:placeholder-shown)) {
+  border-color: green;
+  background: #efe;
+}
+
+<span class="code-comment">/* 显示成功提示 */</span>
+.validation-form:has(input:valid):not(:has(input:placeholder-shown)) .form-status.success {
+  display: block;
+}
+
+<span class="code-comment">/* 优势：无需 JavaScript 即可实现实时验证反馈 */</span></code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 案例 2: 卡片状态管理 -->
+        <section class="demo-section">
+          <h2>案例 2: 卡片状态管理</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 20px">
+            根据卡片内容和选中状态，动态调整卡片的样式和布局。这在任务列表、商品列表等场景中非常实用。
+          </p>
+
+          <div class="demo-container single-column">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览 - 点击复选框查看效果</div>
+              <style>
+                .card-demo {
+                  display: grid;
+                  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                  gap: 20px;
+                }
+
+                .product-card {
+                  background: var(--bg-primary);
+                  border: 2px solid var(--border-color);
+                  border-radius: 12px;
+                  padding: 20px;
+                  transition: all 0.3s ease;
+                  position: relative;
+                }
+
+                /* 卡片包含选中复选框时高亮 */
+                .product-card:has(input[type='checkbox']:checked) {
+                  background: var(--primary-light);
+                  border-color: var(--primary);
+                  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+                  transform: scale(1.02);
+                }
+
+                /* 卡片包含图片时调整布局 */
+                .product-card:has(img) {
+                  display: grid;
+                  grid-template-rows: auto 1fr auto;
+                  gap: 15px;
+                }
+
+                .product-card:has(img) .card-content {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 10px;
+                }
+
+                .card-checkbox {
+                  position: absolute;
+                  top: 15px;
+                  right: 15px;
+                  width: 24px;
+                  height: 24px;
+                  cursor: pointer;
+                }
+
+                .card-image {
+                  width: 100%;
+                  height: 150px;
+                  background: var(--bg-secondary);
+                  border-radius: 8px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 3rem;
+                }
+
+                .card-title {
+                  font-size: 1.2rem;
+                  font-weight: 700;
+                  color: var(--text-primary);
+                  margin: 0;
+                }
+
+                .card-description {
+                  color: var(--text-secondary);
+                  font-size: 0.9rem;
+                  line-height: 1.5;
+                  margin: 0;
+                }
+
+                .card-price {
+                  font-size: 1.3rem;
+                  font-weight: 700;
+                  color: var(--primary);
+                  margin: 10px 0 0;
+                }
+
+                /* 选中状态的特殊样式 */
+                .product-card:has(input:checked) .card-title {
+                  color: var(--primary);
+                }
+
+                .product-card:has(input:checked)::before {
+                  content: '✓ 已选中';
+                  position: absolute;
+                  top: 15px;
+                  left: 15px;
+                  background: var(--primary);
+                  color: white;
+                  padding: 4px 12px;
+                  border-radius: 20px;
+                  font-size: 0.8rem;
+                  font-weight: 600;
+                }
+              </style>
+
+              <div class="card-demo" aria-label="产品列表" role="group">
+                <div class="product-card">
+                  <input id="product-1" class="card-checkbox" type="checkbox" aria-label="选择智能手机" />
+                  <div class="card-image" aria-hidden="true">📱</div>
+                  <div class="card-content">
+                    <h4 class="card-title">智能手机</h4>
+                    <p class="card-description">最新款旗舰手机，性能强劲</p>
+                    <p class="card-price">¥4,999</p>
+                  </div>
+                </div>
+
+                <div class="product-card">
+                  <input id="product-2" class="card-checkbox" type="checkbox" aria-label="选择无线耳机" />
+                  <div class="card-content">
+                    <h4 class="card-title">无线耳机</h4>
+                    <p class="card-description">降噪耳机，音质出色（无图片）</p>
+                    <p class="card-price">¥1,299</p>
+                  </div>
+                </div>
+
+                <div class="product-card">
+                  <input id="product-3" class="card-checkbox" type="checkbox" aria-label="选择笔记本电脑" />
+                  <div class="card-image" aria-hidden="true">💻</div>
+                  <div class="card-content">
+                    <h4 class="card-title">笔记本电脑</h4>
+                    <p class="card-description">轻薄便携，适合办公</p>
+                    <p class="card-price">¥6,999</p>
+                  </div>
+                </div>
+
+                <div class="product-card">
+                  <input id="product-4" class="card-checkbox" type="checkbox" aria-label="选择智能手表" />
+                  <div class="card-content">
+                    <h4 class="card-title">智能手表</h4>
+                    <p class="card-description">健康监测，运动追踪（无图片）</p>
+                    <p class="card-price">¥2,499</p>
+                  </div>
+                </div>
+              </div>
+
+              <p style="margin-top: 20px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 点击卡片右上角的复选框，观察卡片样式变化。有图片的卡片布局也不同。
+              </p>
+            </div>
+
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 卡片包含选中复选框时高亮 */</span>
+.product-card:has(input[type="checkbox"]:checked) {
+  background: lightgreen;
+  border-color: green;
+  box-shadow: 0 4px 12px rgba(0, 255, 0, 0.2);
+  transform: scale(1.02);
+}
+
+<span class="code-comment">/* 显示选中标签 */</span>
+.product-card:has(input:checked)::before {
+  content: '✓ 已选中';
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: green;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+<span class="code-comment">/* 卡片包含图片时调整布局 */</span>
+.product-card:has(img) {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 15px;
+}
+
+<span class="code-comment">/* 多种状态组合：根据内容和选中状态动态调整 */</span></code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 案例 3: 导航菜单高亮 -->
+        <section class="demo-section">
+          <h2>案例 3: 导航菜单高亮</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 20px">
+            使用 <code>:has()</code> 实现智能导航菜单，根据当前页面链接自动高亮父级导航项，并为包含子菜单的项显示箭头。
+          </p>
+
+          <div class="demo-container single-column">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览 - 点击链接查看效果</div>
+              <style>
+                .nav-demo {
+                  background: var(--bg-secondary);
+                  padding: 20px;
+                  border-radius: 12px;
+                }
+
+                .smart-nav {
+                  list-style: none;
+                  padding: 0;
+                  margin: 0;
+                }
+
+                .smart-nav > li {
+                  margin-bottom: 8px;
+                }
+
+                .smart-nav a {
+                  display: block;
+                  padding: 12px 16px;
+                  color: var(--text-primary);
+                  text-decoration: none;
+                  border-radius: 8px;
+                  font-weight: 600;
+                  transition: all 0.3s;
+                  background: var(--bg-primary);
+                }
+
+                .smart-nav a:hover {
+                  background: var(--primary-light);
+                  color: var(--primary);
+                  transform: translateX(4px);
+                }
+
+                .smart-nav a.active {
+                  background: var(--primary);
+                  color: white;
+                }
+
+                /* 包含当前页面链接的导航项高亮 */
+                .smart-nav li:has(a.active) {
+                  background: var(--primary-light);
+                  border-radius: 8px;
+                  padding: 8px;
+                }
+
+                /* 包含子菜单的导航项显示箭头 */
+                .smart-nav li:has(ul) > a::after {
+                  content: '▼';
+                  float: right;
+                  font-size: 0.8rem;
+                  transition: transform 0.3s;
+                }
+
+                /* 子菜单样式 */
+                .smart-nav ul {
+                  list-style: none;
+                  padding: 8px 0 0 20px;
+                  margin: 8px 0 0;
+                  border-left: 2px solid var(--primary);
+                }
+
+                .smart-nav ul li {
+                  margin-bottom: 4px;
+                }
+
+                .smart-nav ul a {
+                  padding: 8px 12px;
+                  font-size: 0.9rem;
+                  font-weight: 500;
+                }
+
+                /* 展开/收起状态管理 */
+                .smart-nav li:has(ul) {
+                  position: relative;
+                }
+
+                .smart-nav li:has(ul) ul {
+                  max-height: 0;
+                  overflow: hidden;
+                  transition: max-height 0.3s ease;
+                }
+
+                .smart-nav li:has(ul):hover ul,
+                .smart-nav li:has(a.active) ul {
+                  max-height: 500px;
+                }
+
+                .smart-nav li:has(ul):hover > a::after,
+                .smart-nav li:has(a.active) > a::after {
+                  transform: rotate(180deg);
+                }
+              </style>
+
+              <div class="nav-demo">
+                <ul class="smart-nav">
+                  <li>
+                    <a href="#home">首页</a>
+                  </li>
+                  <li>
+                    <a href="#products">产品中心</a>
+                    <ul>
+                      <li><a href="#product-1">产品 A</a></li>
+                      <li><a class="active" href="#product-2">产品 B（当前页）</a></li>
+                      <li><a href="#product-3">产品 C</a></li>
+                    </ul>
+                  </li>
+                  <li>
+                    <a href="#services">服务支持</a>
+                    <ul>
+                      <li><a href="#service-1">技术支持</a></li>
+                      <li><a href="#service-2">售后服务</a></li>
+                    </ul>
+                  </li>
+                  <li>
+                    <a href="#about">关于我们</a>
+                  </li>
+                  <li>
+                    <a href="#contact">联系方式</a>
+                  </li>
+                </ul>
+              </div>
+
+              <p style="margin-top: 20px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 "产品中心"包含当前激活的子链接，因此自动高亮并展开。有子菜单的项显示箭头。
+              </p>
+            </div>
+
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 包含当前页面链接的导航项高亮 */</span>
+.smart-nav li:has(a.active) {
+  background: lightgreen;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+<span class="code-comment">/* 包含子菜单的导航项显示箭头 */</span>
+.smart-nav li:has(ul) > a::after {
+  content: '▼';
+  float: right;
+  transition: transform 0.3s;
+}
+
+<span class="code-comment">/* 展开包含激活链接的子菜单 */</span>
+.smart-nav li:has(a.active) ul {
+  max-height: 500px;
+}
+
+<span class="code-comment">/* 旋转箭头 */</span>
+.smart-nav li:has(a.active) > a::after {
+  transform: rotate(180deg);
+}
+
+<span class="code-comment">/* 优势：父级导航自动感知子链接状态，无需手动添加类 */</span></code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 案例 4: 购物车状态 -->
+        <section class="demo-section">
+          <h2>案例 4: 购物车状态</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 20px">
+            根据购物车中是否有商品，动态显示不同的状态和操作按钮。这是电商网站中非常常见的场景。
+          </p>
+
+          <div class="demo-container single-column">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览 - 点击按钮添加/移除商品</div>
+              <style>
+                .cart-demo {
+                  max-width: 600px;
+                  margin: 0 auto;
+                }
+
+                .shopping-cart {
+                  background: var(--bg-primary);
+                  border: 2px solid var(--border-color);
+                  border-radius: 12px;
+                  padding: 25px;
+                  min-height: 300px;
+                  position: relative;
+                }
+
+                .cart-header {
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-bottom: 20px;
+                  padding-bottom: 15px;
+                  border-bottom: 2px solid var(--border-color);
+                }
+
+                .cart-header h3 {
+                  margin: 0;
+                  color: var(--text-primary);
+                  font-size: 1.4rem;
+                }
+
+                .cart-count {
+                  background: var(--primary);
+                  color: white;
+                  padding: 4px 12px;
+                  border-radius: 20px;
+                  font-weight: 600;
+                  font-size: 0.9rem;
+                }
+
+                .cart-items {
+                  margin-bottom: 20px;
+                }
+
+                .cart-item {
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  padding: 15px;
+                  background: var(--bg-secondary);
+                  border-radius: 8px;
+                  margin-bottom: 10px;
+                }
+
+                .item-info {
+                  flex: 1;
+                }
+
+                .item-name {
+                  font-weight: 600;
+                  color: var(--text-primary);
+                  margin-bottom: 5px;
+                }
+
+                .item-price {
+                  color: var(--primary);
+                  font-weight: 700;
+                }
+
+                .remove-btn {
+                  padding: 6px 12px;
+                  background: var(--error);
+                  color: white;
+                  border: none;
+                  border-radius: 6px;
+                  cursor: pointer;
+                  font-size: 0.85rem;
+                  font-weight: 600;
+                  transition: all 0.3s;
+                }
+
+                .remove-btn:hover {
+                  background: var(--error-dark);
+                  transform: scale(1.05);
+                }
+
+                /* 购物车为空时显示提示 */
+                .empty-message {
+                  display: none;
+                  text-align: center;
+                  padding: 60px 20px;
+                  color: var(--text-secondary);
+                }
+
+                .shopping-cart:not(:has(.cart-item)) .empty-message {
+                  display: block;
+                }
+
+                .empty-message .icon {
+                  font-size: 4rem;
+                  margin-bottom: 15px;
+                  opacity: 0.5;
+                }
+
+                .empty-message h4 {
+                  margin: 0 0 10px;
+                  color: var(--text-primary);
+                  font-size: 1.2rem;
+                }
+
+                /* 购物车有商品时显示结算按钮 */
+                .cart-actions {
+                  display: none;
+                  gap: 10px;
+                }
+
+                .shopping-cart:has(.cart-item) .cart-actions {
+                  display: flex;
+                }
+
+                .checkout-btn {
+                  flex: 1;
+                  padding: 14px;
+                  background: var(--primary);
+                  color: white;
+                  border: none;
+                  border-radius: 8px;
+                  font-size: 1.1rem;
+                  font-weight: 600;
+                  cursor: pointer;
+                  transition: all 0.3s;
+                }
+
+                .checkout-btn:hover {
+                  background: var(--primary-dark);
+                  transform: translateY(-2px);
+                  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+                }
+
+                .clear-btn {
+                  padding: 14px 24px;
+                  background: var(--bg-secondary);
+                  color: var(--text-primary);
+                  border: 2px solid var(--border-color);
+                  border-radius: 8px;
+                  font-size: 1rem;
+                  font-weight: 600;
+                  cursor: pointer;
+                  transition: all 0.3s;
+                }
+
+                .clear-btn:hover {
+                  border-color: var(--error);
+                  color: var(--error);
+                }
+
+                /* 隐藏购物车为空时的商品列表容器 */
+                .shopping-cart:not(:has(.cart-item)) .cart-items {
+                  display: none;
+                }
+
+                /* 隐藏购物车为空时的数量标签 */
+                .shopping-cart:not(:has(.cart-item)) .cart-count {
+                  display: none;
+                }
+
+                .add-demo-items {
+                  margin-top: 20px;
+                  padding: 15px;
+                  background: var(--bg-secondary);
+                  border-radius: 8px;
+                  text-align: center;
+                }
+
+                .add-item-btn {
+                  padding: 10px 20px;
+                  background: var(--primary);
+                  color: white;
+                  border: none;
+                  border-radius: 6px;
+                  font-weight: 600;
+                  cursor: pointer;
+                  transition: all 0.3s;
+                  margin: 5px;
+                }
+
+                .add-item-btn:hover {
+                  background: var(--primary-dark);
+                  transform: translateY(-2px);
+                }
+              </style>
+
+              <div class="cart-demo">
+                <div id="shoppingCart" class="shopping-cart" aria-label="购物车" role="region">
+                  <div class="cart-header">
+                    <h3>购物车</h3>
+                    <span id="cartCount" class="cart-count" aria-live="polite" role="status">0 件商品</span>
+                  </div>
+
+                  <div class="empty-message" aria-live="polite" role="status">
+                    <div class="icon" aria-hidden="true">🛒</div>
+                    <h4>购物车是空的</h4>
+                    <p>快去添加一些商品吧！</p>
+                  </div>
+
+                  <div id="cartItems" class="cart-items" aria-label="购物车商品列表" role="list">
+                    <!-- 商品将通过 JavaScript 动态添加 -->
+                  </div>
+
+                  <div class="cart-actions">
+                    <button class="checkout-btn" aria-label="前往结算页面">去结算</button>
+                    <button class="clear-btn" aria-label="清空购物车中的所有商品" onclick="clearCart()">
+                      清空购物车
+                    </button>
+                  </div>
+                </div>
+
+                <div class="add-demo-items" aria-label="添加商品到购物车" role="group">
+                  <p style="margin-top: 0; color: var(--text-secondary); font-weight: 600">
+                    测试功能：添加商品到购物车
+                  </p>
+                  <button class="add-item-btn" aria-label="添加智能手机到购物车" onclick="addItem('智能手机', 4999)">
+                    添加手机
+                  </button>
+                  <button class="add-item-btn" aria-label="添加无线耳机到购物车" onclick="addItem('无线耳机', 1299)">
+                    添加耳机
+                  </button>
+                  <button
+                    class="add-item-btn"
+                    aria-label="添加笔记本电脑到购物车"
+                    onclick="addItem('笔记本电脑', 6999)"
+                  >
+                    添加电脑
+                  </button>
+                </div>
+              </div>
+
+              <script>
+                window.addItem = function addItem(name, price) {
+                  const cartItems = document.getElementById('cartItems');
+                  const item = document.createElement('div');
+                  item.className = 'cart-item';
+                  item.setAttribute('role', 'listitem');
+                  item.innerHTML = `
+                    <div class="item-info">
+                      <div class="item-name">${name}</div>
+                      <div class="item-price">¥${price}</div>
+                    </div>
+                    <button class="remove-btn" onclick="removeItem(this)" aria-label="从购物车移除 ${name}">移除</button>
+                  `;
+                  cartItems.appendChild(item);
+                  updateCartCount();
+
+                  // Announce to screen reader
+                  if (window.announceToScreenReader) {
+                    window.announceToScreenReader(`已添加 ${name} 到购物车`);
+                  }
+                };
+
+                window.removeItem = function removeItem(btn) {
+                  const itemName = btn.closest('.cart-item').querySelector('.item-name').textContent;
+                  btn.closest('.cart-item').remove();
+                  updateCartCount();
+
+                  // Announce to screen reader
+                  if (window.announceToScreenReader) {
+                    window.announceToScreenReader(`已从购物车移除 ${itemName}`);
+                  }
+                };
+
+                window.clearCart = function clearCart() {
+                  const count = document.querySelectorAll('.cart-item').length;
+                  document.getElementById('cartItems').innerHTML = '';
+                  updateCartCount();
+
+                  // Announce to screen reader
+                  if (window.announceToScreenReader) {
+                    window.announceToScreenReader(`已清空购物车，移除了 ${count} 件商品`);
+                  }
+                };
+
+                function updateCartCount() {
+                  const count = document.querySelectorAll('.cart-item').length;
+                  const countElement = document.getElementById('cartCount');
+                  countElement.textContent = `${count} 件商品`;
+
+                  // Update aria-label for better screen reader support
+                  countElement.setAttribute('aria-label', `购物车中有 ${count} 件商品`);
+                }
+              </script>
+
+              <p style="margin-top: 20px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 添加商品到购物车，观察空状态和有商品状态的切换。结算按钮只在有商品时显示。
+              </p>
+            </div>
+
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 购物车为空时显示提示 */</span>
+.shopping-cart:not(:has(.cart-item)) .empty-message {
+  display: block;
+}
+
+<span class="code-comment">/* 隐藏空购物车的商品列表 */</span>
+.shopping-cart:not(:has(.cart-item)) .cart-items {
+  display: none;
+}
+
+<span class="code-comment">/* 隐藏空购物车的数量标签 */</span>
+.shopping-cart:not(:has(.cart-item)) .cart-count {
+  display: none;
+}
+
+<span class="code-comment">/* 购物车有商品时显示结算按钮 */</span>
+.shopping-cart:has(.cart-item) .cart-actions {
+  display: flex;
+}
+
+<span class="code-comment">/* 优势：根据商品数量自动切换状态，无需手动管理类名 */</span></code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 浏览器兼容性 -->
+        <section class="compatibility-section">
+          <h2>浏览器兼容性</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 20px">
+            <code>:has()</code> 是一个相对较新的 CSS 特性，主流现代浏览器已经支持。
+          </p>
+
+          <table class="compatibility-table">
+            <thead>
+              <tr>
+                <th>浏览器</th>
+                <th>版本</th>
+                <th>支持状态</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Chrome / Edge</td>
+                <td>105+</td>
+                <td class="support-yes">✓ 完全支持</td>
+              </tr>
+              <tr>
+                <td>Firefox</td>
+                <td>121+</td>
+                <td class="support-yes">✓ 完全支持</td>
+              </tr>
+              <tr>
+                <td>Safari</td>
+                <td>15.4+</td>
+                <td class="support-yes">✓ 完全支持</td>
+              </tr>
+              <tr>
+                <td>Opera</td>
+                <td>91+</td>
+                <td class="support-yes">✓ 完全支持</td>
+              </tr>
+              <tr>
+                <td>IE 11</td>
+                <td>-</td>
+                <td class="support-no">✗ 不支持</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div
+            style="
+              background: var(--warning-light);
+              border-left: 4px solid var(--warning);
+              padding: 15px;
+              border-radius: var(--radius-md);
+              margin-top: 20px;
+            "
+          >
+            <strong style="color: var(--warning-dark)">⚠️ 兼容性建议</strong>
+            <p style="color: var(--text-primary); margin-top: 8px; line-height: 1.6">
+              如果需要支持旧版浏览器，可以使用 <code>@supports</code> 检测 <code>:has()</code> 支持情况，
+              并提供降级方案（如使用 JavaScript 或传统的类名管理）。
+            </p>
+            <pre
+              style="margin-top: 10px; background: var(--bg-primary); padding: 10px; border-radius: 4px"
+            ><code><span class="code-comment">/* 检测 :has() 支持 */</span>
+@supports selector(:has(*)) {
+  .card:has(input:checked) {
+    /* 支持 :has() 的样式 */
+  }
+}
+
+@supports not selector(:has(*)) {
+  .card.selected {
+    /* 降级方案：使用类名 */
+  }
+}</code></pre>
+          </div>
+
+          <p style="margin-top: 20px; color: var(--text-secondary)">
+            更多兼容性信息请访问：
+            <a href="https://caniuse.com/css-has" target="_blank" style="color: var(--primary); font-weight: 600">
+              Can I Use - :has()
+            </a>
+          </p>
+        </section>
+
+        <!-- 总结 -->
+        <section class="concept-section" style="margin-top: 50px">
+          <h2>实战总结</h2>
+          <p>通过这 4 个实战案例，我们看到了 <code>:has()</code> 在真实项目中的强大应用：</p>
+          <ul>
+            <li><strong>表单验证</strong> - 无需 JavaScript 即可实现实时验证反馈</li>
+            <li><strong>卡片管理</strong> - 根据内容和状态自动调整样式和布局</li>
+            <li><strong>智能导航</strong> - 父级菜单自动感知子链接状态</li>
+            <li><strong>购物车</strong> - 根据商品数量动态切换空/非空状态</li>
+          </ul>
+          <p>
+            <code>:has()</code> 让我们能够用纯 CSS 实现许多以前需要 JavaScript 才能完成的功能，
+            大大简化了代码，提升了性能和可维护性。在支持的浏览器中，它是一个非常值得使用的现代特性。
+          </p>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

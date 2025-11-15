@@ -1,0 +1,945 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>:focus-within - CSS 现代选择器</title>
+    <link href="/src/styles/common.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+    <script>
+      (function () {
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    </script>
+    <script type="module" src="/src/theme.js"></script>
+    <script src="compatibility-check.js"></script>
+  </head>
+  <body data-demo="focus-within">
+    <!-- 左侧边栏导航 -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>CSS 现代选择器</h1>
+        <a class="back-home" href="index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a class="nav-item" href="demo1-specificity.html">选择器优先级</a>
+        </div>
+        <div class="nav-section">
+          <h3>逻辑选择器</h3>
+          <a class="nav-item" href="demo2-is.html">:is() 伪类</a>
+          <a class="nav-item" href="demo3-where.html">:where() 伪类</a>
+          <a class="nav-item" href="demo4-not.html">:not() 伪类</a>
+        </div>
+        <div class="nav-section">
+          <h3>父子关系选择器</h3>
+          <a class="nav-item" href="demo5-has-basics.html">:has() 基础</a>
+          <a class="nav-item" href="demo6-has-practical.html">:has() 实战</a>
+        </div>
+        <div class="nav-section">
+          <h3>状态选择器</h3>
+          <a class="nav-item active" href="demo7-focus-within.html">:focus-within</a>
+          <a class="nav-item" href="demo8-focus-visible.html">:focus-visible</a>
+        </div>
+        <div class="nav-section">
+          <h3>结构选择器进阶</h3>
+          <a class="nav-item" href="demo9-nth-child.html">:nth-child() 高级</a>
+          <a class="nav-item" href="demo10-nth-comparison.html">结构选择器对比</a>
+        </div>
+        <div class="nav-section">
+          <h3>综合实战</h3>
+          <a class="nav-item" href="demo11-combinations.html">选择器组合实战</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- 右侧主内容区 -->
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>:focus-within</h1>
+        <p class="subtitle">检测内部元素的焦点状态</p>
+
+        <!-- 概念介绍 -->
+        <section class="concept-section">
+          <h2>什么是 :focus-within?</h2>
+          <p>
+            <code>:focus-within</code> 伪类用于选择<strong>自身或其后代元素获得焦点</strong>的元素。
+            这是一个非常实用的选择器，可以让我们在内部元素获得焦点时，改变父容器的样式。
+          </p>
+          <p>
+            与传统的 <code>:focus</code> 只能选择获得焦点的元素本身不同，
+            <code>:focus-within</code> 可以向上传播，让父元素也能响应内部元素的焦点状态。
+            这在表单设计、搜索框、对话框等场景中特别有用。
+          </p>
+          <div class="info-box">
+            <strong>💡 核心特性：</strong>
+            <ul>
+              <li>当元素自身或任何后代元素获得焦点时匹配</li>
+              <li>焦点状态向上传播到所有祖先元素</li>
+              <li>支持嵌套元素的焦点检测</li>
+              <li>无需 JavaScript 即可实现父容器响应</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 语法说明 -->
+        <section class="syntax-section">
+          <h2>语法</h2>
+          <pre><code>/* 基础语法 */
+element:focus-within {
+  /* 当 element 或其后代获得焦点时的样式 */
+}
+
+/* 实际应用示例 */
+form:focus-within {
+  border-color: blue;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* 嵌套使用 */
+.container:focus-within .label {
+  color: var(--primary);
+  font-weight: 600;
+}</code></pre>
+          <div class="info-box warning">
+            <strong>⚠️ 与 :has(:focus) 的对比：</strong>
+            <ul>
+              <li><code>:focus-within</code> - 专门用于焦点检测，性能更好，浏览器支持更早</li>
+              <li><code>:has(:focus)</code> - 更通用的父选择器，但性能稍差，浏览器支持较晚</li>
+              <li>对于焦点检测场景，推荐使用 <code>:focus-within</code></li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 示例 1: 表单容器焦点 -->
+        <section class="demo-section">
+          <h2>示例 1: 表单容器焦点效果</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 20px">
+            当表单内的任何输入框获得焦点时，整个表单容器会改变样式，提供清晰的视觉反馈。
+          </p>
+
+          <div class="demo-container single-column">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览 - 点击或 Tab 到输入框</div>
+              <style>
+                .form-container-demo {
+                  max-width: 500px;
+                  margin: 0 auto;
+                }
+
+                .focus-form {
+                  background: var(--bg-primary);
+                  border: 3px solid var(--border-color);
+                  border-radius: 12px;
+                  padding: 30px;
+                  transition: all 0.3s ease;
+                }
+
+                /* 表单内有元素获得焦点时的样式 */
+                .focus-form:focus-within {
+                  border-color: var(--primary);
+                  background: var(--primary-light);
+                  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+                }
+
+                .focus-form h3 {
+                  margin-top: 0;
+                  color: var(--text-primary);
+                  transition: color 0.3s ease;
+                }
+
+                /* 标题也会响应焦点状态 */
+                .focus-form:focus-within h3 {
+                  color: var(--primary);
+                }
+
+                .form-group {
+                  margin-bottom: 20px;
+                }
+
+                .form-group label {
+                  display: block;
+                  margin-bottom: 8px;
+                  color: var(--text-secondary);
+                  font-weight: 500;
+                  transition: all 0.3s ease;
+                }
+
+                .form-group input,
+                .form-group textarea {
+                  width: 100%;
+                  padding: 12px;
+                  border: 2px solid var(--border-color);
+                  border-radius: 8px;
+                  font-size: 1rem;
+                  background: var(--bg-primary);
+                  color: var(--text-primary);
+                  transition: all 0.3s ease;
+                }
+
+                .form-group input:focus,
+                .form-group textarea:focus {
+                  outline: none;
+                  border-color: var(--primary);
+                }
+
+                /* 当前获得焦点的输入框的标签高亮 */
+                .form-group:focus-within label {
+                  color: var(--primary);
+                  font-weight: 600;
+                  transform: translateX(4px);
+                }
+
+                .focus-indicator {
+                  margin-top: 20px;
+                  padding: 12px;
+                  background: var(--bg-secondary);
+                  border-radius: 8px;
+                  text-align: center;
+                  font-weight: 600;
+                  color: var(--text-secondary);
+                  transition: all 0.3s ease;
+                }
+
+                .focus-form:focus-within .focus-indicator {
+                  background: var(--primary);
+                  color: white;
+                }
+              </style>
+
+              <div class="form-container-demo">
+                <form class="focus-form">
+                  <h3>用户注册</h3>
+                  <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input id="username" type="text" placeholder="请输入用户名" />
+                  </div>
+                  <div class="form-group">
+                    <label for="email">邮箱</label>
+                    <input id="email" type="email" placeholder="请输入邮箱" />
+                  </div>
+                  <div class="form-group">
+                    <label for="bio">个人简介</label>
+                    <textarea id="bio" placeholder="介绍一下自己..." rows="3"></textarea>
+                  </div>
+                  <div class="focus-indicator">表单未激活</div>
+                </form>
+              </div>
+            </div>
+
+            <div class="demo-code">
+              <pre><code>/* 表单容器焦点样式 */
+.focus-form:focus-within {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+/* 标题响应焦点状态 */
+.focus-form:focus-within h3 {
+  color: var(--primary);
+}
+
+/* 当前获得焦点的输入框的标签高亮 */
+.form-group:focus-within label {
+  color: var(--primary);
+  font-weight: 600;
+  transform: translateX(4px);
+}
+
+/* 焦点指示器 */
+.focus-form:focus-within .focus-indicator {
+  background: var(--primary);
+  color: white;
+}</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 示例 2: 嵌套元素焦点传播 -->
+        <section class="demo-section">
+          <h2>示例 2: 嵌套元素的焦点传播</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 20px">
+            <code>:focus-within</code> 会向上传播到所有祖先元素，这使得多层嵌套的布局也能响应内部元素的焦点状态。
+          </p>
+
+          <div class="demo-container single-column">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览 - 观察多层容器的响应</div>
+              <style>
+                .nested-demo {
+                  max-width: 600px;
+                  margin: 0 auto;
+                }
+
+                .outer-container {
+                  background: var(--bg-secondary);
+                  border: 3px solid var(--border-color);
+                  border-radius: 12px;
+                  padding: 20px;
+                  transition: all 0.3s ease;
+                }
+
+                .outer-container:focus-within {
+                  border-color: #f59e0b;
+                  background: rgba(245, 158, 11, 0.05);
+                }
+
+                .middle-container {
+                  background: var(--bg-primary);
+                  border: 3px solid var(--border-color);
+                  border-radius: 8px;
+                  padding: 20px;
+                  margin-top: 15px;
+                  transition: all 0.3s ease;
+                }
+
+                .middle-container:focus-within {
+                  border-color: #8b5cf6;
+                  background: rgba(139, 92, 246, 0.05);
+                }
+
+                .inner-container {
+                  background: var(--bg-secondary);
+                  border: 3px solid var(--border-color);
+                  border-radius: 8px;
+                  padding: 15px;
+                  margin-top: 15px;
+                  transition: all 0.3s ease;
+                }
+
+                .inner-container:focus-within {
+                  border-color: var(--primary);
+                  background: var(--primary-light);
+                }
+
+                .container-label {
+                  font-weight: 600;
+                  margin-bottom: 10px;
+                  color: var(--text-secondary);
+                  transition: color 0.3s ease;
+                }
+
+                .outer-container:focus-within > .container-label {
+                  color: #f59e0b;
+                }
+
+                .middle-container:focus-within > .container-label {
+                  color: #8b5cf6;
+                }
+
+                .inner-container:focus-within > .container-label {
+                  color: var(--primary);
+                }
+
+                .nested-input {
+                  width: 100%;
+                  padding: 10px;
+                  border: 2px solid var(--border-color);
+                  border-radius: 6px;
+                  font-size: 1rem;
+                  background: var(--bg-primary);
+                  color: var(--text-primary);
+                }
+
+                .nested-input:focus {
+                  outline: none;
+                  border-color: var(--primary);
+                }
+              </style>
+
+              <div class="nested-demo">
+                <div class="outer-container">
+                  <div class="container-label">🟡 外层容器 (Outer)</div>
+                  <p style="margin: 10px 0; color: var(--text-secondary); font-size: 0.9rem">
+                    当内部任何输入框获得焦点时，我会变成橙色边框
+                  </p>
+
+                  <div class="middle-container">
+                    <div class="container-label">🟣 中层容器 (Middle)</div>
+                    <p style="margin: 10px 0; color: var(--text-secondary); font-size: 0.9rem">
+                      当内部输入框获得焦点时，我会变成紫色边框
+                    </p>
+
+                    <div class="inner-container">
+                      <div class="container-label">🟢 内层容器 (Inner)</div>
+                      <input class="nested-input" type="text" placeholder="点击这里，观察三层容器的变化" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="demo-code">
+              <pre><code>/* 外层容器 */
+.outer-container:focus-within {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.outer-container:focus-within > .container-label {
+  color: #f59e0b;
+}
+
+/* 中层容器 */
+.middle-container:focus-within {
+  border-color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.05);
+}
+
+.middle-container:focus-within > .container-label {
+  color: #8b5cf6;
+}
+
+/* 内层容器 */
+.inner-container:focus-within {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+.inner-container:focus-within > .container-label {
+  color: var(--primary);
+}</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 实际应用场景 -->
+        <section class="demo-section">
+          <h2>实际应用场景</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 20px">
+            以下是三个常见的实际应用场景，展示 <code>:focus-within</code> 如何提升用户体验。
+          </p>
+
+          <!-- 场景 1: 搜索框 -->
+          <div class="demo-container single-column" style="margin-bottom: 40px">
+            <h3 style="margin-top: 0">场景 1: 搜索框容器焦点效果</h3>
+            <div class="demo-preview">
+              <style>
+                .search-container {
+                  max-width: 500px;
+                  margin: 0 auto;
+                  background: var(--bg-primary);
+                  border: 3px solid var(--border-color);
+                  border-radius: 50px;
+                  padding: 8px 20px;
+                  display: flex;
+                  align-items: center;
+                  gap: 12px;
+                  transition: all 0.3s ease;
+                }
+
+                .search-container:focus-within {
+                  border-color: var(--primary);
+                  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+                  background: var(--primary-light);
+                }
+
+                .search-icon {
+                  font-size: 1.3rem;
+                  color: var(--text-secondary);
+                  transition: color 0.3s ease;
+                }
+
+                .search-container:focus-within .search-icon {
+                  color: var(--primary);
+                }
+
+                .search-input {
+                  flex: 1;
+                  border: none;
+                  outline: none;
+                  font-size: 1rem;
+                  background: transparent;
+                  color: var(--text-primary);
+                }
+
+                .search-input::placeholder {
+                  color: var(--text-secondary);
+                }
+
+                .search-btn {
+                  padding: 8px 20px;
+                  background: var(--bg-secondary);
+                  border: none;
+                  border-radius: 20px;
+                  color: var(--text-secondary);
+                  font-weight: 600;
+                  cursor: pointer;
+                  transition: all 0.3s ease;
+                  opacity: 0;
+                  transform: scale(0.8);
+                }
+
+                .search-container:focus-within .search-btn {
+                  opacity: 1;
+                  transform: scale(1);
+                  background: var(--primary);
+                  color: white;
+                }
+              </style>
+
+              <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input class="search-input" type="text" placeholder="搜索..." />
+                <button class="search-btn">搜索</button>
+              </div>
+            </div>
+
+            <div class="demo-code">
+              <pre><code>/* 搜索框容器获得焦点时的样式 */
+.search-container:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+  background: var(--primary-light);
+}
+
+/* 图标颜色变化 */
+.search-container:focus-within .search-icon {
+  color: var(--primary);
+}
+
+/* 搜索按钮显示动画 */
+.search-container:focus-within .search-btn {
+  opacity: 1;
+  transform: scale(1);
+  background: var(--primary);
+  color: white;
+}</code></pre>
+            </div>
+          </div>
+
+          <!-- 场景 2: 登录表单 -->
+          <div class="demo-container single-column" style="margin-bottom: 40px">
+            <h3 style="margin-top: 0">场景 2: 登录表单焦点高亮</h3>
+            <div class="demo-preview">
+              <style>
+                .login-card {
+                  max-width: 400px;
+                  margin: 0 auto;
+                  background: var(--bg-primary);
+                  border: 3px solid var(--border-color);
+                  border-radius: 16px;
+                  padding: 40px;
+                  transition: all 0.3s ease;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                }
+
+                .login-card:focus-within {
+                  border-color: var(--primary);
+                  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15);
+                  transform: translateY(-2px);
+                }
+
+                .login-card h3 {
+                  margin-top: 0;
+                  text-align: center;
+                  color: var(--text-primary);
+                  transition: color 0.3s ease;
+                }
+
+                .login-card:focus-within h3 {
+                  color: var(--primary);
+                }
+
+                .login-field {
+                  margin-bottom: 20px;
+                }
+
+                .login-field label {
+                  display: block;
+                  margin-bottom: 8px;
+                  color: var(--text-secondary);
+                  font-weight: 500;
+                  transition: all 0.3s ease;
+                }
+
+                .login-field:focus-within label {
+                  color: var(--primary);
+                  transform: translateX(4px);
+                }
+
+                .login-field input {
+                  width: 100%;
+                  padding: 12px;
+                  border: 2px solid var(--border-color);
+                  border-radius: 8px;
+                  font-size: 1rem;
+                  background: var(--bg-secondary);
+                  color: var(--text-primary);
+                  transition: all 0.3s ease;
+                }
+
+                .login-field input:focus {
+                  outline: none;
+                  border-color: var(--primary);
+                  background: var(--bg-primary);
+                }
+
+                .login-submit {
+                  width: 100%;
+                  padding: 12px;
+                  background: var(--bg-secondary);
+                  border: 2px solid var(--border-color);
+                  border-radius: 8px;
+                  color: var(--text-secondary);
+                  font-size: 1rem;
+                  font-weight: 600;
+                  cursor: pointer;
+                  transition: all 0.3s ease;
+                }
+
+                .login-card:focus-within .login-submit {
+                  background: var(--primary);
+                  border-color: var(--primary);
+                  color: white;
+                }
+              </style>
+
+              <form class="login-card">
+                <h3>🔐 用户登录</h3>
+                <div class="login-field">
+                  <label for="login-email">邮箱地址</label>
+                  <input id="login-email" type="email" placeholder="your@email.com" />
+                </div>
+                <div class="login-field">
+                  <label for="login-password">密码</label>
+                  <input id="login-password" type="password" placeholder="••••••••" />
+                </div>
+                <button class="login-submit" type="submit">登录</button>
+              </form>
+            </div>
+
+            <div class="demo-code">
+              <pre><code>/* 登录卡片获得焦点时提升 */
+.login-card:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15);
+  transform: translateY(-2px);
+}
+
+/* 标题颜色变化 */
+.login-card:focus-within h3 {
+  color: var(--primary);
+}
+
+/* 当前字段标签高亮 */
+.login-field:focus-within label {
+  color: var(--primary);
+  transform: translateX(4px);
+}
+
+/* 提交按钮激活 */
+.login-card:focus-within .login-submit {
+  background: var(--primary);
+  color: white;
+}</code></pre>
+            </div>
+          </div>
+
+          <!-- 场景 3: 评论框 -->
+          <div class="demo-container single-column">
+            <h3 style="margin-top: 0">场景 3: 评论框焦点状态</h3>
+            <div class="demo-preview">
+              <style>
+                .comment-box {
+                  max-width: 600px;
+                  margin: 0 auto;
+                  background: var(--bg-primary);
+                  border: 3px solid var(--border-color);
+                  border-radius: 12px;
+                  padding: 20px;
+                  transition: all 0.3s ease;
+                }
+
+                .comment-box:focus-within {
+                  border-color: var(--primary);
+                  background: var(--primary-light);
+                }
+
+                .comment-header {
+                  display: flex;
+                  align-items: center;
+                  gap: 12px;
+                  margin-bottom: 15px;
+                }
+
+                .comment-avatar {
+                  width: 40px;
+                  height: 40px;
+                  background: var(--bg-secondary);
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 1.5rem;
+                  transition: all 0.3s ease;
+                }
+
+                .comment-box:focus-within .comment-avatar {
+                  background: var(--primary);
+                  transform: scale(1.1);
+                }
+
+                .comment-user {
+                  font-weight: 600;
+                  color: var(--text-primary);
+                }
+
+                .comment-textarea {
+                  width: 100%;
+                  min-height: 100px;
+                  padding: 12px;
+                  border: 2px solid var(--border-color);
+                  border-radius: 8px;
+                  font-size: 1rem;
+                  font-family: inherit;
+                  background: var(--bg-primary);
+                  color: var(--text-primary);
+                  resize: vertical;
+                  transition: all 0.3s ease;
+                }
+
+                .comment-textarea:focus {
+                  outline: none;
+                  border-color: var(--primary);
+                }
+
+                .comment-actions {
+                  margin-top: 15px;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  opacity: 0.5;
+                  transition: all 0.3s ease;
+                }
+
+                .comment-box:focus-within .comment-actions {
+                  opacity: 1;
+                }
+
+                .comment-tools {
+                  display: flex;
+                  gap: 10px;
+                }
+
+                .comment-tool {
+                  padding: 6px 12px;
+                  background: var(--bg-secondary);
+                  border: none;
+                  border-radius: 6px;
+                  color: var(--text-secondary);
+                  cursor: pointer;
+                  transition: all 0.3s ease;
+                  transform: translateY(10px);
+                  opacity: 0;
+                }
+
+                .comment-box:focus-within .comment-tool {
+                  transform: translateY(0);
+                  opacity: 1;
+                }
+
+                .comment-tool:nth-child(1) {
+                  transition-delay: 0.05s;
+                }
+                .comment-tool:nth-child(2) {
+                  transition-delay: 0.1s;
+                }
+                .comment-tool:nth-child(3) {
+                  transition-delay: 0.15s;
+                }
+
+                .comment-submit {
+                  padding: 8px 24px;
+                  background: var(--bg-secondary);
+                  border: 2px solid var(--border-color);
+                  border-radius: 6px;
+                  color: var(--text-secondary);
+                  font-weight: 600;
+                  cursor: pointer;
+                  transition: all 0.3s ease;
+                }
+
+                .comment-box:focus-within .comment-submit {
+                  background: var(--primary);
+                  border-color: var(--primary);
+                  color: white;
+                }
+              </style>
+
+              <div class="comment-box">
+                <div class="comment-header">
+                  <div class="comment-avatar">👤</div>
+                  <span class="comment-user">当前用户</span>
+                </div>
+                <textarea class="comment-textarea" placeholder="写下你的评论..."></textarea>
+                <div class="comment-actions">
+                  <div class="comment-tools">
+                    <button class="comment-tool">📷</button>
+                    <button class="comment-tool">😊</button>
+                    <button class="comment-tool">🔗</button>
+                  </div>
+                  <button class="comment-submit">发表评论</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="demo-code">
+              <pre><code>/* 评论框获得焦点时的样式 */
+.comment-box:focus-within {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+/* 头像动画 */
+.comment-box:focus-within .comment-avatar {
+  background: var(--primary);
+  transform: scale(1.1);
+}
+
+/* 操作按钮显示 */
+.comment-box:focus-within .comment-actions {
+  opacity: 1;
+}
+
+/* 工具按钮渐入动画 */
+.comment-box:focus-within .comment-tool {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* 提交按钮激活 */
+.comment-box:focus-within .comment-submit {
+  background: var(--primary);
+  color: white;
+}</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 浏览器兼容性 -->
+        <section class="compatibility-section">
+          <h2>浏览器兼容性</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 20px">
+            <code>:focus-within</code> 在现代浏览器中有良好的支持，是一个可以放心使用的特性。
+          </p>
+
+          <div class="compatibility-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>浏览器</th>
+                  <th>版本支持</th>
+                  <th>发布时间</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <span class="browser-icon">🌐</span>
+                    Chrome / Edge
+                  </td>
+                  <td><span class="support-badge yes">✓ 60+</span></td>
+                  <td>2017年7月</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="browser-icon">🦊</span>
+                    Firefox
+                  </td>
+                  <td><span class="support-badge yes">✓ 52+</span></td>
+                  <td>2017年3月</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="browser-icon">🧭</span>
+                    Safari
+                  </td>
+                  <td><span class="support-badge yes">✓ 10.1+</span></td>
+                  <td>2017年3月</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="browser-icon">📱</span>
+                    iOS Safari
+                  </td>
+                  <td><span class="support-badge yes">✓ 10.3+</span></td>
+                  <td>2017年3月</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="info-box">
+            <strong>💡 使用建议：</strong>
+            <ul>
+              <li>
+                <strong>优先使用</strong> - 相比 <code>:has(:focus)</code>，<code>:focus-within</code>
+                性能更好且支持更早
+              </li>
+              <li><strong>渐进增强</strong> - 即使不支持，也不会影响基本功能，只是缺少视觉增强</li>
+              <li><strong>无障碍友好</strong> - 配合键盘导航使用，提升可访问性</li>
+              <li><strong>避免过度使用</strong> - 不要在每个元素上都使用，保持性能</li>
+            </ul>
+          </div>
+
+          <div class="info-box warning">
+            <strong>⚠️ 注意事项：</strong>
+            <ul>
+              <li>IE 浏览器不支持 <code>:focus-within</code></li>
+              <li>如需支持旧版浏览器，可以使用 JavaScript polyfill</li>
+              <li>避免在 <code>:focus-within</code> 中使用复杂的动画，可能影响性能</li>
+            </ul>
+          </div>
+
+          <p style="margin-top: 20px">
+            <a
+              href="https://caniuse.com/css-focus-within"
+              target="_blank"
+              rel="noopener"
+              style="color: var(--primary); text-decoration: none; font-weight: 600"
+            >
+              → 查看完整的浏览器兼容性数据 (Can I Use)
+            </a>
+          </p>
+        </section>
+
+        <!-- 总结 -->
+        <section class="concept-section" style="margin-top: 40px">
+          <h2>总结</h2>
+          <p>
+            <code>:focus-within</code> 是一个强大且实用的伪类选择器，它让我们能够在不使用 JavaScript 的情况下，
+            根据内部元素的焦点状态来改变父容器的样式。
+          </p>
+          <div class="info-box">
+            <strong>🎯 核心要点：</strong>
+            <ul>
+              <li>当元素自身或后代元素获得焦点时匹配</li>
+              <li>焦点状态向上传播到所有祖先元素</li>
+              <li>非常适合表单、搜索框、对话框等交互场景</li>
+              <li>相比 <code>:has(:focus)</code> 性能更好，浏览器支持更早</li>
+              <li>配合过渡动画可以创造流畅的用户体验</li>
+            </ul>
+          </div>
+          <p>
+            在下一个演示中，我们将学习 <code>:focus-visible</code>，
+            它可以帮助我们区分鼠标点击和键盘导航的焦点状态，进一步优化用户体验。
+          </p>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>
