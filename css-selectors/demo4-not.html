@@ -422,7 +422,8 @@ button.warning { background: orange; color: white; }
               <div class="demo-preview-title">效果预览</div>
               <style>
                 .not-demo-4 {
-                  display: grid;
+                  display: flex;
+                  flex-direction: column;
                   gap: 15px;
                 }
                 .not-demo-4 .item {
@@ -430,57 +431,60 @@ button.warning { background: orange; color: white; }
                   border-radius: 8px;
                   font-weight: 600;
                   border: 2px solid;
+                  position: static !important;
+                  width: auto !important;
+                  height: auto !important;
                 }
-                .not-demo-4 .item:not(.header):not(.footer):not(.sidebar) {
+                .not-demo-4 .item:not(.demo-header):not(.demo-footer):not(.demo-sidebar) {
                   background: #d1fae5;
                   color: #065f46;
                   border-color: #10b981;
                 }
-                .not-demo-4 .item.header {
+                .not-demo-4 .item.demo-header {
                   background: #dbeafe;
                   color: #1e40af;
                   border-color: #3b82f6;
                 }
-                .not-demo-4 .item.footer {
+                .not-demo-4 .item.demo-footer {
                   background: #fce7f3;
                   color: #9f1239;
                   border-color: #ec4899;
                 }
-                .not-demo-4 .item.sidebar {
+                .not-demo-4 .item.demo-sidebar {
                   background: #fef3c7;
                   color: #92400e;
                   border-color: #f59e0b;
                 }
               </style>
               <div class="not-demo-4">
-                <div class="item header">Header 区域 - 蓝色</div>
+                <div class="item demo-header">Header 区域 - 蓝色</div>
                 <div class="item">主内容区域 1 - 绿色 ✓</div>
-                <div class="item sidebar">Sidebar 区域 - 黄色</div>
+                <div class="item demo-sidebar">Sidebar 区域 - 黄色</div>
                 <div class="item">主内容区域 2 - 绿色 ✓</div>
                 <div class="item">主内容区域 3 - 绿色 ✓</div>
-                <div class="item footer">Footer 区域 - 粉色</div>
+                <div class="item demo-footer">Footer 区域 - 粉色</div>
               </div>
               <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
-                💡 链式 :not() 排除了 header、footer、sidebar，只有主内容区域显示绿色
+                💡 链式 :not() 排除了 demo-header、demo-footer、demo-sidebar，只有主内容区域显示绿色
               </p>
             </div>
             <div class="demo-code">
               <pre><code><span class="code-comment">/* 链式使用多个 :not() */</span>
-.item:not(.header):not(.footer):not(.sidebar) {
+.item:not(.demo-header):not(.demo-footer):not(.demo-sidebar) {
   background: lightgreen;
   color: darkgreen;
   border-color: green;
 }
 
 <span class="code-comment">/* 等价于现代语法（如果浏览器支持） */</span>
-.item:not(.header, .footer, .sidebar) {
+.item:not(.demo-header, .demo-footer, .demo-sidebar) {
   background: lightgreen;
   color: darkgreen;
   border-color: green;
 }
 
 <span class="code-comment">/* 每个 :not() 都会进一步过滤元素
-   只有同时不是 header、footer、sidebar 的元素才会被选中 */</span></code></pre>
+   只有同时不是 demo-header、demo-footer、demo-sidebar 的元素才会被选中 */</span></code></pre>
             </div>
           </div>
 
