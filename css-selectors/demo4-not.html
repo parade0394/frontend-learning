@@ -103,7 +103,8 @@
 
 <span class="code-comment">/* 排除多个选择器（现代语法） */</span>
 :not(selector1, selector2, selector3) {
-  /* 匹配不是 selector1、selector2 或 selector3 的元素 */
+  /* 匹配"不是 selector1、selector2 或 selector3"的元素 */
+  /* 等价于：既不是 selector1，也不是 selector2，也不是 selector3 */
 }
 
 <span class="code-comment">/* 常见用法示例 */</span>
@@ -149,11 +150,17 @@ input:not([type="submit"]):not([type="button"]) {
             </p>
             <pre
               style="margin-top: 10px; background: var(--bg-primary); padding: 10px; border-radius: 4px"
-            ><code><span class="code-comment">/* 旧语法 - 需要链式使用 */</span>
+            ><code><span class="code-comment">/* 旧语法 - 链式使用（兼容性更好） */</span>
 p:not(.intro):not(.summary) { }
 
-<span class="code-comment">/* 新语法 - 一次排除多个 */</span>
-p:not(.intro, .summary) { }</code></pre>
+<span class="code-comment">/* 新语法 - 一次排除多个（更简洁） */</span>
+p:not(.intro, .summary) { }
+
+<span class="code-comment">/* 两者完全等价！都表示"既不是 .intro 也不是 .summary" */</span></code></pre>
+            <p style="color: var(--text-primary); margin-top: 12px; line-height: 1.6">
+              <strong>逻辑解释：</strong><code>:not(.intro, .summary)</code> 表示"不是(.intro 或 .summary)"，
+              根据德摩根定律，等价于"不是.intro 且 不是.summary"
+            </p>
           </div>
 
           <div
@@ -185,6 +192,29 @@ p:not(.intro, .summary) { }</code></pre>
         <!-- 基础排除示例 -->
         <section class="demo-section">
           <h2>基础排除示例</h2>
+
+          <div
+            style="
+              background: var(--warning-light);
+              border-left: 4px solid var(--warning);
+              padding: 20px;
+              border-radius: var(--radius-md);
+              margin-bottom: 30px;
+            "
+          >
+            <strong style="color: var(--warning-dark); font-size: 1.1rem">⚠️ 重要概念：逻辑关系</strong>
+            <p style="color: var(--text-primary); margin-top: 12px; line-height: 1.8">
+              <code>:not(A, B, C)</code> 表示"不是(A 或 B 或 C)"，根据德摩根定律，等价于"不是A 且 不是B 且 不是C"
+            </p>
+            <div style="margin-top: 15px; padding: 15px; background: var(--bg-primary); border-radius: 6px">
+              <div style="margin-bottom: 10px"><strong>✓ 会被选中：</strong>既不是 A，也不是 B，也不是 C 的元素</div>
+              <div><strong>✗ 不会被选中：</strong>是 A、B 或 C 中任意一个的元素</div>
+            </div>
+            <p style="color: var(--text-primary); margin-top: 12px; line-height: 1.8">
+              <strong>示例：</strong><code>p:not(.intro, .summary)</code> 只会选中<strong>既没有</strong>
+              <code>.intro</code> 类<strong>也没有</strong> <code>.summary</code> 类的 <code>&lt;p&gt;</code> 元素
+            </p>
+          </div>
 
           <h3>示例 1: 选择除最后一个外的所有元素</h3>
           <div class="demo-container">
