@@ -112,6 +112,27 @@
         background: #047857;
         transform: rotateX(-90deg) translateZ(75px);
       }
+
+      /* 对比演示样式 */
+      .correct-demo-container {
+        width: 200px;
+        height: 140px;
+        margin: 20px auto;
+        perspective: 800px;
+      }
+
+      .correct-demo-card {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        transition: transform 0.6s;
+        cursor: pointer;
+      }
+
+      .correct-demo-container:hover .correct-demo-card {
+        transform: rotateY(180deg);
+      }
     </style>
   </head>
   <body>
@@ -575,6 +596,308 @@
             <li><strong>调试技巧：</strong>如果翻转效果不正常，检查是否忘记设置 backface-visibility: hidden</li>
             <li><strong>两面都要设置：</strong>卡片翻转时，正面和背面都应该设置 backface-visibility: hidden</li>
           </ul>
+        </section>
+
+        <section class="section">
+          <h2>Transform 的工作机制：父元素 vs 子元素</h2>
+
+          <div
+            style="
+              background: #fef3c7;
+              padding: 25px;
+              border-radius: 8px;
+              margin: 20px 0;
+              border-left: 4px solid #f59e0b;
+            "
+          >
+            <h3 style="margin-top: 0; color: #92400e; font-size: 1.1rem">🤔 常见疑问</h3>
+            <p style="color: #78350f; line-height: 1.8; margin: 0">
+              既然翻转后正面和背面都旋转了 180°，为什么不能直接对正面和背面分别执行
+              <code>transform: rotateY(180deg)</code>？
+            </p>
+          </div>
+
+          <h3 style="margin-top: 30px; font-size: 1.1rem">对比演示</h3>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0">
+            <!-- 方式 1：在父元素上旋转（正确） -->
+            <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1)">
+              <h4 style="margin-top: 0; text-align: center; color: #166534">✅ 方式 1：在父元素上旋转</h4>
+              <div class="correct-demo-container">
+                <div class="correct-demo-card">
+                  <div
+                    style="
+                      position: absolute;
+                      width: 100%;
+                      height: 100%;
+                      background: linear-gradient(135deg, #10b981, #059669);
+                      color: white;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-weight: bold;
+                      border-radius: 8px;
+                      backface-visibility: hidden;
+                      font-size: 1.2rem;
+                    "
+                  >
+                    正面
+                  </div>
+                  <div
+                    style="
+                      position: absolute;
+                      width: 100%;
+                      height: 100%;
+                      background: linear-gradient(135deg, #3b82f6, #2563eb);
+                      color: white;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-weight: bold;
+                      border-radius: 8px;
+                      transform: rotateY(180deg);
+                      backface-visibility: hidden;
+                      font-size: 1.2rem;
+                    "
+                  >
+                    背面
+                  </div>
+                </div>
+              </div>
+              <pre
+                style="
+                  background: #f0fdf4;
+                  color: #166534;
+                  padding: 15px;
+                  border-radius: 6px;
+                  font-size: 0.85rem;
+                  overflow-x: auto;
+                  border: 2px solid #86efac;
+                "
+              ><code><span style="color: #6b7280;">/* 在爷容器上 hover，旋转父容器 */</span>
+<span style="color: #059669;">.card-container:hover .card</span> {
+  <span style="color: #047857;">transform</span>: <span style="color: #10b981;">rotateY(180deg)</span>;
+}</code></pre>
+              <div
+                style="
+                  background: #d1fae5;
+                  padding: 12px;
+                  border-radius: 6px;
+                  font-size: 0.9rem;
+                  line-height: 1.6;
+                  margin-top: 15px;
+                "
+              >
+                <strong>结果：</strong>✅ 完美翻转<br />
+                <strong>原理：</strong>父元素旋转 180°，带着两个子元素一起在 3D 空间中旋转
+              </div>
+            </div>
+
+            <!-- 方式 2：分别旋转子元素（错误） -->
+            <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1)">
+              <h4 style="margin-top: 0; text-align: center; color: #991b1b">❌ 方式 2：分别旋转子元素</h4>
+              <div style="width: 200px; height: 140px; margin: 20px auto; perspective: 800px">
+                <div
+                  id="wrong-demo"
+                  style="position: relative; width: 100%; height: 100%; transform-style: preserve-3d"
+                >
+                  <div
+                    id="wrong-front"
+                    style="
+                      position: absolute;
+                      width: 100%;
+                      height: 100%;
+                      background: linear-gradient(135deg, #10b981, #059669);
+                      color: white;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-weight: bold;
+                      border-radius: 8px;
+                      backface-visibility: hidden;
+                      font-size: 1.2rem;
+                      transition: transform 0.6s;
+                      transform: rotateY(0deg);
+                    "
+                  >
+                    正面
+                  </div>
+                  <div
+                    id="wrong-back"
+                    style="
+                      position: absolute;
+                      width: 100%;
+                      height: 100%;
+                      background: linear-gradient(135deg, #3b82f6, #2563eb);
+                      color: white;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-weight: bold;
+                      border-radius: 8px;
+                      transform: rotateY(180deg);
+                      backface-visibility: hidden;
+                      font-size: 1.2rem;
+                      transition: transform 0.6s;
+                    "
+                  >
+                    背面
+                  </div>
+                </div>
+              </div>
+              <pre
+                style="
+                  background: #fef2f2;
+                  color: #991b1b;
+                  padding: 15px;
+                  border-radius: 6px;
+                  font-size: 0.85rem;
+                  overflow-x: auto;
+                  border: 2px solid #fca5a5;
+                "
+              ><code><span style="color: #b91c1c;">.card-container:hover .front</span> {
+  <span style="color: #991b1b;">transform</span>: <span style="color: #dc2626;">rotateY(180deg)</span>;
+}
+<span style="color: #b91c1c;">.card-container:hover .back</span> {
+  <span style="color: #991b1b;">transform</span>: <span style="color: #dc2626;">rotateY(180deg)</span>;
+}
+
+<span style="color: #6b7280;">/* 分别旋转子元素 */</span></code></pre>
+              <div
+                style="
+                  background: #fee2e2;
+                  padding: 12px;
+                  border-radius: 6px;
+                  font-size: 0.9rem;
+                  line-height: 1.6;
+                  margin-top: 15px;
+                "
+              >
+                <strong>结果：</strong>❌ 翻转失败<br />
+                <strong>原因：</strong>背面从 180° 变成 180°，没有变化！
+              </div>
+            </div>
+          </div>
+
+          <script>
+            // 为错误示例添加悬停效果
+            const wrongDemo = document.getElementById('wrong-demo');
+            const wrongFront = document.getElementById('wrong-front');
+            const wrongBack = document.getElementById('wrong-back');
+
+            wrongDemo.addEventListener('mouseenter', () => {
+              wrongFront.style.transform = 'rotateY(180deg)';
+              wrongBack.style.transform = 'rotateY(180deg)';
+            });
+
+            wrongDemo.addEventListener('mouseleave', () => {
+              wrongFront.style.transform = 'rotateY(0deg)';
+              wrongBack.style.transform = 'rotateY(180deg)';
+            });
+          </script>
+
+          <h3 style="margin-top: 30px; font-size: 1.1rem">为什么方式 2 不行？</h3>
+
+          <div
+            style="
+              background: #fffbeb;
+              padding: 20px;
+              border-radius: 8px;
+              margin: 20px 0;
+              border-left: 4px solid #f59e0b;
+            "
+          >
+            <h4 style="margin-top: 0; color: #92400e; font-size: 1rem">🔑 关键原因：transform 属性会被覆盖</h4>
+
+            <div style="background: white; padding: 20px; border-radius: 6px; margin: 15px 0">
+              <h5 style="margin-top: 0; color: #1f2937; font-size: 0.95rem">初始状态</h5>
+              <pre
+                style="background: #f9fafb; padding: 12px; border-radius: 4px; margin: 10px 0"
+              ><code><span style="color: #059669;">.front</span> { <span style="color: #6b7280;">transform: rotateY(0deg);</span> }
+<span style="color: #2563eb;">.back</span>  { <span style="color: #6b7280;">transform: rotateY(180deg);</span> }</code></pre>
+            </div>
+
+            <div style="background: white; padding: 20px; border-radius: 6px; margin: 15px 0">
+              <h5 style="margin-top: 0; color: #1f2937; font-size: 0.95rem">悬停后（方式 2）</h5>
+              <pre
+                style="background: #f9fafb; padding: 12px; border-radius: 4px; margin: 10px 0"
+              ><code><span style="color: #dc2626;">.card-container:hover .front</span> {
+  <span style="color: #6b7280;">transform: rotateY(180deg);</span>  <span style="color: #10b981;">← 从 0° 变成 180° ✓</span>
+}
+<span style="color: #dc2626;">.card-container:hover .back</span> {
+  <span style="color: #6b7280;">transform: rotateY(180deg);</span>  <span style="color: #ef4444;">← 从 180° 变成 180° ✗ 没变化！</span>
+}</code></pre>
+            </div>
+
+            <p style="color: #78350f; line-height: 1.8; margin: 15px 0">
+              <strong>问题所在：</strong>CSS 的 <code>transform</code> 属性会被<strong>完全覆盖</strong>，而不是累加。
+              背面的初始值 <code>rotateY(180deg)</code> 被新值 <code>rotateY(180deg)</code> 覆盖，
+              但因为值相同，所以背面没有任何变化，依然停在 180° 的位置。
+            </p>
+          </div>
+
+          <h3 style="margin-top: 30px; font-size: 1.1rem">正确理解：3D 空间的旋转</h3>
+
+          <div style="display: grid; gap: 20px; margin: 20px 0">
+            <div
+              style="
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                border-left: 4px solid #10b981;
+              "
+            >
+              <h4 style="margin-top: 0; color: #065f46">✅ 方式 1：旋转整个 3D 空间</h4>
+              <pre
+                style="background: #f0fdf4; padding: 15px; border-radius: 6px; margin: 15px 0"
+              ><code><span style="color: #6b7280;">初始状态：</span>
+.card (0°)
+  ├── .front: rotateY(0°) 相对于 .card   → 绝对位置 0°
+  └── .back:  rotateY(180°) 相对于 .card → 绝对位置 180°
+
+<span style="color: #6b7280;">悬停后：</span>
+.card (180°)  <span style="color: #10b981;">← 整个坐标系旋转了</span>
+  ├── .front: rotateY(0°) 相对于 .card   → 绝对位置 0° + 180° = 180°
+  └── .back:  rotateY(180°) 相对于 .card → 绝对位置 180° + 180° = 360° = 0°</code></pre>
+              <p style="color: #065f46; line-height: 1.8; margin: 0">
+                <strong>关键：</strong>子元素的 transform 是<strong>相对于父元素的坐标系</strong>。
+                当父元素旋转时，子元素的相对角度不变，但绝对角度会改变。
+              </p>
+            </div>
+
+            <div
+              style="
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                border-left: 4px solid #ef4444;
+              "
+            >
+              <h4 style="margin-top: 0; color: #991b1b">❌ 方式 2：分别旋转元素</h4>
+              <pre
+                style="background: #fef2f2; padding: 15px; border-radius: 6px; margin: 15px 0"
+              ><code><span style="color: #6b7280;">初始状态：</span>
+.front: rotateY(0°)   → 绝对位置 0°
+.back:  rotateY(180°) → 绝对位置 180°
+
+<span style="color: #6b7280;">悬停后：</span>
+.front: rotateY(180°) → 绝对位置 180°  <span style="color: #10b981;">✓ 正面翻转成功</span>
+.back:  rotateY(180°) → 绝对位置 180°  <span style="color: #ef4444;">✗ 背面没有变化</span></code></pre>
+              <p style="color: #991b1b; line-height: 1.8; margin: 0">
+                <strong>问题：</strong>直接设置元素的 transform 会覆盖原有值。 背面需要旋转到 360°（或
+                0°），但我们只能设置成 180°。
+              </p>
+            </div>
+          </div>
+
+          <div class="info-box" style="margin-top: 20px">
+            <p>
+              <strong>总结：</strong>卡片翻转必须在<strong>父元素</strong>上执行旋转，
+              这样才能同时改变正面和背面的绝对角度。分别旋转子元素会因为 transform 属性覆盖而失败。
+            </p>
+          </div>
         </section>
 
         <section class="section">
