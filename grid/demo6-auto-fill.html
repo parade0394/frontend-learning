@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Demo 6: 自动填充</title>
+    <title>自动填充 - auto-fill & auto-fit - CSS Grid 布局</title>
     <link href="/src/styles/common.css" rel="stylesheet" />
-    <!-- 防止主题闪烁 -->
+    <link href="styles.css" rel="stylesheet" />
     <script>
       (function () {
         try {
@@ -17,93 +17,19 @@
           }
           document.documentElement.setAttribute('data-theme', actualTheme);
           document.documentElement.style.setProperty('--primary', color);
-        } catch {
-          // 忽略解析错误
+        } catch (e) {
+          console.log(e);
         }
       })();
     </script>
-    <script type="module" src="/src/theme-sync.js"></script>
+    <script type="module" src="/src/theme.js"></script>
     <style>
-      /* 主题适配 */
-      body {
-        background: var(--bg-secondary);
-        color: var(--text-primary);
-        transition:
-          background-color 0.3s ease,
-          color 0.3s ease;
-      }
-
-      .container {
-        background: var(--card-bg);
-        color: var(--text-primary);
-      }
-
-      h1,
-      h2 {
-        color: var(--text-primary);
-      }
-
-      .description {
-        color: var(--text-secondary);
-      }
-
-      .code-block {
-        background: var(--gray-800);
-        color: var(--gray-200);
-        border: 1px solid var(--gray-700);
-      }
-
-      .syntax-note,
-      .info-box {
-        background: var(--primary-light);
-        border-left-color: var(--primary);
-        color: var(--text-primary);
-      }
-
-      .syntax-note code,
-      .info-box code {
-        background: var(--bg-primary);
-        color: var(--primary);
-      }
-    </style>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-        background: var(--bg-secondary);
-      }
-
-      .container {
-        max-width: 900px;
-        margin: 0 auto;
-        background: var(--card-bg);
-        padding: 30px;
-        border-radius: 8px;
-      }
-
-      h1 {
-        color: var(--text-primary);
-        margin-bottom: 10px;
-      }
-
-      h2 {
-        color: var(--text-primary);
-        margin-top: 30px;
-        margin-bottom: 10px;
-        font-size: 20px;
-      }
-
+      /* 页面特定样式 */
       h3 {
         color: var(--text-primary);
         margin-top: 20px;
         margin-bottom: 10px;
         font-size: 16px;
-      }
-
-      .description {
-        color: var(--text-secondary);
-        margin-bottom: 30px;
-        line-height: 1.6;
       }
 
       .code-block {
@@ -152,20 +78,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-      }
-
-      .back-link {
-        display: inline-block;
-        margin-top: 30px;
-        color: var(--primary);
-        text-decoration: none;
-      }
-
-      code {
-        background: #f8f9fa;
-        padding: 2px 6px;
-        border-radius: 3px;
-        color: #e74c3c;
       }
 
       .explanation-box {
@@ -277,182 +189,217 @@
     </style>
   </head>
   <body>
-    <div class="container">
-      <a class="back-link" href="index.html">← 返回 Grid 教程</a>
-
-      <h1>Demo 6: 自动填充 - auto-fill & auto-fit</h1>
-      <div class="description">
-        <p><strong>知识点：</strong>使用 <code>auto-fill</code> 和 <code>auto-fit</code> 创建响应式网格。</p>
-        <p><code>auto-fill</code>：尽可能多地创建列，即使是空的</p>
-        <p><code>auto-fit</code>：创建列并拉伸填充可用空间</p>
-        <p>试着调整浏览器窗口大小，观察区别！</p>
+    <!-- Skip to main content link for accessibility -->
+    <a class="skip-link" href="#main-content">跳转到主要内容</a>
+    <!-- 左侧边栏导航 -->
+    <aside class="sidebar" aria-label="演示导航" role="navigation">
+      <div class="sidebar-header">
+        <h1>CSS Grid 布局</h1>
+        <a class="back-home" href="index.html" aria-label="返回主页">← 返回主页</a>
       </div>
+      <nav class="sidebar-nav" aria-label="主导航">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a class="nav-item" href="demo1-basic.html">基础网格</a>
+          <a class="nav-item" href="demo2-columns-rows.html">定义列和行</a>
+          <a class="nav-item" href="demo3-gap.html">网格间距</a>
+        </div>
+        <div class="nav-section">
+          <h3>网格定位</h3>
+          <a class="nav-item" href="demo4-grid-area.html">网格区域</a>
+          <a class="nav-item" href="demo5-span.html">跨越单元格</a>
+        </div>
+        <div class="nav-section">
+          <h3>自动布局</h3>
+          <a class="nav-item active" href="demo6-auto-fill.html">auto-fill & auto-fit</a>
+          <a class="nav-item" href="demo7-minmax.html">minmax() 函数</a>
+        </div>
+        <div class="nav-section">
+          <h3>对齐与区域</h3>
+          <a class="nav-item" href="demo8-align.html">对齐方式</a>
+          <a class="nav-item" href="demo9-template-areas.html">模板区域</a>
+        </div>
+        <div class="nav-section">
+          <h3>实战应用</h3>
+          <a class="nav-item" href="demo10-responsive.html">响应式布局</a>
+        </div>
+      </nav>
+    </aside>
 
-      <div class="code-block">
-        /* auto-fill */<br />
-        .grid {<br />
-        &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>:
-        <span class="value">repeat(auto-fill, minmax(150px, 1fr))</span>;<br />
-        }<br />
-        <br />
-        /* auto-fit */<br />
-        .grid {<br />
-        &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>:
-        <span class="value">repeat(auto-fit, minmax(150px, 1fr))</span>;<br />
-        }
-      </div>
+    <!-- 右侧主内容区 -->
+    <main id="main-content" class="main-content" role="main">
+      <div class="demo-page">
+        <h1>自动填充 - auto-fill & auto-fit</h1>
+        <p class="subtitle">使用 auto-fill 和 auto-fit 创建自适应网格</p>
 
-      <div class="explanation-box">
-        <h3>🤔 auto-fill 是如何计算列数的？</h3>
-        <p><strong>关键：</strong><code>minmax(150px, 1fr)</code> 中的 <span class="highlight">150px 是最小值</span></p>
-
-        <div class="calculation">
-          <strong>以本页为例（容器宽度 900px）：</strong><br /><br />
-          1. 可用宽度 = 900px - padding(15×2) = 870px<br />
-          2. 尝试创建列：<br />
-          &nbsp;&nbsp;&nbsp;• 1列：870px ÷ 1 = 870px ✅ (≥150px)<br />
-          &nbsp;&nbsp;&nbsp;• 2列：(870px - gap 15px) ÷ 2 = 427.5px ✅<br />
-          &nbsp;&nbsp;&nbsp;• 3列：(870px - gap 30px) ÷ 3 = 280px ✅<br />
-          &nbsp;&nbsp;&nbsp;• 4列：(870px - gap 45px) ÷ 4 = 206.25px ✅<br />
-          &nbsp;&nbsp;&nbsp;• 5列：(870px - gap 60px) ÷ 5 = 162px ✅<br />
-          &nbsp;&nbsp;&nbsp;• <span class="highlight">6列：(870px - gap 75px) ÷ 6 = 132.5px ❌ (&lt;150px)</span
-          ><br /><br />
-          <strong>结论：最多创建 5 列！</strong><br /><br />
-          但是只有 4 个项目，所以显示 4 列 + 1 个空列（auto-fill 保留空列）
+        <div class="code-block">
+          /* auto-fill */<br />
+          .grid {<br />
+          &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>:
+          <span class="value">repeat(auto-fill, minmax(150px, 1fr))</span>;<br />
+          }<br />
+          <br />
+          /* auto-fit */<br />
+          .grid {<br />
+          &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>:
+          <span class="value">repeat(auto-fit, minmax(150px, 1fr))</span>;<br />
+          }
         </div>
 
-        <p class="note">💡 提示：打开浏览器开发者工具，调整窗口宽度，观察列数变化！</p>
-      </div>
+        <div class="explanation-box">
+          <h3>🤔 auto-fill 是如何计算列数的？</h3>
+          <p>
+            <strong>关键：</strong><code>minmax(150px, 1fr)</code> 中的 <span class="highlight">150px 是最小值</span>
+          </p>
 
-      <h2>auto-fill（保留空列）</h2>
-      <p>当容器有剩余空间时，<code>auto-fill</code> 会创建空列（即使没有内容）</p>
-      <div class="grid-auto-fill">
-        <div class="item">1</div>
-        <div class="item">2</div>
-        <div class="item">3</div>
-        <div class="item">4</div>
-      </div>
+          <div class="calculation">
+            <strong>以本页为例（容器宽度 900px）：</strong><br /><br />
+            1. 可用宽度 = 900px - padding(15×2) = 870px<br />
+            2. 尝试创建列：<br />
+            &nbsp;&nbsp;&nbsp;• 1列：870px ÷ 1 = 870px ✅ (≥150px)<br />
+            &nbsp;&nbsp;&nbsp;• 2列：(870px - gap 15px) ÷ 2 = 427.5px ✅<br />
+            &nbsp;&nbsp;&nbsp;• 3列：(870px - gap 30px) ÷ 3 = 280px ✅<br />
+            &nbsp;&nbsp;&nbsp;• 4列：(870px - gap 45px) ÷ 4 = 206.25px ✅<br />
+            &nbsp;&nbsp;&nbsp;• 5列：(870px - gap 60px) ÷ 5 = 162px ✅<br />
+            &nbsp;&nbsp;&nbsp;• <span class="highlight">6列：(870px - gap 75px) ÷ 6 = 132.5px ❌ (&lt;150px)</span
+            ><br /><br />
+            <strong>结论：最多创建 5 列！</strong><br /><br />
+            但是只有 4 个项目，所以显示 4 列 + 1 个空列（auto-fill 保留空列）
+          </div>
 
-      <h2>auto-fit（拉伸填充）</h2>
-      <p>当容器有剩余空间时，<code>auto-fit</code> 会折叠空列，让现有项目拉伸填充</p>
-      <div class="grid-auto-fit">
-        <div class="item">1</div>
-        <div class="item">2</div>
-        <div class="item">3</div>
-        <div class="item">4</div>
-      </div>
-
-      <div class="explanation-box" style="background: #e1f5fe; border-color: #03a9f4">
-        <h3>🔍 auto-fit 的计算过程</h3>
-        <p><strong>关键区别：</strong>auto-fit 会<span class="highlight">折叠空列</span>，让现有项目拉伸</p>
-
-        <div class="calculation" style="border-left-color: #03a9f4">
-          <strong>计算步骤（容器宽度 900px，4个项目）：</strong><br /><br />
-          <strong>第1步：计算最多能创建多少列（与 auto-fill 相同）</strong><br />
-          &nbsp;&nbsp;可用宽度 = 900px - padding(30px) = 870px<br />
-          &nbsp;&nbsp;最多可创建：5列（每列最小150px）<br /><br />
-          <strong>第2步：检查实际项目数量</strong><br />
-          &nbsp;&nbsp;实际项目：4个<br />
-          &nbsp;&nbsp;空列数量：5 - 4 = 1个空列<br /><br />
-          <strong>第3步：折叠空列（auto-fit 的关键！）</strong><br />
-          &nbsp;&nbsp;• auto-fill：保留空列，4个项目占4列，剩余空间留白<br />
-          &nbsp;&nbsp;• <span class="highlight">auto-fit：折叠空列，4个项目拉伸填充整个容器</span><br /><br />
-          <strong>第4步：重新分配空间</strong><br />
-          &nbsp;&nbsp;可用宽度：870px<br />
-          &nbsp;&nbsp;gap 总宽度：15px × 3 = 45px<br />
-          &nbsp;&nbsp;每列宽度：(870px - 45px) ÷ 4 = 206.25px<br /><br />
-          <strong>结果：</strong>4个项目，每个约 206px 宽（拉伸填充整个容器）
+          <p class="note">💡 提示：打开浏览器开发者工具，调整窗口宽度，观察列数变化！</p>
         </div>
 
-        <p class="note">💡 提示：调整窗口宽度到很宽时，auto-fit 的项目会拉伸，而 auto-fill 会留白！</p>
-      </div>
-
-      <div class="visual-box">
-        <h3>📊 auto-fill vs auto-fit 可视化对比</h3>
-        <p><strong>窄容器（450px）：</strong>两者效果相同，因为没有空列</p>
-
-        <h3>auto-fill（保留空列）</h3>
-        <div class="grid-demo-small">
-          <div class="item-small">1</div>
-          <div class="item-small">2</div>
-          <div class="item-small">3</div>
-        </div>
-        <div class="calculation" style="font-size: 12px; margin-top: 10px">
-          计算：(450 - 20) ÷ 4 = 107.5px，可创建4列<br />
-          结果：3个项目 + 1个空列（右侧留白）
+        <h2>auto-fill（保留空列）</h2>
+        <p>当容器有剩余空间时，<code>auto-fill</code> 会创建空列（即使没有内容）</p>
+        <div class="grid-auto-fill">
+          <div class="item">1</div>
+          <div class="item">2</div>
+          <div class="item">3</div>
+          <div class="item">4</div>
         </div>
 
-        <h3>auto-fit（折叠空列）</h3>
-        <div class="grid-demo-small" style="grid-template-columns: repeat(auto-fit, minmax(100px, 1fr))">
-          <div class="item-small">1</div>
-          <div class="item-small">2</div>
-          <div class="item-small">3</div>
+        <h2>auto-fit（拉伸填充）</h2>
+        <p>当容器有剩余空间时，<code>auto-fit</code> 会折叠空列，让现有项目拉伸填充</p>
+        <div class="grid-auto-fit">
+          <div class="item">1</div>
+          <div class="item">2</div>
+          <div class="item">3</div>
+          <div class="item">4</div>
         </div>
-        <div class="calculation" style="font-size: 12px; margin-top: 10px">
-          计算：可创建4列，但空列被折叠<br />
-          结果：3个项目拉伸填充，每个约 143px（而不是 107px）
+
+        <div class="explanation-box" style="background: #e1f5fe; border-color: #03a9f4">
+          <h3>🔍 auto-fit 的计算过程</h3>
+          <p><strong>关键区别：</strong>auto-fit 会<span class="highlight">折叠空列</span>，让现有项目拉伸</p>
+
+          <div class="calculation" style="border-left-color: #03a9f4">
+            <strong>计算步骤（容器宽度 900px，4个项目）：</strong><br /><br />
+            <strong>第1步：计算最多能创建多少列（与 auto-fill 相同）</strong><br />
+            &nbsp;&nbsp;可用宽度 = 900px - padding(30px) = 870px<br />
+            &nbsp;&nbsp;最多可创建：5列（每列最小150px）<br /><br />
+            <strong>第2步：检查实际项目数量</strong><br />
+            &nbsp;&nbsp;实际项目：4个<br />
+            &nbsp;&nbsp;空列数量：5 - 4 = 1个空列<br /><br />
+            <strong>第3步：折叠空列（auto-fit 的关键！）</strong><br />
+            &nbsp;&nbsp;• auto-fill：保留空列，4个项目占4列，剩余空间留白<br />
+            &nbsp;&nbsp;• <span class="highlight">auto-fit：折叠空列，4个项目拉伸填充整个容器</span><br /><br />
+            <strong>第4步：重新分配空间</strong><br />
+            &nbsp;&nbsp;可用宽度：870px<br />
+            &nbsp;&nbsp;gap 总宽度：15px × 3 = 45px<br />
+            &nbsp;&nbsp;每列宽度：(870px - 45px) ÷ 4 = 206.25px<br /><br />
+            <strong>结果：</strong>4个项目，每个约 206px 宽（拉伸填充整个容器）
+          </div>
+
+          <p class="note">💡 提示：调整窗口宽度到很宽时，auto-fit 的项目会拉伸，而 auto-fill 会留白！</p>
+        </div>
+
+        <div class="visual-box">
+          <h3>📊 auto-fill vs auto-fit 可视化对比</h3>
+          <p><strong>窄容器（450px）：</strong>两者效果相同，因为没有空列</p>
+
+          <h3>auto-fill（保留空列）</h3>
+          <div class="grid-demo-small">
+            <div class="item-small">1</div>
+            <div class="item-small">2</div>
+            <div class="item-small">3</div>
+          </div>
+          <div class="calculation" style="font-size: 12px; margin-top: 10px">
+            计算：(450 - 20) ÷ 4 = 107.5px，可创建4列<br />
+            结果：3个项目 + 1个空列（右侧留白）
+          </div>
+
+          <h3>auto-fit（折叠空列）</h3>
+          <div class="grid-demo-small" style="grid-template-columns: repeat(auto-fit, minmax(100px, 1fr))">
+            <div class="item-small">1</div>
+            <div class="item-small">2</div>
+            <div class="item-small">3</div>
+          </div>
+          <div class="calculation" style="font-size: 12px; margin-top: 10px">
+            计算：可创建4列，但空列被折叠<br />
+            结果：3个项目拉伸填充，每个约 143px（而不是 107px）
+          </div>
+        </div>
+
+        <div class="comparison-table-box">
+          <h3>📋 auto-fill vs auto-fit 对比总结</h3>
+          <table class="comparison-table">
+            <tr>
+              <th>特性</th>
+              <th>auto-fill</th>
+              <th>auto-fit</th>
+            </tr>
+            <tr>
+              <td><strong>列数计算</strong></td>
+              <td>根据容器宽度和 minmax 计算</td>
+              <td>根据容器宽度和 minmax 计算</td>
+            </tr>
+            <tr>
+              <td><strong>空列处理</strong></td>
+              <td>✅ 保留空列（留白）</td>
+              <td>❌ 折叠空列（拉伸项目）</td>
+            </tr>
+            <tr>
+              <td><strong>项目宽度</strong></td>
+              <td>受 minmax 限制，不会超过计算值</td>
+              <td>会拉伸填充整个容器</td>
+            </tr>
+            <tr>
+              <td><strong>适用场景</strong></td>
+              <td>固定尺寸的项目（如图标、缩略图）</td>
+              <td>需要拉伸的项目（如卡片、文章列表）</td>
+            </tr>
+            <tr>
+              <td><strong>容器很宽时</strong></td>
+              <td>右侧会有留白空间</td>
+              <td>项目会拉伸填充，无留白</td>
+            </tr>
+            <tr>
+              <td><strong>项目数量少时</strong></td>
+              <td>保持原始尺寸，右侧留白</td>
+              <td>拉伸到更大尺寸，填满容器</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="code-block" style="margin-top: 30px">
+          <strong>使用场景：</strong><br /><br />
+          /* 响应式卡片布局 - 推荐使用 auto-fit */<br />
+          .card-grid {<br />
+          &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>:
+          <span class="value">repeat(auto-fit, minmax(250px, 1fr))</span>;<br />
+          &nbsp;&nbsp;/* 卡片会自动拉伸填充空间 */<br />
+          }<br /><br />
+          /* 固定尺寸的图标网格 - 可以使用 auto-fill */<br />
+          .icon-grid {<br />
+          &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>:
+          <span class="value">repeat(auto-fill, minmax(80px, 80px))</span>;<br />
+          &nbsp;&nbsp;/* 图标保持固定大小，不拉伸 */<br />
+          }<br /><br />
+          <strong>关键区别：</strong><br />
+          • <span class="highlight">auto-fill</span>：保留空列，适合固定尺寸的项目<br />
+          • <span class="highlight">auto-fit</span>：折叠空列，适合需要拉伸的项目
         </div>
       </div>
-
-      <div class="comparison-table-box">
-        <h3>📋 auto-fill vs auto-fit 对比总结</h3>
-        <table class="comparison-table">
-          <tr>
-            <th>特性</th>
-            <th>auto-fill</th>
-            <th>auto-fit</th>
-          </tr>
-          <tr>
-            <td><strong>列数计算</strong></td>
-            <td>根据容器宽度和 minmax 计算</td>
-            <td>根据容器宽度和 minmax 计算</td>
-          </tr>
-          <tr>
-            <td><strong>空列处理</strong></td>
-            <td>✅ 保留空列（留白）</td>
-            <td>❌ 折叠空列（拉伸项目）</td>
-          </tr>
-          <tr>
-            <td><strong>项目宽度</strong></td>
-            <td>受 minmax 限制，不会超过计算值</td>
-            <td>会拉伸填充整个容器</td>
-          </tr>
-          <tr>
-            <td><strong>适用场景</strong></td>
-            <td>固定尺寸的项目（如图标、缩略图）</td>
-            <td>需要拉伸的项目（如卡片、文章列表）</td>
-          </tr>
-          <tr>
-            <td><strong>容器很宽时</strong></td>
-            <td>右侧会有留白空间</td>
-            <td>项目会拉伸填充，无留白</td>
-          </tr>
-          <tr>
-            <td><strong>项目数量少时</strong></td>
-            <td>保持原始尺寸，右侧留白</td>
-            <td>拉伸到更大尺寸，填满容器</td>
-          </tr>
-        </table>
-      </div>
-
-      <div class="code-block" style="margin-top: 30px">
-        <strong>使用场景：</strong><br /><br />
-        /* 响应式卡片布局 - 推荐使用 auto-fit */<br />
-        .card-grid {<br />
-        &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>:
-        <span class="value">repeat(auto-fit, minmax(250px, 1fr))</span>;<br />
-        &nbsp;&nbsp;/* 卡片会自动拉伸填充空间 */<br />
-        }<br /><br />
-        /* 固定尺寸的图标网格 - 可以使用 auto-fill */<br />
-        .icon-grid {<br />
-        &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>:
-        <span class="value">repeat(auto-fill, minmax(80px, 80px))</span>;<br />
-        &nbsp;&nbsp;/* 图标保持固定大小，不拉伸 */<br />
-        }<br /><br />
-        <strong>关键区别：</strong><br />
-        • <span class="highlight">auto-fill</span>：保留空列，适合固定尺寸的项目<br />
-        • <span class="highlight">auto-fit</span>：折叠空列，适合需要拉伸的项目
-      </div>
-    </div>
+    </main>
   </body>
 </html>
