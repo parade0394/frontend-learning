@@ -127,22 +127,23 @@
 
         <section class="section">
           <h2>基本语法</h2>
-          <pre class="code-block"><code>
-            <span class="comment">/* 方式 1：使用 from 和 to */</span> <span class="keyword">@keyframes</span>
-            <span class="value">animationName</span> { <span class="keyword">from</span> { <span class="property">transform</span>:
-            <span class="value">translateX(0)</span>; } <span class="keyword">to</span> { <span class="property">transform</span>:
-            <span class="value">translateX(100px)</span>; } }
+          <pre class="code-block"><code><span class="comment">/* 方式 1：使用 from 和 to */</span>
+<span class="keyword">@keyframes</span> <span class="value">animationName</span> {
+  <span class="keyword">from</span> { <span class="property">transform</span>: <span class="value">translateX(0)</span>; }
+  <span class="keyword">to</span> { <span class="property">transform</span>: <span class="value">translateX(100px)</span>; }
+}
 
-            <span class="comment">/* 方式 2：使用百分比 */</span>
-            <span class="keyword">@keyframes</span> <span class="value">animationName</span> { <span class="keyword">0%</span> {
-            <span class="property">transform</span>: <span class="value">translateX(0)</span>; } <span class="keyword">50%</span> {
-            <span class="property">transform</span>: <span class="value">translateX(100px)</span>; } <span class="keyword">100%</span> {
-            <span class="property">transform</span>: <span class="value">translateX(0)</span>; } }
+<span class="comment">/* 方式 2：使用百分比 */</span>
+<span class="keyword">@keyframes</span> <span class="value">animationName</span> {
+  <span class="keyword">0%</span> { <span class="property">transform</span>: <span class="value">translateX(0)</span>; }
+  <span class="keyword">50%</span> { <span class="property">transform</span>: <span class="value">translateX(100px)</span>; }
+  <span class="keyword">100%</span> { <span class="property">transform</span>: <span class="value">translateX(0)</span>; }
+}
 
-            <span class="comment">/* 应用动画 */</span>
-            <span class="keyword">.element</span> { <span class="property">animation</span>:
-            <span class="value">animationName 2s ease-in-out infinite</span>; }
-          </code></pre>
+<span class="comment">/* 应用动画 */</span>
+<span class="keyword">.element</span> {
+  <span class="property">animation</span>: <span class="value">animationName 2s ease-in-out infinite</span>;
+}</code></pre>
         </section>
 
         <section class="section">
@@ -156,11 +157,10 @@
             <li><strong>优点：</strong>语义清晰，代码简洁</li>
           </ul>
 
-          <pre class="code-block"><code>
-            <span class="keyword">@keyframes</span> <span class="value">fadeIn</span> { <span class="keyword">from</span> {
-            <span class="property">opacity</span>: <span class="value">0</span>; } <span class="keyword">to</span> {
-            <span class="property">opacity</span>: <span class="value">1</span>; } }
-          </code></pre>
+          <pre class="code-block"><code><span class="keyword">@keyframes</span> <span class="value">fadeIn</span> {
+  <span class="keyword">from</span> { <span class="property">opacity</span>: <span class="value">0</span>; }
+  <span class="keyword">to</span> { <span class="property">opacity</span>: <span class="value">1</span>; }
+}</code></pre>
 
           <h3 style="font-size: 1.2rem; margin: 20px 0 10px 0; color: #059669">使用百分比</h3>
           <ul>
@@ -171,14 +171,13 @@
             <li><strong>优点：</strong>可以精确控制动画的每个阶段</li>
           </ul>
 
-          <pre class="code-block"><code>
-            <span class="keyword">@keyframes</span> <span class="value">complexMove</span> { <span class="keyword">0%</span> {
-            <span class="property">transform</span>: <span class="value">translateX(0)</span>; } <span class="keyword">25%</span> {
-            <span class="property">transform</span>: <span class="value">translateX(100px)</span>; } <span class="keyword">50%</span> {
-            <span class="property">transform</span>: <span class="value">translateX(100px) translateY(50px)</span>; }
-            <span class="keyword">75%</span> { <span class="property">transform</span>: <span class="value">translateX(0) translateY(50px)</span>; }
-            <span class="keyword">100%</span> { <span class="property">transform</span>: <span class="value">translateX(0) translateY(0)</span>; } }
-          </code></pre>
+          <pre class="code-block"><code><span class="keyword">@keyframes</span> <span class="value">complexMove</span> {
+  <span class="keyword">0%</span> { <span class="property">transform</span>: <span class="value">translateX(0)</span>; }
+  <span class="keyword">25%</span> { <span class="property">transform</span>: <span class="value">translateX(100px)</span>; }
+  <span class="keyword">50%</span> { <span class="property">transform</span>: <span class="value">translateX(100px) translateY(50px)</span>; }
+  <span class="keyword">75%</span> { <span class="property">transform</span>: <span class="value">translateX(0) translateY(50px)</span>; }
+  <span class="keyword">100%</span> { <span class="property">transform</span>: <span class="value">translateX(0) translateY(0)</span>; }
+}</code></pre>
 
           <div class="info-box">
             <p>
@@ -197,24 +196,25 @@
               <p style="text-align: center; margin-bottom: 10px">
                 <strong>使用 from/to</strong>
               </p>
-              <div class="code-block" style="font-size: 0.85rem">
-                <span class="keyword">@keyframes</span>
-                <span class="value">simple</span> { <span class="keyword">from</span> {
-                <span class="property">opacity</span>: <span class="value">0</span>; } <span class="keyword">to</span> {
-                <span class="property">opacity</span>: <span class="value">1</span>; } }
-              </div>
+              <pre
+                class="code-block"
+                style="font-size: 0.85rem"
+              ><code><span class="keyword">@keyframes</span> <span class="value">simple</span> {
+  <span class="keyword">from</span> { <span class="property">opacity</span>: <span class="value">0</span>; }
+  <span class="keyword">to</span> { <span class="property">opacity</span>: <span class="value">1</span>; }
+}</code></pre>
             </div>
             <div>
               <p style="text-align: center; margin-bottom: 10px">
                 <strong>使用百分比</strong>
               </p>
-              <div class="code-block" style="font-size: 0.85rem">
-                <span class="keyword">@keyframes</span>
-                <span class="value">simple</span> { <span class="keyword">0%</span> {
-                <span class="property">opacity</span>: <span class="value">0</span>; }
-                <span class="keyword">100%</span> { <span class="property">opacity</span>: <span class="value">1</span>;
-                } }
-              </div>
+              <pre
+                class="code-block"
+                style="font-size: 0.85rem"
+              ><code><span class="keyword">@keyframes</span> <span class="value">simple</span> {
+  <span class="keyword">0%</span> { <span class="property">opacity</span>: <span class="value">0</span>; }
+  <span class="keyword">100%</span> { <span class="property">opacity</span>: <span class="value">1</span>; }
+}</code></pre>
             </div>
           </div>
 
@@ -233,14 +233,20 @@
 
           <button class="play-button" data-demo="demo1">播放动画</button>
 
-          <pre class="code-block"><code>
-            <span class="keyword">@keyframes</span> <span class="value">slideIn</span> { <span class="keyword">from</span> {
-            <span class="property">transform</span>: <span class="value">translateX(-100%)</span>; <span class="property">opacity</span>:
-            <span class="value">0</span>; } <span class="keyword">to</span> { <span class="property">transform</span>:
-            <span class="value">translateX(0)</span>; <span class="property">opacity</span>: <span class="value">1</span>; } }
+          <pre class="code-block"><code><span class="keyword">@keyframes</span> <span class="value">slideIn</span> {
+  <span class="keyword">from</span> {
+    <span class="property">transform</span>: <span class="value">translateX(-100%)</span>;
+    <span class="property">opacity</span>: <span class="value">0</span>;
+  }
+  <span class="keyword">to</span> {
+    <span class="property">transform</span>: <span class="value">translateX(0)</span>;
+    <span class="property">opacity</span>: <span class="value">1</span>;
+  }
+}
 
-            <span class="keyword">.box</span> { <span class="property">animation</span>: <span class="value">slideIn 1s ease-out</span>; }
-          </code></pre>
+<span class="keyword">.box</span> {
+  <span class="property">animation</span>: <span class="value">slideIn 1s ease-out</span>;
+}</code></pre>
         </section>
 
         <section class="section">
@@ -253,15 +259,19 @@
 
           <button class="play-button" data-demo="demo2">播放动画</button>
 
-          <pre class="code-block"><code>
-            <span class="keyword">@keyframes</span> <span class="value">bounce</span> { <span class="keyword">0%, 100%</span> {
-            <span class="property">transform</span>: <span class="value">translateY(0)</span>; } <span class="keyword">50%</span> {
-            <span class="property">transform</span>: <span class="value">translateY(-30px)</span>; } }
+          <pre class="code-block"><code><span class="keyword">@keyframes</span> <span class="value">bounce</span> {
+  <span class="keyword">0%, 100%</span> {
+    <span class="property">transform</span>: <span class="value">translateY(0)</span>;
+  }
+  <span class="keyword">50%</span> {
+    <span class="property">transform</span>: <span class="value">translateY(-30px)</span>;
+  }
+}
 
-            <span class="keyword">.box</span> { <span class="property">animation</span>: <span class="value">bounce 1s ease-in-out infinite</span>;
-            <span class="comment">/* infinite 表示无限循环 */</span>
-            }
-          </code></pre>
+<span class="keyword">.box</span> {
+  <span class="property">animation</span>: <span class="value">bounce 1s ease-in-out infinite</span>;
+  <span class="comment">/* infinite 表示无限循环 */</span>
+}</code></pre>
         </section>
 
         <section class="section">
@@ -274,16 +284,16 @@
 
           <button class="play-button" data-demo="demo3">播放动画</button>
 
-          <pre class="code-block"><code>
-            <span class="keyword">@keyframes</span> <span class="value">colorChange</span> { <span class="keyword">0%</span> {
-            <span class="property">background</span>: <span class="value">#10b981</span>; } <span class="keyword">33%</span> {
-            <span class="property">background</span>: <span class="value">#3b82f6</span>; } <span class="keyword">66%</span> {
-            <span class="property">background</span>: <span class="value">#8b5cf6</span>; } <span class="keyword">100%</span> {
-            <span class="property">background</span>: <span class="value">#10b981</span>; } }
+          <pre class="code-block"><code><span class="keyword">@keyframes</span> <span class="value">colorChange</span> {
+  <span class="keyword">0%</span> { <span class="property">background</span>: <span class="value">#10b981</span>; }
+  <span class="keyword">33%</span> { <span class="property">background</span>: <span class="value">#3b82f6</span>; }
+  <span class="keyword">66%</span> { <span class="property">background</span>: <span class="value">#8b5cf6</span>; }
+  <span class="keyword">100%</span> { <span class="property">background</span>: <span class="value">#10b981</span>; }
+}
 
-            <span class="keyword">.box</span> { <span class="property">animation</span>:
-            <span class="value">colorChange 3s ease-in-out infinite</span>; }
-          </code></pre>
+<span class="keyword">.box</span> {
+  <span class="property">animation</span>: <span class="value">colorChange 3s ease-in-out infinite</span>;
+}</code></pre>
         </section>
 
         <section class="section">
@@ -296,21 +306,25 @@
 
           <button class="play-button" data-demo="demo4">播放动画</button>
 
-          <pre class="code-block"><code>
-            <span class="keyword">@keyframes</span> <span class="value">rotate3d</span> { <span class="keyword">from</span> {
-            <span class="property">transform</span>: <span class="value">rotate3d(0, 1, 0, 0deg)</span>; } <span class="keyword">to</span> {
-            <span class="property">transform</span>: <span class="value">rotate3d(0, 1, 0, 360deg)</span>; } }
+          <pre class="code-block"><code><span class="keyword">@keyframes</span> <span class="value">rotate3d</span> {
+  <span class="keyword">from</span> {
+    <span class="property">transform</span>: <span class="value">rotate3d(0, 1, 0, 0deg)</span>;
+  }
+  <span class="keyword">to</span> {
+    <span class="property">transform</span>: <span class="value">rotate3d(0, 1, 0, 360deg)</span>;
+  }
+}
 
-            <span class="keyword">.box</span> { <span class="property">animation</span>: <span class="value">rotate3d 3s linear infinite</span>; }
-          </code></pre>
+<span class="keyword">.box</span> {
+  <span class="property">animation</span>: <span class="value">rotate3d 3s linear infinite</span>;
+}</code></pre>
         </section>
 
         <section class="section">
           <h2>animation 属性详解</h2>
-          <pre class="code-block"><code>
-            <span class="keyword">.element</span> { <span class="property">animation</span>:
-            <span class="value">name duration timing-function delay iteration-count direction fill-mode</span>; }
-          </code></pre>
+          <pre class="code-block"><code><span class="keyword">.element</span> {
+  <span class="property">animation</span>: <span class="value">name duration timing-function delay iteration-count direction fill-mode</span>;
+}</code></pre>
 
           <ul>
             <li><span class="highlight">animation-name</span> - 动画名称（@keyframes 定义的名称）</li>
@@ -378,13 +392,18 @@
             </div>
           </div>
 
-          <pre class="code-block"><code>
-            <span class="keyword">.normal</span> { <span class="property">animation-direction</span>: <span class="value">normal</span>; }
-            <span class="keyword">.reverse</span> { <span class="property">animation-direction</span>: <span class="value">reverse</span>; }
-            <span class="keyword">.alternate</span> { <span class="property">animation-direction</span>: <span class="value">alternate</span>; }
-            <span class="keyword">.alternate-reverse</span> { <span class="property">animation-direction</span>:
-            <span class="value">alternate-reverse</span>; }
-          </code></pre>
+          <pre class="code-block"><code><span class="keyword">.normal</span> {
+  <span class="property">animation-direction</span>: <span class="value">normal</span>;
+}
+<span class="keyword">.reverse</span> {
+  <span class="property">animation-direction</span>: <span class="value">reverse</span>;
+}
+<span class="keyword">.alternate</span> {
+  <span class="property">animation-direction</span>: <span class="value">alternate</span>;
+}
+<span class="keyword">.alternate-reverse</span> {
+  <span class="property">animation-direction</span>: <span class="value">alternate-reverse</span>;
+}</code></pre>
         </section>
 
         <section class="section">
@@ -533,38 +552,48 @@
             </div>
           </div>
 
-          <pre class="code-block"><code>
-            <span class="comment">/* 假设动画定义：从透明到不透明 */</span> <span class="keyword">@keyframes</span>
-            <span class="value">fadeOut</span> { <span class="keyword">from</span> { <span class="property">opacity</span>:
-            <span class="value">0.2</span>; } <span class="comment">/* 第一帧：透明 */</span> <span class="keyword">to</span> {
-            <span class="property">opacity</span>: <span class="value">1</span>; } <span class="comment">/* 最后一帧：不透明 */</span>
-            }
+          <pre class="code-block"><code><span class="comment">/* 假设动画定义：从透明到不透明 */</span>
+<span class="keyword">@keyframes</span> <span class="value">fadeOut</span> {
+  <span class="keyword">from</span> { <span class="property">opacity</span>: <span class="value">0.2</span>; } <span class="comment">/* 第一帧：透明 */</span>
+  <span class="keyword">to</span> { <span class="property">opacity</span>: <span class="value">1</span>; } <span class="comment">/* 最后一帧：不透明 */</span>
+}
 
-            <span class="comment">/* 元素原始状态：不透明 */</span>
-            <span class="keyword">.box</span> { <span class="property">opacity</span>: <span class="value">1</span>; }
+<span class="comment">/* 元素原始状态：不透明 */</span>
+<span class="keyword">.box</span> {
+  <span class="property">opacity</span>: <span class="value">1</span>;
+}
 
-            <span class="comment">/* none: 延迟期间保持原始状态，结束后回到原始状态 */</span>
-            <span class="keyword">.none</span> { <span class="property">animation</span>: <span class="value">fadeOut 1s linear 2s 1 none</span>;
-            <span class="comment">/* 延迟 2 秒期间：opacity: 1（原始） 动画播放：opacity: 0.2 → 1 动画结束后：opacity: 1（原始）*/</span>
-            }
+<span class="comment">/* none: 延迟期间保持原始状态，结束后回到原始状态 */</span>
+<span class="keyword">.none</span> {
+  <span class="property">animation</span>: <span class="value">fadeOut 1s linear 2s 1 none</span>;
+  <span class="comment">/* 延迟 2 秒期间：opacity: 1（原始）
+     动画播放：opacity: 0.2 → 1
+     动画结束后：opacity: 1（原始）*/</span>
+}
 
-            <span class="comment">/* backwards: 延迟期间立即应用第一帧 */</span>
-            <span class="keyword">.backwards</span> { <span class="property">animation</span>:
-            <span class="value">fadeOut 1s linear 2s 1 backwards</span>;
-            <span class="comment">/* 延迟 2 秒期间：opacity: 0.2（第一帧！） 动画播放：opacity: 0.2 → 1 动画结束后：opacity: 1（原始）*/</span>
-            }
+<span class="comment">/* backwards: 延迟期间立即应用第一帧 */</span>
+<span class="keyword">.backwards</span> {
+  <span class="property">animation</span>: <span class="value">fadeOut 1s linear 2s 1 backwards</span>;
+  <span class="comment">/* 延迟 2 秒期间：opacity: 0.2（第一帧！）
+     动画播放：opacity: 0.2 → 1
+     动画结束后：opacity: 1（原始）*/</span>
+}
 
-            <span class="comment">/* forwards: 结束后保持最后一帧 */</span>
-            <span class="keyword">.forwards</span> { <span class="property">animation</span>:
-            <span class="value">fadeOut 1s linear 2s 1 forwards</span>;
-            <span class="comment">/* 延迟 2 秒期间：opacity: 1（原始） 动画播放：opacity: 0.2 → 1 动画结束后：opacity: 1（最后一帧！）*/</span>
-            }
+<span class="comment">/* forwards: 结束后保持最后一帧 */</span>
+<span class="keyword">.forwards</span> {
+  <span class="property">animation</span>: <span class="value">fadeOut 1s linear 2s 1 forwards</span>;
+  <span class="comment">/* 延迟 2 秒期间：opacity: 1（原始）
+     动画播放：opacity: 0.2 → 1
+     动画结束后：opacity: 1（最后一帧！）*/</span>
+}
 
-            <span class="comment">/* both: 结合 backwards 和 forwards */</span>
-            <span class="keyword">.both</span> { <span class="property">animation</span>: <span class="value">fadeOut 1s linear 2s 1 both</span>;
-            <span class="comment">/* 延迟 2 秒期间：opacity: 0.2（第一帧！） 动画播放：opacity: 0.2 → 1 动画结束后：opacity: 1（最后一帧！）*/</span>
-            }
-          </code></pre>
+<span class="comment">/* both: 结合 backwards 和 forwards */</span>
+<span class="keyword">.both</span> {
+  <span class="property">animation</span>: <span class="value">fadeOut 1s linear 2s 1 both</span>;
+  <span class="comment">/* 延迟 2 秒期间：opacity: 0.2（第一帧！）
+     动画播放：opacity: 0.2 → 1
+     动画结束后：opacity: 1（最后一帧！）*/</span>
+}</code></pre>
 
           <div class="info-box">
             <h3>📝 总结</h3>
