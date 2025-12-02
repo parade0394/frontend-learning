@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -85,370 +85,426 @@
         margin-top: var(--spacing-md);
       }
     </style>
-  </head>
-  <body>
-    <div class="container">
-      <a class="back-link" href="index.html">← 返回 SVG 模块</a>
-
-      <h1>SVG 路径绘制</h1>
-      <p>path 元素是 SVG 中最强大的绘图工具，可以绘制任意复杂的形状。</p>
-
-      <!-- 路径命令参考 -->
-      <div class="path-demo">
-        <h3>📖 路径命令参考</h3>
-        <div class="path-commands">
-          <div class="command-item">
-            <code>M x y</code>
-            <p>移动到 (Move to)</p>
-          </div>
-          <div class="command-item">
-            <code>L x y</code>
-            <p>直线到 (Line to)</p>
-          </div>
-          <div class="command-item">
-            <code>H x</code>
-            <p>水平线到</p>
-          </div>
-          <div class="command-item">
-            <code>V y</code>
-            <p>垂直线到</p>
-          </div>
-          <div class="command-item">
-            <code>C x1 y1 x2 y2 x y</code>
-            <p>三次贝塞尔曲线</p>
-          </div>
-          <div class="command-item">
-            <code>S x2 y2 x y</code>
-            <p>平滑三次贝塞尔</p>
-          </div>
-          <div class="command-item">
-            <code>Q x1 y1 x y</code>
-            <p>二次贝塞尔曲线</p>
-          </div>
-          <div class="command-item">
-            <code>T x y</code>
-            <p>平滑二次贝塞尔</p>
-          </div>
-          <div class="command-item">
-            <code>A rx ry rotation large-arc sweep x y</code>
-            <p>椭圆弧</p>
-          </div>
-          <div class="command-item">
-            <code>Z</code>
-            <p>闭合路径</p>
-          </div>
-        </div>
-        <p style="margin-top: var(--spacing-sm); color: var(--text-secondary); font-size: 0.9rem">
-          💡 提示：大写字母表示绝对坐标，小写字母表示相对坐标
-        </p>
-      </div>
-
-      <!-- 直线路径 -->
-      <div class="path-demo">
-        <h3>直线路径 (M, L, H, V)</h3>
-        <div class="svg-container">
-          <svg width="400" height="200" viewBox="0 0 400 200">
-            <path d="M 50,50 L 150,50 L 150,150 L 50,150 Z" fill="none" stroke="var(--primary)" stroke-width="3" />
-            <path
-              d="M 200,50 H 300 V 150 H 200 Z"
-              fill="none"
-              stroke="var(--primary)"
-              stroke-width="3"
-              stroke-dasharray="5,5"
-            />
-          </svg>
-        </div>
-        <div class="code-block">
-          <code
-            >// 使用 L (Line to) &lt;path d="M 50,50 L 150,50 L 150,150 L 50,150 Z"/&gt; // 使用 H (Horizontal) 和 V
-            (Vertical) &lt;path d="M 200,50 H 300 V 150 H 200 Z"/&gt;</code
-          >
-        </div>
-      </div>
-
-      <!-- 二次贝塞尔曲线 -->
-      <div class="path-demo">
-        <h3>二次贝塞尔曲线 (Q, T)</h3>
-        <div class="svg-container">
-          <svg width="400" height="200" viewBox="0 0 400 200">
-            <!-- 辅助线 -->
-            <line
-              x1="50"
-              y1="150"
-              x2="150"
-              y2="50"
-              stroke="var(--text-secondary)"
-              stroke-width="1"
-              stroke-dasharray="2,2"
-              opacity="0.5"
-            />
-            <line
-              x1="150"
-              y1="50"
-              x2="250"
-              y2="150"
-              stroke="var(--text-secondary)"
-              stroke-width="1"
-              stroke-dasharray="2,2"
-              opacity="0.5"
-            />
-
-            <!-- 曲线 -->
-            <path d="M 50,150 Q 150,50 250,150" fill="none" stroke="var(--primary)" stroke-width="3" />
-
-            <!-- 控制点 -->
-            <circle cx="50" cy="150" r="4" fill="var(--primary)" />
-            <circle cx="150" cy="50" r="4" fill="var(--error)" />
-            <circle cx="250" cy="150" r="4" fill="var(--primary)" />
-
-            <!-- 平滑曲线 -->
-            <path
-              d="M 50,150 Q 150,50 250,150 T 450,150"
-              fill="none"
-              stroke="var(--primary)"
-              stroke-width="2"
-              opacity="0.5"
-            />
-          </svg>
-        </div>
-        <div class="code-block">
-          <code
-            >// Q: 二次贝塞尔曲线 (起点, 控制点, 终点) &lt;path d="M 50,150 Q 150,50 250,150"/&gt; // T: 平滑延续曲线
-            &lt;path d="M 50,150 Q 150,50 250,150 T 450,150"/&gt;</code
-          >
-        </div>
-      </div>
-
-      <!-- 三次贝塞尔曲线 -->
-      <div class="path-demo">
-        <h3>三次贝塞尔曲线 (C, S)</h3>
-        <div class="svg-container">
-          <svg width="400" height="200" viewBox="0 0 400 200">
-            <!-- 辅助线 -->
-            <line
-              x1="50"
-              y1="100"
-              x2="100"
-              y2="50"
-              stroke="var(--text-secondary)"
-              stroke-width="1"
-              stroke-dasharray="2,2"
-              opacity="0.5"
-            />
-            <line
-              x1="200"
-              y1="50"
-              x2="250"
-              y2="100"
-              stroke="var(--text-secondary)"
-              stroke-width="1"
-              stroke-dasharray="2,2"
-              opacity="0.5"
-            />
-
-            <!-- 曲线 -->
-            <path d="M 50,100 C 100,50 200,50 250,100" fill="none" stroke="var(--primary)" stroke-width="3" />
-
-            <!-- 控制点 -->
-            <circle cx="50" cy="100" r="4" fill="var(--primary)" />
-            <circle cx="100" cy="50" r="4" fill="var(--error)" />
-            <circle cx="200" cy="50" r="4" fill="var(--error)" />
-            <circle cx="250" cy="100" r="4" fill="var(--primary)" />
-          </svg>
-        </div>
-        <div class="code-block">
-          <code
-            >// C: 三次贝塞尔曲线 (起点, 控制点1, 控制点2, 终点) &lt;path d="M 50,100 C 100,50 200,50
-            250,100"/&gt;</code
-          >
-        </div>
-      </div>
-
-      <!-- 弧线 -->
-      <div class="path-demo">
-        <h3>椭圆弧 (A)</h3>
-        <div class="svg-container">
-          <svg width="400" height="200" viewBox="0 0 400 200">
-            <!-- 不同的弧线选项 -->
-            <path d="M 50,100 A 50,50 0 0,0 150,100" fill="none" stroke="var(--primary)" stroke-width="3" />
-            <path d="M 50,100 A 50,50 0 0,1 150,100" fill="none" stroke="var(--success)" stroke-width="3" />
-            <path d="M 50,100 A 50,50 0 1,0 150,100" fill="none" stroke="var(--warning)" stroke-width="3" />
-            <path d="M 50,100 A 50,50 0 1,1 150,100" fill="none" stroke="var(--error)" stroke-width="3" />
-          </svg>
-        </div>
-        <div class="code-block">
-          <code
-            >// A: 椭圆弧 (rx ry rotation large-arc-flag sweep-flag x y) &lt;path d="M 50,100 A 50,50 0 0,0
-            150,100"/&gt; // 小弧，逆时针 &lt;path d="M 50,100 A 50,50 0 0,1 150,100"/&gt; // 小弧，顺时针 &lt;path d="M
-            50,100 A 50,50 0 1,0 150,100"/&gt; // 大弧，逆时针 &lt;path d="M 50,100 A 50,50 0 1,1 150,100"/&gt; //
-            大弧，顺时针</code
-          >
-        </div>
-      </div>
-
-      <!-- 交互式路径编辑器 -->
-      <div class="path-demo">
-        <h3>🎮 交互式路径编辑器</h3>
-        <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md)">拖动控制点来调整曲线形状</p>
-        <div class="interactive-canvas">
-          <svg id="interactive-svg" width="100%" height="300" viewBox="0 0 500 300">
-            <!-- 辅助线 -->
-            <line
-              id="guide1"
-              x1="50"
-              y1="150"
-              x2="150"
-              y2="50"
-              stroke="var(--text-secondary)"
-              stroke-width="1"
-              stroke-dasharray="2,2"
-              opacity="0.3"
-            />
-            <line
-              id="guide2"
-              x1="350"
-              y1="50"
-              x2="450"
-              y2="150"
-              stroke="var(--text-secondary)"
-              stroke-width="1"
-              stroke-dasharray="2,2"
-              opacity="0.3"
-            />
-
-            <!-- 路径 -->
-            <path
-              id="interactive-path"
-              d="M 50,150 C 150,50 350,50 450,150"
-              fill="none"
-              stroke="var(--primary)"
-              stroke-width="4"
-            />
-
-            <!-- 控制点 -->
-            <circle class="point" data-index="0" cx="50" cy="150" r="6" fill="var(--primary)" cursor="move" />
-            <circle class="point" data-index="1" cx="150" cy="50" r="6" fill="var(--error)" cursor="move" />
-            <circle class="point" data-index="2" cx="350" cy="50" r="6" fill="var(--error)" cursor="move" />
-            <circle class="point" data-index="3" cx="450" cy="150" r="6" fill="var(--primary)" cursor="move" />
-          </svg>
-        </div>
-        <div class="code-block">
-          <code id="interactive-code">&lt;path d="M 50,150 C 150,50 350,50 450,150"/&gt;</code>
-        </div>
-        <div class="btn-group">
-          <button class="btn" onclick="resetPath()">重置路径</button>
-          <button class="btn" onclick="copyPathCode()">复制代码</button>
-        </div>
-      </div>
-    </div>
-
-    <script type="module">
-      import { copyToClipboard, showToast } from '/src/utils.js';
-
-      (() => {
-        'use strict';
-
-        // 交互式路径编辑器
-        const svg = document.getElementById('interactive-svg');
-        const path = document.getElementById('interactive-path');
-        const points = document.querySelectorAll('.point');
-        const guide1 = document.getElementById('guide1');
-        const guide2 = document.getElementById('guide2');
-        const codeDisplay = document.getElementById('interactive-code');
-
-        let selectedPoint = null;
-        const offset = { x: 0, y: 0 };
-
-        // 初始坐标
-        const initialCoords = [
-          { x: 50, y: 150 },
-          { x: 150, y: 50 },
-          { x: 350, y: 50 },
-          { x: 450, y: 150 },
-        ];
-
-        points.forEach((point) => {
-          point.addEventListener('mousedown', startDrag);
-        });
-
-        svg.addEventListener('mousemove', drag);
-        svg.addEventListener('mouseup', endDrag);
-        svg.addEventListener('mouseleave', endDrag);
-
-        function startDrag(e) {
-          selectedPoint = e.target;
-          const pt = getMousePosition(e);
-          offset.x = pt.x - parseFloat(selectedPoint.getAttribute('cx'));
-          offset.y = pt.y - parseFloat(selectedPoint.getAttribute('cy'));
-        }
-
-        function drag(e) {
-          if (!selectedPoint) {
-            return;
+    <!-- 防止主题闪烁 -->
+    <script>
+      (function () {
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
           }
-
-          const pt = getMousePosition(e);
-          const x = pt.x - offset.x;
-          const y = pt.y - offset.y;
-
-          selectedPoint.setAttribute('cx', x);
-          selectedPoint.setAttribute('cy', y);
-
-          updatePath();
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {
+          console.log(e);
         }
-
-        function endDrag() {
-          selectedPoint = null;
-        }
-
-        function getMousePosition(e) {
-          const CTM = svg.getScreenCTM();
-          return {
-            x: (e.clientX - CTM.e) / CTM.a,
-            y: (e.clientY - CTM.f) / CTM.d,
-          };
-        }
-
-        function updatePath() {
-          const coords = Array.from(points).map((p) => ({
-            x: Math.round(parseFloat(p.getAttribute('cx'))),
-            y: Math.round(parseFloat(p.getAttribute('cy'))),
-          }));
-
-          const d = `M ${coords[0].x},${coords[0].y} C ${coords[1].x},${coords[1].y} ${coords[2].x},${coords[2].y} ${coords[3].x},${coords[3].y}`;
-          path.setAttribute('d', d);
-
-          // 更新辅助线
-          guide1.setAttribute('x1', coords[0].x);
-          guide1.setAttribute('y1', coords[0].y);
-          guide1.setAttribute('x2', coords[1].x);
-          guide1.setAttribute('y2', coords[1].y);
-
-          guide2.setAttribute('x1', coords[2].x);
-          guide2.setAttribute('y1', coords[2].y);
-          guide2.setAttribute('x2', coords[3].x);
-          guide2.setAttribute('y2', coords[3].y);
-
-          // 更新代码显示
-          codeDisplay.textContent = `<path d="${d}"/>`;
-        }
-
-        // 全局函数
-        window.resetPath = function () {
-          points.forEach((point, i) => {
-            point.setAttribute('cx', initialCoords[i].x);
-            point.setAttribute('cy', initialCoords[i].y);
-          });
-          updatePath();
-          showToast('路径已重置', 'success');
-        };
-
-        window.copyPathCode = function () {
-          const d = path.getAttribute('d');
-          copyToClipboard(`<path d="${d}"/>`);
-          showToast('代码已复制到剪贴板', 'success');
-        };
       })();
     </script>
+    <script type="module" src="/src/theme.js"></script>
+    <link href="styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Skip to main content link for accessibility -->
+    <a class="skip-link" href="#main-content">跳转到主要内容</a>
+
+    <!-- 左侧边栏导航 -->
+    <aside class="sidebar" aria-label="演示导航" role="navigation">
+      <div class="sidebar-header">
+        <h1>SVG 图形</h1>
+        <a class="back-home" href="index.html" aria-label="返回主页">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav" aria-label="主导航">
+        <div class="nav-section">
+          <h3>基础图形</h3>
+          <a class="nav-item" href="demo1-basic-shapes.html">基础形状</a>
+          <a class="nav-item active" href="demo2-paths.html">路径绘制</a>
+        </div>
+        <div class="nav-section">
+          <h3>样式与效果</h3>
+          <a class="nav-item" href="demo3-gradients.html">渐变填充</a>
+          <a class="nav-item" href="demo4-transforms.html">变换操作</a>
+          <a class="nav-item" href="demo5-text.html">文本处理</a>
+          <a class="nav-item" href="demo6-filters.html">滤镜效果</a>
+        </div>
+        <div class="nav-section">
+          <h3>高级应用</h3>
+          <a class="nav-item" href="demo7-animations.html">动画效果</a>
+          <a class="nav-item" href="demo8-icons.html">图标系统</a>
+          <a class="nav-item" href="demo9-charts.html">交互图表</a>
+          <a class="nav-item" href="demo10-responsive.html">响应式 SVG</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- 右侧主内容区 -->
+    <main id="main-content" class="main-content" role="main">
+      <div class="demo-page">
+        <div class="container">
+          <a class="back-link" href="index.html">← 返回 SVG 模块</a>
+
+          <h1>SVG 路径绘制</h1>
+          <p>path 元素是 SVG 中最强大的绘图工具，可以绘制任意复杂的形状。</p>
+
+          <!-- 路径命令参考 -->
+          <div class="path-demo">
+            <h3>📖 路径命令参考</h3>
+            <div class="path-commands">
+              <div class="command-item">
+                <code>M x y</code>
+                <p>移动到 (Move to)</p>
+              </div>
+              <div class="command-item">
+                <code>L x y</code>
+                <p>直线到 (Line to)</p>
+              </div>
+              <div class="command-item">
+                <code>H x</code>
+                <p>水平线到</p>
+              </div>
+              <div class="command-item">
+                <code>V y</code>
+                <p>垂直线到</p>
+              </div>
+              <div class="command-item">
+                <code>C x1 y1 x2 y2 x y</code>
+                <p>三次贝塞尔曲线</p>
+              </div>
+              <div class="command-item">
+                <code>S x2 y2 x y</code>
+                <p>平滑三次贝塞尔</p>
+              </div>
+              <div class="command-item">
+                <code>Q x1 y1 x y</code>
+                <p>二次贝塞尔曲线</p>
+              </div>
+              <div class="command-item">
+                <code>T x y</code>
+                <p>平滑二次贝塞尔</p>
+              </div>
+              <div class="command-item">
+                <code>A rx ry rotation large-arc sweep x y</code>
+                <p>椭圆弧</p>
+              </div>
+              <div class="command-item">
+                <code>Z</code>
+                <p>闭合路径</p>
+              </div>
+            </div>
+            <p style="margin-top: var(--spacing-sm); color: var(--text-secondary); font-size: 0.9rem">
+              💡 提示：大写字母表示绝对坐标，小写字母表示相对坐标
+            </p>
+          </div>
+
+          <!-- 直线路径 -->
+          <div class="path-demo">
+            <h3>直线路径 (M, L, H, V)</h3>
+            <div class="svg-container">
+              <svg width="400" height="200" viewBox="0 0 400 200">
+                <path d="M 50,50 L 150,50 L 150,150 L 50,150 Z" fill="none" stroke="var(--primary)" stroke-width="3" />
+                <path
+                  d="M 200,50 H 300 V 150 H 200 Z"
+                  fill="none"
+                  stroke="var(--primary)"
+                  stroke-width="3"
+                  stroke-dasharray="5,5"
+                />
+              </svg>
+            </div>
+            <div class="code-block">
+              <code
+                >// 使用 L (Line to) &lt;path d="M 50,50 L 150,50 L 150,150 L 50,150 Z"/&gt; // 使用 H (Horizontal) 和 V
+                (Vertical) &lt;path d="M 200,50 H 300 V 150 H 200 Z"/&gt;</code
+              >
+            </div>
+          </div>
+
+          <!-- 二次贝塞尔曲线 -->
+          <div class="path-demo">
+            <h3>二次贝塞尔曲线 (Q, T)</h3>
+            <div class="svg-container">
+              <svg width="400" height="200" viewBox="0 0 400 200">
+                <!-- 辅助线 -->
+                <line
+                  x1="50"
+                  y1="150"
+                  x2="150"
+                  y2="50"
+                  stroke="var(--text-secondary)"
+                  stroke-width="1"
+                  stroke-dasharray="2,2"
+                  opacity="0.5"
+                />
+                <line
+                  x1="150"
+                  y1="50"
+                  x2="250"
+                  y2="150"
+                  stroke="var(--text-secondary)"
+                  stroke-width="1"
+                  stroke-dasharray="2,2"
+                  opacity="0.5"
+                />
+
+                <!-- 曲线 -->
+                <path d="M 50,150 Q 150,50 250,150" fill="none" stroke="var(--primary)" stroke-width="3" />
+
+                <!-- 控制点 -->
+                <circle cx="50" cy="150" r="4" fill="var(--primary)" />
+                <circle cx="150" cy="50" r="4" fill="var(--error)" />
+                <circle cx="250" cy="150" r="4" fill="var(--primary)" />
+
+                <!-- 平滑曲线 -->
+                <path
+                  d="M 50,150 Q 150,50 250,150 T 450,150"
+                  fill="none"
+                  stroke="var(--primary)"
+                  stroke-width="2"
+                  opacity="0.5"
+                />
+              </svg>
+            </div>
+            <div class="code-block">
+              <code
+                >// Q: 二次贝塞尔曲线 (起点, 控制点, 终点) &lt;path d="M 50,150 Q 150,50 250,150"/&gt; // T:
+                平滑延续曲线 &lt;path d="M 50,150 Q 150,50 250,150 T 450,150"/&gt;</code
+              >
+            </div>
+          </div>
+
+          <!-- 三次贝塞尔曲线 -->
+          <div class="path-demo">
+            <h3>三次贝塞尔曲线 (C, S)</h3>
+            <div class="svg-container">
+              <svg width="400" height="200" viewBox="0 0 400 200">
+                <!-- 辅助线 -->
+                <line
+                  x1="50"
+                  y1="100"
+                  x2="100"
+                  y2="50"
+                  stroke="var(--text-secondary)"
+                  stroke-width="1"
+                  stroke-dasharray="2,2"
+                  opacity="0.5"
+                />
+                <line
+                  x1="200"
+                  y1="50"
+                  x2="250"
+                  y2="100"
+                  stroke="var(--text-secondary)"
+                  stroke-width="1"
+                  stroke-dasharray="2,2"
+                  opacity="0.5"
+                />
+
+                <!-- 曲线 -->
+                <path d="M 50,100 C 100,50 200,50 250,100" fill="none" stroke="var(--primary)" stroke-width="3" />
+
+                <!-- 控制点 -->
+                <circle cx="50" cy="100" r="4" fill="var(--primary)" />
+                <circle cx="100" cy="50" r="4" fill="var(--error)" />
+                <circle cx="200" cy="50" r="4" fill="var(--error)" />
+                <circle cx="250" cy="100" r="4" fill="var(--primary)" />
+              </svg>
+            </div>
+            <div class="code-block">
+              <code
+                >// C: 三次贝塞尔曲线 (起点, 控制点1, 控制点2, 终点) &lt;path d="M 50,100 C 100,50 200,50
+                250,100"/&gt;</code
+              >
+            </div>
+          </div>
+
+          <!-- 弧线 -->
+          <div class="path-demo">
+            <h3>椭圆弧 (A)</h3>
+            <div class="svg-container">
+              <svg width="400" height="200" viewBox="0 0 400 200">
+                <!-- 不同的弧线选项 -->
+                <path d="M 50,100 A 50,50 0 0,0 150,100" fill="none" stroke="var(--primary)" stroke-width="3" />
+                <path d="M 50,100 A 50,50 0 0,1 150,100" fill="none" stroke="var(--success)" stroke-width="3" />
+                <path d="M 50,100 A 50,50 0 1,0 150,100" fill="none" stroke="var(--warning)" stroke-width="3" />
+                <path d="M 50,100 A 50,50 0 1,1 150,100" fill="none" stroke="var(--error)" stroke-width="3" />
+              </svg>
+            </div>
+            <div class="code-block">
+              <code
+                >// A: 椭圆弧 (rx ry rotation large-arc-flag sweep-flag x y) &lt;path d="M 50,100 A 50,50 0 0,0
+                150,100"/&gt; // 小弧，逆时针 &lt;path d="M 50,100 A 50,50 0 0,1 150,100"/&gt; // 小弧，顺时针 &lt;path
+                d="M 50,100 A 50,50 0 1,0 150,100"/&gt; // 大弧，逆时针 &lt;path d="M 50,100 A 50,50 0 1,1 150,100"/&gt;
+                // 大弧，顺时针</code
+              >
+            </div>
+          </div>
+
+          <!-- 交互式路径编辑器 -->
+          <div class="path-demo">
+            <h3>🎮 交互式路径编辑器</h3>
+            <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md)">拖动控制点来调整曲线形状</p>
+            <div class="interactive-canvas">
+              <svg id="interactive-svg" width="100%" height="300" viewBox="0 0 500 300">
+                <!-- 辅助线 -->
+                <line
+                  id="guide1"
+                  x1="50"
+                  y1="150"
+                  x2="150"
+                  y2="50"
+                  stroke="var(--text-secondary)"
+                  stroke-width="1"
+                  stroke-dasharray="2,2"
+                  opacity="0.3"
+                />
+                <line
+                  id="guide2"
+                  x1="350"
+                  y1="50"
+                  x2="450"
+                  y2="150"
+                  stroke="var(--text-secondary)"
+                  stroke-width="1"
+                  stroke-dasharray="2,2"
+                  opacity="0.3"
+                />
+
+                <!-- 路径 -->
+                <path
+                  id="interactive-path"
+                  d="M 50,150 C 150,50 350,50 450,150"
+                  fill="none"
+                  stroke="var(--primary)"
+                  stroke-width="4"
+                />
+
+                <!-- 控制点 -->
+                <circle class="point" data-index="0" cx="50" cy="150" r="6" fill="var(--primary)" cursor="move" />
+                <circle class="point" data-index="1" cx="150" cy="50" r="6" fill="var(--error)" cursor="move" />
+                <circle class="point" data-index="2" cx="350" cy="50" r="6" fill="var(--error)" cursor="move" />
+                <circle class="point" data-index="3" cx="450" cy="150" r="6" fill="var(--primary)" cursor="move" />
+              </svg>
+            </div>
+            <div class="code-block">
+              <code id="interactive-code">&lt;path d="M 50,150 C 150,50 350,50 450,150"/&gt;</code>
+            </div>
+            <div class="btn-group">
+              <button class="btn" onclick="resetPath()">重置路径</button>
+              <button class="btn" onclick="copyPathCode()">复制代码</button>
+            </div>
+          </div>
+        </div>
+
+        <script type="module">
+          import { copyToClipboard, showToast } from '/src/utils.js';
+
+          (() => {
+            'use strict';
+
+            // 交互式路径编辑器
+            const svg = document.getElementById('interactive-svg');
+            const path = document.getElementById('interactive-path');
+            const points = document.querySelectorAll('.point');
+            const guide1 = document.getElementById('guide1');
+            const guide2 = document.getElementById('guide2');
+            const codeDisplay = document.getElementById('interactive-code');
+
+            let selectedPoint = null;
+            const offset = { x: 0, y: 0 };
+
+            // 初始坐标
+            const initialCoords = [
+              { x: 50, y: 150 },
+              { x: 150, y: 50 },
+              { x: 350, y: 50 },
+              { x: 450, y: 150 },
+            ];
+
+            points.forEach((point) => {
+              point.addEventListener('mousedown', startDrag);
+            });
+
+            svg.addEventListener('mousemove', drag);
+            svg.addEventListener('mouseup', endDrag);
+            svg.addEventListener('mouseleave', endDrag);
+
+            function startDrag(e) {
+              selectedPoint = e.target;
+              const pt = getMousePosition(e);
+              offset.x = pt.x - parseFloat(selectedPoint.getAttribute('cx'));
+              offset.y = pt.y - parseFloat(selectedPoint.getAttribute('cy'));
+            }
+
+            function drag(e) {
+              if (!selectedPoint) {
+                return;
+              }
+
+              const pt = getMousePosition(e);
+              const x = pt.x - offset.x;
+              const y = pt.y - offset.y;
+
+              selectedPoint.setAttribute('cx', x);
+              selectedPoint.setAttribute('cy', y);
+
+              updatePath();
+            }
+
+            function endDrag() {
+              selectedPoint = null;
+            }
+
+            function getMousePosition(e) {
+              const CTM = svg.getScreenCTM();
+              return {
+                x: (e.clientX - CTM.e) / CTM.a,
+                y: (e.clientY - CTM.f) / CTM.d,
+              };
+            }
+
+            function updatePath() {
+              const coords = Array.from(points).map((p) => ({
+                x: Math.round(parseFloat(p.getAttribute('cx'))),
+                y: Math.round(parseFloat(p.getAttribute('cy'))),
+              }));
+
+              const d = `M ${coords[0].x},${coords[0].y} C ${coords[1].x},${coords[1].y} ${coords[2].x},${coords[2].y} ${coords[3].x},${coords[3].y}`;
+              path.setAttribute('d', d);
+
+              // 更新辅助线
+              guide1.setAttribute('x1', coords[0].x);
+              guide1.setAttribute('y1', coords[0].y);
+              guide1.setAttribute('x2', coords[1].x);
+              guide1.setAttribute('y2', coords[1].y);
+
+              guide2.setAttribute('x1', coords[2].x);
+              guide2.setAttribute('y1', coords[2].y);
+              guide2.setAttribute('x2', coords[3].x);
+              guide2.setAttribute('y2', coords[3].y);
+
+              // 更新代码显示
+              codeDisplay.textContent = `<path d="${d}"/>`;
+            }
+
+            // 全局函数
+            window.resetPath = function () {
+              points.forEach((point, i) => {
+                point.setAttribute('cx', initialCoords[i].x);
+                point.setAttribute('cy', initialCoords[i].y);
+              });
+              updatePath();
+              showToast('路径已重置', 'success');
+            };
+
+            window.copyPathCode = function () {
+              const d = path.getAttribute('d');
+              copyToClipboard(`<path d="${d}"/>`);
+              showToast('代码已复制到剪贴板', 'success');
+            };
+          })();
+        </script>
+      </div>
+    </main>
   </body>
 </html>
