@@ -16,7 +16,7 @@
 
       .demo-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: var(--spacing-lg);
         margin: 40px 0;
       }
@@ -27,6 +27,11 @@
         padding: var(--spacing-lg);
         background: var(--card-bg);
         transition: all var(--transition-base);
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        overflow: hidden;
+        contain: layout style;
       }
 
       .demo-card:hover {
@@ -35,30 +40,32 @@
       }
 
       .demo-card h3 {
-        margin: 0 0 20px 0;
-        font-size: 1.3rem;
+        margin: 0 0 15px 0;
+        font-size: 1.2rem;
         color: var(--text-primary);
       }
 
       .demo-area {
-        height: 200px;
+        height: 180px;
         background: var(--bg-secondary);
         border-radius: var(--radius-md);
         position: relative;
         overflow: hidden;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
         border: 2px dashed var(--border-color);
+        flex-shrink: 0;
       }
 
       .box {
-        width: 100px;
-        height: 100px;
+        width: 80px;
+        height: 80px;
         background: var(--primary);
         color: white;
         display: flex;
         align-items: center;
         justify-content: center;
         font-weight: 700;
+        font-size: 0.9rem;
         border-radius: var(--radius-md);
         position: absolute;
         top: 50%;
@@ -69,15 +76,16 @@
 
       .play-btn {
         width: 100%;
-        padding: 12px;
+        padding: 10px;
         background: var(--primary);
         color: white;
         border: none;
         border-radius: var(--radius-md);
-        font-size: 1rem;
+        font-size: 0.95rem;
         font-weight: 600;
         cursor: pointer;
         transition: all var(--transition-base);
+        flex-shrink: 0;
       }
 
       .play-btn:hover {
@@ -91,17 +99,32 @@
       }
 
       .description {
-        margin-top: 15px;
-        padding: 15px;
+        margin-top: 12px;
+        padding: 12px;
         background: var(--primary-light);
         border-radius: var(--radius-md);
-        font-size: 0.95rem;
-        line-height: 1.6;
+        font-size: 0.9rem;
+        line-height: 1.5;
         color: var(--text-primary);
+        display: block;
+        min-height: 20px;
       }
 
       .description strong {
         color: var(--primary-dark);
+        display: inline;
+      }
+
+      /* 代码块在卡片内的样式 */
+      .demo-card pre.code-block {
+        margin-top: 12px;
+        padding: 10px;
+        font-size: 0.8rem;
+      }
+
+      .demo-card pre.code-block code {
+        display: block;
+        white-space: pre;
       }
 
       .info-box {
@@ -143,6 +166,32 @@
         }
       }
 
+      /* forwards 演示专用动画：最后一帧和原始状态不同 */
+      @keyframes slideToRight {
+        from {
+          transform: translate(-50%, -50%);
+          background: var(--primary);
+        }
+        to {
+          transform: translate(150%, -50%);
+          background: var(--warning);
+          opacity: 0.3;
+        }
+      }
+
+      /* both 演示专用动画：从左到右 */
+      @keyframes slideLeftToRight {
+        from {
+          transform: translate(-250%, -50%);
+          background: var(--error);
+        }
+        to {
+          transform: translate(150%, -50%);
+          background: var(--warning);
+          opacity: 0.3;
+        }
+      }
+
       h2 {
         margin: 40px 0 20px 0;
         color: var(--text-primary);
@@ -167,6 +216,16 @@
 
         .demo-card h3 {
           font-size: 1.1rem;
+        }
+
+        .demo-card .code-block {
+          font-size: 0.75rem;
+          padding: 8px;
+        }
+
+        .description {
+          font-size: 0.85rem;
+          padding: 10px;
         }
       }
     </style>
@@ -207,6 +266,12 @@
         <p class="subtitle">理解"延迟期间"和四种填充模式的区别</p>
 
         <section class="section">
+          <h2>什么是 animation-fill-mode？</h2>
+          <p>
+            <code>animation-fill-mode</code>
+            控制动画开始前和结束后元素的状态。它决定了元素在动画的"延迟期间"和"结束后"应该显示什么样式。
+          </p>
+
           <div class="info-box">
             <p><strong>💡 什么是"延迟期间"？</strong></p>
             <p>
@@ -220,6 +285,14 @@
               <strong>2 秒延迟</strong>。点击按钮后，<strong>仔细观察前 2 秒</strong>方块的位置和颜色！
             </p>
           </div>
+
+          <h3 style="font-size: 1.2rem; margin: 30px 0 15px 0; color: var(--primary-dark)">四种填充模式</h3>
+          <ul>
+            <li><span class="highlight">none</span> - 默认值，延迟期间和结束后都不应用动画样式</li>
+            <li><span class="highlight">forwards</span> - 动画结束后保持最后一帧的状态（最常用！）</li>
+            <li><span class="highlight">backwards</span> - 延迟期间应用第一帧样式</li>
+            <li><span class="highlight">both</span> - 结合 backwards 和 forwards 的效果</li>
+          </ul>
         </section>
 
         <section class="section">
@@ -240,6 +313,10 @@
                 • 2-3.5秒：从左边滑到中间<br />
                 • 3.5秒后：回到中间（绿色）
               </div>
+              <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">animation</span>: <span class="value">slideFromLeft 1.5s ease-out 2s 1 none</span>;
+  <span class="comment">/* 延迟期间保持原始状态 */</span>
+}</code></pre>
             </div>
 
             <div class="demo-card">
@@ -255,6 +332,10 @@
                 • 2-3.5秒：从左边滑到中间<br />
                 • 3.5秒后：回到中间（绿色）
               </div>
+              <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">animation</span>: <span class="value">slideFromLeft 1.5s ease-out 2s 1 backwards</span>;
+  <span class="comment">/* 延迟期间立即应用第一帧 */</span>
+}</code></pre>
             </div>
           </div>
 
@@ -271,7 +352,7 @@
 
         <section class="section">
           <h2>forwards 的作用对比</h2>
-          <p class="section-intro">观察动画结束后的状态</p>
+          <p class="section-intro">动画：从中间（绿色）滑到右边（橙色半透明），有 2 秒延迟</p>
 
           <div class="demo-grid">
             <div class="demo-card">
@@ -281,9 +362,15 @@
               </div>
               <button class="play-btn" data-demo="demo2" data-param="none">播放动画</button>
               <div class="description">
-                <strong>动画结束后：</strong><br />
-                回到原始状态（中间，绿色）
+                <strong>点击后：</strong><br />
+                • 0-2秒：在中间（绿色）等待<br />
+                • 2-3.5秒：滑到右边（橙色半透明）<br />
+                • 3.5秒后：<strong>回到中间（绿色）</strong>
               </div>
+              <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">animation</span>: <span class="value">slideToRight 1.5s ease-out 2s 1 none</span>;
+  <span class="comment">/* 动画结束后回到原始状态 */</span>
+}</code></pre>
             </div>
 
             <div class="demo-card">
@@ -293,52 +380,99 @@
               </div>
               <button class="play-btn" data-demo="demo2" data-param="forwards">播放动画</button>
               <div class="description">
-                <strong>动画结束后：</strong><br />
-                保持最后一帧状态（中间，绿色）
+                <strong>点击后：</strong><br />
+                • 0-2秒：在中间（绿色）等待<br />
+                • 2-3.5秒：滑到右边（橙色半透明）<br />
+                • 3.5秒后：<strong>停在右边（橙色半透明）</strong>
               </div>
+              <pre class="code-block"><code><span class="keyword">.box</span> {
+  <span class="property">animation</span>: <span class="value">slideToRight 1.5s ease-out 2s 1 forwards</span>;
+  <span class="comment">/* 动画结束后保持最后一帧 */</span>
+}</code></pre>
             </div>
+          </div>
+
+          <div class="info-box">
+            <p><strong>🎯 关键区别</strong></p>
+            <p>
+              <strong>none:</strong>
+              动画结束后，元素"闪回"到原始状态（中间，绿色）<br /><br />
+              <strong>forwards:</strong>
+              动画结束后，元素保持在最后一帧的状态（右边，橙色半透明）
+            </p>
           </div>
         </section>
 
         <section class="section">
           <h2>both = backwards + forwards</h2>
+          <p class="section-intro">动画：从左侧（红色）滑到右边（橙色半透明），有 2 秒延迟</p>
 
           <div class="demo-grid">
             <div class="demo-card">
-              <h3>both</h3>
+              <h3>both（完美组合）</h3>
               <div class="demo-area">
                 <div id="box-both" class="box">中间</div>
               </div>
-              <button class="play-btn" data-demo="demo" data-param="both">播放动画</button>
+              <button class="play-btn" data-demo="demo3" data-param="both">播放动画</button>
               <div class="description">
                 <strong>点击后：</strong><br />
-                • <strong>立即：</strong>跳到左边（backwards）<br />
+                • <strong>立即：</strong>跳到左边（红色）- backwards<br />
                 • 0-2秒：在左边等待<br />
-                • 2-3.5秒：从左边滑到中间<br />
-                • 3.5秒后：<strong>保持在中间</strong>（forwards）
+                • 2-3.5秒：从左边滑到右边<br />
+                • 3.5秒后：<strong>停在右边（橙色半透明）</strong> - forwards
               </div>
+              <pre
+                class="code-block"
+              ><code><span class="keyword">@keyframes</span> <span class="value">slideLeftToRight</span> {
+  <span class="keyword">from</span> {
+    <span class="property">transform</span>: <span class="value">translate(-250%, -50%)</span>;
+    <span class="property">background</span>: <span class="value">var(--error)</span>;
+  }
+  <span class="keyword">to</span> {
+    <span class="property">transform</span>: <span class="value">translate(150%, -50%)</span>;
+    <span class="property">background</span>: <span class="value">var(--warning)</span>;
+    <span class="property">opacity</span>: <span class="value">0.3</span>;
+  }
+}
+
+<span class="keyword">.box</span> {
+  <span class="property">animation</span>: <span class="value">slideLeftToRight 1.5s ease-out 2s 1 both</span>;
+}</code></pre>
             </div>
 
             <div class="demo-card">
-              <h3>完整对比</h3>
-              <div class="description" style="font-size: 0.9rem; line-height: 2">
-                <strong>none:</strong> 延迟期间：原始状态 | 结束后：原始状态<br />
-                <strong>backwards:</strong> 延迟期间：<span style="color: var(--primary)">第一帧 ✨</span> |
-                结束后：原始状态<br />
-                <strong>forwards:</strong> 延迟期间：原始状态 | 结束后：<span style="color: var(--primary)"
-                  >最后一帧 ✨</span
-                ><br />
-                <strong>both:</strong> 延迟期间：<span style="color: var(--primary)">第一帧 ✨</span> | 结束后：<span
-                  style="color: var(--primary)"
-                  >最后一帧 ✨</span
-                >
+              <h3>完整对比表格</h3>
+              <div class="description" style="font-size: 0.9rem; line-height: 2.2; padding: 20px">
+                <div style="margin-bottom: 15px">
+                  <strong style="color: var(--text-primary)">none:</strong><br />
+                  <span style="color: var(--text-secondary)">延迟期间：原始状态 | 结束后：原始状态</span>
+                </div>
+                <div style="margin-bottom: 15px">
+                  <strong style="color: var(--text-primary)">backwards:</strong><br />
+                  <span style="color: var(--text-secondary)">延迟期间：</span
+                  ><span style="color: var(--primary); font-weight: 600">第一帧 ✨</span>
+                  <span style="color: var(--text-secondary)">| 结束后：原始状态</span>
+                </div>
+                <div style="margin-bottom: 15px">
+                  <strong style="color: var(--text-primary)">forwards:</strong><br />
+                  <span style="color: var(--text-secondary)">延迟期间：原始状态 | 结束后：</span
+                  ><span style="color: var(--primary); font-weight: 600">最后一帧 ✨</span>
+                </div>
+                <div>
+                  <strong style="color: var(--text-primary)">both:</strong><br />
+                  <span style="color: var(--text-secondary)">延迟期间：</span
+                  ><span style="color: var(--primary); font-weight: 600">第一帧 ✨</span>
+                  <span style="color: var(--text-secondary)">| 结束后：</span
+                  ><span style="color: var(--primary); font-weight: 600">最后一帧 ✨</span>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         <section class="section">
-          <h2>代码示例</h2>
+          <section>完整代码示例</section>
+
           <pre class="code-block"><code><span class="comment">/* 动画定义 */</span>
 <span class="keyword">@keyframes</span> <span class="value">slideFromLeft</span> {
   <span class="keyword">from</span> {
@@ -356,6 +490,78 @@
   <span class="property">animation</span>: <span class="value">slideFromLeft 1.5s ease-out 2s 1 backwards</span>;
   <span class="comment">/* 动画名 时长 缓动 延迟 次数 填充模式 */</span>
 }</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>详细语法说明</h2>
+          <pre class="code-block"><code><span class="comment">/* 假设动画定义：从透明到不透明 */</span>
+<span class="keyword">@keyframes</span> <span class="value">fadeOut</span> {
+  <span class="keyword">from</span> { <span class="property">opacity</span>: <span class="value">0.2</span>; } <span class="comment">/* 第一帧：透明 */</span>
+  <span class="keyword">to</span> { <span class="property">opacity</span>: <span class="value">1</span>; } <span class="comment">/* 最后一帧：不透明 */</span>
+}
+
+<span class="comment">/* 元素原始状态：不透明 */</span>
+<span class="keyword">.box</span> {
+  <span class="property">opacity</span>: <span class="value">1</span>;
+}
+
+<span class="comment">/* none: 延迟期间保持原始状态，结束后回到原始状态 */</span>
+<span class="keyword">.none</span> {
+  <span class="property">animation</span>: <span class="value">fadeOut 1s linear 2s 1 none</span>;
+  <span class="comment">/* 延迟 2 秒期间：opacity: 1（原始）
+     动画播放：opacity: 0.2 → 1
+     动画结束后：opacity: 1（原始）*/</span>
+}
+
+<span class="comment">/* backwards: 延迟期间立即应用第一帧 */</span>
+<span class="keyword">.backwards</span> {
+  <span class="property">animation</span>: <span class="value">fadeOut 1s linear 2s 1 backwards</span>;
+  <span class="comment">/* 延迟 2 秒期间：opacity: 0.2（第一帧！）
+     动画播放：opacity: 0.2 → 1
+     动画结束后：opacity: 1（原始）*/</span>
+}
+
+<span class="comment">/* forwards: 结束后保持最后一帧 */</span>
+<span class="keyword">.forwards</span> {
+  <span class="property">animation</span>: <span class="value">fadeOut 1s linear 2s 1 forwards</span>;
+  <span class="comment">/* 延迟 2 秒期间：opacity: 1（原始）
+     动画播放：opacity: 0.2 → 1
+     动画结束后：opacity: 1（最后一帧！）*/</span>
+}
+
+<span class="comment">/* both: 结合 backwards 和 forwards */</span>
+<span class="keyword">.both</span> {
+  <span class="property">animation</span>: <span class="value">fadeOut 1s linear 2s 1 both</span>;
+  <span class="comment">/* 延迟 2 秒期间：opacity: 0.2（第一帧！）
+     动画播放：opacity: 0.2 → 1
+     动画结束后：opacity: 1（最后一帧！）*/</span>
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>总结与最佳实践</h2>
+
+          <div class="info-box">
+            <h3>📝 四种模式总结</h3>
+            <ul style="margin-top: 10px">
+              <li><strong>none:</strong> 延迟期间和结束后都用原始样式</li>
+              <li><strong>forwards:</strong> 结束后保持最后一帧（最常用！）</li>
+              <li><strong>backwards:</strong> 延迟期间应用第一帧</li>
+              <li><strong>both:</strong> 延迟期间用第一帧 + 结束后用最后一帧</li>
+            </ul>
+          </div>
+
+          <div class="info-box" style="background: #fef3c7; border-left-color: #f59e0b; margin-top: 20px">
+            <h3 style="color: #d97706">💡 实际应用建议</h3>
+            <p style="color: #92400e">
+              <strong>forwards</strong>
+              最常用，可以让元素在动画结束后保持最终状态，避免"闪回"到初始状态。<br /><br />
+              <strong>backwards</strong>
+              在有延迟的动画中很有用，可以让元素在延迟期间就显示动画的起始状态，避免突然跳变。<br /><br />
+              <strong>both</strong>
+              适合既有延迟又需要保持结束状态的场景，是 backwards 和 forwards 的组合。
+            </p>
+          </div>
         </section>
       </div>
     </main>
@@ -399,8 +605,8 @@
 
         resetBox(box);
 
-        // 应用动画
-        box.style.animation = `slideFromLeft 1.5s ease-out 2s 1 ${mode}`;
+        // 应用动画（使用 slideToRight，最后一帧和原始状态不同）
+        box.style.animation = `slideToRight 1.5s ease-out 2s 1 ${mode}`;
 
         // none 模式需要重置
         if (mode === 'none') {
@@ -410,6 +616,18 @@
         }
       }
 
+      function playDemo3(mode) {
+        const box = document.getElementById('box-both');
+        if (!box) {
+          return;
+        }
+
+        resetBox(box);
+
+        // 应用动画（从左到右）
+        box.style.animation = `slideLeftToRight 1.5s ease-out 2s 1 ${mode}`;
+      }
+
       // 使用事件委托，避免全局命名冲突
       const demos = {
         demo: (param) => {
@@ -417,6 +635,9 @@
         },
         demo2: (param) => {
           playDemo2(param);
+        },
+        demo3: (param) => {
+          playDemo3(param);
         },
       };
 
