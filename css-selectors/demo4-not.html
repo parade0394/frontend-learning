@@ -1,0 +1,1026 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>:not() 伪类 - CSS 现代选择器</title>
+    <link href="/src/styles/common.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+    <script>
+      (function () {
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    </script>
+    <script type="module" src="/src/theme.js"></script>
+    <script src="compatibility-check.js"></script>
+  </head>
+  <body data-demo="not">
+    <!-- 左侧边栏导航 -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>CSS 现代选择器</h1>
+        <a class="back-home" href="index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a class="nav-item" href="demo1-specificity.html">选择器优先级</a>
+        </div>
+        <div class="nav-section">
+          <h3>逻辑选择器</h3>
+          <a class="nav-item" href="demo2-is.html">:is() 伪类</a>
+          <a class="nav-item" href="demo3-where.html">:where() 伪类</a>
+          <a class="nav-item active" href="demo4-not.html">:not() 伪类</a>
+        </div>
+        <div class="nav-section">
+          <h3>父子关系选择器</h3>
+          <a class="nav-item" href="demo5-has-basics.html">:has() 基础</a>
+          <a class="nav-item" href="demo6-has-practical.html">:has() 实战</a>
+        </div>
+        <div class="nav-section">
+          <h3>状态选择器</h3>
+          <a class="nav-item" href="demo7-focus-within.html">:focus-within</a>
+          <a class="nav-item" href="demo8-focus-visible.html">:focus-visible</a>
+        </div>
+        <div class="nav-section">
+          <h3>结构选择器进阶</h3>
+          <a class="nav-item" href="demo9-nth-child.html">:nth-child() 高级</a>
+          <a class="nav-item" href="demo10-nth-comparison.html">结构选择器对比</a>
+        </div>
+        <div class="nav-section">
+          <h3>综合实战</h3>
+          <a class="nav-item" href="demo11-combinations.html">选择器组合实战</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- 右侧主内容区 -->
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>:not() 伪类</h1>
+        <p class="subtitle">排除特定元素，实现反向选择</p>
+
+        <!-- 概念介绍 -->
+        <section class="concept-section">
+          <h2>什么是 :not() 伪类？</h2>
+          <p>
+            <code>:not()</code> 伪类允许你选择<strong>不匹配</strong>特定选择器的元素。
+            它是一个强大的排除工具，可以帮助你精确地选择需要的元素，而无需为每个元素添加额外的类名。
+          </p>
+          <p>
+            在现代 CSS 中，<code>:not()</code> 已经支持复杂选择器列表，可以同时排除多个条件， 甚至可以链式使用多个
+            <code>:not()</code> 来实现更复杂的排除逻辑。
+          </p>
+          <ul>
+            <li><strong>反向选择</strong> - 选择不符合条件的元素</li>
+            <li><strong>减少类名</strong> - 避免为排除的元素添加额外类</li>
+            <li><strong>支持复杂选择器</strong> - 可以排除复杂的选择器组合</li>
+            <li><strong>可链式使用</strong> - 多个 :not() 可以组合使用</li>
+          </ul>
+        </section>
+
+        <!-- 语法说明 -->
+        <section class="syntax-section">
+          <h2>基础语法</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 20px">
+            <code>:not()</code> 接受一个或多个选择器作为参数，匹配不符合这些选择器的元素。
+          </p>
+          <pre><code><span class="code-comment">/* 基础语法 - 排除单个选择器 */</span>
+:not(selector) {
+  /* 样式规则 */
+}
+
+<span class="code-comment">/* 排除多个选择器（现代语法） */</span>
+:not(selector1, selector2, selector3) {
+  /* 匹配"不是 selector1、selector2 或 selector3"的元素 */
+  /* 等价于：既不是 selector1，也不是 selector2，也不是 selector3 */
+}
+
+<span class="code-comment">/* 常见用法示例 */</span>
+
+<span class="code-comment">/* 选择除最后一个外的所有 li */</span>
+li:not(:last-child) {
+  border-bottom: 1px solid #ccc;
+}
+
+<span class="code-comment">/* 选择没有 .active 类的链接 */</span>
+a:not(.active) {
+  color: gray;
+}
+
+<span class="code-comment">/* 选择不是 disabled 的按钮 */</span>
+button:not(:disabled) {
+  cursor: pointer;
+}
+
+<span class="code-comment">/* 排除多个类 */</span>
+div:not(.header, .footer, .sidebar) {
+  padding: 20px;
+}
+
+<span class="code-comment">/* 链式使用 :not() */</span>
+input:not([type="submit"]):not([type="button"]) {
+  border: 1px solid #ccc;
+}</code></pre>
+
+          <div
+            style="
+              background: var(--info-light);
+              border-left: 4px solid var(--info);
+              padding: 15px;
+              border-radius: var(--radius-md);
+              margin-top: 20px;
+            "
+          >
+            <strong style="color: var(--info-dark)">💡 现代语法支持</strong>
+            <p style="color: var(--text-primary); margin-top: 8px; line-height: 1.6">
+              现代浏览器支持在 <code>:not()</code> 中使用复杂选择器列表。 你可以在一个
+              <code>:not()</code> 中排除多个选择器，而不需要链式使用多个 <code>:not()</code>。
+            </p>
+            <pre
+              style="margin-top: 10px; background: var(--bg-primary); padding: 10px; border-radius: 4px"
+            ><code><span class="code-comment">/* 旧语法 - 链式使用（兼容性更好） */</span>
+p:not(.intro):not(.summary) { }
+
+<span class="code-comment">/* 新语法 - 一次排除多个（更简洁） */</span>
+p:not(.intro, .summary) { }
+
+<span class="code-comment">/* 两者完全等价！都表示"既不是 .intro 也不是 .summary" */</span></code></pre>
+            <p style="color: var(--text-primary); margin-top: 12px; line-height: 1.6">
+              <strong>逻辑解释：</strong><code>:not(.intro, .summary)</code> 表示"不是(.intro 或 .summary)"，
+              根据德摩根定律，等价于"不是.intro 且 不是.summary"
+            </p>
+          </div>
+
+          <div
+            style="
+              background: var(--warning-light);
+              border-left: 4px solid var(--warning);
+              padding: 15px;
+              border-radius: var(--radius-md);
+              margin-top: 20px;
+            "
+          >
+            <strong style="color: var(--warning-dark)">⚠️ 优先级计算</strong>
+            <p style="color: var(--text-primary); margin-top: 8px; line-height: 1.6">
+              <code>:not()</code> 本身不增加优先级，但其参数中的选择器会计入优先级。 与 <code>:is()</code> 类似，<code
+                >:not()</code
+              >
+              的优先级取决于其参数列表中优先级最高的选择器。
+            </p>
+            <pre
+              style="margin-top: 10px; background: var(--bg-primary); padding: 10px; border-radius: 4px"
+            ><code><span class="code-comment">/* :not() 的权重取决于参数 */</span>
+:not(.class) { }        <span class="code-comment">/* 权重: (0,1,0) */</span>
+:not(#id) { }           <span class="code-comment">/* 权重: (1,0,0) */</span>
+:not(div) { }           <span class="code-comment">/* 权重: (0,0,1) */</span>
+:not(.a, .b, #id) { }   <span class="code-comment">/* 权重: (1,0,0) - 取最高 */</span></code></pre>
+          </div>
+        </section>
+
+        <!-- 基础排除示例 -->
+        <section class="demo-section">
+          <h2>基础排除示例</h2>
+
+          <div
+            style="
+              background: var(--warning-light);
+              border-left: 4px solid var(--warning);
+              padding: 20px;
+              border-radius: var(--radius-md);
+              margin-bottom: 30px;
+            "
+          >
+            <strong style="color: var(--warning-dark); font-size: 1.1rem">⚠️ 重要概念：逻辑关系</strong>
+            <p style="color: var(--text-primary); margin-top: 12px; line-height: 1.8">
+              <code>:not(A, B, C)</code> 表示"不是(A 或 B 或 C)"，根据德摩根定律，等价于"不是A 且 不是B 且 不是C"
+            </p>
+            <div style="margin-top: 15px; padding: 15px; background: var(--bg-primary); border-radius: 6px">
+              <div style="margin-bottom: 10px"><strong>✓ 会被选中：</strong>既不是 A，也不是 B，也不是 C 的元素</div>
+              <div><strong>✗ 不会被选中：</strong>是 A、B 或 C 中任意一个的元素</div>
+            </div>
+            <p style="color: var(--text-primary); margin-top: 12px; line-height: 1.8">
+              <strong>示例：</strong><code>p:not(.intro, .summary)</code> 只会选中<strong>既没有</strong>
+              <code>.intro</code> 类<strong>也没有</strong> <code>.summary</code> 类的 <code>&lt;p&gt;</code> 元素
+            </p>
+          </div>
+
+          <h3>示例 1: 选择除最后一个外的所有元素</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览</div>
+              <style>
+                .not-demo-1 {
+                  background: var(--bg-secondary);
+                  padding: 20px;
+                  border-radius: 8px;
+                }
+                .not-demo-1 ul {
+                  list-style: none;
+                  padding: 0;
+                  margin: 0;
+                }
+                .not-demo-1 li {
+                  padding: 15px;
+                  background: var(--bg-primary);
+                  margin-bottom: 0;
+                  color: var(--text-primary);
+                  font-weight: 600;
+                }
+                .not-demo-1 li:not(:last-child) {
+                  border-bottom: 2px solid var(--primary);
+                  margin-bottom: 10px;
+                }
+              </style>
+              <div class="not-demo-1">
+                <ul>
+                  <li>列表项 1 - 有底部边框</li>
+                  <li>列表项 2 - 有底部边框</li>
+                  <li>列表项 3 - 有底部边框</li>
+                  <li>列表项 4 - 有底部边框</li>
+                  <li>列表项 5 - 最后一个，没有边框</li>
+                </ul>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 除了最后一个列表项，其他都有底部边框和间距
+              </p>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 为除最后一个外的所有 li 添加边框 */</span>
+li:not(:last-child) {
+  border-bottom: 2px solid green;
+  margin-bottom: 10px;
+}
+
+<span class="code-comment">/* 这样可以避免最后一个元素有多余的边框
+   比手动为每个元素添加类名更简洁 */</span></code></pre>
+            </div>
+          </div>
+
+          <h3>示例 2: 排除特定类的元素</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览</div>
+              <style>
+                .not-demo-2 {
+                  display: grid;
+                  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                  gap: 15px;
+                }
+                .not-demo-2 .box {
+                  padding: 20px;
+                  border-radius: 8px;
+                  text-align: center;
+                  font-weight: 600;
+                  border: 2px solid;
+                }
+                .not-demo-2 .box:not(.special) {
+                  background: #dbeafe;
+                  color: #1e40af;
+                  border-color: #3b82f6;
+                }
+                .not-demo-2 .box.special {
+                  background: #fef3c7;
+                  color: #92400e;
+                  border-color: #f59e0b;
+                  font-size: 1.1rem;
+                }
+              </style>
+              <div class="not-demo-2">
+                <div class="box">普通盒子 1</div>
+                <div class="box">普通盒子 2</div>
+                <div class="box special">特殊盒子 ⭐</div>
+                <div class="box">普通盒子 3</div>
+                <div class="box">普通盒子 4</div>
+                <div class="box special">特殊盒子 ⭐</div>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 普通盒子使用蓝色样式，特殊盒子使用黄色样式
+              </p>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 为所有不是 .special 的盒子设置蓝色样式 */</span>
+.box:not(.special) {
+  background: lightblue;
+  color: darkblue;
+  border-color: blue;
+}
+
+<span class="code-comment">/* 特殊盒子单独设置样式 */</span>
+.box.special {
+  background: lightyellow;
+  color: darkorange;
+  border-color: orange;
+}
+
+<span class="code-comment">/* 优势：不需要为每个普通盒子添加额外的类名 */</span></code></pre>
+            </div>
+          </div>
+
+          <h3>示例 3: 排除多个条件</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览</div>
+              <style>
+                .not-demo-3 {
+                  display: flex;
+                  flex-wrap: wrap;
+                  gap: 10px;
+                }
+                .not-demo-3 button {
+                  padding: 10px 20px;
+                  border: 2px solid;
+                  border-radius: 6px;
+                  font-size: 1rem;
+                  font-weight: 600;
+                  cursor: pointer;
+                  transition: all 0.3s;
+                }
+                .not-demo-3 button:not(.primary, .danger, .warning) {
+                  background: var(--bg-secondary);
+                  color: var(--text-primary);
+                  border-color: var(--border-color);
+                }
+                .not-demo-3 button:not(.primary, .danger, .warning):hover {
+                  background: var(--bg-primary);
+                  border-color: var(--text-secondary);
+                  transform: translateY(-2px);
+                }
+                .not-demo-3 button.primary {
+                  background: var(--primary);
+                  color: white;
+                  border-color: var(--primary);
+                }
+                .not-demo-3 button.danger {
+                  background: var(--error);
+                  color: white;
+                  border-color: var(--error);
+                }
+                .not-demo-3 button.warning {
+                  background: var(--warning);
+                  color: white;
+                  border-color: var(--warning);
+                }
+              </style>
+              <div class="not-demo-3">
+                <button>默认按钮 1</button>
+                <button class="primary">主要按钮</button>
+                <button>默认按钮 2</button>
+                <button class="danger">危险按钮</button>
+                <button>默认按钮 3</button>
+                <button class="warning">警告按钮</button>
+                <button>默认按钮 4</button>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 排除了 primary、danger、warning 类的按钮都使用默认样式
+              </p>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 为所有不是特殊类型的按钮设置默认样式 */</span>
+button:not(.primary, .danger, .warning) {
+  background: #f5f5f5;
+  color: #333;
+  border-color: #ccc;
+}
+
+button:not(.primary, .danger, .warning):hover {
+  background: white;
+  border-color: #999;
+}
+
+<span class="code-comment">/* 特殊按钮单独设置样式 */</span>
+button.primary { background: green; color: white; }
+button.danger { background: red; color: white; }
+button.warning { background: orange; color: white; }
+
+<span class="code-comment">/* 一次排除多个条件，比链式 :not() 更简洁 */</span></code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 链式 :not() 示例 -->
+        <section class="demo-section">
+          <h2>链式 :not() 示例</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 20px">
+            多个 <code>:not()</code> 可以链式使用，实现更复杂的排除逻辑。每个 <code>:not()</code> 都会进一步过滤元素。
+          </p>
+
+          <h3>示例 1: 多个 :not() 组合使用</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览</div>
+              <style>
+                .not-demo-4 {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 15px;
+                }
+                .not-demo-4 .item {
+                  padding: 15px;
+                  border-radius: 8px;
+                  font-weight: 600;
+                  border: 2px solid;
+                  position: static !important;
+                  width: auto !important;
+                  height: auto !important;
+                }
+                .not-demo-4 .item:not(.demo-header):not(.demo-footer):not(.demo-sidebar) {
+                  background: #d1fae5;
+                  color: #065f46;
+                  border-color: #10b981;
+                }
+                .not-demo-4 .item.demo-header {
+                  background: #dbeafe;
+                  color: #1e40af;
+                  border-color: #3b82f6;
+                }
+                .not-demo-4 .item.demo-footer {
+                  background: #fce7f3;
+                  color: #9f1239;
+                  border-color: #ec4899;
+                }
+                .not-demo-4 .item.demo-sidebar {
+                  background: #fef3c7;
+                  color: #92400e;
+                  border-color: #f59e0b;
+                }
+              </style>
+              <div class="not-demo-4">
+                <div class="item demo-header">Header 区域 - 蓝色</div>
+                <div class="item">主内容区域 1 - 绿色 ✓</div>
+                <div class="item demo-sidebar">Sidebar 区域 - 黄色</div>
+                <div class="item">主内容区域 2 - 绿色 ✓</div>
+                <div class="item">主内容区域 3 - 绿色 ✓</div>
+                <div class="item demo-footer">Footer 区域 - 粉色</div>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 链式 :not() 排除了 demo-header、demo-footer、demo-sidebar，只有主内容区域显示绿色
+              </p>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 链式使用多个 :not() */</span>
+.item:not(.demo-header):not(.demo-footer):not(.demo-sidebar) {
+  background: lightgreen;
+  color: darkgreen;
+  border-color: green;
+}
+
+<span class="code-comment">/* 等价于现代语法（如果浏览器支持） */</span>
+.item:not(.demo-header, .demo-footer, .demo-sidebar) {
+  background: lightgreen;
+  color: darkgreen;
+  border-color: green;
+}
+
+<span class="code-comment">/* 每个 :not() 都会进一步过滤元素
+   只有同时不是 demo-header、demo-footer、demo-sidebar 的元素才会被选中 */</span></code></pre>
+            </div>
+          </div>
+
+          <h3>示例 2: 复杂条件排除</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览</div>
+              <style>
+                .not-demo-5 {
+                  display: grid;
+                  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                  gap: 15px;
+                }
+                .not-demo-5 .card {
+                  padding: 20px;
+                  border-radius: 8px;
+                  border: 2px solid;
+                  font-weight: 600;
+                  text-align: center;
+                }
+                .not-demo-5 .card:not([data-status='active']):not([data-priority='high']) {
+                  background: var(--bg-secondary);
+                  color: var(--text-secondary);
+                  border-color: var(--border-color);
+                  opacity: 0.6;
+                }
+                .not-demo-5 .card[data-status='active'] {
+                  background: #d1fae5;
+                  color: #065f46;
+                  border-color: #10b981;
+                }
+                .not-demo-5 .card[data-priority='high'] {
+                  background: #fee2e2;
+                  color: #991b1b;
+                  border-color: #ef4444;
+                }
+                .not-demo-5 .card[data-status='active'][data-priority='high'] {
+                  background: #fef3c7;
+                  color: #92400e;
+                  border-color: #f59e0b;
+                }
+              </style>
+              <div class="not-demo-5">
+                <div class="card" data-status="active" data-priority="normal">激活状态<br />普通优先级</div>
+                <div class="card" data-status="inactive" data-priority="high">未激活<br />高优先级</div>
+                <div class="card" data-status="inactive" data-priority="normal">未激活<br />普通优先级<br />(灰色)</div>
+                <div class="card" data-status="active" data-priority="high">激活状态<br />高优先级</div>
+                <div class="card" data-status="inactive" data-priority="low">未激活<br />低优先级<br />(灰色)</div>
+                <div class="card" data-status="active" data-priority="normal">激活状态<br />普通优先级</div>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 既不是激活状态也不是高优先级的卡片显示为灰色
+              </p>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 排除激活状态和高优先级的卡片 */</span>
+.card:not([data-status="active"]):not([data-priority="high"]) {
+  background: #f5f5f5;
+  color: #999;
+  opacity: 0.6;
+}
+
+<span class="code-comment">/* 激活状态的卡片 */</span>
+.card[data-status="active"] {
+  background: lightgreen;
+  color: darkgreen;
+}
+
+<span class="code-comment">/* 高优先级的卡片 */</span>
+.card[data-priority="high"] {
+  background: lightcoral;
+  color: darkred;
+}
+
+<span class="code-comment">/* 同时满足两个条件的卡片 */</span>
+.card[data-status="active"][data-priority="high"] {
+  background: lightyellow;
+  color: darkorange;
+}
+
+<span class="code-comment">/* 链式 :not() 实现"既不是...也不是..."的逻辑 */</span></code></pre>
+            </div>
+          </div>
+
+          <h3>示例 3: 结合其他伪类使用</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览</div>
+              <style>
+                .not-demo-6 {
+                  background: var(--bg-secondary);
+                  padding: 20px;
+                  border-radius: 8px;
+                }
+                .not-demo-6 ul {
+                  list-style: none;
+                  padding: 0;
+                  margin: 0;
+                }
+                .not-demo-6 li {
+                  padding: 12px 15px;
+                  background: var(--bg-primary);
+                  margin-bottom: 8px;
+                  border-radius: 6px;
+                  font-weight: 600;
+                  border: 2px solid var(--border-color);
+                  transition: all 0.3s;
+                }
+                .not-demo-6 li:not(:first-child):not(:last-child):hover {
+                  background: var(--primary);
+                  color: white;
+                  border-color: var(--primary);
+                  transform: translateX(10px);
+                  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+                }
+                .not-demo-6 li:first-child {
+                  background: #dbeafe;
+                  color: #1e40af;
+                  border-color: #3b82f6;
+                }
+                .not-demo-6 li:last-child {
+                  background: #fce7f3;
+                  color: #9f1239;
+                  border-color: #ec4899;
+                }
+              </style>
+              <div class="not-demo-6">
+                <ul>
+                  <li>第一项 - 蓝色（不可悬停）</li>
+                  <li>中间项 1 - 可悬停变绿</li>
+                  <li>中间项 2 - 可悬停变绿</li>
+                  <li>中间项 3 - 可悬停变绿</li>
+                  <li>中间项 4 - 可悬停变绿</li>
+                  <li>最后一项 - 粉色（不可悬停）</li>
+                </ul>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 只有中间的列表项在悬停时会变色和移动
+              </p>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 只为中间的列表项添加悬停效果 */</span>
+li:not(:first-child):not(:last-child):hover {
+  background: green;
+  color: white;
+  transform: translateX(10px);
+}
+
+<span class="code-comment">/* 第一项和最后一项有特殊样式 */</span>
+li:first-child {
+  background: lightblue;
+  color: darkblue;
+}
+
+li:last-child {
+  background: lightpink;
+  color: darkred;
+}
+
+<span class="code-comment">/* 链式 :not() 结合伪类，实现精确控制 */</span></code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 表单验证场景 -->
+        <section class="demo-section">
+          <h2>表单验证场景</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 20px">
+            <code>:not()</code> 在表单验证中非常有用，可以轻松选择未填写、未禁用或特定状态的表单元素。
+          </p>
+
+          <h3>场景 1: 排除已填写的输入框</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览</div>
+              <style>
+                .not-demo-7 {
+                  background: var(--bg-secondary);
+                  padding: 25px;
+                  border-radius: 8px;
+                  max-width: 500px;
+                }
+                .not-demo-7 .form-group {
+                  margin-bottom: 20px;
+                }
+                .not-demo-7 label {
+                  display: block;
+                  margin-bottom: 8px;
+                  font-weight: 600;
+                  color: var(--text-primary);
+                }
+                .not-demo-7 input {
+                  width: 100%;
+                  padding: 10px 12px;
+                  border: 2px solid var(--border-color);
+                  border-radius: 6px;
+                  font-size: 1rem;
+                  background: var(--bg-primary);
+                  color: var(--text-primary);
+                  box-sizing: border-box;
+                  transition: all 0.3s;
+                }
+                .not-demo-7 input:not(:placeholder-shown) {
+                  border-color: var(--success);
+                  background: var(--success-light);
+                }
+                .not-demo-7 input:not(:placeholder-shown):focus {
+                  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+                }
+                .not-demo-7 input:placeholder-shown {
+                  border-color: var(--warning);
+                }
+                .not-demo-7 input:focus {
+                  outline: none;
+                  border-color: var(--primary);
+                }
+              </style>
+              <div class="not-demo-7">
+                <form>
+                  <div class="form-group">
+                    <label for="name1">姓名（已填写）</label>
+                    <input id="name1" type="text" placeholder="请输入姓名" value="张三" />
+                  </div>
+                  <div class="form-group">
+                    <label for="email1">邮箱（未填写）</label>
+                    <input id="email1" type="email" placeholder="请输入邮箱" />
+                  </div>
+                  <div class="form-group">
+                    <label for="phone1">电话（已填写）</label>
+                    <input id="phone1" type="tel" placeholder="请输入电话" value="13800138000" />
+                  </div>
+                </form>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 已填写的输入框显示绿色边框，未填写的显示黄色边框
+              </p>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 已填写的输入框（不显示占位符） */</span>
+input:not(:placeholder-shown) {
+  border-color: green;
+  background: lightgreen;
+}
+
+<span class="code-comment">/* 未填写的输入框（显示占位符） */</span>
+input:placeholder-shown {
+  border-color: orange;
+}
+
+<span class="code-comment">/* :placeholder-shown 伪类在输入框为空时匹配
+   :not(:placeholder-shown) 选择已有内容的输入框 */</span></code></pre>
+            </div>
+          </div>
+
+          <h3>场景 2: 排除禁用的按钮</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览</div>
+              <style>
+                .not-demo-8 {
+                  background: var(--bg-secondary);
+                  padding: 25px;
+                  border-radius: 8px;
+                }
+                .not-demo-8 button {
+                  padding: 12px 24px;
+                  border: 2px solid;
+                  border-radius: 6px;
+                  font-size: 1rem;
+                  font-weight: 600;
+                  margin: 5px;
+                  transition: all 0.3s;
+                }
+                .not-demo-8 button:not(:disabled) {
+                  background: var(--primary);
+                  color: white;
+                  border-color: var(--primary);
+                  cursor: pointer;
+                }
+                .not-demo-8 button:not(:disabled):hover {
+                  background: var(--primary-dark);
+                  border-color: var(--primary-dark);
+                  transform: translateY(-2px);
+                  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+                }
+                .not-demo-8 button:not(:disabled):active {
+                  transform: translateY(0);
+                }
+                .not-demo-8 button:disabled {
+                  background: var(--bg-primary);
+                  color: var(--text-secondary);
+                  border-color: var(--border-color);
+                  cursor: not-allowed;
+                  opacity: 0.5;
+                }
+              </style>
+              <div class="not-demo-8">
+                <button>可用按钮 1</button>
+                <button disabled>禁用按钮</button>
+                <button>可用按钮 2</button>
+                <button disabled>禁用按钮</button>
+                <button>可用按钮 3</button>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 只有未禁用的按钮可以悬停和点击
+              </p>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 只为未禁用的按钮设置交互样式 */</span>
+button:not(:disabled) {
+  background: green;
+  color: white;
+  cursor: pointer;
+}
+
+button:not(:disabled):hover {
+  background: darkgreen;
+  transform: translateY(-2px);
+}
+
+<span class="code-comment">/* 禁用的按钮 */</span>
+button:disabled {
+  background: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+<span class="code-comment">/* 避免为禁用按钮添加不必要的交互效果 */</span></code></pre>
+            </div>
+          </div>
+
+          <h3>场景 3: 必填字段验证</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览</div>
+              <style>
+                .not-demo-9 {
+                  background: var(--bg-secondary);
+                  padding: 25px;
+                  border-radius: 8px;
+                  max-width: 500px;
+                }
+                .not-demo-9 .form-group {
+                  margin-bottom: 20px;
+                }
+                .not-demo-9 label {
+                  display: block;
+                  margin-bottom: 8px;
+                  font-weight: 600;
+                  color: var(--text-primary);
+                }
+                .not-demo-9 label .required {
+                  color: var(--error);
+                  margin-left: 4px;
+                }
+                .not-demo-9 input {
+                  width: 100%;
+                  padding: 10px 12px;
+                  border: 2px solid var(--border-color);
+                  border-radius: 6px;
+                  font-size: 1rem;
+                  background: var(--bg-primary);
+                  color: var(--text-primary);
+                  box-sizing: border-box;
+                  transition: all 0.3s;
+                }
+                .not-demo-9 input:required:not(:focus):not(:placeholder-shown):valid {
+                  border-color: var(--success);
+                  background: var(--success-light);
+                }
+                .not-demo-9 input:required:not(:focus):not(:placeholder-shown):invalid {
+                  border-color: var(--error);
+                  background: var(--error-light);
+                }
+                .not-demo-9 input:not(:required) {
+                  border-style: dashed;
+                }
+                .not-demo-9 input:focus {
+                  outline: none;
+                  border-color: var(--primary);
+                  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+                }
+              </style>
+              <div class="not-demo-9">
+                <form>
+                  <div class="form-group">
+                    <label for="username"> 用户名<span class="required">*</span> </label>
+                    <input id="username" type="text" placeholder="请输入用户名" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="email2"> 邮箱<span class="required">*</span> </label>
+                    <input id="email2" type="email" placeholder="请输入邮箱" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="website"> 网站（可选） </label>
+                    <input id="website" type="url" placeholder="https://example.com" />
+                  </div>
+                  <div class="form-group">
+                    <label for="notes"> 备注（可选） </label>
+                    <input id="notes" type="text" placeholder="请输入备注" />
+                  </div>
+                </form>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 必填字段有效时显示绿色，无效时显示红色；可选字段使用虚线边框
+              </p>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 必填字段：已填写且有效 */</span>
+input:required:not(:focus):not(:placeholder-shown):valid {
+  border-color: green;
+  background: lightgreen;
+}
+
+<span class="code-comment">/* 必填字段：已填写但无效 */</span>
+input:required:not(:focus):not(:placeholder-shown):invalid {
+  border-color: red;
+  background: lightcoral;
+}
+
+<span class="code-comment">/* 可选字段：使用虚线边框 */</span>
+input:not(:required) {
+  border-style: dashed;
+}
+
+<span class="code-comment">/* 多个 :not() 组合：
+   - 不在焦点状态
+   - 不显示占位符（已填写）
+   - 配合 :valid/:invalid 实现实时验证 */</span></code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 浏览器兼容性 -->
+        <section class="compatibility-section">
+          <h2>浏览器兼容性</h2>
+          <div
+            style="
+              background: var(--bg-secondary);
+              padding: 20px;
+              border-radius: 8px;
+              border: 1px solid var(--border-color);
+            "
+          >
+            <p style="margin-bottom: 15px">
+              <code>:not()</code> 伪类是 CSS 的基础特性，在所有现代浏览器中都得到了支持：
+            </p>
+            <table style="width: 100%; border-collapse: collapse">
+              <thead>
+                <tr style="background: var(--bg-primary); border-bottom: 2px solid var(--border-color)">
+                  <th style="padding: 12px; text-align: left">浏览器</th>
+                  <th style="padding: 12px; text-align: left">基础支持</th>
+                  <th style="padding: 12px; text-align: left">复杂选择器列表</th>
+                  <th style="padding: 12px; text-align: center">状态</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom: 1px solid var(--border-color)">
+                  <td style="padding: 12px">Chrome / Edge</td>
+                  <td style="padding: 12px">1+</td>
+                  <td style="padding: 12px">88+</td>
+                  <td style="padding: 12px; text-align: center">
+                    <span style="color: var(--success); font-size: 1.2rem">✓</span>
+                  </td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color)">
+                  <td style="padding: 12px">Firefox</td>
+                  <td style="padding: 12px">1+</td>
+                  <td style="padding: 12px">84+</td>
+                  <td style="padding: 12px; text-align: center">
+                    <span style="color: var(--success); font-size: 1.2rem">✓</span>
+                  </td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color)">
+                  <td style="padding: 12px">Safari</td>
+                  <td style="padding: 12px">3.1+</td>
+                  <td style="padding: 12px">9+</td>
+                  <td style="padding: 12px; text-align: center">
+                    <span style="color: var(--success); font-size: 1.2rem">✓</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px">Opera</td>
+                  <td style="padding: 12px">9.5+</td>
+                  <td style="padding: 12px">74+</td>
+                  <td style="padding: 12px; text-align: center">
+                    <span style="color: var(--success); font-size: 1.2rem">✓</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div
+              style="
+                margin-top: 20px;
+                padding: 15px;
+                background: var(--info-light);
+                border-left: 4px solid var(--info);
+                border-radius: 4px;
+              "
+            >
+              <strong style="color: var(--info-dark)">💡 兼容性说明</strong>
+              <p style="margin-top: 8px; color: var(--text-primary); line-height: 1.6">
+                <strong>基础 :not()</strong> - 只支持简单选择器，所有浏览器都支持<br />
+                <strong>复杂选择器列表</strong> - 支持 <code>:not(selector1, selector2)</code> 语法，需要较新版本
+              </p>
+              <p style="margin-top: 12px; color: var(--text-primary); line-height: 1.6">
+                如果需要支持旧版浏览器，可以使用链式 <code>:not()</code> 代替复杂选择器列表：
+              </p>
+              <pre
+                style="
+                  margin-top: 10px;
+                  background: var(--bg-primary);
+                  padding: 10px;
+                  border-radius: 4px;
+                  font-size: 0.9rem;
+                "
+              ><code><span class="code-comment">/* 旧浏览器兼容写法 */</span>
+element:not(.a):not(.b):not(.c) { }
+
+<span class="code-comment">/* 现代浏览器简化写法 */</span>
+element:not(.a, .b, .c) { }</code></pre>
+            </div>
+            <p style="margin-top: 15px">
+              <a
+                href="https://caniuse.com/css-not-sel-list"
+                target="_blank"
+                rel="noopener"
+                style="color: var(--primary); text-decoration: none; font-weight: 600"
+              >
+                查看详细兼容性数据 →
+              </a>
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

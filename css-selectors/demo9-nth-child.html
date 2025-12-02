@@ -1,0 +1,1250 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>:nth-child() 高级用法 - CSS 现代选择器</title>
+    <link href="/src/styles/common.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+    <script>
+      (function () {
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    </script>
+    <script type="module" src="/src/theme.js"></script>
+    <script src="compatibility-check.js"></script>
+  </head>
+  <body data-demo="nth-child">
+    <!-- Skip to main content link for accessibility -->
+    <a class="skip-link" href="#main-content">跳转到主要内容</a>
+
+    <!-- 左侧边栏导航 -->
+    <aside class="sidebar" aria-label="演示导航" role="navigation">
+      <div class="sidebar-header">
+        <h1>CSS 现代选择器</h1>
+        <a class="back-home" href="index.html" aria-label="返回主页">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav" aria-label="主导航">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a class="nav-item" href="demo1-specificity.html">选择器优先级</a>
+        </div>
+        <div class="nav-section">
+          <h3>逻辑选择器</h3>
+          <a class="nav-item" href="demo2-is.html">:is() 伪类</a>
+          <a class="nav-item" href="demo3-where.html">:where() 伪类</a>
+          <a class="nav-item" href="demo4-not.html">:not() 伪类</a>
+        </div>
+        <div class="nav-section">
+          <h3>父子关系选择器</h3>
+          <a class="nav-item" href="demo5-has-basics.html">:has() 基础</a>
+          <a class="nav-item" href="demo6-has-practical.html">:has() 实战</a>
+        </div>
+        <div class="nav-section">
+          <h3>状态选择器</h3>
+          <a class="nav-item" href="demo7-focus-within.html">:focus-within</a>
+          <a class="nav-item" href="demo8-focus-visible.html">:focus-visible</a>
+        </div>
+        <div class="nav-section">
+          <h3>结构选择器进阶</h3>
+          <a class="nav-item active" href="demo9-nth-child.html">:nth-child() 高级</a>
+          <a class="nav-item" href="demo10-nth-comparison.html">结构选择器对比</a>
+        </div>
+        <div class="nav-section">
+          <h3>综合实战</h3>
+          <a class="nav-item" href="demo11-combinations.html">选择器组合实战</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- 右侧主内容区 -->
+    <main id="main-content" class="main-content" role="main">
+      <div class="demo-page">
+        <h1>:nth-child() 高级用法</h1>
+        <p class="subtitle">掌握 An+B 语法，实现复杂的元素选择模式</p>
+
+        <!-- 概念介绍 -->
+        <section class="concept-section">
+          <h2>什么是 :nth-child()？</h2>
+          <p>
+            <code>:nth-child()</code> 是一个强大的结构伪类选择器，允许你根据元素在父元素中的位置来选择元素。 它使用
+            <strong>An+B</strong> 数学公式来表达复杂的选择模式，可以实现各种灵活的布局和样式需求。
+          </p>
+          <p>
+            与简单的 <code>:first-child</code> 或 <code>:last-child</code> 不同，<code>:nth-child()</code>
+            可以选择任意位置、间隔、范围的元素，是实现斑马条纹、网格布局、响应式设计的关键工具。
+          </p>
+          <ul>
+            <li><strong>灵活选择</strong> - 使用数学公式选择任意位置的元素</li>
+            <li><strong>模式匹配</strong> - 轻松实现奇数、偶数、每 N 个等模式</li>
+            <li><strong>范围选择</strong> - 选择前 N 个、后 N 个或中间范围的元素</li>
+            <li><strong>现代语法</strong> - 支持 <code>of selector</code> 语法进行条件过滤</li>
+          </ul>
+        </section>
+
+        <!-- An+B 语法详解 -->
+        <section class="syntax-section">
+          <h2>An+B 语法详解</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 20px">
+            An+B 是一个数学表达式，其中 <strong>A</strong> 和 <strong>B</strong> 是整数，<strong>n</strong> 是从 0
+            开始递增的计数器。 公式会计算出一系列匹配的元素位置。
+          </p>
+
+          <div
+            style="
+              background: var(--info-light);
+              border-left: 4px solid var(--info);
+              padding: 20px;
+              border-radius: var(--radius-md);
+              margin-bottom: 25px;
+            "
+          >
+            <strong style="color: var(--info-dark); font-size: 1.1rem">💡 An+B 公式解析</strong>
+            <div style="margin-top: 15px; color: var(--text-primary); line-height: 1.8">
+              <p style="margin-bottom: 12px">
+                <strong>公式结构：</strong>
+                <code
+                  style="
+                    background: var(--gray-700);
+                    color: var(--gray-200);
+                    padding: 4px 10px;
+                    border-radius: 4px;
+                    font-size: 1rem;
+                  "
+                  >An + B</code
+                >
+              </p>
+              <ul style="margin-left: 20px">
+                <li><strong>A</strong> - 循环间隔（步长），决定每隔多少个元素选择一次</li>
+                <li><strong>n</strong> - 计数器，从 0 开始：0, 1, 2, 3, 4...</li>
+                <li><strong>B</strong> - 偏移量，决定从第几个元素开始</li>
+              </ul>
+              <p style="margin-top: 12px"><strong>计算过程：</strong></p>
+              <ul style="margin-left: 20px">
+                <li>当 n=0 时：A×0 + B = B（第 B 个元素）</li>
+                <li>当 n=1 时：A×1 + B = A+B（第 A+B 个元素）</li>
+                <li>当 n=2 时：A×2 + B = 2A+B（第 2A+B 个元素）</li>
+                <li>以此类推...</li>
+              </ul>
+            </div>
+          </div>
+
+          <pre><code><span class="code-comment">/* 基础语法 */</span>
+:nth-child(An+B) {
+  /* 样式规则 */
+}
+
+<span class="code-comment">/* 常用关键字 */</span>
+:nth-child(odd)   <span class="code-comment">/* 等价于 2n+1，选择奇数位 */</span>
+:nth-child(even)  <span class="code-comment">/* 等价于 2n，选择偶数位 */</span>
+
+<span class="code-comment">/* 单个数字 - 选择第 N 个元素 */</span>
+:nth-child(3)     <span class="code-comment">/* 选择第 3 个元素 */</span>
+
+<span class="code-comment">/* An 形式 - 每隔 A 个选择一次 */</span>
+:nth-child(3n)    <span class="code-comment">/* 选择第 3, 6, 9, 12... 个元素 */</span>
+
+<span class="code-comment">/* An+B 形式 - 从第 B 个开始，每隔 A 个选择一次 */</span>
+:nth-child(3n+1)  <span class="code-comment">/* 选择第 1, 4, 7, 10... 个元素 */</span>
+:nth-child(3n+2)  <span class="code-comment">/* 选择第 2, 5, 8, 11... 个元素 */</span>
+
+<span class="code-comment">/* 负数 A - 选择前 N 个元素 */</span>
+:nth-child(-n+3)  <span class="code-comment">/* 选择前 3 个元素（1, 2, 3） */</span>
+
+<span class="code-comment">/* 正数 n+B - 选择第 B 个之后的所有元素 */</span>
+:nth-child(n+4)   <span class="code-comment">/* 选择第 4 个及之后的所有元素 */</span>
+
+<span class="code-comment">/* 组合使用 - 选择范围 */</span>
+:nth-child(n+3):nth-child(-n+7)  <span class="code-comment">/* 选择第 3-7 个元素 */</span></code></pre>
+
+          <h3 style="margin-top: 35px; color: var(--text-primary); font-size: 1.3rem">常用模式速查表</h3>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+              gap: 15px;
+              margin-top: 20px;
+            "
+          >
+            <div
+              style="
+                background: var(--bg-secondary);
+                padding: 15px;
+                border-radius: var(--radius-md);
+                border: 2px solid var(--border-color);
+              "
+            >
+              <div style="font-family: var(--font-mono); color: var(--primary); font-weight: 700; margin-bottom: 8px">
+                2n 或 even
+              </div>
+              <div style="color: var(--text-secondary); font-size: 0.9rem">选择所有偶数位元素</div>
+              <div style="margin-top: 8px; font-size: 0.85rem; color: var(--text-primary)">匹配：2, 4, 6, 8...</div>
+            </div>
+            <div
+              style="
+                background: var(--bg-secondary);
+                padding: 15px;
+                border-radius: var(--radius-md);
+                border: 2px solid var(--border-color);
+              "
+            >
+              <div style="font-family: var(--font-mono); color: var(--primary); font-weight: 700; margin-bottom: 8px">
+                2n+1 或 odd
+              </div>
+              <div style="color: var(--text-secondary); font-size: 0.9rem">选择所有奇数位元素</div>
+              <div style="margin-top: 8px; font-size: 0.85rem; color: var(--text-primary)">匹配：1, 3, 5, 7...</div>
+            </div>
+            <div
+              style="
+                background: var(--bg-secondary);
+                padding: 15px;
+                border-radius: var(--radius-md);
+                border: 2px solid var(--border-color);
+              "
+            >
+              <div style="font-family: var(--font-mono); color: var(--primary); font-weight: 700; margin-bottom: 8px">
+                3n
+              </div>
+              <div style="color: var(--text-secondary); font-size: 0.9rem">选择每 3 个元素</div>
+              <div style="margin-top: 8px; font-size: 0.85rem; color: var(--text-primary)">匹配：3, 6, 9, 12...</div>
+            </div>
+            <div
+              style="
+                background: var(--bg-secondary);
+                padding: 15px;
+                border-radius: var(--radius-md);
+                border: 2px solid var(--border-color);
+              "
+            >
+              <div style="font-family: var(--font-mono); color: var(--primary); font-weight: 700; margin-bottom: 8px">
+                -n+3
+              </div>
+              <div style="color: var(--text-secondary); font-size: 0.9rem">选择前 3 个元素</div>
+              <div style="margin-top: 8px; font-size: 0.85rem; color: var(--text-primary)">匹配：1, 2, 3</div>
+            </div>
+            <div
+              style="
+                background: var(--bg-secondary);
+                padding: 15px;
+                border-radius: var(--radius-md);
+                border: 2px solid var(--border-color);
+              "
+            >
+              <div style="font-family: var(--font-mono); color: var(--primary); font-weight: 700; margin-bottom: 8px">
+                n+4
+              </div>
+              <div style="color: var(--text-secondary); font-size: 0.9rem">选择第 4 个及之后</div>
+              <div style="margin-top: 8px; font-size: 0.85rem; color: var(--text-primary)">匹配：4, 5, 6, 7...</div>
+            </div>
+            <div
+              style="
+                background: var(--bg-secondary);
+                padding: 15px;
+                border-radius: var(--radius-md);
+                border: 2px solid var(--border-color);
+              "
+            >
+              <div style="font-family: var(--font-mono); color: var(--primary); font-weight: 700; margin-bottom: 8px">
+                4n+1
+              </div>
+              <div style="color: var(--text-secondary); font-size: 0.9rem">每 4 个选 1 个，从第 1 个开始</div>
+              <div style="margin-top: 8px; font-size: 0.85rem; color: var(--text-primary)">匹配：1, 5, 9, 13...</div>
+            </div>
+          </div>
+
+          <h3 style="margin-top: 35px; color: var(--text-primary); font-size: 1.3rem">of 选择器语法（现代特性）</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 15px">
+            <code>:nth-child(An+B of selector)</code> 允许你在特定类型的元素中应用 An+B 模式，而不是所有子元素。
+          </p>
+          <pre><code><span class="code-comment">/* 传统方式 - 计数所有子元素 */</span>
+li:nth-child(2n) {
+  <span class="code-comment">/* 选择所有偶数位的 li，但如果有其他元素会影响计数 */</span>
+}
+
+<span class="code-comment">/* 现代方式 - 只计数匹配的元素 */</span>
+:nth-child(2n of li) {
+  <span class="code-comment">/* 只在 li 元素中计数，选择偶数位的 li */</span>
+}
+
+:nth-child(3n of .item) {
+  <span class="code-comment">/* 只在 .item 元素中计数，选择每 3 个 .item */</span>
+}
+
+:nth-child(odd of [data-active]) {
+  <span class="code-comment">/* 只在有 data-active 属性的元素中计数奇数位 */</span>
+}</code></pre>
+
+          <div
+            style="
+              background: var(--warning-light);
+              border-left: 4px solid var(--warning);
+              padding: 15px;
+              border-radius: var(--radius-md);
+              margin-top: 20px;
+            "
+          >
+            <strong style="color: var(--warning-dark)">⚠️ 浏览器支持</strong>
+            <p style="color: var(--text-primary); margin-top: 8px; line-height: 1.6">
+              <code>of selector</code> 语法是较新的特性，在 Safari 9+ 和 Chrome 111+ 中支持。
+              对于旧版浏览器，需要使用传统的 <code>:nth-of-type()</code> 或组合选择器。
+            </p>
+          </div>
+        </section>
+
+        <!-- 交互式 An+B 计算器 -->
+        <section class="demo-section">
+          <h2>交互式 An+B 计算器</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 20px">
+            输入 A 和 B 的值，实时查看哪些元素会被选中。通过可视化帮助你理解 An+B 公式的工作原理。
+          </p>
+
+          <div class="interactive-demo">
+            <div
+              class="controls"
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+                margin-bottom: 25px;
+              "
+            >
+              <div class="control-group">
+                <label for="input-a">A 值（步长）：</label>
+                <input
+                  id="input-a"
+                  type="number"
+                  value="2"
+                  aria-label="An+B 公式中的 A 值"
+                  aria-describedby="a-help"
+                  min="-10"
+                  max="10"
+                />
+                <span
+                  id="a-help"
+                  style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; display: block"
+                >
+                  循环间隔（-10 到 10）
+                </span>
+              </div>
+              <div class="control-group">
+                <label for="input-b">B 值（偏移）：</label>
+                <input
+                  id="input-b"
+                  type="number"
+                  value="1"
+                  aria-label="An+B 公式中的 B 值"
+                  aria-describedby="b-help"
+                  min="-10"
+                  max="20"
+                />
+                <span
+                  id="b-help"
+                  style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; display: block"
+                >
+                  起始偏移（-10 到 20）
+                </span>
+              </div>
+              <div class="control-group">
+                <label for="element-count">元素数量：</label>
+                <input id="element-count" type="number" value="12" aria-label="显示的元素总数" min="5" max="20" />
+                <span style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; display: block">
+                  显示 5-20 个元素
+                </span>
+              </div>
+            </div>
+
+            <div
+              style="
+                background: var(--bg-secondary);
+                padding: 20px;
+                border-radius: var(--radius-lg);
+                border: 2px solid var(--border-color);
+                margin-bottom: 20px;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-bottom: 15px;
+                  flex-wrap: wrap;
+                  gap: 10px;
+                "
+              >
+                <div>
+                  <strong style="color: var(--text-primary); font-size: 1.1rem">当前选择器：</strong>
+                  <code
+                    id="current-selector"
+                    style="
+                      background: var(--gray-700);
+                      color: var(--gray-200);
+                      padding: 6px 14px;
+                      border-radius: 4px;
+                      font-size: 1rem;
+                      margin-left: 10px;
+                      font-weight: 600;
+                    "
+                  >
+                    :nth-child(2n+1)
+                  </code>
+                </div>
+                <div style="color: var(--text-secondary); font-size: 0.9rem">
+                  <span id="match-count" style="color: var(--primary); font-weight: 700; font-size: 1.1rem">6</span>
+                  个元素匹配
+                </div>
+              </div>
+
+              <div
+                id="element-grid"
+                aria-live="polite"
+                aria-label="元素选择结果"
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+                  gap: 10px;
+                  margin-top: 15px;
+                "
+                role="region"
+              >
+                <!-- 元素将通过 JavaScript 动态生成 -->
+              </div>
+            </div>
+
+            <div
+              style="
+                background: var(--info-light);
+                padding: 15px;
+                border-radius: var(--radius-md);
+                border-left: 4px solid var(--info);
+              "
+            >
+              <strong style="color: var(--info-dark)">💡 计算说明</strong>
+              <div
+                id="calculation-explanation"
+                style="
+                  margin-top: 10px;
+                  color: var(--text-primary);
+                  line-height: 1.8;
+                  font-family: var(--font-mono);
+                  font-size: 0.9rem;
+                "
+              >
+                <!-- 计算过程将通过 JavaScript 动态生成 -->
+              </div>
+            </div>
+
+            <div
+              style="margin-top: 20px; padding: 15px; background: var(--bg-secondary); border-radius: var(--radius-md)"
+            >
+              <strong style="color: var(--text-primary)">快捷模式：</strong>
+              <div
+                aria-label="预设模式"
+                style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap"
+                role="group"
+              >
+                <button class="preset-btn" data-a="2" data-b="0" aria-label="偶数位模式">偶数 (2n)</button>
+                <button class="preset-btn" data-a="2" data-b="1" aria-label="奇数位模式">奇数 (2n+1)</button>
+                <button class="preset-btn" data-a="3" data-b="0" aria-label="每3个模式">每3个 (3n)</button>
+                <button class="preset-btn" data-a="-1" data-b="3" aria-label="前3个模式">前3个 (-n+3)</button>
+                <button class="preset-btn" data-a="1" data-b="4" aria-label="第4个之后模式">第4个后 (n+4)</button>
+                <button class="preset-btn" data-a="4" data-b="1" aria-label="每4个选1个模式">4n+1</button>
+                <button class="preset-btn" data-a="3" data-b="2" aria-label="每3个选1个从第2个开始">3n+2</button>
+              </div>
+            </div>
+          </div>
+
+          <style>
+            .preset-btn {
+              padding: 8px 16px;
+              background: var(--primary-light);
+              color: var(--primary-dark);
+              border: 2px solid var(--primary);
+              border-radius: var(--radius-md);
+              font-family: var(--font-mono);
+              font-size: 0.9rem;
+              cursor: pointer;
+              transition: all var(--transition-base);
+              font-weight: 600;
+            }
+            .preset-btn:hover {
+              background: var(--primary);
+              color: white;
+              transform: translateY(-2px);
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .preset-btn:focus-visible {
+              outline: 3px solid var(--primary);
+              outline-offset: 2px;
+            }
+            .element-box {
+              aspect-ratio: 1;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border-radius: var(--radius-md);
+              font-weight: 700;
+              font-size: 1.1rem;
+              transition: all 0.3s ease;
+              border: 2px solid var(--border-color);
+              background: var(--bg-primary);
+              color: var(--text-secondary);
+            }
+            .element-box.matched {
+              background: var(--primary);
+              color: white;
+              border-color: var(--primary);
+              transform: scale(1.1);
+              box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+            }
+          </style>
+
+          <script>
+            (function () {
+              const inputA = document.getElementById('input-a');
+              const inputB = document.getElementById('input-b');
+              const elementCount = document.getElementById('element-count');
+              const currentSelector = document.getElementById('current-selector');
+              const matchCount = document.getElementById('match-count');
+              const elementGrid = document.getElementById('element-grid');
+              const calculationExplanation = document.getElementById('calculation-explanation');
+
+              function calculateMatches(a, b, total) {
+                const matches = [];
+
+                // 特殊情况：A = 0
+                if (a === 0) {
+                  if (b > 0 && b <= total) {
+                    matches.push(b);
+                  }
+                  return matches;
+                }
+
+                // 计算匹配的元素
+                for (let n = 0; n <= total; n++) {
+                  const position = a * n + b;
+                  if (position > 0 && position <= total) {
+                    matches.push(position);
+                  }
+                  // 优化：如果位置超出范围且 A > 0，可以停止
+                  if (a > 0 && position > total) {
+                    break;
+                  }
+                  // 优化：如果位置小于 1 且 A < 0，可以停止
+                  if (a < 0 && position < 1) {
+                    break;
+                  }
+                }
+
+                return [...new Set(matches)].sort((x, y) => x - y);
+              }
+
+              function formatSelector(a, b) {
+                // 特殊情况
+                if (a === 0 && b > 0) {
+                  return `:nth-child(${b})`;
+                }
+                if (a === 0 && b <= 0) {
+                  return ':nth-child(无效)';
+                }
+                if (a === 2 && b === 0) {
+                  return ':nth-child(even)';
+                }
+                if (a === 2 && b === 1) {
+                  return ':nth-child(odd)';
+                }
+
+                // 标准格式
+                let formula = '';
+                if (a === 1) {
+                  formula = 'n';
+                } else if (a === -1) {
+                  formula = '-n';
+                } else if (a !== 0) {
+                  formula = `${a}n`;
+                }
+
+                if (b > 0) {
+                  formula += `+${b}`;
+                } else if (b < 0) {
+                  formula += `${b}`;
+                }
+
+                return `:nth-child(${formula || '0'})`;
+              }
+
+              function generateExplanation(a, b, matches, total) {
+                let html = '<div style="margin-bottom: 10px;">';
+
+                if (a === 0) {
+                  html += `<div>A = 0，只选择第 ${b} 个元素</div>`;
+                } else {
+                  html += `<div style="margin-bottom: 8px;">公式：${a}n + ${b}</div>`;
+
+                  const examples = [];
+                  for (let n = 0; n <= Math.min(3, Math.ceil(total / Math.abs(a))); n++) {
+                    const pos = a * n + b;
+                    if (pos > 0 && pos <= total) {
+                      examples.push(`n=${n}: ${a}×${n} + ${b} = ${pos}`);
+                    }
+                  }
+
+                  if (examples.length > 0) {
+                    html += '<div style="margin-top: 8px;">计算过程：</div>';
+                    examples.forEach((ex) => {
+                      html += `<div style="margin-left: 15px; color: var(--text-secondary);">${ex}</div>`;
+                    });
+                  }
+                }
+
+                html += '</div>';
+                return html;
+              }
+
+              function updateCalculator() {
+                const a = parseInt(inputA.value) || 0;
+                const b = parseInt(inputB.value) || 0;
+                const total = parseInt(elementCount.value) || 12;
+
+                // 更新选择器显示
+                currentSelector.textContent = formatSelector(a, b);
+
+                // 计算匹配的元素
+                const matches = calculateMatches(a, b, total);
+                matchCount.textContent = matches.length;
+
+                // 生成元素网格
+                elementGrid.innerHTML = '';
+                for (let i = 1; i <= total; i++) {
+                  const box = document.createElement('div');
+                  box.className = 'element-box';
+                  box.textContent = i;
+                  box.setAttribute('role', 'status');
+
+                  if (matches.includes(i)) {
+                    box.classList.add('matched');
+                    box.setAttribute('aria-label', `元素 ${i} 已选中`);
+                  } else {
+                    box.setAttribute('aria-label', `元素 ${i} 未选中`);
+                  }
+
+                  elementGrid.appendChild(box);
+                }
+
+                // 更新计算说明
+                calculationExplanation.innerHTML = generateExplanation(a, b, matches, total);
+              }
+
+              // 事件监听
+              inputA.addEventListener('input', updateCalculator);
+              inputB.addEventListener('input', updateCalculator);
+              elementCount.addEventListener('input', updateCalculator);
+
+              // 预设按钮
+              document.querySelectorAll('.preset-btn').forEach((btn) => {
+                btn.addEventListener('click', function () {
+                  inputA.value = this.getAttribute('data-a');
+                  inputB.value = this.getAttribute('data-b');
+                  updateCalculator();
+                });
+              });
+
+              // 初始化
+              updateCalculator();
+            })();
+          </script>
+        </section>
+
+        <!-- 常用模式示例 -->
+        <section class="demo-section">
+          <h2>常用模式示例</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 25px">
+            以下是 :nth-child() 最常用的选择模式，涵盖了大多数实际应用场景。
+          </p>
+
+          <h3>模式 1: 选择前 N 个元素</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览 - 前 5 个元素</div>
+              <style>
+                .pattern-1 {
+                  display: grid;
+                  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+                  gap: 10px;
+                }
+                .pattern-1 .item {
+                  aspect-ratio: 1;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  background: var(--bg-primary);
+                  border: 2px solid var(--border-color);
+                  border-radius: var(--radius-md);
+                  font-weight: 700;
+                  color: var(--text-secondary);
+                }
+                .pattern-1 .item:nth-child(-n + 5) {
+                  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                  color: white;
+                  border-color: #667eea;
+                  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+                }
+              </style>
+              <div class="pattern-1">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+                <div class="item">4</div>
+                <div class="item">5</div>
+                <div class="item">6</div>
+                <div class="item">7</div>
+                <div class="item">8</div>
+                <div class="item">9</div>
+                <div class="item">10</div>
+                <div class="item">11</div>
+                <div class="item">12</div>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">💡 前 5 个元素被高亮显示</p>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 选择前 5 个元素 */</span>
+.item:nth-child(-n+5) {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+<span class="code-comment">/* 公式解析：-n+5
+   n=0: -0+5 = 5 ✓
+   n=1: -1+5 = 4 ✓
+   n=2: -2+5 = 3 ✓
+   n=3: -3+5 = 2 ✓
+   n=4: -4+5 = 1 ✓
+   n=5: -5+5 = 0 ✗ (无效)
+   
+   结果：选择第 1, 2, 3, 4, 5 个元素 */</span>
+
+<span class="code-comment">/* 应用场景：
+   - 限制显示的项目数量
+   - 突出显示最新的几条记录
+   - 创建"查看更多"功能 */</span></code></pre>
+            </div>
+          </div>
+
+          <h3>模式 2: 选择第 N 个之后的所有元素</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览 - 第 4 个之后</div>
+              <style>
+                .pattern-2 {
+                  display: grid;
+                  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+                  gap: 10px;
+                }
+                .pattern-2 .item {
+                  aspect-ratio: 1;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  background: var(--bg-primary);
+                  border: 2px solid var(--border-color);
+                  border-radius: var(--radius-md);
+                  font-weight: 700;
+                  color: var(--text-secondary);
+                }
+                .pattern-2 .item:nth-child(n + 4) {
+                  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                  color: white;
+                  border-color: #f093fb;
+                  box-shadow: 0 4px 12px rgba(240, 147, 251, 0.3);
+                }
+              </style>
+              <div class="pattern-2">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+                <div class="item">4</div>
+                <div class="item">5</div>
+                <div class="item">6</div>
+                <div class="item">7</div>
+                <div class="item">8</div>
+                <div class="item">9</div>
+                <div class="item">10</div>
+                <div class="item">11</div>
+                <div class="item">12</div>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 第 4 个及之后的元素被高亮
+              </p>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 选择第 4 个及之后的所有元素 */</span>
+.item:nth-child(n+4) {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+<span class="code-comment">/* 公式解析：n+4
+   n=0: 0+4 = 4 ✓
+   n=1: 1+4 = 5 ✓
+   n=2: 2+4 = 6 ✓
+   n=3: 3+4 = 7 ✓
+   ...持续到最后
+   
+   结果：选择第 4, 5, 6, 7... 个元素 */</span>
+
+<span class="code-comment">/* 应用场景：
+   - 跳过前几个元素
+   - 实现"加载更多"后的新内容样式
+   - 分页显示 */</span></code></pre>
+            </div>
+          </div>
+
+          <h3>模式 3: 选择范围内的元素（第 3-7 个）</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览 - 第 3 到 7 个</div>
+              <style>
+                .pattern-3 {
+                  display: grid;
+                  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+                  gap: 10px;
+                }
+                .pattern-3 .item {
+                  aspect-ratio: 1;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  background: var(--bg-primary);
+                  border: 2px solid var(--border-color);
+                  border-radius: var(--radius-md);
+                  font-weight: 700;
+                  color: var(--text-secondary);
+                }
+                .pattern-3 .item:nth-child(n + 3):nth-child(-n + 7) {
+                  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+                  color: white;
+                  border-color: #4facfe;
+                  box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+                }
+              </style>
+              <div class="pattern-3">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+                <div class="item">4</div>
+                <div class="item">5</div>
+                <div class="item">6</div>
+                <div class="item">7</div>
+                <div class="item">8</div>
+                <div class="item">9</div>
+                <div class="item">10</div>
+                <div class="item">11</div>
+                <div class="item">12</div>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 第 3-7 个元素被高亮（组合选择器）
+              </p>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 选择第 3 到第 7 个元素 */</span>
+.item:nth-child(n+3):nth-child(-n+7) {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+}
+
+<span class="code-comment">/* 组合两个选择器：
+   :nth-child(n+3)  → 第 3 个及之后
+   :nth-child(-n+7) → 前 7 个
+   
+   交集：第 3, 4, 5, 6, 7 个元素 */</span>
+
+<span class="code-comment">/* 应用场景：
+   - 选择特定范围的元素
+   - 实现分页高亮
+   - 创建视觉分组 */</span></code></pre>
+            </div>
+          </div>
+
+          <h3>模式 4: 选择每 3 个元素</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览 - 每 3 个</div>
+              <style>
+                .pattern-4 {
+                  display: grid;
+                  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+                  gap: 10px;
+                }
+                .pattern-4 .item {
+                  aspect-ratio: 1;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  background: var(--bg-primary);
+                  border: 2px solid var(--border-color);
+                  border-radius: var(--radius-md);
+                  font-weight: 700;
+                  color: var(--text-secondary);
+                }
+                .pattern-4 .item:nth-child(3n) {
+                  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+                  color: white;
+                  border-color: #fa709a;
+                  box-shadow: 0 4px 12px rgba(250, 112, 154, 0.3);
+                }
+              </style>
+              <div class="pattern-4">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+                <div class="item">4</div>
+                <div class="item">5</div>
+                <div class="item">6</div>
+                <div class="item">7</div>
+                <div class="item">8</div>
+                <div class="item">9</div>
+                <div class="item">10</div>
+                <div class="item">11</div>
+                <div class="item">12</div>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 每 3 个元素（3, 6, 9, 12）被高亮
+              </p>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 选择每 3 个元素 */</span>
+.item:nth-child(3n) {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  color: white;
+}
+
+<span class="code-comment">/* 公式解析：3n
+   n=0: 3×0 = 0 ✗ (无效)
+   n=1: 3×1 = 3 ✓
+   n=2: 3×2 = 6 ✓
+   n=3: 3×3 = 9 ✓
+   n=4: 3×4 = 12 ✓
+   
+   结果：选择第 3, 6, 9, 12... 个元素 */</span>
+
+<span class="code-comment">/* 应用场景：
+   - 网格布局中每行的最后一个元素
+   - 创建视觉节奏
+   - 分组显示 */</span></code></pre>
+            </div>
+          </div>
+
+          <h3>模式 5: 选择偶数位的特定类元素（使用 of 语法）</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览 - 偶数位的 .highlight</div>
+              <style>
+                .pattern-5 {
+                  display: grid;
+                  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+                  gap: 10px;
+                }
+                .pattern-5 .item {
+                  aspect-ratio: 1;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  background: var(--bg-primary);
+                  border: 2px solid var(--border-color);
+                  border-radius: var(--radius-md);
+                  font-weight: 700;
+                  color: var(--text-secondary);
+                }
+                .pattern-5 .item.highlight {
+                  background: var(--primary-light);
+                  border-color: var(--primary);
+                  color: var(--primary-dark);
+                }
+                .pattern-5 .item:nth-child(even of .highlight) {
+                  background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+                  color: white;
+                  border-color: #30cfd0;
+                  box-shadow: 0 4px 12px rgba(48, 207, 208, 0.3);
+                }
+              </style>
+              <div class="pattern-5">
+                <div class="item">1</div>
+                <div class="item highlight">H1</div>
+                <div class="item">3</div>
+                <div class="item highlight">H2</div>
+                <div class="item">5</div>
+                <div class="item highlight">H3</div>
+                <div class="item">7</div>
+                <div class="item highlight">H4</div>
+                <div class="item">9</div>
+                <div class="item highlight">H5</div>
+                <div class="item">11</div>
+                <div class="item highlight">H6</div>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 只在 .highlight 元素中计数，选择偶数位（H2, H4, H6）
+              </p>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 只在 .highlight 元素中选择偶数位 */</span>
+.item:nth-child(even of .highlight) {
+  background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+  color: white;
+}
+
+<span class="code-comment">/* of 语法说明：
+   - 传统 :nth-child(even) 会计数所有子元素
+   - :nth-child(even of .highlight) 只计数 .highlight 元素
+   - 更精确的选择控制 */</span>
+
+<span class="code-comment">/* 浏览器支持：
+   Chrome 111+, Firefox 113+, Safari 9+ */</span>
+
+<span class="code-comment">/* 应用场景：
+   - 混合元素列表中的斑马条纹
+   - 只对特定类型元素应用样式
+   - 动态内容的精确控制 */</span></code></pre>
+            </div>
+          </div>
+
+          <h3>模式 6: 选择每 4 个中的第 1 个（4n+1）</h3>
+          <div class="demo-container">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览 - 4n+1 模式</div>
+              <style>
+                .pattern-6 {
+                  display: grid;
+                  grid-template-columns: repeat(4, 1fr);
+                  gap: 10px;
+                }
+                .pattern-6 .item {
+                  aspect-ratio: 1;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  background: var(--bg-primary);
+                  border: 2px solid var(--border-color);
+                  border-radius: var(--radius-md);
+                  font-weight: 700;
+                  color: var(--text-secondary);
+                }
+                .pattern-6 .item:nth-child(4n + 1) {
+                  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+                  color: #333;
+                  border-color: #a8edea;
+                  box-shadow: 0 4px 12px rgba(168, 237, 234, 0.3);
+                  font-weight: 900;
+                }
+              </style>
+              <div class="pattern-6">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+                <div class="item">4</div>
+                <div class="item">5</div>
+                <div class="item">6</div>
+                <div class="item">7</div>
+                <div class="item">8</div>
+                <div class="item">9</div>
+                <div class="item">10</div>
+                <div class="item">11</div>
+                <div class="item">12</div>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 每行的第一个元素（1, 5, 9）被高亮
+              </p>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 选择每 4 个中的第 1 个 */</span>
+.item:nth-child(4n+1) {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  font-weight: 900;
+}
+
+<span class="code-comment">/* 公式解析：4n+1
+   n=0: 4×0+1 = 1 ✓
+   n=1: 4×1+1 = 5 ✓
+   n=2: 4×2+1 = 9 ✓
+   n=3: 4×3+1 = 13 ✓
+   
+   结果：选择第 1, 5, 9, 13... 个元素 */</span>
+
+<span class="code-comment">/* 应用场景：
+   - 4 列网格布局中每行的第一个元素
+   - 创建视觉起点标记
+   - 响应式网格的列控制 */</span>
+
+<span class="code-comment">/* 类似模式：
+   4n+2 → 每行第 2 个 (2, 6, 10...)
+   4n+3 → 每行第 3 个 (3, 7, 11...)
+   4n   → 每行最后一个 (4, 8, 12...) */</span></code></pre>
+            </div>
+          </div>
+
+          <h3>模式 7: 奇偶交替（斑马条纹）</h3>
+          <div class="demo-container single-column">
+            <div class="demo-preview">
+              <div class="demo-preview-title">效果预览 - 表格斑马条纹</div>
+              <style>
+                .pattern-7 table {
+                  width: 100%;
+                  border-collapse: collapse;
+                  border-radius: var(--radius-md);
+                  overflow: hidden;
+                }
+                .pattern-7 th {
+                  background: var(--primary);
+                  color: white;
+                  padding: 12px;
+                  text-align: left;
+                  font-weight: 700;
+                }
+                .pattern-7 td {
+                  padding: 12px;
+                  border-bottom: 1px solid var(--border-color);
+                  color: var(--text-primary);
+                }
+                .pattern-7 tbody tr:nth-child(odd) {
+                  background: var(--bg-primary);
+                }
+                .pattern-7 tbody tr:nth-child(even) {
+                  background: var(--bg-secondary);
+                }
+                .pattern-7 tbody tr:hover {
+                  background: var(--primary-light);
+                  cursor: pointer;
+                }
+              </style>
+              <div class="pattern-7">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>姓名</th>
+                      <th>职位</th>
+                      <th>部门</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>张三</td>
+                      <td>工程师</td>
+                      <td>技术部</td>
+                    </tr>
+                    <tr>
+                      <td>李四</td>
+                      <td>设计师</td>
+                      <td>设计部</td>
+                    </tr>
+                    <tr>
+                      <td>王五</td>
+                      <td>产品经理</td>
+                      <td>产品部</td>
+                    </tr>
+                    <tr>
+                      <td>赵六</td>
+                      <td>运营</td>
+                      <td>运营部</td>
+                    </tr>
+                    <tr>
+                      <td>孙七</td>
+                      <td>测试</td>
+                      <td>质量部</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem">
+                💡 奇偶行交替背景色，提高可读性
+              </p>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 经典的表格斑马条纹 */</span>
+tbody tr:nth-child(odd) {
+  background: var(--bg-primary);
+}
+
+tbody tr:nth-child(even) {
+  background: var(--bg-secondary);
+}
+
+<span class="code-comment">/* 也可以使用关键字 */</span>
+tbody tr:nth-child(odd) {
+  background: #ffffff;
+}
+
+tbody tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+<span class="code-comment">/* 添加悬停效果 */</span>
+tbody tr:hover {
+  background: var(--primary-light);
+  cursor: pointer;
+}
+
+<span class="code-comment">/* 应用场景：
+   - 表格行交替背景
+   - 列表项视觉分隔
+   - 提高大量数据的可读性
+   - 最常用的 :nth-child() 模式之一 */</span></code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 浏览器兼容性 -->
+        <section class="compatibility-section">
+          <h2>浏览器兼容性</h2>
+          <p><code>:nth-child()</code> 基础语法在所有现代浏览器中都得到了完全支持。</p>
+          <table class="compatibility-table">
+            <thead>
+              <tr>
+                <th>特性</th>
+                <th>Chrome</th>
+                <th>Firefox</th>
+                <th>Safari</th>
+                <th>Edge</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>:nth-child(An+B)</td>
+                <td class="support-yes">1+</td>
+                <td class="support-yes">3.5+</td>
+                <td class="support-yes">3.1+</td>
+                <td class="support-yes">12+</td>
+              </tr>
+              <tr>
+                <td>:nth-child(of selector)</td>
+                <td class="support-yes">111+</td>
+                <td class="support-yes">113+</td>
+                <td class="support-yes">9+</td>
+                <td class="support-yes">111+</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="margin-top: 15px">
+            <a
+              href="https://caniuse.com/css-nth-child-of"
+              target="_blank"
+              rel="noopener"
+              style="color: var(--primary); text-decoration: none; font-weight: 600"
+            >
+              查看详细兼容性数据 →
+            </a>
+          </p>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

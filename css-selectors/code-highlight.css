@@ -1,0 +1,391 @@
+/* ============================================
+   Code Highlighting and Syntax Styles
+   ============================================ */
+
+/* Prism.js Theme - Custom Dark/Light Theme */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: var(--code-text, #383a42);
+  background: none;
+  font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+  font-size: 0.95rem;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  overflow-wrap: normal;
+  line-height: 1.6;
+  tab-size: 2;
+  hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: 1.5rem;
+  margin: 0;
+  overflow: auto;
+  border-radius: var(--radius-md, 8px);
+  background: var(--code-bg, #f8f9fa);
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  background: var(--code-inline-bg, #e9ecef);
+  white-space: normal;
+}
+
+/* ============================================
+   Syntax Highlighting Tokens
+   ============================================ */
+
+/* Comments */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata,
+.code-comment {
+  color: var(--code-comment, #6c757d);
+  font-style: italic;
+}
+
+/* Punctuation */
+.token.punctuation {
+  color: var(--code-punctuation, #383a42);
+}
+
+/* Properties, tags, boolean, number, constant, symbol, deleted */
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: var(--code-number, #d73a49);
+}
+
+/* Selectors, attr-names, strings, chars, builtin, inserted */
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: var(--code-string, #22863a);
+}
+
+/* Operators, entities, urls */
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: var(--code-operator, #d73a49);
+}
+
+/* Keywords, atrules, attr-values */
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: var(--code-keyword, #6f42c1);
+}
+
+/* Functions, class-names */
+.token.function,
+.token.class-name {
+  color: var(--code-function, #6f42c1);
+}
+
+/* Regex, important, variables */
+.token.regex,
+.token.important,
+.token.variable {
+  color: var(--code-variable, #e36209);
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+/* ============================================
+   Dark Theme Code Colors
+   ============================================ */
+
+[data-theme="dark"] {
+  --code-bg: #1e1e1e;
+  --code-text: #d4d4d4;
+  --code-comment: #6a9955;
+  --code-punctuation: #d4d4d4;
+  --code-number: #b5cea8;
+  --code-string: #ce9178;
+  --code-operator: #d4d4d4;
+  --code-keyword: #569cd6;
+  --code-function: #dcdcaa;
+  --code-variable: #9cdcfe;
+  --code-inline-bg: #2d2d2d;
+}
+
+/* ============================================
+   Light Theme Code Colors
+   ============================================ */
+
+[data-theme="light"] {
+  --code-bg: #f8f9fa;
+  --code-text: #383a42;
+  --code-comment: #6c757d;
+  --code-punctuation: #383a42;
+  --code-number: #d73a49;
+  --code-string: #22863a;
+  --code-operator: #d73a49;
+  --code-keyword: #6f42c1;
+  --code-function: #6f42c1;
+  --code-variable: #e36209;
+  --code-inline-bg: #e9ecef;
+}
+
+/* ============================================
+   Code Block Enhancements
+   ============================================ */
+
+/* Code block container with title */
+.code-block {
+  margin: 1.5rem 0;
+  border-radius: var(--radius-md, 8px);
+  overflow: hidden;
+  border: 1px solid var(--border-color, #e5e7eb);
+  background: var(--code-bg);
+}
+
+.code-block-title {
+  padding: 0.75rem 1.25rem;
+  background: var(--bg-secondary, #f3f4f6);
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary, #111827);
+  font-family: Consolas, Monaco, monospace;
+}
+
+.code-block pre {
+  margin: 0;
+  border-radius: 0;
+}
+
+/* Line highlighting */
+.line-highlight {
+  background: rgba(255, 255, 0, 0.1);
+  border-left: 3px solid var(--primary, #10b981);
+  display: block;
+  margin: 0 -1.5rem;
+  padding: 0 1.5rem;
+}
+
+/* Line numbers */
+.line-numbers .line-numbers-rows {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  font-size: 100%;
+  left: -3.8em;
+  width: 3em;
+  letter-spacing: -1px;
+  border-right: 1px solid var(--border-color, #e5e7eb);
+  user-select: none;
+}
+
+.line-numbers .line-numbers-rows > span {
+  display: block;
+  counter-increment: linenumber;
+}
+
+.line-numbers .line-numbers-rows > span::before {
+  content: counter(linenumber);
+  color: var(--text-secondary, #6b7280);
+  display: block;
+  padding-right: 0.8em;
+  text-align: right;
+}
+
+/* ============================================
+   Inline Code Styles
+   ============================================ */
+
+code {
+  font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+  font-size: 0.9em;
+  padding: 0.2em 0.4em;
+  background: var(--code-inline-bg);
+  border-radius: 4px;
+  color: var(--code-text);
+}
+
+pre code {
+  padding: 0;
+  background: none;
+  font-size: 0.95rem;
+}
+
+/* ============================================
+   Code Comparison Styles
+   ============================================ */
+
+.code-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.code-comparison-item {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.code-comparison-label {
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.code-comparison-label.bad {
+  background: var(--error-light, #fee2e2);
+  color: var(--error-dark, #991b1b);
+  border-bottom: 2px solid var(--error, #ef4444);
+}
+
+.code-comparison-label.good {
+  background: var(--success-light, #d1fae5);
+  color: var(--success-dark, #065f46);
+  border-bottom: 2px solid var(--success, #10b981);
+}
+
+.code-comparison-item pre {
+  margin: 0;
+  border-radius: 0;
+}
+
+@media (max-width: 768px) {
+  .code-comparison {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* ============================================
+   Code Annotations
+   ============================================ */
+
+.code-annotation {
+  position: relative;
+  display: inline-block;
+}
+
+.code-annotation-marker {
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: help;
+  vertical-align: super;
+  margin-left: 0.25rem;
+}
+
+.code-annotation-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gray-900, #111827);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  margin-bottom: 0.5rem;
+  z-index: 10;
+}
+
+.code-annotation-marker:hover + .code-annotation-tooltip {
+  opacity: 1;
+}
+
+/* ============================================
+   Copy Button for Code Blocks
+   ============================================ */
+
+.code-block-wrapper {
+  position: relative;
+}
+
+.code-copy-button {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0;
+  z-index: 5;
+}
+
+.code-block-wrapper:hover .code-copy-button {
+  opacity: 1;
+}
+
+.code-copy-button:hover {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.code-copy-button.copied {
+  background: var(--success);
+  color: white;
+  border-color: var(--success);
+}
+
+/* ============================================
+   Responsive Code Blocks
+   ============================================ */
+
+@media (max-width: 768px) {
+  pre[class*="language-"] {
+    padding: 1rem;
+    font-size: 0.875rem;
+  }
+
+  .code-block-title {
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+  }
+
+  code {
+    font-size: 0.875em;
+  }
+}

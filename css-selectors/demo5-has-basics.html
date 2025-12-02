@@ -1,0 +1,1923 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>:has() 基础 - CSS 现代选择器</title>
+    <link href="/src/styles/common.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+    <script>
+      (function () {
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    </script>
+    <script type="module" src="/src/theme.js"></script>
+  </head>
+  <body>
+    <!-- 左侧边栏导航 -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>CSS 现代选择器</h1>
+        <a class="back-home" href="index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a class="nav-item" href="demo1-specificity.html">选择器优先级</a>
+        </div>
+        <div class="nav-section">
+          <h3>逻辑选择器</h3>
+          <a class="nav-item" href="demo2-is.html">:is() 伪类</a>
+          <a class="nav-item" href="demo3-where.html">:where() 伪类</a>
+          <a class="nav-item" href="demo4-not.html">:not() 伪类</a>
+        </div>
+        <div class="nav-section">
+          <h3>父子关系选择器</h3>
+          <a class="nav-item active" href="demo5-has-basics.html">:has() 基础</a>
+          <a class="nav-item" href="demo6-has-practical.html">:has() 实战</a>
+        </div>
+        <div class="nav-section">
+          <h3>状态选择器</h3>
+          <a class="nav-item" href="demo7-focus-within.html">:focus-within</a>
+          <a class="nav-item" href="demo8-focus-visible.html">:focus-visible</a>
+        </div>
+        <div class="nav-section">
+          <h3>结构选择器进阶</h3>
+          <a class="nav-item" href="demo9-nth-child.html">:nth-child() 高级</a>
+          <a class="nav-item" href="demo10-nth-comparison.html">结构选择器对比</a>
+        </div>
+        <div class="nav-section">
+          <h3>综合实战</h3>
+          <a class="nav-item" href="demo11-combinations.html">选择器组合实战</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- 右侧主内容区 -->
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>:has() 基础</h1>
+        <p class="subtitle">革命性的父选择器，根据子元素选择父元素</p>
+
+        <!-- 概念介绍 -->
+        <section class="concept-section">
+          <h2>什么是 :has() 伪类？</h2>
+          <p>
+            <code>:has()</code> 是 CSS 中最具革命性的选择器之一，它允许你<strong>根据子元素的状态来选择父元素</strong>。
+            这在以前被称为"父选择器"，是开发者期待已久的功能。
+          </p>
+          <p>
+            在 <code>:has()</code> 出现之前，CSS 只能从父元素向下选择子元素，无法反向选择。
+            现在，你可以根据元素内部包含的内容来改变该元素的样式，这为样式控制带来了前所未有的灵活性。
+          </p>
+          <ul>
+            <li><strong>父选择器能力</strong> - 根据子元素状态选择父元素</li>
+            <li><strong>条件样式</strong> - 根据内容动态调整布局和样式</li>
+            <li><strong>减少 JavaScript</strong> - 许多以前需要 JS 的场景现在可以用纯 CSS 实现</li>
+            <li><strong>提高可维护性</strong> - 样式逻辑更加清晰和集中</li>
+          </ul>
+        </section>
+
+        <!-- 父子关系可视化 -->
+        <section class="demo-section">
+          <h2>父子关系可视化</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 25px">
+            理解 <code>:has()</code> 的关键在于理解它如何改变选择方向。让我们通过可视化来理解这个概念。
+          </p>
+
+          <div class="demo-container single-column">
+            <div class="demo-preview" style="min-height: auto">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px">
+                <!-- 传统选择器 -->
+                <div>
+                  <h4 style="color: var(--text-primary); margin-bottom: 15px; font-size: 1.1rem">
+                    ❌ 传统选择器（向下选择）
+                  </h4>
+                  <div
+                    style="
+                      background: var(--bg-primary);
+                      border: 2px solid var(--border-color);
+                      border-radius: var(--radius-md);
+                      padding: 20px;
+                    "
+                  >
+                    <div
+                      style="
+                        background: var(--error-light);
+                        border: 2px solid var(--error);
+                        border-radius: var(--radius-md);
+                        padding: 15px;
+                        margin-bottom: 10px;
+                      "
+                    >
+                      <div style="font-weight: 600; color: var(--error-dark); margin-bottom: 8px">
+                        父元素 (无法选择)
+                      </div>
+                      <div style="font-size: 0.85rem; color: var(--text-secondary)">选择器: <code>.parent</code></div>
+                    </div>
+                    <div style="margin-left: 20px; border-left: 3px solid var(--border-color); padding-left: 15px">
+                      <div
+                        style="
+                          background: var(--success-light);
+                          border: 2px solid var(--success);
+                          border-radius: var(--radius-md);
+                          padding: 12px;
+                        "
+                      >
+                        <div style="font-weight: 600; color: var(--success-dark); margin-bottom: 8px">
+                          子元素 (可以选择)
+                        </div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary)">
+                          选择器: <code>.parent .child</code>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      margin-top: 15px;
+                      padding: 12px;
+                      background: var(--gray-100);
+                      border-radius: var(--radius-md);
+                      font-size: 0.9rem;
+                      color: var(--text-secondary);
+                    "
+                  >
+                    <strong>限制：</strong>只能从父元素向下选择子元素，无法根据子元素状态选择父元素。
+                  </div>
+                </div>
+
+                <!-- :has() 选择器 -->
+                <div>
+                  <h4 style="color: var(--text-primary); margin-bottom: 15px; font-size: 1.1rem">
+                    ✅ :has() 选择器（向上选择）
+                  </h4>
+                  <div
+                    style="
+                      background: var(--bg-primary);
+                      border: 2px solid var(--border-color);
+                      border-radius: var(--radius-md);
+                      padding: 20px;
+                    "
+                  >
+                    <div
+                      style="
+                        background: var(--success-light);
+                        border: 2px solid var(--success);
+                        border-radius: var(--radius-md);
+                        padding: 15px;
+                        margin-bottom: 10px;
+                      "
+                    >
+                      <div style="font-weight: 600; color: var(--success-dark); margin-bottom: 8px">
+                        父元素 (可以选择！)
+                      </div>
+                      <div style="font-size: 0.85rem; color: var(--text-secondary)">
+                        选择器: <code>.parent:has(.child)</code>
+                      </div>
+                    </div>
+                    <div style="margin-left: 20px; border-left: 3px solid var(--primary); padding-left: 15px">
+                      <div
+                        style="
+                          background: var(--primary-light);
+                          border: 2px solid var(--primary);
+                          border-radius: var(--radius-md);
+                          padding: 12px;
+                        "
+                      >
+                        <div style="font-weight: 600; color: var(--primary-dark); margin-bottom: 8px">
+                          子元素 (条件)
+                        </div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary)">
+                          匹配条件: <code>.child</code>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      margin-top: 15px;
+                      padding: 12px;
+                      background: var(--success-light);
+                      border-radius: var(--radius-md);
+                      font-size: 0.9rem;
+                      color: var(--success-dark);
+                    "
+                  >
+                    <strong>突破：</strong>可以根据子元素的存在或状态来选择并样式化父元素！
+                  </div>
+                </div>
+              </div>
+
+              <!-- 实际示例 -->
+              <div style="border-top: 2px solid var(--border-color); padding-top: 25px">
+                <h4 style="color: var(--text-primary); margin-bottom: 15px; font-size: 1.1rem">💡 实际示例对比</h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px">
+                  <div>
+                    <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: 10px; font-size: 0.9rem">
+                      传统方式（需要 JavaScript）
+                    </div>
+                    <pre
+                      style="
+                        background: var(--gray-800);
+                        color: var(--gray-200);
+                        padding: 15px;
+                        border-radius: var(--radius-md);
+                        font-size: 0.85rem;
+                        line-height: 1.5;
+                        margin: 0;
+                      "
+                    ><code><span class="code-comment">/* CSS */</span>
+.card.has-image {
+  border: 2px solid blue;
+}
+
+<span class="code-comment">/* JavaScript 必需 */</span>
+if (card.querySelector('img')) {
+  card.classList.add('has-image');
+}</code></pre>
+                  </div>
+                  <div>
+                    <div style="font-weight: 600; color: var(--success-dark); margin-bottom: 10px; font-size: 0.9rem">
+                      使用 :has()（纯 CSS）
+                    </div>
+                    <pre
+                      style="
+                        background: var(--gray-800);
+                        color: var(--gray-200);
+                        padding: 15px;
+                        border-radius: var(--radius-md);
+                        font-size: 0.85rem;
+                        line-height: 1.5;
+                        margin: 0;
+                      "
+                    ><code><span class="code-comment">/* 纯 CSS，无需 JavaScript */</span>
+.card:has(img) {
+  border: 2px solid blue;
+}
+
+
+<span class="code-comment">/* 自动响应 DOM 变化 */</span></code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 与传统选择器对比 -->
+        <section class="demo-section">
+          <h2>与传统选择器的对比</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 25px">
+            让我们通过具体的代码示例来理解 <code>:has()</code> 与传统选择器的区别。
+          </p>
+
+          <div class="demo-container">
+            <!-- 传统选择器示例 -->
+            <div>
+              <div class="demo-preview-title">传统选择器</div>
+              <div class="demo-preview" style="min-height: 200px">
+                <div
+                  style="
+                    background: var(--bg-primary);
+                    border: 2px solid var(--border-color);
+                    border-radius: var(--radius-md);
+                    padding: 15px;
+                    margin-bottom: 15px;
+                  "
+                >
+                  <div style="font-weight: 600; margin-bottom: 8px">卡片容器</div>
+                  <div
+                    style="
+                      margin-left: 15px;
+                      padding: 10px;
+                      background: var(--primary-light);
+                      border-radius: var(--radius-sm);
+                    "
+                  >
+                    <div style="font-weight: 600; color: var(--primary-dark)">✓ 图片（可以选择）</div>
+                  </div>
+                </div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6">
+                  <strong>问题：</strong>我们可以选择图片，但无法根据图片的存在来改变卡片容器的样式。
+                </div>
+              </div>
+              <div class="demo-code">
+                <pre><code><span class="code-comment">/* 只能选择子元素 */</span>
+.card img {
+  border-radius: 8px;
+}
+
+<span class="code-comment">/* ❌ 无法实现：
+   "如果卡片包含图片，
+    改变卡片的边框颜色" */</span></code></pre>
+              </div>
+            </div>
+
+            <!-- :has() 选择器示例 -->
+            <div>
+              <div class="demo-preview-title">:has() 选择器</div>
+              <div class="demo-preview" style="min-height: 200px">
+                <div
+                  style="
+                    background: var(--bg-primary);
+                    border: 2px solid var(--success);
+                    border-radius: var(--radius-md);
+                    padding: 15px;
+                    margin-bottom: 15px;
+                    box-shadow: 0 0 0 3px var(--success-light);
+                  "
+                >
+                  <div style="font-weight: 600; color: var(--success-dark); margin-bottom: 8px">
+                    ✓ 卡片容器（可以选择！）
+                  </div>
+                  <div
+                    style="
+                      margin-left: 15px;
+                      padding: 10px;
+                      background: var(--primary-light);
+                      border-radius: var(--radius-sm);
+                    "
+                  >
+                    <div style="font-weight: 600; color: var(--primary-dark)">图片（条件）</div>
+                  </div>
+                </div>
+                <div style="font-size: 0.9rem; color: var(--success-dark); line-height: 1.6">
+                  <strong>解决：</strong>可以根据图片的存在来改变卡片容器的样式！
+                </div>
+              </div>
+              <div class="demo-code">
+                <pre><code><span class="code-comment">/* 根据子元素选择父元素 */</span>
+.card:has(img) {
+  border: 2px solid green;
+  box-shadow: 0 0 0 3px lightgreen;
+}
+
+<span class="code-comment">/* ✅ 完美实现：
+   "如果卡片包含图片，
+    改变卡片的边框颜色" */</span></code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div
+            style="
+              background: var(--info-light);
+              border-left: 4px solid var(--info);
+              padding: 20px;
+              border-radius: var(--radius-md);
+              margin-top: 30px;
+            "
+          >
+            <strong style="color: var(--info-dark); font-size: 1.1rem">🎯 核心理解</strong>
+            <div style="color: var(--text-primary); margin-top: 12px; line-height: 1.8">
+              <p style="margin-bottom: 10px">
+                <strong>传统选择器：</strong><code>.parent .child</code> - 选择 .parent 内的 .child
+              </p>
+              <p style="margin-bottom: 10px">
+                <strong>:has() 选择器：</strong><code>.parent:has(.child)</code> - 选择包含 .child 的 .parent
+              </p>
+              <p style="margin-bottom: 0">
+                <strong>关键区别：</strong>选择的目标不同！传统选择器选择子元素，:has() 选择父元素。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 常见使用场景预览 -->
+        <section class="demo-section">
+          <h2>常见使用场景</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 25px">
+            <code>:has()</code> 可以解决许多以前需要 JavaScript 才能实现的样式需求。以下是一些常见场景：
+          </p>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px">
+            <!-- 场景 1 -->
+            <div
+              style="
+                background: var(--card-bg);
+                border: 2px solid var(--border-color);
+                border-radius: var(--radius-lg);
+                padding: 20px;
+              "
+            >
+              <div style="font-size: 1.5rem; margin-bottom: 10px">📝</div>
+              <h3 style="color: var(--text-primary); font-size: 1.1rem; margin-bottom: 10px">表单验证</h3>
+              <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 12px">
+                根据输入框的验证状态改变表单容器的样式
+              </p>
+              <code
+                style="
+                  background: var(--gray-800);
+                  color: var(--gray-200);
+                  padding: 8px;
+                  border-radius: 4px;
+                  font-size: 0.85rem;
+                  display: block;
+                "
+              >
+                form:has(input:invalid)
+              </code>
+            </div>
+
+            <!-- 场景 2 -->
+            <div
+              style="
+                background: var(--card-bg);
+                border: 2px solid var(--border-color);
+                border-radius: var(--radius-lg);
+                padding: 20px;
+              "
+            >
+              <div style="font-size: 1.5rem; margin-bottom: 10px">🎴</div>
+              <h3 style="color: var(--text-primary); font-size: 1.1rem; margin-bottom: 10px">卡片布局</h3>
+              <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 12px">
+                根据卡片是否包含图片调整布局
+              </p>
+              <code
+                style="
+                  background: var(--gray-800);
+                  color: var(--gray-200);
+                  padding: 8px;
+                  border-radius: 4px;
+                  font-size: 0.85rem;
+                  display: block;
+                "
+              >
+                .card:has(img)
+              </code>
+            </div>
+
+            <!-- 场景 3 -->
+            <div
+              style="
+                background: var(--card-bg);
+                border: 2px solid var(--border-color);
+                border-radius: var(--radius-lg);
+                padding: 20px;
+              "
+            >
+              <div style="font-size: 1.5rem; margin-bottom: 10px">🧭</div>
+              <h3 style="color: var(--text-primary); font-size: 1.1rem; margin-bottom: 10px">导航高亮</h3>
+              <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 12px">
+                高亮包含当前页面链接的导航项
+              </p>
+              <code
+                style="
+                  background: var(--gray-800);
+                  color: var(--gray-200);
+                  padding: 8px;
+                  border-radius: 4px;
+                  font-size: 0.85rem;
+                  display: block;
+                "
+              >
+                nav li:has(a.active)
+              </code>
+            </div>
+
+            <!-- 场景 4 -->
+            <div
+              style="
+                background: var(--card-bg);
+                border: 2px solid var(--border-color);
+                border-radius: var(--radius-lg);
+                padding: 20px;
+              "
+            >
+              <div style="font-size: 1.5rem; margin-bottom: 10px">🛒</div>
+              <h3 style="color: var(--text-primary); font-size: 1.1rem; margin-bottom: 10px">购物车状态</h3>
+              <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 12px">
+                根据购物车是否为空显示不同内容
+              </p>
+              <code
+                style="
+                  background: var(--gray-800);
+                  color: var(--gray-200);
+                  padding: 8px;
+                  border-radius: 4px;
+                  font-size: 0.85rem;
+                  display: block;
+                "
+              >
+                .cart:not(:has(.item))
+              </code>
+            </div>
+          </div>
+
+          <div
+            style="
+              background: var(--warning-light);
+              border-left: 4px solid var(--warning);
+              padding: 20px;
+              border-radius: var(--radius-md);
+              margin-top: 30px;
+            "
+          >
+            <strong style="color: var(--warning-dark); font-size: 1.1rem">💡 提示</strong>
+            <p style="color: var(--text-primary); margin-top: 12px; line-height: 1.8; margin-bottom: 0">
+              这些场景将在后续的演示中详细展示。现在，让我们先通过基础示例来熟悉 <code>:has()</code> 的语法和用法。
+            </p>
+          </div>
+        </section>
+
+        <!-- 基础语法示例 -->
+        <section class="demo-section">
+          <h2>基础语法示例</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 25px">
+            让我们通过实际的交互示例来学习 <code>:has()</code> 的基础语法。每个示例都是可交互的，你可以看到实时效果。
+          </p>
+
+          <!-- 示例 1: 选择包含特定子元素的父元素 -->
+          <div class="demo-container">
+            <div class="demo-preview-title">示例 1: 选择包含特定子元素的父元素</div>
+            <div class="demo-preview">
+              <style>
+                .example1-card {
+                  background: var(--card-bg);
+                  border: 2px solid var(--border-color);
+                  border-radius: var(--radius-md);
+                  padding: 20px;
+                  margin-bottom: 15px;
+                  transition: all 0.3s ease;
+                }
+
+                .example1-card:has(img) {
+                  border-color: var(--primary);
+                  background: var(--primary-light);
+                  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+                }
+
+                .example1-card img {
+                  width: 100%;
+                  max-width: 200px;
+                  height: 120px;
+                  object-fit: cover;
+                  border-radius: var(--radius-sm);
+                  margin-top: 10px;
+                }
+
+                .example1-card h3 {
+                  margin: 0 0 8px 0;
+                  color: var(--text-primary);
+                  font-size: 1.1rem;
+                }
+
+                .example1-card p {
+                  margin: 0;
+                  color: var(--text-secondary);
+                  font-size: 0.9rem;
+                }
+              </style>
+
+              <div class="example1-card">
+                <h3>卡片 1 - 包含图片</h3>
+                <p>这个卡片包含图片，所以会被 :has(img) 选中</p>
+                <img
+                  src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120'%3E%3Crect fill='%2310b981' width='200' height='120'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3E图片%3C/text%3E%3C/svg%3E"
+                  alt="示例图片"
+                />
+              </div>
+
+              <div class="example1-card">
+                <h3>卡片 2 - 不包含图片</h3>
+                <p>这个卡片没有图片，所以不会被 :has(img) 选中</p>
+              </div>
+
+              <div class="example1-card">
+                <h3>卡片 3 - 包含图片</h3>
+                <p>这个卡片也包含图片，同样会被选中</p>
+                <img
+                  src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120'%3E%3Crect fill='%233b82f6' width='200' height='120'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-family='Arial'%3E图片%3C/text%3E%3C/svg%3E"
+                  alt="示例图片"
+                />
+              </div>
+
+              <div
+                style="
+                  margin-top: 20px;
+                  padding: 15px;
+                  background: var(--info-light);
+                  border-radius: var(--radius-md);
+                  font-size: 0.9rem;
+                  color: var(--text-primary);
+                "
+              >
+                <strong>效果说明：</strong>包含图片的卡片会有绿色边框、浅绿色背景和阴影效果。
+              </div>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 选择包含 img 元素的卡片 */</span>
+.card:has(img) {
+  border-color: green;
+  background: lightgreen;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+<span class="code-comment">/* HTML 结构 */</span>
+&lt;div class="card"&gt;
+  &lt;h3&gt;卡片 1 - 包含图片&lt;/h3&gt;
+  &lt;img src="..."&gt; <span class="code-comment">&lt;!-- 触发 :has() --&gt;</span>
+&lt;/div&gt;
+
+&lt;div class="card"&gt;
+  &lt;h3&gt;卡片 2 - 不包含图片&lt;/h3&gt;
+  <span class="code-comment">&lt;!-- 没有 img，不会被选中 --&gt;</span>
+&lt;/div&gt;</code></pre>
+            </div>
+          </div>
+
+          <!-- 示例 2: 选择包含特定状态子元素的父元素 -->
+          <div class="demo-container">
+            <div class="demo-preview-title">示例 2: 选择包含特定状态子元素的父元素</div>
+            <div class="demo-preview">
+              <style>
+                .example2-form-group {
+                  background: var(--card-bg);
+                  border: 2px solid var(--border-color);
+                  border-radius: var(--radius-md);
+                  padding: 20px;
+                  margin-bottom: 15px;
+                  transition: all 0.3s ease;
+                }
+
+                .example2-form-group:has(input:checked) {
+                  border-color: var(--success);
+                  background: var(--success-light);
+                }
+
+                .example2-form-group:has(input:focus) {
+                  border-color: var(--primary);
+                  box-shadow: 0 0 0 3px var(--primary-light);
+                }
+
+                .example2-form-group label {
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                  cursor: pointer;
+                  color: var(--text-primary);
+                  font-size: 1rem;
+                }
+
+                .example2-form-group input[type='checkbox'] {
+                  width: 20px;
+                  height: 20px;
+                  cursor: pointer;
+                }
+
+                .example2-form-group input[type='text'] {
+                  width: 100%;
+                  padding: 10px;
+                  border: 2px solid var(--border-color);
+                  border-radius: var(--radius-sm);
+                  font-size: 1rem;
+                  background: var(--bg-primary);
+                  color: var(--text-primary);
+                  margin-top: 8px;
+                }
+
+                .example2-form-group input[type='text']:focus {
+                  outline: none;
+                  border-color: var(--primary);
+                }
+              </style>
+
+              <div class="example2-form-group">
+                <label>
+                  <input type="checkbox" />
+                  <span>选项 1 - 勾选我试试</span>
+                </label>
+              </div>
+
+              <div class="example2-form-group">
+                <label>
+                  <input type="checkbox" />
+                  <span>选项 2 - 也可以勾选我</span>
+                </label>
+              </div>
+
+              <div class="example2-form-group">
+                <label for="example2-input">输入框 - 点击聚焦</label>
+                <input id="example2-input" type="text" placeholder="点击输入框查看效果" />
+              </div>
+
+              <div
+                style="
+                  margin-top: 20px;
+                  padding: 15px;
+                  background: var(--info-light);
+                  border-radius: var(--radius-md);
+                  font-size: 0.9rem;
+                  color: var(--text-primary);
+                "
+              >
+                <strong>效果说明：</strong>
+                <ul style="margin: 10px 0 0 0; padding-left: 20px; line-height: 1.8">
+                  <li>勾选复选框时，表单组会显示绿色边框和背景</li>
+                  <li>输入框获得焦点时，表单组会显示蓝色边框和光晕</li>
+                </ul>
+              </div>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 选择包含已勾选复选框的表单组 */</span>
+.form-group:has(input:checked) {
+  border-color: green;
+  background: lightgreen;
+}
+
+<span class="code-comment">/* 选择包含获得焦点输入框的表单组 */</span>
+.form-group:has(input:focus) {
+  border-color: blue;
+  box-shadow: 0 0 0 3px lightblue;
+}
+
+<span class="code-comment">/* HTML 结构 */</span>
+&lt;div class="form-group"&gt;
+  &lt;label&gt;
+    &lt;input type="checkbox"&gt;
+    &lt;span&gt;选项 1&lt;/span&gt;
+  &lt;/label&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+          </div>
+
+          <!-- 示例 3: 选择包含特定类名子元素的父元素 -->
+          <div class="demo-container">
+            <div class="demo-preview-title">示例 3: 选择包含特定类名子元素的父元素</div>
+            <div class="demo-preview">
+              <style>
+                .example3-list {
+                  background: var(--card-bg);
+                  border: 2px solid var(--border-color);
+                  border-radius: var(--radius-md);
+                  padding: 20px;
+                  margin-bottom: 15px;
+                  transition: all 0.3s ease;
+                }
+
+                .example3-list:has(.error) {
+                  border-color: var(--error);
+                  background: var(--error-light);
+                }
+
+                .example3-list:has(.warning) {
+                  border-color: var(--warning);
+                  background: var(--warning-light);
+                }
+
+                .example3-list:has(.success) {
+                  border-color: var(--success);
+                  background: var(--success-light);
+                }
+
+                .example3-list h4 {
+                  margin: 0 0 15px 0;
+                  color: var(--text-primary);
+                  font-size: 1rem;
+                }
+
+                .example3-list ul {
+                  list-style: none;
+                  padding: 0;
+                  margin: 0;
+                }
+
+                .example3-list li {
+                  padding: 10px;
+                  margin-bottom: 8px;
+                  border-radius: var(--radius-sm);
+                  background: var(--bg-primary);
+                  color: var(--text-primary);
+                }
+
+                .example3-list li.error {
+                  background: var(--error);
+                  color: white;
+                }
+
+                .example3-list li.warning {
+                  background: var(--warning);
+                  color: white;
+                }
+
+                .example3-list li.success {
+                  background: var(--success);
+                  color: white;
+                }
+
+                .example3-controls {
+                  display: flex;
+                  gap: 10px;
+                  margin-top: 15px;
+                  flex-wrap: wrap;
+                }
+
+                .example3-controls button {
+                  padding: 8px 16px;
+                  border: 2px solid var(--border-color);
+                  border-radius: var(--radius-sm);
+                  background: var(--bg-primary);
+                  color: var(--text-primary);
+                  cursor: pointer;
+                  font-size: 0.9rem;
+                  transition: all 0.2s ease;
+                }
+
+                .example3-controls button:hover {
+                  background: var(--primary);
+                  color: white;
+                  border-color: var(--primary);
+                }
+              </style>
+
+              <div id="example3-list1" class="example3-list">
+                <h4>列表 1 - 包含错误项</h4>
+                <ul>
+                  <li>正常项目 1</li>
+                  <li class="error">❌ 错误项目</li>
+                  <li>正常项目 2</li>
+                </ul>
+              </div>
+
+              <div id="example3-list2" class="example3-list">
+                <h4>列表 2 - 包含警告项</h4>
+                <ul>
+                  <li>正常项目 1</li>
+                  <li class="warning">⚠️ 警告项目</li>
+                  <li>正常项目 2</li>
+                </ul>
+              </div>
+
+              <div id="example3-list3" class="example3-list">
+                <h4>列表 3 - 包含成功项</h4>
+                <ul>
+                  <li>正常项目 1</li>
+                  <li class="success">✅ 成功项目</li>
+                  <li>正常项目 2</li>
+                </ul>
+              </div>
+
+              <div id="example3-list4" class="example3-list">
+                <h4>列表 4 - 无特殊项</h4>
+                <ul>
+                  <li>正常项目 1</li>
+                  <li>正常项目 2</li>
+                  <li>正常项目 3</li>
+                </ul>
+              </div>
+
+              <div
+                style="
+                  margin-top: 20px;
+                  padding: 15px;
+                  background: var(--info-light);
+                  border-radius: var(--radius-md);
+                  font-size: 0.9rem;
+                  color: var(--text-primary);
+                "
+              >
+                <strong>效果说明：</strong>
+                <ul style="margin: 10px 0 0 0; padding-left: 20px; line-height: 1.8">
+                  <li>包含 <code>.error</code> 类的列表显示红色边框和背景</li>
+                  <li>包含 <code>.warning</code> 类的列表显示橙色边框和背景</li>
+                  <li>包含 <code>.success</code> 类的列表显示绿色边框和背景</li>
+                  <li>没有特殊类的列表保持默认样式</li>
+                </ul>
+              </div>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 根据子元素的类名选择父元素 */</span>
+.list:has(.error) {
+  border-color: red;
+  background: #fee;
+}
+
+.list:has(.warning) {
+  border-color: orange;
+  background: #fef3cd;
+}
+
+.list:has(.success) {
+  border-color: green;
+  background: #d1f2eb;
+}
+
+<span class="code-comment">/* HTML 结构 */</span>
+&lt;div class="list"&gt;
+  &lt;ul&gt;
+    &lt;li&gt;正常项目&lt;/li&gt;
+    &lt;li class="error"&gt;错误项目&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+          </div>
+
+          <!-- 语法总结 -->
+          <div
+            style="
+              background: var(--primary-light);
+              border-left: 4px solid var(--primary);
+              padding: 20px;
+              border-radius: var(--radius-md);
+              margin-top: 30px;
+            "
+          >
+            <strong style="color: var(--primary-dark); font-size: 1.1rem">📝 语法总结</strong>
+            <div style="color: var(--text-primary); margin-top: 15px; line-height: 1.8">
+              <p style="margin-bottom: 12px"><strong>基础语法：</strong></p>
+              <ul style="margin: 0 0 15px 0; padding-left: 20px">
+                <li><code>element:has(selector)</code> - 选择包含匹配 selector 的 element</li>
+                <li><code>selector</code> 可以是任何有效的 CSS 选择器</li>
+                <li>可以匹配子元素、后代元素的任何状态</li>
+              </ul>
+              <p style="margin-bottom: 12px"><strong>常用模式：</strong></p>
+              <ul style="margin: 0; padding-left: 20px">
+                <li><code>.parent:has(.child)</code> - 包含特定类的子元素</li>
+                <li><code>.parent:has(> .child)</code> - 包含直接子元素（使用 > 选择器）</li>
+                <li><code>.parent:has(input:checked)</code> - 包含特定状态的元素</li>
+                <li><code>.parent:has(.class1, .class2)</code> - 包含多个选择器之一</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 动态交互示例 -->
+        <section class="demo-section">
+          <h2>动态交互示例</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 25px">
+            <code>:has()</code> 的强大之处在于它能自动响应 DOM
+            的变化。当你添加或移除子元素时，父元素的样式会自动更新，无需任何 JavaScript 干预。
+          </p>
+
+          <div class="demo-container single-column">
+            <div class="demo-preview">
+              <style>
+                .interactive-container {
+                  background: var(--card-bg);
+                  border: 3px solid var(--border-color);
+                  border-radius: var(--radius-lg);
+                  padding: 25px;
+                  min-height: 200px;
+                  transition: all 0.3s ease;
+                  position: relative;
+                }
+
+                .interactive-container:has(.item) {
+                  border-color: var(--primary);
+                  background: var(--primary-light);
+                }
+
+                .interactive-container:has(.item:nth-child(3)) {
+                  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+                }
+
+                .interactive-container::before {
+                  content: '容器为空';
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                  color: var(--text-secondary);
+                  font-size: 1.2rem;
+                  opacity: 1;
+                  transition: opacity 0.3s ease;
+                }
+
+                .interactive-container:has(.item)::before {
+                  opacity: 0;
+                }
+
+                .items-grid {
+                  display: grid;
+                  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                  gap: 15px;
+                }
+
+                .item {
+                  background: var(--bg-primary);
+                  border: 2px solid var(--primary);
+                  border-radius: var(--radius-md);
+                  padding: 15px;
+                  text-align: center;
+                  animation: itemAppear 0.3s ease;
+                }
+
+                @keyframes itemAppear {
+                  from {
+                    opacity: 0;
+                    transform: scale(0.8);
+                  }
+                  to {
+                    opacity: 1;
+                    transform: scale(1);
+                  }
+                }
+
+                .item-number {
+                  font-size: 1.5rem;
+                  font-weight: bold;
+                  color: var(--primary);
+                  margin-bottom: 5px;
+                }
+
+                .item-label {
+                  font-size: 0.9rem;
+                  color: var(--text-secondary);
+                }
+
+                .controls {
+                  display: flex;
+                  gap: 10px;
+                  margin-bottom: 20px;
+                  flex-wrap: wrap;
+                }
+
+                .controls button {
+                  padding: 10px 20px;
+                  border: 2px solid var(--primary);
+                  border-radius: var(--radius-md);
+                  background: var(--primary);
+                  color: white;
+                  cursor: pointer;
+                  font-size: 1rem;
+                  font-weight: 600;
+                  transition: all 0.2s ease;
+                }
+
+                .controls button:hover {
+                  background: var(--primary-dark);
+                  border-color: var(--primary-dark);
+                  transform: translateY(-2px);
+                }
+
+                .controls button.secondary {
+                  background: var(--bg-primary);
+                  color: var(--primary);
+                }
+
+                .controls button.secondary:hover {
+                  background: var(--primary-light);
+                }
+
+                .status-display {
+                  background: var(--gray-800);
+                  color: var(--gray-200);
+                  padding: 15px;
+                  border-radius: var(--radius-md);
+                  font-family: 'Courier New', monospace;
+                  font-size: 0.9rem;
+                  margin-top: 20px;
+                  line-height: 1.8;
+                }
+
+                .status-display .status-line {
+                  margin-bottom: 5px;
+                }
+
+                .status-display .matched {
+                  color: var(--success);
+                  font-weight: bold;
+                }
+
+                .status-display .not-matched {
+                  color: var(--error);
+                }
+              </style>
+
+              <div class="controls">
+                <button onclick="addItem()">➕ 添加项目</button>
+                <button class="secondary" onclick="removeItem()">➖ 移除项目</button>
+                <button class="secondary" onclick="clearItems()">🗑️ 清空所有</button>
+              </div>
+
+              <div id="interactiveContainer" class="interactive-container">
+                <div id="itemsGrid" class="items-grid"></div>
+              </div>
+
+              <div id="statusDisplay" class="status-display">
+                <div class="status-line">选择器匹配状态：</div>
+                <div id="status1" class="status-line">:has(.item) - <span class="not-matched">未匹配</span></div>
+                <div id="status2" class="status-line">
+                  :has(.item:nth-child(3)) - <span class="not-matched">未匹配</span>
+                </div>
+                <div id="itemCount" class="status-line">当前项目数：0</div>
+              </div>
+
+              <script>
+                let itemCounter = 0;
+
+                window.addItem = function addItem() {
+                  itemCounter++;
+                  const grid = document.getElementById('itemsGrid');
+                  const item = document.createElement('div');
+                  item.className = 'item';
+                  item.innerHTML = `
+                    <div class="item-number">${itemCounter}</div>
+                    <div class="item-label">项目 ${itemCounter}</div>
+                  `;
+                  grid.appendChild(item);
+                  updateStatus();
+                };
+
+                window.removeItem = function removeItem() {
+                  const grid = document.getElementById('itemsGrid');
+                  const items = grid.querySelectorAll('.item');
+                  if (items.length > 0) {
+                    grid.removeChild(items[items.length - 1]);
+                    updateStatus();
+                  }
+                };
+
+                window.clearItems = function clearItems() {
+                  const grid = document.getElementById('itemsGrid');
+                  grid.innerHTML = '';
+                  itemCounter = 0;
+                  updateStatus();
+                };
+
+                function updateStatus() {
+                  const container = document.getElementById('interactiveContainer');
+                  const items = container.querySelectorAll('.item');
+                  const count = items.length;
+
+                  // 更新状态显示
+                  const status1 = document.getElementById('status1');
+                  const status2 = document.getElementById('status2');
+                  const itemCount = document.getElementById('itemCount');
+
+                  // :has(.item) 状态
+                  if (count > 0) {
+                    status1.innerHTML = ':has(.item) - <span class="matched">✓ 匹配</span>';
+                  } else {
+                    status1.innerHTML = ':has(.item) - <span class="not-matched">✗ 未匹配</span>';
+                  }
+
+                  // :has(.item:nth-child(3)) 状态
+                  if (count >= 3) {
+                    status2.innerHTML = ':has(.item:nth-child(3)) - <span class="matched">✓ 匹配（有阴影效果）</span>';
+                  } else {
+                    status2.innerHTML = ':has(.item:nth-child(3)) - <span class="not-matched">✗ 未匹配</span>';
+                  }
+
+                  itemCount.textContent = `当前项目数：${count}`;
+                }
+
+                // 初始化
+                updateStatus();
+              </script>
+
+              <div
+                style="
+                  margin-top: 20px;
+                  padding: 15px;
+                  background: var(--info-light);
+                  border-radius: var(--radius-md);
+                  font-size: 0.9rem;
+                  color: var(--text-primary);
+                "
+              >
+                <strong>交互说明：</strong>
+                <ul style="margin: 10px 0 0 0; padding-left: 20px; line-height: 1.8">
+                  <li>点击"添加项目"按钮，容器会自动变为绿色边框和浅绿色背景</li>
+                  <li>当项目数达到 3 个时，容器会显示阴影效果</li>
+                  <li>移除所有项目后，容器恢复默认样式并显示"容器为空"</li>
+                  <li>所有样式变化都是纯 CSS 实现，无需手动添加类名</li>
+                </ul>
+              </div>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 容器包含项目时的样式 */</span>
+.container:has(.item) {
+  border-color: green;
+  background: lightgreen;
+}
+
+<span class="code-comment">/* 容器包含第 3 个项目时的样式 */</span>
+.container:has(.item:nth-child(3)) {
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+}
+
+<span class="code-comment">/* 容器为空时显示提示 */</span>
+.container::before {
+  content: '容器为空';
+  opacity: 1;
+}
+
+.container:has(.item)::before {
+  opacity: 0;
+}
+
+<span class="code-comment">/* JavaScript 只负责添加/移除元素
+   样式自动响应，无需手动操作类名 */</span>
+function addItem() {
+  const item = document.createElement('div');
+  item.className = 'item';
+  container.appendChild(item);
+  <span class="code-comment">// CSS 自动更新样式！</span>
+}</code></pre>
+            </div>
+          </div>
+
+          <!-- 更多交互示例 -->
+          <div class="demo-container">
+            <div class="demo-preview-title">实时选择器测试器</div>
+            <div class="demo-preview">
+              <style>
+                .selector-tester {
+                  background: var(--card-bg);
+                  border: 2px solid var(--border-color);
+                  border-radius: var(--radius-md);
+                  padding: 20px;
+                }
+
+                .test-container {
+                  background: var(--bg-primary);
+                  border: 3px dashed var(--border-color);
+                  border-radius: var(--radius-md);
+                  padding: 20px;
+                  min-height: 150px;
+                  margin-bottom: 20px;
+                  transition: all 0.3s ease;
+                }
+
+                .test-container.highlight {
+                  border-color: var(--success);
+                  background: var(--success-light);
+                  border-style: solid;
+                }
+
+                .test-elements {
+                  display: flex;
+                  gap: 10px;
+                  flex-wrap: wrap;
+                }
+
+                .test-element {
+                  padding: 10px 15px;
+                  background: var(--gray-200);
+                  border: 2px solid var(--gray-400);
+                  border-radius: var(--radius-sm);
+                  color: var(--text-primary);
+                  font-size: 0.9rem;
+                }
+
+                .test-element.special {
+                  background: var(--primary);
+                  color: white;
+                  border-color: var(--primary-dark);
+                }
+
+                .selector-input-group {
+                  margin-bottom: 20px;
+                }
+
+                .selector-input-group label {
+                  display: block;
+                  margin-bottom: 8px;
+                  color: var(--text-primary);
+                  font-weight: 600;
+                }
+
+                .selector-input-group input {
+                  width: 100%;
+                  padding: 10px;
+                  border: 2px solid var(--border-color);
+                  border-radius: var(--radius-sm);
+                  font-size: 1rem;
+                  font-family: 'Courier New', monospace;
+                  background: var(--bg-primary);
+                  color: var(--text-primary);
+                }
+
+                .selector-input-group input:focus {
+                  outline: none;
+                  border-color: var(--primary);
+                }
+
+                .test-buttons {
+                  display: flex;
+                  gap: 10px;
+                  flex-wrap: wrap;
+                }
+
+                .test-buttons button {
+                  padding: 8px 16px;
+                  border: 2px solid var(--border-color);
+                  border-radius: var(--radius-sm);
+                  background: var(--bg-primary);
+                  color: var(--text-primary);
+                  cursor: pointer;
+                  font-size: 0.9rem;
+                  transition: all 0.2s ease;
+                }
+
+                .test-buttons button:hover {
+                  background: var(--primary);
+                  color: white;
+                  border-color: var(--primary);
+                }
+
+                .result-display {
+                  background: var(--gray-800);
+                  color: var(--gray-200);
+                  padding: 15px;
+                  border-radius: var(--radius-md);
+                  font-family: 'Courier New', monospace;
+                  font-size: 0.9rem;
+                  margin-top: 15px;
+                }
+              </style>
+
+              <div class="selector-tester">
+                <div class="selector-input-group">
+                  <label for="selectorInput">输入 :has() 选择器（例如：.special）</label>
+                  <input
+                    id="selectorInput"
+                    type="text"
+                    placeholder=".special"
+                    value=".special"
+                    oninput="testSelector()"
+                  />
+                </div>
+
+                <div id="testContainer" class="test-container">
+                  <div id="testElements" class="test-elements">
+                    <div class="test-element">普通元素 1</div>
+                    <div class="test-element">普通元素 2</div>
+                  </div>
+                </div>
+
+                <div class="test-buttons">
+                  <button onclick="addNormalElement()">添加普通元素</button>
+                  <button onclick="addSpecialElement()">添加特殊元素</button>
+                  <button onclick="clearTestElements()">清空</button>
+                </div>
+
+                <div id="resultDisplay" class="result-display">等待测试...</div>
+              </div>
+
+              <script>
+                function testSelector() {
+                  const input = document.getElementById('selectorInput');
+                  const container = document.getElementById('testContainer');
+                  const result = document.getElementById('resultDisplay');
+
+                  const selector = input.value.trim();
+
+                  if (!selector) {
+                    container.classList.remove('highlight');
+                    result.textContent = '请输入选择器';
+                    return;
+                  }
+
+                  try {
+                    // 测试选择器是否匹配
+                    const matches = container.matches(`:has(${selector})`);
+
+                    if (matches) {
+                      container.classList.add('highlight');
+                      result.innerHTML = `<span style="color: var(--success);">✓ 匹配成功！</span>\n选择器: .test-container:has(${selector})\n容器被选中并高亮显示`;
+                    } else {
+                      container.classList.remove('highlight');
+                      result.innerHTML = `<span style="color: var(--error);">✗ 未匹配</span>\n选择器: .test-container:has(${selector})\n容器内没有匹配的元素`;
+                    }
+                  } catch (e) {
+                    container.classList.remove('highlight');
+                    result.innerHTML = `<span style="color: var(--error);">✗ 选择器语法错误</span>\n${e.message}`;
+                  }
+                }
+
+                window.addNormalElement = function addNormalElement() {
+                  const container = document.getElementById('testElements');
+                  const element = document.createElement('div');
+                  element.className = 'test-element';
+                  element.textContent = `普通元素 ${container.children.length + 1}`;
+                  container.appendChild(element);
+                  testSelector();
+                };
+
+                window.addSpecialElement = function addSpecialElement() {
+                  const container = document.getElementById('testElements');
+                  const element = document.createElement('div');
+                  element.className = 'test-element special';
+                  element.textContent = `特殊元素 ${container.querySelectorAll('.special').length + 1}`;
+                  container.appendChild(element);
+                  testSelector();
+                };
+
+                window.clearTestElements = function clearTestElements() {
+                  const container = document.getElementById('testElements');
+                  container.innerHTML = '';
+                  testSelector();
+                };
+
+                // 初始化
+                testSelector();
+              </script>
+
+              <div
+                style="
+                  margin-top: 20px;
+                  padding: 15px;
+                  background: var(--info-light);
+                  border-radius: var(--radius-md);
+                  font-size: 0.9rem;
+                  color: var(--text-primary);
+                "
+              >
+                <strong>测试说明：</strong>
+                <ul style="margin: 10px 0 0 0; padding-left: 20px; line-height: 1.8">
+                  <li>在输入框中输入选择器（不包括 :has()），例如 <code>.special</code></li>
+                  <li>添加不同类型的元素，观察容器是否被选中</li>
+                  <li>尝试其他选择器，如 <code>.test-element</code>、<code>div</code> 等</li>
+                  <li>实时查看选择器匹配结果</li>
+                </ul>
+              </div>
+            </div>
+            <div class="demo-code">
+              <pre><code><span class="code-comment">/* 动态测试 :has() 选择器 */</span>
+const matches = element.matches(':has(.special)');
+
+if (matches) {
+  <span class="code-comment">// 元素包含 .special 类的子元素</span>
+  element.classList.add('highlight');
+} else {
+  <span class="code-comment">// 元素不包含 .special 类的子元素</span>
+  element.classList.remove('highlight');
+}
+
+<span class="code-comment">/* CSS 会自动响应 DOM 变化
+   无需手动检测和更新样式 */</span></code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 浏览器兼容性 -->
+        <section class="compatibility-section">
+          <h2>浏览器兼容性</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 25px">
+            <code>:has()</code> 是一个相对较新的 CSS 特性，主流浏览器已经提供了良好的支持。
+          </p>
+
+          <div
+            style="
+              background: var(--card-bg);
+              border: 2px solid var(--border-color);
+              border-radius: var(--radius-lg);
+              padding: 25px;
+              margin-bottom: 25px;
+            "
+          >
+            <h3 style="color: var(--text-primary); margin-bottom: 20px; font-size: 1.2rem">主流浏览器支持情况</h3>
+
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+                margin-bottom: 25px;
+              "
+            >
+              <!-- Chrome -->
+              <div
+                style="
+                  text-align: center;
+                  padding: 20px;
+                  background: var(--bg-primary);
+                  border-radius: var(--radius-md);
+                  border: 2px solid var(--success);
+                "
+              >
+                <div style="font-size: 3rem; margin-bottom: 10px">🟢</div>
+                <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 5px; font-size: 1.1rem">
+                  Chrome
+                </div>
+                <div style="color: var(--success-dark); font-weight: 600; font-size: 1.2rem; margin-bottom: 5px">
+                  ✓ 支持
+                </div>
+                <div style="color: var(--text-secondary); font-size: 0.9rem">版本 105+</div>
+                <div style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 5px">2022年8月</div>
+              </div>
+
+              <!-- Firefox -->
+              <div
+                style="
+                  text-align: center;
+                  padding: 20px;
+                  background: var(--bg-primary);
+                  border-radius: var(--radius-md);
+                  border: 2px solid var(--success);
+                "
+              >
+                <div style="font-size: 3rem; margin-bottom: 10px">🟠</div>
+                <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 5px; font-size: 1.1rem">
+                  Firefox
+                </div>
+                <div style="color: var(--success-dark); font-weight: 600; font-size: 1.2rem; margin-bottom: 5px">
+                  ✓ 支持
+                </div>
+                <div style="color: var(--text-secondary); font-size: 0.9rem">版本 121+</div>
+                <div style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 5px">2023年12月</div>
+              </div>
+
+              <!-- Safari -->
+              <div
+                style="
+                  text-align: center;
+                  padding: 20px;
+                  background: var(--bg-primary);
+                  border-radius: var(--radius-md);
+                  border: 2px solid var(--success);
+                "
+              >
+                <div style="font-size: 3rem; margin-bottom: 10px">🔵</div>
+                <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 5px; font-size: 1.1rem">
+                  Safari
+                </div>
+                <div style="color: var(--success-dark); font-weight: 600; font-size: 1.2rem; margin-bottom: 5px">
+                  ✓ 支持
+                </div>
+                <div style="color: var(--text-secondary); font-size: 0.9rem">版本 15.4+</div>
+                <div style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 5px">2022年3月</div>
+              </div>
+
+              <!-- Edge -->
+              <div
+                style="
+                  text-align: center;
+                  padding: 20px;
+                  background: var(--bg-primary);
+                  border-radius: var(--radius-md);
+                  border: 2px solid var(--success);
+                "
+              >
+                <div style="font-size: 3rem; margin-bottom: 10px">🔷</div>
+                <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 5px; font-size: 1.1rem">
+                  Edge
+                </div>
+                <div style="color: var(--success-dark); font-weight: 600; font-size: 1.2rem; margin-bottom: 5px">
+                  ✓ 支持
+                </div>
+                <div style="color: var(--text-secondary); font-size: 0.9rem">版本 105+</div>
+                <div style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 5px">2022年8月</div>
+              </div>
+            </div>
+
+            <div
+              style="
+                background: var(--success-light);
+                border-left: 4px solid var(--success);
+                padding: 15px;
+                border-radius: var(--radius-md);
+              "
+            >
+              <strong style="color: var(--success-dark)">✓ 总体支持情况良好</strong>
+              <p style="color: var(--text-primary); margin: 10px 0 0 0; line-height: 1.6">
+                截至 2024 年，所有主流浏览器的最新版本都已支持 <code>:has()</code> 选择器。全球浏览器支持率超过 90%。
+              </p>
+            </div>
+          </div>
+
+          <!-- 兼容性检测代码 -->
+          <div
+            style="
+              background: var(--card-bg);
+              border: 2px solid var(--border-color);
+              border-radius: var(--radius-lg);
+              padding: 25px;
+              margin-bottom: 25px;
+            "
+          >
+            <h3 style="color: var(--text-primary); margin-bottom: 20px; font-size: 1.2rem">兼容性检测</h3>
+
+            <div style="margin-bottom: 20px">
+              <h4 style="color: var(--text-primary); margin-bottom: 15px; font-size: 1rem">
+                方法 1: 使用 CSS @supports
+              </h4>
+              <pre
+                style="
+                  background: var(--gray-800);
+                  color: var(--gray-200);
+                  padding: 20px;
+                  border-radius: var(--radius-md);
+                  font-size: 0.9rem;
+                  line-height: 1.6;
+                  margin: 0;
+                  overflow-x: auto;
+                "
+              ><code><span class="code-comment">/* 检测浏览器是否支持 :has() */</span>
+@supports selector(:has(*)) {
+  <span class="code-comment">/* 支持 :has() 的样式 */</span>
+  .card:has(img) {
+    border: 2px solid green;
+  }
+}
+
+@supports not selector(:has(*)) {
+  <span class="code-comment">/* 不支持 :has() 的降级样式 */</span>
+  .card.has-image {
+    border: 2px solid green;
+  }
+}</code></pre>
+            </div>
+
+            <div style="margin-bottom: 20px">
+              <h4 style="color: var(--text-primary); margin-bottom: 15px; font-size: 1rem">
+                方法 2: 使用 JavaScript 检测
+              </h4>
+              <pre
+                style="
+                  background: var(--gray-800);
+                  color: var(--gray-200);
+                  padding: 20px;
+                  border-radius: var(--radius-md);
+                  font-size: 0.9rem;
+                  line-height: 1.6;
+                  margin: 0;
+                  overflow-x: auto;
+                "
+              ><code><span class="code-comment">// 检测浏览器是否支持 :has()</span>
+function supportsHasSelector() {
+  try {
+    document.querySelector(':has(*)');
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+if (supportsHasSelector()) {
+  console.log('✓ 浏览器支持 :has() 选择器');
+} else {
+  console.log('✗ 浏览器不支持 :has() 选择器');
+  <span class="code-comment">// 使用 JavaScript 实现降级方案</span>
+  addFallbackLogic();
+}</code></pre>
+            </div>
+
+            <div>
+              <h4 style="color: var(--text-primary); margin-bottom: 15px; font-size: 1rem">当前浏览器检测结果</h4>
+              <div
+                id="browserSupport"
+                style="
+                  padding: 20px;
+                  background: var(--bg-primary);
+                  border-radius: var(--radius-md);
+                  border: 2px solid var(--border-color);
+                "
+              >
+                <div style="font-size: 1.1rem; margin-bottom: 10px">
+                  <strong>检测中...</strong>
+                </div>
+              </div>
+              <script>
+                (function () {
+                  const supportDiv = document.getElementById('browserSupport');
+
+                  function supportsHasSelector() {
+                    try {
+                      document.querySelector(':has(*)');
+                      return true;
+                    } catch {
+                      return false;
+                    }
+                  }
+
+                  const isSupported = supportsHasSelector();
+
+                  if (isSupported) {
+                    supportDiv.innerHTML = `
+                      <div style="font-size: 1.1rem; margin-bottom: 10px;">
+                        <strong style="color: var(--success-dark);">✓ 你的浏览器支持 :has() 选择器</strong>
+                      </div>
+                      <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                        太好了！你可以在本页面体验所有交互示例。所有的样式效果都是通过纯 CSS 实现的。
+                      </div>
+                    `;
+                    supportDiv.style.borderColor = 'var(--success)';
+                    supportDiv.style.background = 'var(--success-light)';
+                  } else {
+                    supportDiv.innerHTML = `
+                      <div style="font-size: 1.1rem; margin-bottom: 10px;">
+                        <strong style="color: var(--error-dark);">✗ 你的浏览器不支持 :has() 选择器</strong>
+                      </div>
+                      <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 10px;">
+                        建议升级到最新版本的浏览器以获得最佳体验：
+                      </div>
+                      <ul style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8; margin: 0; padding-left: 20px;">
+                        <li>Chrome 105+ 或 Edge 105+</li>
+                        <li>Firefox 121+</li>
+                        <li>Safari 15.4+</li>
+                      </ul>
+                    `;
+                    supportDiv.style.borderColor = 'var(--error)';
+                    supportDiv.style.background = 'var(--error-light)';
+                  }
+                })();
+              </script>
+            </div>
+          </div>
+
+          <!-- 降级方案 -->
+          <div
+            style="
+              background: var(--card-bg);
+              border: 2px solid var(--border-color);
+              border-radius: var(--radius-lg);
+              padding: 25px;
+            "
+          >
+            <h3 style="color: var(--text-primary); margin-bottom: 20px; font-size: 1.2rem">降级方案</h3>
+
+            <p style="color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6">
+              对于不支持 <code>:has()</code> 的旧版浏览器，你可以使用以下降级方案：
+            </p>
+
+            <div style="display: grid; gap: 20px">
+              <!-- 方案 1 -->
+              <div
+                style="
+                  background: var(--bg-primary);
+                  border: 2px solid var(--border-color);
+                  border-radius: var(--radius-md);
+                  padding: 20px;
+                "
+              >
+                <h4 style="color: var(--text-primary); margin-bottom: 15px; font-size: 1rem">
+                  <span
+                    style="
+                      background: var(--primary);
+                      color: white;
+                      padding: 4px 10px;
+                      border-radius: var(--radius-sm);
+                      margin-right: 8px;
+                      font-size: 0.85rem;
+                    "
+                    >方案 1</span
+                  >
+                  使用 JavaScript 添加类名
+                </h4>
+                <pre
+                  style="
+                    background: var(--gray-800);
+                    color: var(--gray-200);
+                    padding: 15px;
+                    border-radius: var(--radius-md);
+                    font-size: 0.85rem;
+                    line-height: 1.6;
+                    margin: 0;
+                    overflow-x: auto;
+                  "
+                ><code><span class="code-comment">// JavaScript 降级方案</span>
+document.querySelectorAll('.card').forEach(card => {
+  if (card.querySelector('img')) {
+    card.classList.add('has-image');
+  }
+});
+
+<span class="code-comment">/* CSS */</span>
+.card:has(img),
+.card.has-image {
+  border: 2px solid green;
+}</code></pre>
+              </div>
+
+              <!-- 方案 2 -->
+              <div
+                style="
+                  background: var(--bg-primary);
+                  border: 2px solid var(--border-color);
+                  border-radius: var(--radius-md);
+                  padding: 20px;
+                "
+              >
+                <h4 style="color: var(--text-primary); margin-bottom: 15px; font-size: 1rem">
+                  <span
+                    style="
+                      background: var(--primary);
+                      color: white;
+                      padding: 4px 10px;
+                      border-radius: var(--radius-sm);
+                      margin-right: 8px;
+                      font-size: 0.85rem;
+                    "
+                    >方案 2</span
+                  >
+                  渐进增强策略
+                </h4>
+                <pre
+                  style="
+                    background: var(--gray-800);
+                    color: var(--gray-200);
+                    padding: 15px;
+                    border-radius: var(--radius-md);
+                    font-size: 0.85rem;
+                    line-height: 1.6;
+                    margin: 0;
+                    overflow-x: auto;
+                  "
+                ><code><span class="code-comment">/* 基础样式（所有浏览器） */</span>
+.card {
+  border: 2px solid gray;
+}
+
+<span class="code-comment">/* 增强样式（支持 :has() 的浏览器） */</span>
+@supports selector(:has(*)) {
+  .card:has(img) {
+    border: 2px solid green;
+  }
+}</code></pre>
+              </div>
+
+              <!-- 方案 3 -->
+              <div
+                style="
+                  background: var(--bg-primary);
+                  border: 2px solid var(--border-color);
+                  border-radius: var(--radius-md);
+                  padding: 20px;
+                "
+              >
+                <h4 style="color: var(--text-primary); margin-bottom: 15px; font-size: 1rem">
+                  <span
+                    style="
+                      background: var(--primary);
+                      color: white;
+                      padding: 4px 10px;
+                      border-radius: var(--radius-sm);
+                      margin-right: 8px;
+                      font-size: 0.85rem;
+                    "
+                    >方案 3</span
+                  >
+                  接受差异
+                </h4>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin: 0">
+                  对于非关键的视觉增强，可以接受旧版浏览器的样式差异。<code>:has()</code>
+                  作为渐进增强特性，在不支持的浏览器中优雅降级，不影响核心功能。
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 更多资源 -->
+          <div
+            style="
+              background: var(--info-light);
+              border-left: 4px solid var(--info);
+              padding: 20px;
+              border-radius: var(--radius-md);
+              margin-top: 25px;
+            "
+          >
+            <strong style="color: var(--info-dark); font-size: 1.1rem">📚 更多资源</strong>
+            <ul style="color: var(--text-primary); margin: 15px 0 0 0; padding-left: 20px; line-height: 2">
+              <li>
+                <a
+                  href="https://caniuse.com/css-has"
+                  target="_blank"
+                  rel="noopener"
+                  style="color: var(--primary); text-decoration: none; font-weight: 600"
+                >
+                  Can I Use: :has() 浏览器支持情况
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://developer.mozilla.org/en-US/docs/Web/CSS/:has"
+                  target="_blank"
+                  rel="noopener"
+                  style="color: var(--primary); text-decoration: none; font-weight: 600"
+                >
+                  MDN Web Docs: :has() 伪类
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://webkit.org/blog/13096/css-has-pseudo-class/"
+                  target="_blank"
+                  rel="noopener"
+                  style="color: var(--primary); text-decoration: none; font-weight: 600"
+                >
+                  WebKit Blog: :has() 伪类介绍
+                </a>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

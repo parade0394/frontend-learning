@@ -1,0 +1,338 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>浏览器兼容性检测测试 - CSS 现代选择器</title>
+    <link href="/src/styles/common.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+    <script>
+      (function () {
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    </script>
+    <script type="module" src="/src/theme.js"></script>
+    <script src="compatibility-check.js"></script>
+  </head>
+  <body data-demo="compatibility-test">
+    <!-- 左侧边栏导航 -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>CSS 现代选择器</h1>
+        <a class="back-home" href="index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>测试页面</h3>
+          <a class="nav-item active" href="compatibility-test.html">兼容性检测测试</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- 右侧主内容区 -->
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>浏览器兼容性检测测试</h1>
+        <p class="subtitle">测试现代 CSS 选择器的浏览器支持情况</p>
+
+        <!-- 概念介绍 -->
+        <section class="concept-section">
+          <h2>关于兼容性检测</h2>
+          <p>
+            本页面演示了浏览器兼容性检测系统的功能。系统会自动检测您的浏览器是否支持现代 CSS 选择器，
+            并在不支持时显示警告横幅和降级建议。
+          </p>
+          <p>检测使用了 <code>CSS.supports('selector(...)')</code> API，这是最可靠的特性检测方法。</p>
+        </section>
+
+        <!-- 手动检测区域 -->
+        <section class="demo-section">
+          <h2>手动检测选择器支持</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 20px">输入任意 CSS 选择器，检测您的浏览器是否支持。</p>
+
+          <div class="interactive-demo">
+            <div class="controls">
+              <div class="control-group" style="flex: 1; min-width: 300px">
+                <label for="selector-test-input">输入选择器：</label>
+                <input
+                  id="selector-test-input"
+                  type="text"
+                  placeholder="例如: :has(*)"
+                  value=":has(*)"
+                  style="width: 100%"
+                />
+              </div>
+              <div class="control-group">
+                <label>&nbsp;</label>
+                <button
+                  id="test-selector-btn"
+                  style="
+                    padding: 8px 20px;
+                    background: var(--primary);
+                    color: white;
+                    border: none;
+                    border-radius: var(--radius-md);
+                    font-weight: 600;
+                    cursor: pointer;
+                  "
+                >
+                  检测
+                </button>
+              </div>
+            </div>
+
+            <div id="test-result" class="result-display">
+              <div id="test-result-content">点击"检测"按钮查看结果</div>
+            </div>
+
+            <div
+              style="margin-top: 20px; padding: 15px; background: var(--bg-secondary); border-radius: var(--radius-md)"
+            >
+              <strong style="color: var(--text-primary)">快捷测试：</strong>
+              <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap">
+                <button class="test-example-btn" data-selector=":has(*)">:has(*)</button>
+                <button class="test-example-btn" data-selector=":is(div, span)">:is(div, span)</button>
+                <button class="test-example-btn" data-selector=":where(div, span)">:where(div, span)</button>
+                <button class="test-example-btn" data-selector=":not(.class)">:not(.class)</button>
+                <button class="test-example-btn" data-selector=":focus-within">:focus-within</button>
+                <button class="test-example-btn" data-selector=":focus-visible">:focus-visible</button>
+              </div>
+            </div>
+          </div>
+
+          <style>
+            .test-example-btn {
+              padding: 8px 16px;
+              background: var(--primary-light);
+              color: var(--primary-dark);
+              border: 2px solid var(--primary);
+              border-radius: var(--radius-md);
+              font-family: var(--font-mono);
+              font-size: 0.9rem;
+              cursor: pointer;
+              transition: all var(--transition-base);
+              font-weight: 600;
+            }
+            .test-example-btn:hover {
+              background: var(--primary);
+              color: white;
+              transform: translateY(-2px);
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+          </style>
+
+          <script>
+            function testSelector() {
+              const input = document.getElementById('selector-test-input');
+              const resultContent = document.getElementById('test-result-content');
+              const selector = input.value.trim();
+
+              if (!selector) {
+                resultContent.innerHTML = '<div style="color: var(--error);">❌ 请输入选择器</div>';
+                return;
+              }
+
+              const supported = window.checkSelectorSupport(selector);
+
+              if (supported) {
+                resultContent.innerHTML = `
+                  <div style="color: var(--success); font-weight: 600; font-size: 1.1rem; margin-bottom: 10px;">
+                    ✓ 您的浏览器支持此选择器
+                  </div>
+                  <div style="color: var(--text-primary);">
+                    <strong>选择器：</strong>
+                    <code style="background: var(--gray-700); color: var(--gray-200); padding: 4px 12px; border-radius: 4px; font-size: 1rem;">${selector}</code>
+                  </div>
+                  <div style="margin-top: 10px; padding: 10px; background: var(--success-light); border-radius: 6px; color: var(--text-primary);">
+                    您可以在项目中安全使用此选择器。
+                  </div>
+                `;
+              } else {
+                resultContent.innerHTML = `
+                  <div style="color: var(--error); font-weight: 600; font-size: 1.1rem; margin-bottom: 10px;">
+                    ✗ 您的浏览器不支持此选择器
+                  </div>
+                  <div style="color: var(--text-primary);">
+                    <strong>选择器：</strong>
+                    <code style="background: var(--gray-700); color: var(--gray-200); padding: 4px 12px; border-radius: 4px; font-size: 1rem;">${selector}</code>
+                  </div>
+                  <div style="margin-top: 10px; padding: 10px; background: var(--error-light); border-radius: 6px; color: var(--text-primary);">
+                    <strong>建议：</strong>使用降级方案或 polyfill。查看 <a href="polyfill-guide.md" style="color: var(--primary); font-weight: 600;">Polyfill 指南</a> 了解详情。
+                  </div>
+                `;
+              }
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+              const input = document.getElementById('selector-test-input');
+              const testBtn = document.getElementById('test-selector-btn');
+
+              testBtn.addEventListener('click', testSelector);
+
+              input.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                  testSelector();
+                }
+              });
+
+              // 快捷测试按钮
+              document.querySelectorAll('.test-example-btn').forEach((btn) => {
+                btn.addEventListener('click', function () {
+                  const selector = this.getAttribute('data-selector');
+                  input.value = selector;
+                  testSelector();
+                });
+              });
+
+              // 初始测试
+              testSelector();
+            });
+          </script>
+        </section>
+
+        <!-- 完整检测报告 -->
+        <section class="compatibility-section">
+          <h2>浏览器兼容性报告</h2>
+          <p>以下是您的浏览器对所有现代 CSS 选择器的支持情况：</p>
+          <!-- 报告将由 compatibility-check.js 自动插入 -->
+        </section>
+
+        <!-- Polyfill 建议 -->
+        <section class="demo-section">
+          <h2>Polyfill 和降级方案</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 20px">
+            如果您的浏览器不支持某些选择器，可以使用以下方案：
+          </p>
+
+          <div class="polyfill-notice">
+            <h3>📚 Polyfill 指南</h3>
+            <p>我们提供了详细的 Polyfill 和降级方案指南，包括：</p>
+            <ul>
+              <li>JavaScript Polyfill 实现</li>
+              <li>CSS @supports 降级样式</li>
+              <li>推荐的第三方库</li>
+              <li>最佳实践和性能建议</li>
+            </ul>
+            <p>
+              <a href="polyfill-guide.md" target="_blank">查看完整的 Polyfill 指南 →</a>
+            </p>
+          </div>
+
+          <h3>快速降级示例</h3>
+          <div class="demo-code">
+            <pre><code><span class="code-comment">/* 使用 @supports 提供降级样式 */</span>
+
+<span class="code-comment">/* 现代浏览器 */</span>
+@supports selector(:has(*)) {
+  .card:has(img) {
+    border-color: blue;
+  }
+}
+
+<span class="code-comment">/* 降级方案 */</span>
+@supports not selector(:has(*)) {
+  .card.has-image {
+    border-color: blue;
+  }
+}
+
+<span class="code-comment">/* JavaScript 添加类名 */</span>
+document.querySelectorAll('.card').forEach(card => {
+  if (card.querySelector('img')) {
+    card.classList.add('has-image');
+  }
+});</code></pre>
+          </div>
+        </section>
+
+        <!-- @supports 演示 -->
+        <section class="demo-section">
+          <h2>@supports 特性查询演示</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 20px">
+            下面的盒子会根据浏览器支持情况显示不同的样式。
+          </p>
+
+          <style>
+            .supports-demo-box {
+              padding: 30px;
+              border-radius: 12px;
+              text-align: center;
+              font-weight: 600;
+              font-size: 1.1rem;
+              margin: 20px 0;
+            }
+
+            /* 默认样式（所有浏览器） */
+            .supports-demo-box {
+              background: var(--bg-secondary);
+              border: 2px solid var(--border-color);
+              color: var(--text-secondary);
+            }
+
+            /* 支持 :has() 的浏览器 */
+            @supports selector(:has(*)) {
+              .supports-demo-box {
+                background: var(--success-light);
+                border-color: var(--success);
+                color: var(--success-dark);
+              }
+
+              .supports-demo-box::before {
+                content: '✓ ';
+                font-size: 1.5rem;
+              }
+            }
+
+            /* 不支持 :has() 的浏览器 */
+            @supports not selector(:has(*)) {
+              .supports-demo-box {
+                background: var(--warning-light);
+                border-color: var(--warning);
+                color: var(--warning-dark);
+              }
+
+              .supports-demo-box::before {
+                content: '⚠️ ';
+                font-size: 1.5rem;
+              }
+            }
+          </style>
+
+          <div class="supports-demo-box">您的浏览器对 :has() 的支持状态</div>
+
+          <div class="demo-code">
+            <pre><code><span class="code-comment">/* 默认样式 */</span>
+.box {
+  background: gray;
+}
+
+<span class="code-comment">/* 支持时的增强样式 */</span>
+@supports selector(:has(*)) {
+  .box {
+    background: green;
+  }
+}
+
+<span class="code-comment">/* 不支持时的降级样式 */</span>
+@supports not selector(:has(*)) {
+  .box {
+    background: orange;
+  }
+}</code></pre>
+          </div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>
