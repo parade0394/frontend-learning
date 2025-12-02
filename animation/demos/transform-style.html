@@ -120,22 +120,74 @@
     </style>
   </head>
   <body>
+    <!-- 左侧边栏导航 -->
+    <!-- 左侧边栏导航 -->
     <aside class="sidebar">
       <div class="sidebar-header">
-        <h1>CSS 动画教程</h1>
-        <a class="back-home" href="../index.html">← 返回首页</a>
+        <h1>CSS Transform & Transition</h1>
+        <a class="back-home" href="../index.html">← 返回主页</a>
       </div>
       <nav class="sidebar-nav">
+        <!-- 基础概念 -->
         <div class="nav-section">
           <h3>基础概念</h3>
+          <a class="nav-item" href="overview.html">CSS 动画总览</a>
           <a class="nav-item" href="coordinate.html">坐标系统</a>
         </div>
+
+        <!-- Transform 变换 -->
+        <div class="nav-section">
+          <h3>Transform 变换</h3>
+          <a class="nav-item" href="translate.html">translate()</a>
+          <a class="nav-item" href="translateX.html">translateX()</a>
+          <a class="nav-item" href="translateY.html">translateY()</a>
+          <a class="nav-item" href="translateZ.html">translateZ()</a>
+          <a class="nav-item" href="rotate.html">rotate()</a>
+          <a class="nav-item" href="rotateX.html">rotateX()</a>
+          <a class="nav-item" href="rotateY.html">rotateY()</a>
+          <a class="nav-item" href="rotateZ.html">rotateZ()</a>
+          <a class="nav-item" href="scale.html">scale()</a>
+          <a class="nav-item" href="scaleX.html">scaleX()</a>
+          <a class="nav-item" href="scaleY.html">scaleY()</a>
+          <a class="nav-item" href="scaleZ.html">scaleZ()</a>
+          <a class="nav-item" href="skew.html">skew()</a>
+          <a class="nav-item" href="skewX.html">skewX()</a>
+          <a class="nav-item" href="skewY.html">skewY()</a>
+          <a class="nav-item" href="multiple.html">组合变换</a>
+        </div>
+
+        <!-- Transition 过渡 -->
+        <div class="nav-section">
+          <h3>Transition 过渡</h3>
+          <a class="nav-item" href="duration.html">transition-duration</a>
+          <a class="nav-item" href="timing.html">transition-timing-function</a>
+          <a class="nav-item" href="delay.html">transition-delay</a>
+        </div>
+
+        <!-- Animation 动画 -->
+        <div class="nav-section">
+          <h3>Animation 动画</h3>
+          <a class="nav-item" href="keyframes.html">@keyframes</a>
+          <a class="nav-item" href="animation-play-state.html">animation-play-state</a>
+          <a class="nav-item" href="fill-mode-demo.html">animation-fill-mode</a>
+        </div>
+
+        <!-- 3D 变换 -->
         <div class="nav-section">
           <h3>3D 变换</h3>
-          <a class="nav-item" href="perspective.html">perspective 透视</a>
-          <a class="nav-item" href="rotate3d.html">rotate3d() 3D旋转</a>
-          <a class="nav-item" href="translate3d.html">translate3d() 3D平移</a>
-          <a class="nav-item active" href="transform-style.html">transform-style 3D空间</a>
+          <a class="nav-item" href="perspective.html">perspective</a>
+          <a class="nav-item" href="rotate3d.html">rotate3d()</a>
+          <a class="nav-item" href="translate3d.html">translate3d()</a>
+          <a class="nav-item active" href="transform-style.html">transform-style</a>
+          <a class="nav-item" href="backface-visibility.html">backface-visibility</a>
+          <a class="nav-item" href="perspective-origin.html">perspective-origin</a>
+        </div>
+
+        <!-- 高级属性 -->
+        <div class="nav-section">
+          <h3>高级属性</h3>
+          <a class="nav-item" href="transform-origin.html">transform-origin</a>
+          <a class="nav-item" href="will-change.html">will-change</a>
         </div>
       </nav>
     </aside>
@@ -236,6 +288,14 @@
 
           <div style="text-align: center; margin-top: 20px">
             <button class="play-button" data-demo="rotatecube">旋转立方体</button>
+          </div>
+
+          <div class="info-box" style="margin-top: 20px">
+            <p>
+              <strong>💡 想深入学习？</strong>查看
+              <a href="cube-3d.html" style="color: var(--primary); text-decoration: underline">3D 立方体实现教程</a
+              >，一步一步学习如何创建完整的 3D 立方体。
+            </p>
           </div>
 
           <pre class="code-block"><code><span class="comment">/* 父容器设置透视 */</span>
