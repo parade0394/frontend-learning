@@ -4,6 +4,30 @@
    ======================================== */
 
 /* ========================================
+   防止横向滚动 - Prevent Horizontal Scroll
+   ======================================== */
+
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+body {
+  position: relative;
+}
+
+/* 确保所有容器不超出视口 */
+* {
+  box-sizing: border-box;
+}
+
+.main-content {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* ========================================
    导航卡片组件 - Navigation Cards
    ======================================== */
 
@@ -462,6 +486,19 @@
    ======================================== */
 
 @media (max-width: 768px) {
+  /* 确保主内容区域不超出视口 */
+  .main-content {
+    margin-left: 0;
+    padding: var(--spacing-md);
+    width: 100%;
+  }
+
+  .demo-page,
+  .nav-page {
+    max-width: 100%;
+    padding: var(--spacing-md) 0;
+  }
+
   .demo-page h1,
   .nav-page h1 {
     font-size: 2rem;
@@ -478,6 +515,7 @@
   .knowledge-tags {
     flex-direction: column;
     align-items: flex-start;
+    padding: var(--spacing-sm);
   }
 
   .scenario-links {
@@ -505,17 +543,39 @@
   .btn-copy {
     width: 100%;
   }
+
+  /* 确保所有演示容器适配移动端 */
+  .demo-container {
+    padding: var(--spacing-md);
+    min-height: 250px;
+  }
+
+  /* 代码块在移动端的优化 */
+  .code-block {
+    font-size: 0.85rem;
+    overflow-x: auto;
+  }
+
+  pre {
+    overflow-x: auto;
+  }
 }
 
 @media (max-width: 480px) {
+  .main-content {
+    padding: var(--spacing-sm);
+  }
+
   .demo-page,
   .nav-page {
-    padding: var(--spacing-md) var(--spacing-sm);
+    padding: var(--spacing-sm) 0;
+    max-width: 100%;
   }
 
   .demo-page h1,
   .nav-page h1 {
     font-size: 1.75rem;
+    overflow-wrap: break-word;
   }
 
   .practical-demo-card {
@@ -525,10 +585,28 @@
   .scenario-link {
     flex-direction: column;
     text-align: center;
+    padding: var(--spacing-sm);
   }
 
   .demo-container {
-    min-height: 250px;
+    min-height: 200px;
+    padding: var(--spacing-sm);
+  }
+
+  /* 知识点标签在小屏幕上的优化 */
+  .knowledge-tag {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+
+  /* 面包屑在小屏幕上的优化 */
+  .breadcrumb {
+    font-size: 0.8rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  /* section 内边距优化 */
+  .section {
     padding: var(--spacing-md);
   }
 }

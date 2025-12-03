@@ -185,11 +185,13 @@
       /* 移动端适配 */
       @media (max-width: 768px) {
         .carousel-container {
-          padding: var(--spacing-md);
+          padding: var(--spacing-sm);
+          max-width: 100%;
         }
 
         .carousel-stage {
           height: 350px;
+          max-width: 100%;
         }
 
         .carousel-3d {
@@ -209,32 +211,41 @@
           height: 50px;
         }
 
+        .control-buttons-row {
+          flex-wrap: wrap;
+        }
+
         .control-buttons-row .btn {
           min-width: 100px;
           font-size: 0.9rem;
+          flex: 1;
         }
       }
 
       @media (max-width: 480px) {
+        .carousel-container {
+          padding: var(--spacing-xs);
+        }
+
         .carousel-stage {
-          height: 300px;
+          height: 280px;
         }
 
         .carousel-3d {
-          width: 200px;
-          height: 200px;
+          width: 180px;
+          height: 180px;
         }
 
         .carousel-item {
-          width: 180px;
-          height: 180px;
-          margin-left: -90px;
-          margin-top: -90px;
+          width: 160px;
+          height: 160px;
+          margin-left: -80px;
+          margin-top: -80px;
         }
 
         .thumbnail {
-          width: 45px;
-          height: 45px;
+          width: 40px;
+          height: 40px;
         }
 
         .control-buttons-row {
