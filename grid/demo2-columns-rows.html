@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Demo 2: 定义列和行</title>
+    <title>定义列和行 - CSS Grid 布局</title>
     <link href="/src/styles/common.css" rel="stylesheet" />
-    <!-- 防止主题闪烁 -->
+    <link href="styles.css" rel="stylesheet" />
     <script>
       (function () {
         try {
@@ -17,90 +17,14 @@
           }
           document.documentElement.setAttribute('data-theme', actualTheme);
           document.documentElement.style.setProperty('--primary', color);
-        } catch {
-          // 忽略解析错误
+        } catch (e) {
+          console.log(e);
         }
       })();
     </script>
-    <script type="module" src="/src/theme-sync.js"></script>
+    <script type="module" src="/src/theme.js"></script>
     <style>
-      /* 主题适配 */
-      body {
-        background: var(--bg-secondary);
-        color: var(--text-primary);
-        transition:
-          background-color 0.3s ease,
-          color 0.3s ease;
-      }
-
-      .container {
-        background: var(--card-bg);
-        color: var(--text-primary);
-      }
-
-      h1,
-      h2 {
-        color: var(--text-primary);
-      }
-
-      .description {
-        color: var(--text-secondary);
-      }
-
-      .code-block {
-        background: var(--gray-800);
-        color: var(--gray-200);
-        border: 1px solid var(--gray-700);
-      }
-
-      .syntax-note,
-      .info-box {
-        background: var(--primary-light);
-        border-left-color: var(--primary);
-        color: var(--text-primary);
-      }
-
-      .syntax-note code,
-      .info-box code {
-        background: var(--bg-primary);
-        color: var(--primary);
-      }
-    </style>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-        background: var(--bg-secondary);
-      }
-
-      .container {
-        max-width: 800px;
-        margin: 0 auto;
-        background: var(--card-bg);
-        padding: 30px;
-        border-radius: 8px;
-      }
-
-      h1 {
-        color: var(--text-primary);
-        margin-bottom: 10px;
-      }
-
-      h2 {
-        color: var(--text-primary);
-        margin-top: 40px;
-        margin-bottom: 15px;
-        font-size: 20px;
-        border-bottom: 2px solid var(--border-color);
-        padding-bottom: 10px;
-      }
-
-      .description {
-        color: var(--text-secondary);
-        margin-bottom: 30px;
-        line-height: 1.6;
-      }
-
+      /* 页面特定样式 */
       .code-block {
         background: var(--gray-800);
         color: var(--gray-200);
@@ -212,157 +136,175 @@
         font-size: 14px;
         color: #856404;
       }
-
-      .back-link {
-        display: inline-block;
-        margin-top: 30px;
-        color: var(--primary);
-        text-decoration: none;
-      }
-
-      code {
-        background: #f8f9fa;
-        padding: 2px 6px;
-        border-radius: 3px;
-        color: #e74c3c;
-      }
     </style>
   </head>
   <body>
-    <div class="container">
-      <a class="back-link" href="index.html">← 返回 Grid 教程</a>
+    <!-- Skip to main content link for accessibility -->
+    <a class="skip-link" href="#main-content">跳转到主要内容</a>
+    <!-- 左侧边栏导航 -->
+    <aside class="sidebar" aria-label="演示导航" role="navigation">
+      <div class="sidebar-header">
+        <h1>CSS Grid 布局</h1>
+        <a class="back-home" href="index.html" aria-label="返回主页">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav" aria-label="主导航">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a class="nav-item" href="demo1-basic.html">基础网格</a>
+          <a class="nav-item active" href="demo2-columns-rows.html">定义列和行</a>
+          <a class="nav-item" href="demo3-gap.html">网格间距</a>
+        </div>
+        <div class="nav-section">
+          <h3>网格定位</h3>
+          <a class="nav-item" href="demo4-grid-area.html">网格区域</a>
+          <a class="nav-item" href="demo5-span.html">跨越单元格</a>
+        </div>
+        <div class="nav-section">
+          <h3>自动布局</h3>
+          <a class="nav-item" href="demo6-auto-fill.html">auto-fill & auto-fit</a>
+          <a class="nav-item" href="demo7-minmax.html">minmax() 函数</a>
+        </div>
+        <div class="nav-section">
+          <h3>对齐与区域</h3>
+          <a class="nav-item" href="demo8-align.html">对齐方式</a>
+          <a class="nav-item" href="demo9-template-areas.html">模板区域</a>
+        </div>
+        <div class="nav-section">
+          <h3>实战应用</h3>
+          <a class="nav-item" href="demo10-responsive.html">响应式布局</a>
+        </div>
+      </nav>
+    </aside>
 
-      <h1>Demo 2: 定义列和行</h1>
-      <div class="description">
-        <p>
-          <strong>知识点：</strong>使用 <code>grid-template-columns</code> 和
-          <code>grid-template-rows</code> 定义网格的列和行。
-        </p>
-        <p>本例：3列（100px, 200px, 100px），2行（80px, 120px）</p>
-      </div>
+    <!-- 右侧主内容区 -->
+    <main id="main-content" class="main-content" role="main">
+      <div class="demo-page">
+        <h1>定义列和行</h1>
+        <p class="subtitle">使用 grid-template-columns/rows 定义网格的列和行</p>
 
-      <div class="code-block">
-        .grid {<br />
-        &nbsp;&nbsp;<span class="keyword">display</span>: <span class="value">grid</span>;<br />
-        &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>:
-        <span class="value">100px 200px 100px</span>;<br />
-        &nbsp;&nbsp;<span class="keyword">grid-template-rows</span>: <span class="value">80px 120px</span>;<br />
-        }
-      </div>
+        <div class="code-block">
+          .grid {<br />
+          &nbsp;&nbsp;<span class="keyword">display</span>: <span class="value">grid</span>;<br />
+          &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>:
+          <span class="value">100px 200px 100px</span>;<br />
+          &nbsp;&nbsp;<span class="keyword">grid-template-rows</span>: <span class="value">80px 120px</span>;<br />
+          }
+        </div>
 
-      <h2>1. 固定尺寸（Fixed Size）</h2>
-      <div class="syntax-note">
-        <strong>语法：</strong><code>grid-template-columns: 100px 200px 100px;</code><br />
-        使用固定的像素值定义每列的宽度
-      </div>
-      <div class="grid">
-        <div class="item">100px</div>
-        <div class="item">200px</div>
-        <div class="item">100px</div>
-        <div class="item">4</div>
-        <div class="item">5</div>
-        <div class="item">6</div>
-      </div>
+        <h2>1. 固定尺寸（Fixed Size）</h2>
+        <div class="syntax-note">
+          <strong>语法：</strong><code>grid-template-columns: 100px 200px 100px;</code><br />
+          使用固定的像素值定义每列的宽度
+        </div>
+        <div class="grid">
+          <div class="item">100px</div>
+          <div class="item">200px</div>
+          <div class="item">100px</div>
+          <div class="item">4</div>
+          <div class="item">5</div>
+          <div class="item">6</div>
+        </div>
 
-      <h2>2. 弹性单位 fr（Flexible Unit）</h2>
-      <div class="syntax-note">
-        <strong>语法：</strong><code>grid-template-columns: 100px 1fr;</code><br />
-        <code>1fr</code> 表示占据剩余空间的 1 份，会自动伸缩
-      </div>
-      <div class="grid-fr">
-        <div class="item">100px 固定</div>
-        <div class="item-alt">1fr 自动填充剩余空间</div>
-        <div class="item">100px</div>
-        <div class="item-alt">1fr</div>
-      </div>
+        <h2>2. 弹性单位 fr（Flexible Unit）</h2>
+        <div class="syntax-note">
+          <strong>语法：</strong><code>grid-template-columns: 100px 1fr;</code><br />
+          <code>1fr</code> 表示占据剩余空间的 1 份，会自动伸缩
+        </div>
+        <div class="grid-fr">
+          <div class="item">100px 固定</div>
+          <div class="item-alt">1fr 自动填充剩余空间</div>
+          <div class="item">100px</div>
+          <div class="item-alt">1fr</div>
+        </div>
 
-      <h2>3. minmax() 函数</h2>
-      <div class="syntax-note">
-        <strong>语法：</strong><code>grid-template-columns: minmax(100px, 1fr) minmax(200px, 2fr);</code><br />
-        定义最小值和最大值，列宽在这个范围内自适应
-      </div>
-      <div class="grid-minmax">
-        <div class="item">minmax(100px, 1fr)</div>
-        <div class="item-highlight">minmax(200px, 2fr)</div>
-        <div class="item">最小 100px</div>
-        <div class="item-highlight">最小 200px，最大 2 倍空间</div>
-      </div>
+        <h2>3. minmax() 函数</h2>
+        <div class="syntax-note">
+          <strong>语法：</strong><code>grid-template-columns: minmax(100px, 1fr) minmax(200px, 2fr);</code><br />
+          定义最小值和最大值，列宽在这个范围内自适应
+        </div>
+        <div class="grid-minmax">
+          <div class="item">minmax(100px, 1fr)</div>
+          <div class="item-highlight">minmax(200px, 2fr)</div>
+          <div class="item">最小 100px</div>
+          <div class="item-highlight">最小 200px，最大 2 倍空间</div>
+        </div>
 
-      <h2>4. fit-content() 函数</h2>
-      <div class="syntax-note">
-        <strong>语法：</strong><code>grid-template-columns: fit-content(200px) 1fr fit-content(150px);</code><br />
-        根据内容自适应，但不超过指定的最大值
-      </div>
-      <div class="grid-fit-content">
-        <div class="item">fit-content(200px)</div>
-        <div class="item-alt">1fr 填充</div>
-        <div class="item">fit-content(150px)</div>
-      </div>
+        <h2>4. fit-content() 函数</h2>
+        <div class="syntax-note">
+          <strong>语法：</strong><code>grid-template-columns: fit-content(200px) 1fr fit-content(150px);</code><br />
+          根据内容自适应，但不超过指定的最大值
+        </div>
+        <div class="grid-fit-content">
+          <div class="item">fit-content(200px)</div>
+          <div class="item-alt">1fr 填充</div>
+          <div class="item">fit-content(150px)</div>
+        </div>
 
-      <h2>5. repeat() 函数</h2>
-      <div class="syntax-note">
-        <strong>语法：</strong><code>grid-template-columns: repeat(3, 200px);</code><br />
-        重复创建相同尺寸的列，等同于 <code>200px 200px 200px</code>
-      </div>
-      <div class="grid-repeat">
-        <div class="item">200px</div>
-        <div class="item">200px</div>
-        <div class="item">200px</div>
-        <div class="item">4</div>
-        <div class="item">5</div>
-        <div class="item">6</div>
-      </div>
+        <h2>5. repeat() 函数</h2>
+        <div class="syntax-note">
+          <strong>语法：</strong><code>grid-template-columns: repeat(3, 200px);</code><br />
+          重复创建相同尺寸的列，等同于 <code>200px 200px 200px</code>
+        </div>
+        <div class="grid-repeat">
+          <div class="item">200px</div>
+          <div class="item">200px</div>
+          <div class="item">200px</div>
+          <div class="item">4</div>
+          <div class="item">5</div>
+          <div class="item">6</div>
+        </div>
 
-      <h2>6. auto-fill 自动填充</h2>
-      <div class="syntax-note">
-        <strong>语法：</strong><code>grid-template-columns: 200px repeat(auto-fill, 100px) 300px;</code><br />
-        自动填充尽可能多的列，适合响应式布局
-      </div>
-      <div class="grid-auto-fill">
-        <div class="item">200px 固定</div>
-        <div class="item-alt">auto-fill 100px</div>
-        <div class="item-alt">auto-fill 100px</div>
-        <div class="item-highlight">300px 固定</div>
-      </div>
+        <h2>6. auto-fill 自动填充</h2>
+        <div class="syntax-note">
+          <strong>语法：</strong><code>grid-template-columns: 200px repeat(auto-fill, 100px) 300px;</code><br />
+          自动填充尽可能多的列，适合响应式布局
+        </div>
+        <div class="grid-auto-fill">
+          <div class="item">200px 固定</div>
+          <div class="item-alt">auto-fill 100px</div>
+          <div class="item-alt">auto-fill 100px</div>
+          <div class="item-highlight">300px 固定</div>
+        </div>
 
-      <h2>7. 混合使用（Mixed）</h2>
-      <div class="syntax-note">
-        <strong>语法：</strong><code>grid-template-columns: 100px 1fr 2fr 100px;</code><br />
-        可以混合使用固定值和弹性单位，<code>2fr</code> 是 <code>1fr</code> 的两倍宽度
-      </div>
-      <div class="grid-mixed">
-        <div class="item">100px</div>
-        <div class="item-alt">1fr</div>
-        <div class="item-highlight">2fr (两倍)</div>
-        <div class="item">100px</div>
-      </div>
+        <h2>7. 混合使用（Mixed）</h2>
+        <div class="syntax-note">
+          <strong>语法：</strong><code>grid-template-columns: 100px 1fr 2fr 100px;</code><br />
+          可以混合使用固定值和弹性单位，<code>2fr</code> 是 <code>1fr</code> 的两倍宽度
+        </div>
+        <div class="grid-mixed">
+          <div class="item">100px</div>
+          <div class="item-alt">1fr</div>
+          <div class="item-highlight">2fr (两倍)</div>
+          <div class="item">100px</div>
+        </div>
 
-      <div class="code-block" style="margin-top: 40px">
-        <strong>常用语法总结：</strong><br /><br />
-        /* 固定尺寸 */<br />
-        <span class="keyword">grid-template-columns</span>: <span class="value">100px 200px 100px</span>;<br /><br />
-        /* 弹性单位 fr */<br />
-        <span class="keyword">grid-template-columns</span>: <span class="value">100px 1fr</span>;<br />
-        <span class="keyword">grid-template-columns</span>: <span class="value">1fr 2fr 1fr</span>;<br /><br />
-        /* minmax() 函数 */<br />
-        <span class="keyword">grid-template-columns</span>: <span class="value">minmax(100px, 1fr)</span>;<br /><br />
-        /* fit-content() 函数 */<br />
-        <span class="keyword">grid-template-columns</span>: <span class="value">fit-content(40%)</span>;<br /><br />
-        /* repeat() 函数 */<br />
-        <span class="keyword">grid-template-columns</span>: <span class="value">repeat(3, 200px)</span>;<br />
-        <span class="keyword">grid-template-columns</span>: <span class="value">repeat(3, 1fr)</span>;<br /><br />
-        /* auto-fill / auto-fit */<br />
-        <span class="keyword">grid-template-columns</span>: <span class="value">repeat(auto-fill, 100px)</span>;<br />
-        <span class="keyword">grid-template-columns</span>:
-        <span class="value">repeat(auto-fit, minmax(200px, 1fr))</span>;<br /><br />
-        /* 命名网格线 */<br />
-        <span class="keyword">grid-template-columns</span>:
-        <span class="value">[line-name] 100px [line-name2]</span>;<br /><br />
-        /* 混合使用 */<br />
-        <span class="keyword">grid-template-columns</span>:
-        <span class="value">200px repeat(auto-fill, 100px) 300px</span>;<br />
-        <span class="keyword">grid-template-columns</span>: <span class="value">100px 1fr 2fr 100px</span>;
+        <div class="code-block" style="margin-top: 40px">
+          <strong>常用语法总结：</strong><br /><br />
+          /* 固定尺寸 */<br />
+          <span class="keyword">grid-template-columns</span>: <span class="value">100px 200px 100px</span>;<br /><br />
+          /* 弹性单位 fr */<br />
+          <span class="keyword">grid-template-columns</span>: <span class="value">100px 1fr</span>;<br />
+          <span class="keyword">grid-template-columns</span>: <span class="value">1fr 2fr 1fr</span>;<br /><br />
+          /* minmax() 函数 */<br />
+          <span class="keyword">grid-template-columns</span>: <span class="value">minmax(100px, 1fr)</span>;<br /><br />
+          /* fit-content() 函数 */<br />
+          <span class="keyword">grid-template-columns</span>: <span class="value">fit-content(40%)</span>;<br /><br />
+          /* repeat() 函数 */<br />
+          <span class="keyword">grid-template-columns</span>: <span class="value">repeat(3, 200px)</span>;<br />
+          <span class="keyword">grid-template-columns</span>: <span class="value">repeat(3, 1fr)</span>;<br /><br />
+          /* auto-fill / auto-fit */<br />
+          <span class="keyword">grid-template-columns</span>: <span class="value">repeat(auto-fill, 100px)</span>;<br />
+          <span class="keyword">grid-template-columns</span>:
+          <span class="value">repeat(auto-fit, minmax(200px, 1fr))</span>;<br /><br />
+          /* 命名网格线 */<br />
+          <span class="keyword">grid-template-columns</span>:
+          <span class="value">[line-name] 100px [line-name2]</span>;<br /><br />
+          /* 混合使用 */<br />
+          <span class="keyword">grid-template-columns</span>:
+          <span class="value">200px repeat(auto-fill, 100px) 300px</span>;<br />
+          <span class="keyword">grid-template-columns</span>: <span class="value">100px 1fr 2fr 100px</span>;
+        </div>
       </div>
-    </div>
+    </main>
   </body>
 </html>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -37,177 +37,234 @@
         min-height: 200px;
       }
     </style>
+    <!-- 防止主题闪烁 -->
+    <script>
+      (function () {
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    </script>
+    <script type="module" src="/src/theme.js"></script>
+    <link href="styles.css" rel="stylesheet" />
   </head>
   <body>
-    <div class="container">
-      <a class="back-link" href="index.html">← 返回 SVG 模块</a>
+    <!-- Skip to main content link for accessibility -->
+    <a class="skip-link" href="#main-content">跳转到主要内容</a>
 
-      <h1>SVG 滤镜效果</h1>
-      <p>使用 SVG 滤镜创建阴影、模糊、光照等高级视觉效果。</p>
-
-      <div class="filter-grid">
-        <!-- 阴影 -->
-        <div class="filter-demo">
-          <h3>阴影 (Drop Shadow)</h3>
-          <div class="svg-container">
-            <svg width="200" height="200" viewBox="0 0 200 200">
-              <defs>
-                <filter id="shadow">
-                  <feGaussianBlur in="SourceAlpha" stdDeviation="4" />
-                  <feOffset dx="4" dy="4" result="offsetblur" />
-                  <feComponentTransfer>
-                    <feFuncA type="linear" slope="0.5" />
-                  </feComponentTransfer>
-                  <feMerge>
-                    <feMergeNode />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-              <circle cx="100" cy="100" r="50" fill="var(--primary)" filter="url(#shadow)" />
-            </svg>
-          </div>
-          <div class="code-block">
-            <code
-              >&lt;filter id="shadow"&gt; &lt;feGaussianBlur in="SourceAlpha" stdDeviation="4"/&gt; &lt;feOffset dx="4"
-              dy="4"/&gt; &lt;feMerge&gt; &lt;feMergeNode/&gt; &lt;feMergeNode in="SourceGraphic"/&gt; &lt;/feMerge&gt;
-              &lt;/filter&gt;</code
-            >
-          </div>
+    <!-- 左侧边栏导航 -->
+    <aside class="sidebar" aria-label="演示导航" role="navigation">
+      <div class="sidebar-header">
+        <h1>SVG 图形</h1>
+        <a class="back-home" href="index.html" aria-label="返回主页">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav" aria-label="主导航">
+        <div class="nav-section">
+          <h3>基础图形</h3>
+          <a class="nav-item" href="demo1-basic-shapes.html">基础形状</a>
+          <a class="nav-item" href="demo2-paths.html">路径绘制</a>
         </div>
-
-        <!-- 模糊 -->
-        <div class="filter-demo">
-          <h3>模糊 (Blur)</h3>
-          <div class="svg-container">
-            <svg width="200" height="200" viewBox="0 0 200 200">
-              <defs>
-                <filter id="blur">
-                  <feGaussianBlur stdDeviation="5" />
-                </filter>
-              </defs>
-              <circle cx="100" cy="100" r="50" fill="var(--primary)" filter="url(#blur)" />
-            </svg>
-          </div>
-          <div class="code-block">
-            <code>&lt;filter id="blur"&gt; &lt;feGaussianBlur stdDeviation="5"/&gt; &lt;/filter&gt;</code>
-          </div>
+        <div class="nav-section">
+          <h3>样式与效果</h3>
+          <a class="nav-item" href="demo3-gradients.html">渐变填充</a>
+          <a class="nav-item" href="demo4-transforms.html">变换操作</a>
+          <a class="nav-item" href="demo5-text.html">文本处理</a>
+          <a class="nav-item active" href="demo6-filters.html">滤镜效果</a>
         </div>
-
-        <!-- 发光 -->
-        <div class="filter-demo">
-          <h3>发光 (Glow)</h3>
-          <div class="svg-container">
-            <svg width="200" height="200" viewBox="0 0 200 200">
-              <defs>
-                <filter id="glow">
-                  <feGaussianBlur stdDeviation="8" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-              <circle cx="100" cy="100" r="40" fill="var(--primary)" filter="url(#glow)" />
-            </svg>
-          </div>
-          <div class="code-block">
-            <code
-              >&lt;filter id="glow"&gt; &lt;feGaussianBlur stdDeviation="8"/&gt; &lt;feMerge&gt; &lt;feMergeNode
-              in="coloredBlur"/&gt; &lt;feMergeNode in="SourceGraphic"/&gt; &lt;/feMerge&gt; &lt;/filter&gt;</code
-            >
-          </div>
+        <div class="nav-section">
+          <h3>高级应用</h3>
+          <a class="nav-item" href="demo7-animations.html">动画效果</a>
+          <a class="nav-item" href="demo8-icons.html">图标系统</a>
+          <a class="nav-item" href="demo9-charts.html">交互图表</a>
+          <a class="nav-item" href="demo10-responsive.html">响应式 SVG</a>
         </div>
+      </nav>
+    </aside>
 
-        <!-- 浮雕 -->
-        <div class="filter-demo">
-          <h3>浮雕 (Emboss)</h3>
-          <div class="svg-container">
-            <svg width="200" height="200" viewBox="0 0 200 200">
-              <defs>
-                <filter id="emboss">
-                  <feConvolveMatrix kernelMatrix="3 0 0 0 0 0 0 0 -3" />
-                </filter>
-              </defs>
-              <circle cx="100" cy="100" r="50" fill="var(--primary)" filter="url(#emboss)" />
-            </svg>
-          </div>
-          <div class="code-block">
-            <code
-              >&lt;filter id="emboss"&gt; &lt;feConvolveMatrix kernelMatrix="3 0 0 0 0 0 0 0 -3"/&gt;
-              &lt;/filter&gt;</code
-            >
-          </div>
-        </div>
+    <!-- 右侧主内容区 -->
+    <main id="main-content" class="main-content" role="main">
+      <div class="demo-page">
+        <div class="container">
+          <a class="back-link" href="index.html">← 返回 SVG 模块</a>
 
-        <!-- 颜色矩阵 -->
-        <div class="filter-demo">
-          <h3>颜色矩阵 (Color Matrix)</h3>
-          <div class="svg-container">
-            <svg width="200" height="200" viewBox="0 0 200 200">
-              <defs>
-                <filter id="colorMatrix">
-                  <feColorMatrix type="hueRotate" values="90" />
-                </filter>
-              </defs>
-              <circle cx="100" cy="100" r="50" fill="var(--primary)" filter="url(#colorMatrix)" />
-            </svg>
-          </div>
-          <div class="code-block">
-            <code
-              >&lt;filter id="colorMatrix"&gt; &lt;feColorMatrix type="hueRotate" values="90"/&gt; &lt;/filter&gt;</code
-            >
-          </div>
-        </div>
+          <h1>SVG 滤镜效果</h1>
+          <p>使用 SVG 滤镜创建阴影、模糊、光照等高级视觉效果。</p>
 
-        <!-- 光照效果 -->
-        <div class="filter-demo">
-          <h3>光照 (Lighting)</h3>
-          <div class="svg-container">
-            <svg width="200" height="200" viewBox="0 0 200 200">
-              <defs>
-                <filter id="lighting">
-                  <feGaussianBlur in="SourceAlpha" stdDeviation="4" />
-                  <feSpecularLighting result="specOut" specularExponent="20" lighting-color="#ffffff">
-                    <fePointLight x="100" y="50" z="200" />
-                  </feSpecularLighting>
-                  <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" />
-                </filter>
-              </defs>
-              <circle cx="100" cy="100" r="50" fill="var(--primary)" filter="url(#lighting)" />
-            </svg>
+          <div class="filter-grid">
+            <!-- 阴影 -->
+            <div class="filter-demo">
+              <h3>阴影 (Drop Shadow)</h3>
+              <div class="svg-container">
+                <svg width="200" height="200" viewBox="0 0 200 200">
+                  <defs>
+                    <filter id="shadow">
+                      <feGaussianBlur in="SourceAlpha" stdDeviation="4" />
+                      <feOffset dx="4" dy="4" result="offsetblur" />
+                      <feComponentTransfer>
+                        <feFuncA type="linear" slope="0.5" />
+                      </feComponentTransfer>
+                      <feMerge>
+                        <feMergeNode />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
+                  <circle cx="100" cy="100" r="50" fill="var(--primary)" filter="url(#shadow)" />
+                </svg>
+              </div>
+              <div class="code-block">
+                <code
+                  >&lt;filter id="shadow"&gt; &lt;feGaussianBlur in="SourceAlpha" stdDeviation="4"/&gt; &lt;feOffset
+                  dx="4" dy="4"/&gt; &lt;feMerge&gt; &lt;feMergeNode/&gt; &lt;feMergeNode in="SourceGraphic"/&gt;
+                  &lt;/feMerge&gt; &lt;/filter&gt;</code
+                >
+              </div>
+            </div>
+
+            <!-- 模糊 -->
+            <div class="filter-demo">
+              <h3>模糊 (Blur)</h3>
+              <div class="svg-container">
+                <svg width="200" height="200" viewBox="0 0 200 200">
+                  <defs>
+                    <filter id="blur">
+                      <feGaussianBlur stdDeviation="5" />
+                    </filter>
+                  </defs>
+                  <circle cx="100" cy="100" r="50" fill="var(--primary)" filter="url(#blur)" />
+                </svg>
+              </div>
+              <div class="code-block">
+                <code>&lt;filter id="blur"&gt; &lt;feGaussianBlur stdDeviation="5"/&gt; &lt;/filter&gt;</code>
+              </div>
+            </div>
+
+            <!-- 发光 -->
+            <div class="filter-demo">
+              <h3>发光 (Glow)</h3>
+              <div class="svg-container">
+                <svg width="200" height="200" viewBox="0 0 200 200">
+                  <defs>
+                    <filter id="glow">
+                      <feGaussianBlur stdDeviation="8" result="coloredBlur" />
+                      <feMerge>
+                        <feMergeNode in="coloredBlur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
+                  <circle cx="100" cy="100" r="40" fill="var(--primary)" filter="url(#glow)" />
+                </svg>
+              </div>
+              <div class="code-block">
+                <code
+                  >&lt;filter id="glow"&gt; &lt;feGaussianBlur stdDeviation="8"/&gt; &lt;feMerge&gt; &lt;feMergeNode
+                  in="coloredBlur"/&gt; &lt;feMergeNode in="SourceGraphic"/&gt; &lt;/feMerge&gt; &lt;/filter&gt;</code
+                >
+              </div>
+            </div>
+
+            <!-- 浮雕 -->
+            <div class="filter-demo">
+              <h3>浮雕 (Emboss)</h3>
+              <div class="svg-container">
+                <svg width="200" height="200" viewBox="0 0 200 200">
+                  <defs>
+                    <filter id="emboss">
+                      <feConvolveMatrix kernelMatrix="3 0 0 0 0 0 0 0 -3" />
+                    </filter>
+                  </defs>
+                  <circle cx="100" cy="100" r="50" fill="var(--primary)" filter="url(#emboss)" />
+                </svg>
+              </div>
+              <div class="code-block">
+                <code
+                  >&lt;filter id="emboss"&gt; &lt;feConvolveMatrix kernelMatrix="3 0 0 0 0 0 0 0 -3"/&gt;
+                  &lt;/filter&gt;</code
+                >
+              </div>
+            </div>
+
+            <!-- 颜色矩阵 -->
+            <div class="filter-demo">
+              <h3>颜色矩阵 (Color Matrix)</h3>
+              <div class="svg-container">
+                <svg width="200" height="200" viewBox="0 0 200 200">
+                  <defs>
+                    <filter id="colorMatrix">
+                      <feColorMatrix type="hueRotate" values="90" />
+                    </filter>
+                  </defs>
+                  <circle cx="100" cy="100" r="50" fill="var(--primary)" filter="url(#colorMatrix)" />
+                </svg>
+              </div>
+              <div class="code-block">
+                <code
+                  >&lt;filter id="colorMatrix"&gt; &lt;feColorMatrix type="hueRotate" values="90"/&gt;
+                  &lt;/filter&gt;</code
+                >
+              </div>
+            </div>
+
+            <!-- 光照效果 -->
+            <div class="filter-demo">
+              <h3>光照 (Lighting)</h3>
+              <div class="svg-container">
+                <svg width="200" height="200" viewBox="0 0 200 200">
+                  <defs>
+                    <filter id="lighting">
+                      <feGaussianBlur in="SourceAlpha" stdDeviation="4" />
+                      <feSpecularLighting result="specOut" specularExponent="20" lighting-color="#ffffff">
+                        <fePointLight x="100" y="50" z="200" />
+                      </feSpecularLighting>
+                      <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" />
+                    </filter>
+                  </defs>
+                  <circle cx="100" cy="100" r="50" fill="var(--primary)" filter="url(#lighting)" />
+                </svg>
+              </div>
+              <div class="code-block">
+                <code
+                  >&lt;filter id="lighting"&gt; &lt;feSpecularLighting&gt; &lt;fePointLight x="100" y="50" z="200"/&gt;
+                  &lt;/feSpecularLighting&gt; &lt;/filter&gt;</code
+                >
+              </div>
+            </div>
           </div>
-          <div class="code-block">
-            <code
-              >&lt;filter id="lighting"&gt; &lt;feSpecularLighting&gt; &lt;fePointLight x="100" y="50" z="200"/&gt;
-              &lt;/feSpecularLighting&gt; &lt;/filter&gt;</code
-            >
+
+          <div
+            class="info-section"
+            style="
+              margin-top: var(--spacing-xl);
+              padding: var(--spacing-md);
+              background: var(--bg-secondary);
+              border-radius: var(--radius-md);
+            "
+          >
+            <h2>💡 关键知识点</h2>
+            <ul>
+              <li><strong>feGaussianBlur</strong>: 高斯模糊效果</li>
+              <li><strong>feOffset</strong>: 偏移图像位置</li>
+              <li><strong>feColorMatrix</strong>: 颜色变换（色相旋转、饱和度等）</li>
+              <li><strong>feBlend</strong>: 混合两个输入图像</li>
+              <li><strong>feComposite</strong>: 组合两个输入图像</li>
+              <li><strong>feMerge</strong>: 合并多个滤镜结果</li>
+              <li><strong>feSpecularLighting</strong>: 镜面光照效果</li>
+              <li><strong>feDiffuseLighting</strong>: 漫反射光照效果</li>
+              <li>滤镜可以链式组合，创建复杂效果</li>
+            </ul>
           </div>
         </div>
       </div>
-
-      <div
-        class="info-section"
-        style="
-          margin-top: var(--spacing-xl);
-          padding: var(--spacing-md);
-          background: var(--bg-secondary);
-          border-radius: var(--radius-md);
-        "
-      >
-        <h2>💡 关键知识点</h2>
-        <ul>
-          <li><strong>feGaussianBlur</strong>: 高斯模糊效果</li>
-          <li><strong>feOffset</strong>: 偏移图像位置</li>
-          <li><strong>feColorMatrix</strong>: 颜色变换（色相旋转、饱和度等）</li>
-          <li><strong>feBlend</strong>: 混合两个输入图像</li>
-          <li><strong>feComposite</strong>: 组合两个输入图像</li>
-          <li><strong>feMerge</strong>: 合并多个滤镜结果</li>
-          <li><strong>feSpecularLighting</strong>: 镜面光照效果</li>
-          <li><strong>feDiffuseLighting</strong>: 漫反射光照效果</li>
-          <li>滤镜可以链式组合，创建复杂效果</li>
-        </ul>
-      </div>
-    </div>
+    </main>
   </body>
 </html>

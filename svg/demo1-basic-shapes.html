@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="zh-CN">
+<html data-theme="light" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SVG 基础形状 - 前端学习中心</title>
     <link href="/src/styles/common.css" rel="stylesheet" />
-    <link href="./svg-common.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
     <script src="../shared/theme-sync.js"></script>
     <script src="../shared/utils.js"></script>
 
@@ -84,366 +84,423 @@
         color: var(--primary);
       }
     </style>
-  </head>
-  <body>
-    <div class="container">
-      <a class="back-link" href="index.html">← 返回 SVG 模块</a>
-
-      <h1>SVG 基础形状</h1>
-      <p>SVG 提供了多种基本图形元素，每种都有特定的属性来控制其外观。</p>
-
-      <div class="shapes-grid">
-        <!-- 圆形 -->
-        <div class="shape-demo">
-          <h3>圆形 (circle)</h3>
-          <div class="svg-container">
-            <svg id="circle-svg" width="200" height="200" viewBox="0 0 200 200">
-              <circle id="circle" cx="100" cy="100" r="60" fill="#10b981" stroke="#059669" stroke-width="3" />
-            </svg>
-          </div>
-          <div class="controls">
-            <div class="control-group">
-              <label>半径 (r): <span id="circle-r-value" class="value-display">60</span></label>
-              <input id="circle-r" type="range" value="60" min="20" max="90" />
-            </div>
-            <div class="control-group">
-              <label>填充颜色:</label>
-              <input id="circle-fill" type="color" value="#10b981" />
-            </div>
-          </div>
-          <div class="code-block">
-            <code id="circle-code"
-              >&lt;circle cx="100" cy="100" r="60" fill="#10b981" stroke="#059669" stroke-width="3"/&gt;</code
-            >
-          </div>
-        </div>
-
-        <!-- 矩形 -->
-        <div class="shape-demo">
-          <h3>矩形 (rect)</h3>
-          <div class="svg-container">
-            <svg id="rect-svg" width="200" height="200" viewBox="0 0 200 200">
-              <rect
-                id="rect"
-                x="50"
-                y="50"
-                width="100"
-                height="100"
-                rx="10"
-                fill="#10b981"
-                stroke="#059669"
-                stroke-width="3"
-              />
-            </svg>
-          </div>
-          <div class="controls">
-            <div class="control-group">
-              <label>圆角 (rx): <span id="rect-rx-value" class="value-display">10</span></label>
-              <input id="rect-rx" type="range" value="10" min="0" max="50" />
-            </div>
-            <div class="control-group">
-              <label>填充颜色:</label>
-              <input id="rect-fill" type="color" value="#10b981" />
-            </div>
-          </div>
-          <div class="code-block">
-            <code id="rect-code">&lt;rect x="50" y="50" width="100" height="100" rx="10" fill="#10b981"/&gt;</code>
-          </div>
-        </div>
-
-        <!-- 椭圆 -->
-        <div class="shape-demo">
-          <h3>椭圆 (ellipse)</h3>
-          <div class="svg-container">
-            <svg id="ellipse-svg" width="200" height="200" viewBox="0 0 200 200">
-              <ellipse
-                id="ellipse"
-                cx="100"
-                cy="100"
-                rx="80"
-                ry="50"
-                fill="#10b981"
-                stroke="#059669"
-                stroke-width="3"
-              />
-            </svg>
-          </div>
-          <div class="controls">
-            <div class="control-group">
-              <label>水平半径 (rx): <span id="ellipse-rx-value" class="value-display">80</span></label>
-              <input id="ellipse-rx" type="range" value="80" min="30" max="90" />
-            </div>
-            <div class="control-group">
-              <label>垂直半径 (ry): <span id="ellipse-ry-value" class="value-display">50</span></label>
-              <input id="ellipse-ry" type="range" value="50" min="20" max="90" />
-            </div>
-          </div>
-          <div class="code-block">
-            <code id="ellipse-code">&lt;ellipse cx="100" cy="100" rx="80" ry="50" fill="#10b981"/&gt;</code>
-          </div>
-        </div>
-
-        <!-- 直线 -->
-        <div class="shape-demo">
-          <h3>直线 (line)</h3>
-          <div class="svg-container">
-            <svg id="line-svg" width="200" height="200" viewBox="0 0 200 200">
-              <line
-                id="line"
-                x1="30"
-                y1="30"
-                x2="170"
-                y2="170"
-                stroke="#10b981"
-                stroke-width="5"
-                stroke-linecap="round"
-              />
-            </svg>
-          </div>
-          <div class="controls">
-            <div class="control-group">
-              <label>线宽: <span id="line-width-value" class="value-display">5</span></label>
-              <input id="line-width" type="range" value="5" min="1" max="20" />
-            </div>
-            <div class="control-group">
-              <label>线条颜色:</label>
-              <input id="line-stroke" type="color" value="#10b981" />
-            </div>
-          </div>
-          <div class="code-block">
-            <code id="line-code"
-              >&lt;line x1="30" y1="30" x2="170" y2="170" stroke="#10b981" stroke-width="5"/&gt;</code
-            >
-          </div>
-        </div>
-
-        <!-- 折线 -->
-        <div class="shape-demo">
-          <h3>折线 (polyline)</h3>
-          <div class="svg-container">
-            <svg id="polyline-svg" width="200" height="200" viewBox="0 0 200 200">
-              <polyline
-                id="polyline"
-                points="30,150 60,50 100,120 140,40 170,150"
-                fill="none"
-                stroke="#10b981"
-                stroke-width="4"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </div>
-          <div class="controls">
-            <div class="control-group">
-              <label>线宽: <span id="polyline-width-value" class="value-display">4</span></label>
-              <input id="polyline-width" type="range" value="4" min="1" max="10" />
-            </div>
-            <div class="control-group">
-              <label>线条颜色:</label>
-              <input id="polyline-stroke" type="color" value="#10b981" />
-            </div>
-          </div>
-          <div class="code-block">
-            <code id="polyline-code"
-              >&lt;polyline points="30,150 60,50 100,120 140,40 170,150" fill="none" stroke="#10b981"/&gt;</code
-            >
-          </div>
-        </div>
-
-        <!-- 多边形 -->
-        <div class="shape-demo">
-          <h3>多边形 (polygon)</h3>
-          <div class="svg-container">
-            <svg id="polygon-svg" width="200" height="200" viewBox="0 0 200 200">
-              <polygon
-                id="polygon"
-                points="100,30 170,80 150,160 50,160 30,80"
-                fill="#10b981"
-                stroke="#059669"
-                stroke-width="3"
-              />
-            </svg>
-          </div>
-          <div class="controls">
-            <div class="control-group">
-              <label>边数: <span id="polygon-sides-value" class="value-display">5</span></label>
-              <input id="polygon-sides" type="range" value="5" min="3" max="8" />
-            </div>
-            <div class="control-group">
-              <label>填充颜色:</label>
-              <input id="polygon-fill" type="color" value="#10b981" />
-            </div>
-          </div>
-          <div class="code-block">
-            <code id="polygon-code">&lt;polygon points="100,30 170,80 150,160 50,160 30,80" fill="#10b981"/&gt;</code>
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="info-section"
-        style="
-          margin-top: var(--spacing-xl);
-          padding: var(--spacing-md);
-          background: var(--bg-secondary);
-          border-radius: var(--radius-md);
-        "
-      >
-        <h2>💡 关键知识点</h2>
-        <ul>
-          <li><strong>circle</strong>: 使用 cx, cy (圆心坐标) 和 r (半径) 定义</li>
-          <li><strong>rect</strong>: 使用 x, y (左上角坐标), width, height 定义，rx/ry 控制圆角</li>
-          <li><strong>ellipse</strong>: 使用 cx, cy (中心坐标), rx (水平半径), ry (垂直半径) 定义</li>
-          <li><strong>line</strong>: 使用 x1, y1 (起点) 和 x2, y2 (终点) 定义</li>
-          <li><strong>polyline</strong>: 使用 points 属性定义一系列连接的点（不自动闭合）</li>
-          <li><strong>polygon</strong>: 使用 points 属性定义一系列点（自动闭合形成多边形）</li>
-        </ul>
-      </div>
-    </div>
-
+    <!-- 防止主题闪烁 -->
     <script>
       (function () {
-        'use strict';
-
-        // 圆形控制
-        const circle = document.getElementById('circle');
-        const circleR = document.getElementById('circle-r');
-        const circleRValue = document.getElementById('circle-r-value');
-        const circleFill = document.getElementById('circle-fill');
-        const circleCode = document.getElementById('circle-code');
-
-        circleR.addEventListener('input', (e) => {
-          const r = e.target.value;
-          circle.setAttribute('r', r);
-          circleRValue.textContent = r;
-          updateCode(circleCode, circle);
-        });
-
-        circleFill.addEventListener('input', (e) => {
-          circle.setAttribute('fill', e.target.value);
-          updateCode(circleCode, circle);
-        });
-
-        // 矩形控制
-        const rect = document.getElementById('rect');
-        const rectRx = document.getElementById('rect-rx');
-        const rectRxValue = document.getElementById('rect-rx-value');
-        const rectFill = document.getElementById('rect-fill');
-        const rectCode = document.getElementById('rect-code');
-
-        rectRx.addEventListener('input', (e) => {
-          const rx = e.target.value;
-          rect.setAttribute('rx', rx);
-          rect.setAttribute('ry', rx);
-          rectRxValue.textContent = rx;
-          updateCode(rectCode, rect);
-        });
-
-        rectFill.addEventListener('input', (e) => {
-          rect.setAttribute('fill', e.target.value);
-          updateCode(rectCode, rect);
-        });
-
-        // 椭圆控制
-        const ellipse = document.getElementById('ellipse');
-        const ellipseRx = document.getElementById('ellipse-rx');
-        const ellipseRy = document.getElementById('ellipse-ry');
-        const ellipseRxValue = document.getElementById('ellipse-rx-value');
-        const ellipseRyValue = document.getElementById('ellipse-ry-value');
-        const ellipseCode = document.getElementById('ellipse-code');
-
-        ellipseRx.addEventListener('input', (e) => {
-          const rx = e.target.value;
-          ellipse.setAttribute('rx', rx);
-          ellipseRxValue.textContent = rx;
-          updateCode(ellipseCode, ellipse);
-        });
-
-        ellipseRy.addEventListener('input', (e) => {
-          const ry = e.target.value;
-          ellipse.setAttribute('ry', ry);
-          ellipseRyValue.textContent = ry;
-          updateCode(ellipseCode, ellipse);
-        });
-
-        // 直线控制
-        const line = document.getElementById('line');
-        const lineWidth = document.getElementById('line-width');
-        const lineWidthValue = document.getElementById('line-width-value');
-        const lineStroke = document.getElementById('line-stroke');
-        const lineCode = document.getElementById('line-code');
-
-        lineWidth.addEventListener('input', (e) => {
-          const width = e.target.value;
-          line.setAttribute('stroke-width', width);
-          lineWidthValue.textContent = width;
-          updateCode(lineCode, line);
-        });
-
-        lineStroke.addEventListener('input', (e) => {
-          line.setAttribute('stroke', e.target.value);
-          updateCode(lineCode, line);
-        });
-
-        // 折线控制
-        const polyline = document.getElementById('polyline');
-        const polylineWidth = document.getElementById('polyline-width');
-        const polylineWidthValue = document.getElementById('polyline-width-value');
-        const polylineStroke = document.getElementById('polyline-stroke');
-        const polylineCode = document.getElementById('polyline-code');
-
-        polylineWidth.addEventListener('input', (e) => {
-          const width = e.target.value;
-          polyline.setAttribute('stroke-width', width);
-          polylineWidthValue.textContent = width;
-          updateCode(polylineCode, polyline);
-        });
-
-        polylineStroke.addEventListener('input', (e) => {
-          polyline.setAttribute('stroke', e.target.value);
-          updateCode(polylineCode, polyline);
-        });
-
-        // 多边形控制
-        const polygon = document.getElementById('polygon');
-        const polygonSides = document.getElementById('polygon-sides');
-        const polygonSidesValue = document.getElementById('polygon-sides-value');
-        const polygonFill = document.getElementById('polygon-fill');
-        const polygonCode = document.getElementById('polygon-code');
-
-        polygonSides.addEventListener('input', (e) => {
-          const sides = parseInt(e.target.value);
-          const points = generatePolygonPoints(100, 100, 70, sides);
-          polygon.setAttribute('points', points);
-          polygonSidesValue.textContent = sides;
-          updateCode(polygonCode, polygon);
-        });
-
-        polygonFill.addEventListener('input', (e) => {
-          polygon.setAttribute('fill', e.target.value);
-          updateCode(polygonCode, polygon);
-        });
-
-        // 生成正多边形的点
-        function generatePolygonPoints(cx, cy, radius, sides) {
-          const points = [];
-          for (let i = 0; i < sides; i++) {
-            const angle = (i * 2 * Math.PI) / sides - Math.PI / 2;
-            const x = cx + radius * Math.cos(angle);
-            const y = cy + radius * Math.sin(angle);
-            points.push(`${x.toFixed(0)},${y.toFixed(0)}`);
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
           }
-          return points.join(' ');
-        }
-
-        // 更新代码显示
-        function updateCode(codeElement, svgElement) {
-          const attrs = Array.from(svgElement.attributes)
-            .filter((attr) => attr.name !== 'id')
-            .map((attr) => `${attr.name}="${attr.value}"`)
-            .join(' ');
-          codeElement.textContent = `<${svgElement.tagName} ${attrs}/>`;
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {
+          console.log(e);
         }
       })();
     </script>
+    <script type="module" src="/src/theme.js"></script>
+  </head>
+  <body>
+    <!-- Skip to main content link for accessibility -->
+    <a class="skip-link" href="#main-content">跳转到主要内容</a>
+
+    <!-- 左侧边栏导航 -->
+    <aside class="sidebar" aria-label="演示导航" role="navigation">
+      <div class="sidebar-header">
+        <h1>SVG 图形</h1>
+        <a class="back-home" href="index.html" aria-label="返回主页">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav" aria-label="主导航">
+        <div class="nav-section">
+          <h3>基础图形</h3>
+          <a class="nav-item active" href="demo1-basic-shapes.html">基础形状</a>
+          <a class="nav-item" href="demo2-paths.html">路径绘制</a>
+        </div>
+        <div class="nav-section">
+          <h3>样式与效果</h3>
+          <a class="nav-item" href="demo3-gradients.html">渐变填充</a>
+          <a class="nav-item" href="demo4-transforms.html">变换操作</a>
+          <a class="nav-item" href="demo5-text.html">文本处理</a>
+          <a class="nav-item" href="demo6-filters.html">滤镜效果</a>
+        </div>
+        <div class="nav-section">
+          <h3>高级应用</h3>
+          <a class="nav-item" href="demo7-animations.html">动画效果</a>
+          <a class="nav-item" href="demo8-icons.html">图标系统</a>
+          <a class="nav-item" href="demo9-charts.html">交互图表</a>
+          <a class="nav-item" href="demo10-responsive.html">响应式 SVG</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- 右侧主内容区 -->
+    <main id="main-content" class="main-content" role="main">
+      <div class="demo-page">
+        <div class="container">
+          <a class="back-link" href="index.html">← 返回 SVG 模块</a>
+
+          <h1>SVG 基础形状</h1>
+          <p>SVG 提供了多种基本图形元素，每种都有特定的属性来控制其外观。</p>
+
+          <div class="shapes-grid">
+            <!-- 圆形 -->
+            <div class="shape-demo">
+              <h3>圆形 (circle)</h3>
+              <div class="svg-container">
+                <svg id="circle-svg" width="200" height="200" viewBox="0 0 200 200">
+                  <circle id="circle" cx="100" cy="100" r="60" fill="#10b981" stroke="#059669" stroke-width="3" />
+                </svg>
+              </div>
+              <div class="controls">
+                <div class="control-group">
+                  <label>半径 (r): <span id="circle-r-value" class="value-display">60</span></label>
+                  <input id="circle-r" type="range" value="60" min="20" max="90" />
+                </div>
+                <div class="control-group">
+                  <label>填充颜色:</label>
+                  <input id="circle-fill" type="color" value="#10b981" />
+                </div>
+              </div>
+              <div class="code-block">
+                <code id="circle-code"
+                  >&lt;circle cx="100" cy="100" r="60" fill="#10b981" stroke="#059669" stroke-width="3"/&gt;</code
+                >
+              </div>
+            </div>
+
+            <!-- 矩形 -->
+            <div class="shape-demo">
+              <h3>矩形 (rect)</h3>
+              <div class="svg-container">
+                <svg id="rect-svg" width="200" height="200" viewBox="0 0 200 200">
+                  <rect
+                    id="rect"
+                    x="50"
+                    y="50"
+                    width="100"
+                    height="100"
+                    rx="10"
+                    fill="#10b981"
+                    stroke="#059669"
+                    stroke-width="3"
+                  />
+                </svg>
+              </div>
+              <div class="controls">
+                <div class="control-group">
+                  <label>圆角 (rx): <span id="rect-rx-value" class="value-display">10</span></label>
+                  <input id="rect-rx" type="range" value="10" min="0" max="50" />
+                </div>
+                <div class="control-group">
+                  <label>填充颜色:</label>
+                  <input id="rect-fill" type="color" value="#10b981" />
+                </div>
+              </div>
+              <div class="code-block">
+                <code id="rect-code">&lt;rect x="50" y="50" width="100" height="100" rx="10" fill="#10b981"/&gt;</code>
+              </div>
+            </div>
+
+            <!-- 椭圆 -->
+            <div class="shape-demo">
+              <h3>椭圆 (ellipse)</h3>
+              <div class="svg-container">
+                <svg id="ellipse-svg" width="200" height="200" viewBox="0 0 200 200">
+                  <ellipse
+                    id="ellipse"
+                    cx="100"
+                    cy="100"
+                    rx="80"
+                    ry="50"
+                    fill="#10b981"
+                    stroke="#059669"
+                    stroke-width="3"
+                  />
+                </svg>
+              </div>
+              <div class="controls">
+                <div class="control-group">
+                  <label>水平半径 (rx): <span id="ellipse-rx-value" class="value-display">80</span></label>
+                  <input id="ellipse-rx" type="range" value="80" min="30" max="90" />
+                </div>
+                <div class="control-group">
+                  <label>垂直半径 (ry): <span id="ellipse-ry-value" class="value-display">50</span></label>
+                  <input id="ellipse-ry" type="range" value="50" min="20" max="90" />
+                </div>
+              </div>
+              <div class="code-block">
+                <code id="ellipse-code">&lt;ellipse cx="100" cy="100" rx="80" ry="50" fill="#10b981"/&gt;</code>
+              </div>
+            </div>
+
+            <!-- 直线 -->
+            <div class="shape-demo">
+              <h3>直线 (line)</h3>
+              <div class="svg-container">
+                <svg id="line-svg" width="200" height="200" viewBox="0 0 200 200">
+                  <line
+                    id="line"
+                    x1="30"
+                    y1="30"
+                    x2="170"
+                    y2="170"
+                    stroke="#10b981"
+                    stroke-width="5"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+              <div class="controls">
+                <div class="control-group">
+                  <label>线宽: <span id="line-width-value" class="value-display">5</span></label>
+                  <input id="line-width" type="range" value="5" min="1" max="20" />
+                </div>
+                <div class="control-group">
+                  <label>线条颜色:</label>
+                  <input id="line-stroke" type="color" value="#10b981" />
+                </div>
+              </div>
+              <div class="code-block">
+                <code id="line-code"
+                  >&lt;line x1="30" y1="30" x2="170" y2="170" stroke="#10b981" stroke-width="5"/&gt;</code
+                >
+              </div>
+            </div>
+
+            <!-- 折线 -->
+            <div class="shape-demo">
+              <h3>折线 (polyline)</h3>
+              <div class="svg-container">
+                <svg id="polyline-svg" width="200" height="200" viewBox="0 0 200 200">
+                  <polyline
+                    id="polyline"
+                    points="30,150 60,50 100,120 140,40 170,150"
+                    fill="none"
+                    stroke="#10b981"
+                    stroke-width="4"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <div class="controls">
+                <div class="control-group">
+                  <label>线宽: <span id="polyline-width-value" class="value-display">4</span></label>
+                  <input id="polyline-width" type="range" value="4" min="1" max="10" />
+                </div>
+                <div class="control-group">
+                  <label>线条颜色:</label>
+                  <input id="polyline-stroke" type="color" value="#10b981" />
+                </div>
+              </div>
+              <div class="code-block">
+                <code id="polyline-code"
+                  >&lt;polyline points="30,150 60,50 100,120 140,40 170,150" fill="none" stroke="#10b981"/&gt;</code
+                >
+              </div>
+            </div>
+
+            <!-- 多边形 -->
+            <div class="shape-demo">
+              <h3>多边形 (polygon)</h3>
+              <div class="svg-container">
+                <svg id="polygon-svg" width="200" height="200" viewBox="0 0 200 200">
+                  <polygon
+                    id="polygon"
+                    points="100,30 170,80 150,160 50,160 30,80"
+                    fill="#10b981"
+                    stroke="#059669"
+                    stroke-width="3"
+                  />
+                </svg>
+              </div>
+              <div class="controls">
+                <div class="control-group">
+                  <label>边数: <span id="polygon-sides-value" class="value-display">5</span></label>
+                  <input id="polygon-sides" type="range" value="5" min="3" max="8" />
+                </div>
+                <div class="control-group">
+                  <label>填充颜色:</label>
+                  <input id="polygon-fill" type="color" value="#10b981" />
+                </div>
+              </div>
+              <div class="code-block">
+                <code id="polygon-code"
+                  >&lt;polygon points="100,30 170,80 150,160 50,160 30,80" fill="#10b981"/&gt;</code
+                >
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="info-section"
+            style="
+              margin-top: var(--spacing-xl);
+              padding: var(--spacing-md);
+              background: var(--bg-secondary);
+              border-radius: var(--radius-md);
+            "
+          >
+            <h2>💡 关键知识点</h2>
+            <ul>
+              <li><strong>circle</strong>: 使用 cx, cy (圆心坐标) 和 r (半径) 定义</li>
+              <li><strong>rect</strong>: 使用 x, y (左上角坐标), width, height 定义，rx/ry 控制圆角</li>
+              <li><strong>ellipse</strong>: 使用 cx, cy (中心坐标), rx (水平半径), ry (垂直半径) 定义</li>
+              <li><strong>line</strong>: 使用 x1, y1 (起点) 和 x2, y2 (终点) 定义</li>
+              <li><strong>polyline</strong>: 使用 points 属性定义一系列连接的点（不自动闭合）</li>
+              <li><strong>polygon</strong>: 使用 points 属性定义一系列点（自动闭合形成多边形）</li>
+            </ul>
+          </div>
+        </div>
+
+        <script>
+          (function () {
+            'use strict';
+
+            // 圆形控制
+            const circle = document.getElementById('circle');
+            const circleR = document.getElementById('circle-r');
+            const circleRValue = document.getElementById('circle-r-value');
+            const circleFill = document.getElementById('circle-fill');
+            const circleCode = document.getElementById('circle-code');
+
+            circleR.addEventListener('input', (e) => {
+              const r = e.target.value;
+              circle.setAttribute('r', r);
+              circleRValue.textContent = r;
+              updateCode(circleCode, circle);
+            });
+
+            circleFill.addEventListener('input', (e) => {
+              circle.setAttribute('fill', e.target.value);
+              updateCode(circleCode, circle);
+            });
+
+            // 矩形控制
+            const rect = document.getElementById('rect');
+            const rectRx = document.getElementById('rect-rx');
+            const rectRxValue = document.getElementById('rect-rx-value');
+            const rectFill = document.getElementById('rect-fill');
+            const rectCode = document.getElementById('rect-code');
+
+            rectRx.addEventListener('input', (e) => {
+              const rx = e.target.value;
+              rect.setAttribute('rx', rx);
+              rect.setAttribute('ry', rx);
+              rectRxValue.textContent = rx;
+              updateCode(rectCode, rect);
+            });
+
+            rectFill.addEventListener('input', (e) => {
+              rect.setAttribute('fill', e.target.value);
+              updateCode(rectCode, rect);
+            });
+
+            // 椭圆控制
+            const ellipse = document.getElementById('ellipse');
+            const ellipseRx = document.getElementById('ellipse-rx');
+            const ellipseRy = document.getElementById('ellipse-ry');
+            const ellipseRxValue = document.getElementById('ellipse-rx-value');
+            const ellipseRyValue = document.getElementById('ellipse-ry-value');
+            const ellipseCode = document.getElementById('ellipse-code');
+
+            ellipseRx.addEventListener('input', (e) => {
+              const rx = e.target.value;
+              ellipse.setAttribute('rx', rx);
+              ellipseRxValue.textContent = rx;
+              updateCode(ellipseCode, ellipse);
+            });
+
+            ellipseRy.addEventListener('input', (e) => {
+              const ry = e.target.value;
+              ellipse.setAttribute('ry', ry);
+              ellipseRyValue.textContent = ry;
+              updateCode(ellipseCode, ellipse);
+            });
+
+            // 直线控制
+            const line = document.getElementById('line');
+            const lineWidth = document.getElementById('line-width');
+            const lineWidthValue = document.getElementById('line-width-value');
+            const lineStroke = document.getElementById('line-stroke');
+            const lineCode = document.getElementById('line-code');
+
+            lineWidth.addEventListener('input', (e) => {
+              const width = e.target.value;
+              line.setAttribute('stroke-width', width);
+              lineWidthValue.textContent = width;
+              updateCode(lineCode, line);
+            });
+
+            lineStroke.addEventListener('input', (e) => {
+              line.setAttribute('stroke', e.target.value);
+              updateCode(lineCode, line);
+            });
+
+            // 折线控制
+            const polyline = document.getElementById('polyline');
+            const polylineWidth = document.getElementById('polyline-width');
+            const polylineWidthValue = document.getElementById('polyline-width-value');
+            const polylineStroke = document.getElementById('polyline-stroke');
+            const polylineCode = document.getElementById('polyline-code');
+
+            polylineWidth.addEventListener('input', (e) => {
+              const width = e.target.value;
+              polyline.setAttribute('stroke-width', width);
+              polylineWidthValue.textContent = width;
+              updateCode(polylineCode, polyline);
+            });
+
+            polylineStroke.addEventListener('input', (e) => {
+              polyline.setAttribute('stroke', e.target.value);
+              updateCode(polylineCode, polyline);
+            });
+
+            // 多边形控制
+            const polygon = document.getElementById('polygon');
+            const polygonSides = document.getElementById('polygon-sides');
+            const polygonSidesValue = document.getElementById('polygon-sides-value');
+            const polygonFill = document.getElementById('polygon-fill');
+            const polygonCode = document.getElementById('polygon-code');
+
+            polygonSides.addEventListener('input', (e) => {
+              const sides = parseInt(e.target.value);
+              const points = generatePolygonPoints(100, 100, 70, sides);
+              polygon.setAttribute('points', points);
+              polygonSidesValue.textContent = sides;
+              updateCode(polygonCode, polygon);
+            });
+
+            polygonFill.addEventListener('input', (e) => {
+              polygon.setAttribute('fill', e.target.value);
+              updateCode(polygonCode, polygon);
+            });
+
+            // 生成正多边形的点
+            function generatePolygonPoints(cx, cy, radius, sides) {
+              const points = [];
+              for (let i = 0; i < sides; i++) {
+                const angle = (i * 2 * Math.PI) / sides - Math.PI / 2;
+                const x = cx + radius * Math.cos(angle);
+                const y = cy + radius * Math.sin(angle);
+                points.push(`${x.toFixed(0)},${y.toFixed(0)}`);
+              }
+              return points.join(' ');
+            }
+
+            // 更新代码显示
+            function updateCode(codeElement, svgElement) {
+              const attrs = Array.from(svgElement.attributes)
+                .filter((attr) => attr.name !== 'id')
+                .map((attr) => `${attr.name}="${attr.value}"`)
+                .join(' ');
+              codeElement.textContent = `<${svgElement.tagName} ${attrs}/>`;
+            }
+          })();
+        </script>
+      </div>
+    </main>
   </body>
 </html>

@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Demo 8: 对齐方式</title>
+    <title>对齐方式 - align & justify - CSS Grid 布局</title>
     <link href="/src/styles/common.css" rel="stylesheet" />
-    <!-- 防止主题闪烁 -->
+    <link href="styles.css" rel="stylesheet" />
     <script>
       (function () {
         try {
@@ -17,95 +17,19 @@
           }
           document.documentElement.setAttribute('data-theme', actualTheme);
           document.documentElement.style.setProperty('--primary', color);
-        } catch {
-          // 忽略解析错误
+        } catch (e) {
+          console.log(e);
         }
       })();
     </script>
-    <script type="module" src="/src/theme-sync.js"></script>
+    <script type="module" src="/src/theme.js"></script>
     <style>
-      /* 主题适配 */
-      body {
-        background: var(--bg-secondary);
-        color: var(--text-primary);
-        transition:
-          background-color 0.3s ease,
-          color 0.3s ease;
-      }
-
-      .container {
-        background: var(--card-bg);
-        color: var(--text-primary);
-      }
-
-      h1,
-      h2 {
-        color: var(--text-primary);
-      }
-
-      .description {
-        color: var(--text-secondary);
-      }
-
-      .code-block {
-        background: var(--gray-800);
-        color: var(--gray-200);
-        border: 1px solid var(--gray-700);
-      }
-
-      .syntax-note,
-      .info-box {
-        background: var(--primary-light);
-        border-left-color: var(--primary);
-        color: var(--text-primary);
-      }
-
-      .syntax-note code,
-      .info-box code {
-        background: var(--bg-primary);
-        color: var(--primary);
-      }
-    </style>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-        background: var(--bg-secondary);
-      }
-
-      .container {
-        max-width: 900px;
-        margin: 0 auto;
-        background: var(--card-bg);
-        padding: 30px;
-        border-radius: 8px;
-      }
-
-      h1 {
-        color: var(--text-primary);
-        margin-bottom: 10px;
-      }
-
-      h2 {
-        color: var(--text-primary);
-        margin-top: 40px;
-        margin-bottom: 15px;
-        font-size: 20px;
-        border-bottom: 2px solid var(--border-color);
-        padding-bottom: 10px;
-      }
-
+      /* 页面特定样式 */
       h3 {
         color: var(--text-primary);
         margin-top: 25px;
         margin-bottom: 10px;
         font-size: 16px;
-      }
-
-      .description {
-        color: var(--text-secondary);
-        margin-bottom: 30px;
-        line-height: 1.6;
       }
 
       .code-block {
@@ -214,20 +138,6 @@
         justify-content: center;
       }
 
-      .back-link {
-        display: inline-block;
-        margin-top: 30px;
-        color: var(--primary);
-        text-decoration: none;
-      }
-
-      code {
-        background: #f8f9fa;
-        padding: 2px 6px;
-        border-radius: 3px;
-        color: #e74c3c;
-      }
-
       .note-box {
         background: var(--card-bg) 3cd;
         border-left: 4px solid var(--primary);
@@ -257,195 +167,229 @@
     </style>
   </head>
   <body>
-    <div class="container">
-      <a class="back-link" href="index.html">← 返回 Grid 教程</a>
-
-      <h1>Demo 8: 对齐方式 - align & justify</h1>
-      <div class="description">
-        <p><strong>知识点：</strong>Grid 提供了强大的对齐控制，分为两类：</p>
-        <p>1️⃣ <strong>容器级对齐</strong>：控制整个网格在容器中的位置（content）</p>
-        <p>2️⃣ <strong>项目级对齐</strong>：控制每个项目在其网格单元中的位置（items）</p>
+    <!-- Skip to main content link for accessibility -->
+    <a class="skip-link" href="#main-content">跳转到主要内容</a>
+    <!-- 左侧边栏导航 -->
+    <aside class="sidebar" aria-label="演示导航" role="navigation">
+      <div class="sidebar-header">
+        <h1>CSS Grid 布局</h1>
+        <a class="back-home" href="index.html" aria-label="返回主页">← 返回主页</a>
       </div>
+      <nav class="sidebar-nav" aria-label="主导航">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a class="nav-item" href="demo1-basic.html">基础网格</a>
+          <a class="nav-item" href="demo2-columns-rows.html">定义列和行</a>
+          <a class="nav-item" href="demo3-gap.html">网格间距</a>
+        </div>
+        <div class="nav-section">
+          <h3>网格定位</h3>
+          <a class="nav-item" href="demo4-grid-area.html">网格区域</a>
+          <a class="nav-item" href="demo5-span.html">跨越单元格</a>
+        </div>
+        <div class="nav-section">
+          <h3>自动布局</h3>
+          <a class="nav-item" href="demo6-auto-fill.html">auto-fill & auto-fit</a>
+          <a class="nav-item" href="demo7-minmax.html">minmax() 函数</a>
+        </div>
+        <div class="nav-section">
+          <h3>对齐与区域</h3>
+          <a class="nav-item active" href="demo8-align.html">对齐方式</a>
+          <a class="nav-item" href="demo9-template-areas.html">模板区域</a>
+        </div>
+        <div class="nav-section">
+          <h3>实战应用</h3>
+          <a class="nav-item" href="demo10-responsive.html">响应式布局</a>
+        </div>
+      </nav>
+    </aside>
 
-      <div class="comparison-box">
-        <h3>📊 对齐属性速查表</h3>
-        <table style="width: 100%; border-collapse: collapse; margin: 15px 0; background: var(--card-bg)">
-          <tr style="background: #2196f3; color: white">
-            <th style="border: 1px solid #ddd; padding: 10px">属性</th>
-            <th style="border: 1px solid #ddd; padding: 10px">作用对象</th>
-            <th style="border: 1px solid #ddd; padding: 10px">方向</th>
-            <th style="border: 1px solid #ddd; padding: 10px">说明</th>
-          </tr>
-          <tr>
-            <td style="border: 1px solid #ddd; padding: 10px"><code>justify-content</code></td>
-            <td style="border: 1px solid #ddd; padding: 10px">整个网格</td>
-            <td style="border: 1px solid #ddd; padding: 10px">水平（行轴）</td>
-            <td style="border: 1px solid #ddd; padding: 10px">网格在容器中的水平位置</td>
-          </tr>
-          <tr style="background: var(--bg-secondary)">
-            <td style="border: 1px solid #ddd; padding: 10px"><code>align-content</code></td>
-            <td style="border: 1px solid #ddd; padding: 10px">整个网格</td>
-            <td style="border: 1px solid #ddd; padding: 10px">垂直（列轴）</td>
-            <td style="border: 1px solid #ddd; padding: 10px">网格在容器中的垂直位置</td>
-          </tr>
-          <tr>
-            <td style="border: 1px solid #ddd; padding: 10px"><code>justify-items</code></td>
-            <td style="border: 1px solid #ddd; padding: 10px">所有项目</td>
-            <td style="border: 1px solid #ddd; padding: 10px">水平（行轴）</td>
-            <td style="border: 1px solid #ddd; padding: 10px">项目在单元格中的水平位置</td>
-          </tr>
-          <tr style="background: var(--bg-secondary)">
-            <td style="border: 1px solid #ddd; padding: 10px"><code>align-items</code></td>
-            <td style="border: 1px solid #ddd; padding: 10px">所有项目</td>
-            <td style="border: 1px solid #ddd; padding: 10px">垂直（列轴）</td>
-            <td style="border: 1px solid #ddd; padding: 10px">项目在单元格中的垂直位置</td>
-          </tr>
-        </table>
+    <!-- 右侧主内容区 -->
+    <main id="main-content" class="main-content" role="main">
+      <div class="demo-page">
+        <h1>对齐方式 - align & justify</h1>
+        <p class="subtitle">Grid 提供强大的对齐控制：容器对齐和项目对齐</p>
+
+        <div class="comparison-box">
+          <h3>📊 对齐属性速查表</h3>
+          <table style="width: 100%; border-collapse: collapse; margin: 15px 0; background: var(--card-bg)">
+            <tr style="background: #2196f3; color: white">
+              <th style="border: 1px solid #ddd; padding: 10px">属性</th>
+              <th style="border: 1px solid #ddd; padding: 10px">作用对象</th>
+              <th style="border: 1px solid #ddd; padding: 10px">方向</th>
+              <th style="border: 1px solid #ddd; padding: 10px">说明</th>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #ddd; padding: 10px"><code>justify-content</code></td>
+              <td style="border: 1px solid #ddd; padding: 10px">整个网格</td>
+              <td style="border: 1px solid #ddd; padding: 10px">水平（行轴）</td>
+              <td style="border: 1px solid #ddd; padding: 10px">网格在容器中的水平位置</td>
+            </tr>
+            <tr style="background: var(--bg-secondary)">
+              <td style="border: 1px solid #ddd; padding: 10px"><code>align-content</code></td>
+              <td style="border: 1px solid #ddd; padding: 10px">整个网格</td>
+              <td style="border: 1px solid #ddd; padding: 10px">垂直（列轴）</td>
+              <td style="border: 1px solid #ddd; padding: 10px">网格在容器中的垂直位置</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #ddd; padding: 10px"><code>justify-items</code></td>
+              <td style="border: 1px solid #ddd; padding: 10px">所有项目</td>
+              <td style="border: 1px solid #ddd; padding: 10px">水平（行轴）</td>
+              <td style="border: 1px solid #ddd; padding: 10px">项目在单元格中的水平位置</td>
+            </tr>
+            <tr style="background: var(--bg-secondary)">
+              <td style="border: 1px solid #ddd; padding: 10px"><code>align-items</code></td>
+              <td style="border: 1px solid #ddd; padding: 10px">所有项目</td>
+              <td style="border: 1px solid #ddd; padding: 10px">垂直（列轴）</td>
+              <td style="border: 1px solid #ddd; padding: 10px">项目在单元格中的垂直位置</td>
+            </tr>
+          </table>
+        </div>
+
+        <h2>一、容器级对齐：justify-content（水平）</h2>
+        <p>控制整个网格在容器中的水平位置</p>
+
+        <h3>start（默认，左对齐）</h3>
+        <div class="grid justify-start">
+          <div class="item">1</div>
+          <div class="item">2</div>
+          <div class="item">3</div>
+        </div>
+
+        <h3>center（水平居中）</h3>
+        <div class="grid justify-center">
+          <div class="item">1</div>
+          <div class="item">2</div>
+          <div class="item">3</div>
+        </div>
+
+        <h3>end（右对齐）</h3>
+        <div class="grid justify-end">
+          <div class="item">1</div>
+          <div class="item">2</div>
+          <div class="item">3</div>
+        </div>
+
+        <h3>space-between（两端对齐）</h3>
+        <div class="grid justify-space-between">
+          <div class="item">1</div>
+          <div class="item">2</div>
+          <div class="item">3</div>
+        </div>
+
+        <h3>space-around（周围留白）</h3>
+        <div class="grid justify-space-around">
+          <div class="item">1</div>
+          <div class="item">2</div>
+          <div class="item">3</div>
+        </div>
+
+        <h3>space-evenly（均匀分布）</h3>
+        <div class="grid justify-space-evenly">
+          <div class="item">1</div>
+          <div class="item">2</div>
+          <div class="item">3</div>
+        </div>
+
+        <h2>二、容器级对齐：align-content（垂直）</h2>
+        <p>控制整个网格在容器中的垂直位置</p>
+
+        <h3>start（顶部对齐）</h3>
+        <div class="grid align-start">
+          <div class="item">1</div>
+          <div class="item">2</div>
+          <div class="item">3</div>
+        </div>
+
+        <h3>center（垂直居中）</h3>
+        <div class="grid align-center">
+          <div class="item">1</div>
+          <div class="item">2</div>
+          <div class="item">3</div>
+        </div>
+
+        <h3>end（底部对齐）</h3>
+        <div class="grid align-end">
+          <div class="item">1</div>
+          <div class="item">2</div>
+          <div class="item">3</div>
+        </div>
+
+        <h2>三、组合使用：完美居中</h2>
+        <div class="grid justify-center align-center">
+          <div class="item">1</div>
+          <div class="item">2</div>
+          <div class="item">3</div>
+        </div>
+        <div class="note-box">
+          💡 <strong>提示：</strong>可以使用简写属性 <code>place-content: center center</code> 同时设置水平和垂直居中
+        </div>
+
+        <h2>四、项目级对齐：justify-items & align-items</h2>
+        <p>控制每个项目在其网格单元格中的位置</p>
+
+        <h3>justify-items: start（项目左对齐）</h3>
+        <div class="grid-items justify-items-start">
+          <div class="item-small">1</div>
+          <div class="item-small">2</div>
+          <div class="item-small">3</div>
+          <div class="item-small">4</div>
+          <div class="item-small">5</div>
+          <div class="item-small">6</div>
+        </div>
+
+        <h3>justify-items: center（项目水平居中）</h3>
+        <div class="grid-items justify-items-center">
+          <div class="item-small">1</div>
+          <div class="item-small">2</div>
+          <div class="item-small">3</div>
+          <div class="item-small">4</div>
+          <div class="item-small">5</div>
+          <div class="item-small">6</div>
+        </div>
+
+        <h3>align-items: center（项目垂直居中）</h3>
+        <div class="grid-items align-items-center">
+          <div class="item-small">1</div>
+          <div class="item-small">2</div>
+          <div class="item-small">3</div>
+          <div class="item-small">4</div>
+          <div class="item-small">5</div>
+          <div class="item-small">6</div>
+        </div>
+
+        <h3>justify-items: stretch（默认，拉伸填充）</h3>
+        <div class="grid-items justify-items-stretch">
+          <div class="item-small">1</div>
+          <div class="item-small">2</div>
+          <div class="item-small">3</div>
+          <div class="item-small">4</div>
+          <div class="item-small">5</div>
+          <div class="item-small">6</div>
+        </div>
+
+        <div class="code-block" style="margin-top: 40px">
+          <strong>常用对齐组合：</strong><br /><br />
+          /* 整个网格居中 */<br />
+          .grid {<br />
+          &nbsp;&nbsp;<span class="keyword">justify-content</span>: <span class="value">center</span>;<br />
+          &nbsp;&nbsp;<span class="keyword">align-content</span>: <span class="value">center</span>;<br />
+          &nbsp;&nbsp;/* 简写：place-content: center; */<br />
+          }<br /><br />
+          /* 项目在单元格中居中 */<br />
+          .grid {<br />
+          &nbsp;&nbsp;<span class="keyword">justify-items</span>: <span class="value">center</span>;<br />
+          &nbsp;&nbsp;<span class="keyword">align-items</span>: <span class="value">center</span>;<br />
+          &nbsp;&nbsp;/* 简写：place-items: center; */<br />
+          }<br /><br />
+          /* 单个项目自定义对齐 */<br />
+          .item {<br />
+          &nbsp;&nbsp;<span class="keyword">justify-self</span>: <span class="value">end</span>;<br />
+          &nbsp;&nbsp;<span class="keyword">align-self</span>: <span class="value">start</span>;<br />
+          &nbsp;&nbsp;/* 简写：place-self: start end; */<br />
+          }
+        </div>
       </div>
-
-      <h2>一、容器级对齐：justify-content（水平）</h2>
-      <p>控制整个网格在容器中的水平位置</p>
-
-      <h3>start（默认，左对齐）</h3>
-      <div class="grid justify-start">
-        <div class="item">1</div>
-        <div class="item">2</div>
-        <div class="item">3</div>
-      </div>
-
-      <h3>center（水平居中）</h3>
-      <div class="grid justify-center">
-        <div class="item">1</div>
-        <div class="item">2</div>
-        <div class="item">3</div>
-      </div>
-
-      <h3>end（右对齐）</h3>
-      <div class="grid justify-end">
-        <div class="item">1</div>
-        <div class="item">2</div>
-        <div class="item">3</div>
-      </div>
-
-      <h3>space-between（两端对齐）</h3>
-      <div class="grid justify-space-between">
-        <div class="item">1</div>
-        <div class="item">2</div>
-        <div class="item">3</div>
-      </div>
-
-      <h3>space-around（周围留白）</h3>
-      <div class="grid justify-space-around">
-        <div class="item">1</div>
-        <div class="item">2</div>
-        <div class="item">3</div>
-      </div>
-
-      <h3>space-evenly（均匀分布）</h3>
-      <div class="grid justify-space-evenly">
-        <div class="item">1</div>
-        <div class="item">2</div>
-        <div class="item">3</div>
-      </div>
-
-      <h2>二、容器级对齐：align-content（垂直）</h2>
-      <p>控制整个网格在容器中的垂直位置</p>
-
-      <h3>start（顶部对齐）</h3>
-      <div class="grid align-start">
-        <div class="item">1</div>
-        <div class="item">2</div>
-        <div class="item">3</div>
-      </div>
-
-      <h3>center（垂直居中）</h3>
-      <div class="grid align-center">
-        <div class="item">1</div>
-        <div class="item">2</div>
-        <div class="item">3</div>
-      </div>
-
-      <h3>end（底部对齐）</h3>
-      <div class="grid align-end">
-        <div class="item">1</div>
-        <div class="item">2</div>
-        <div class="item">3</div>
-      </div>
-
-      <h2>三、组合使用：完美居中</h2>
-      <div class="grid justify-center align-center">
-        <div class="item">1</div>
-        <div class="item">2</div>
-        <div class="item">3</div>
-      </div>
-      <div class="note-box">
-        💡 <strong>提示：</strong>可以使用简写属性 <code>place-content: center center</code> 同时设置水平和垂直居中
-      </div>
-
-      <h2>四、项目级对齐：justify-items & align-items</h2>
-      <p>控制每个项目在其网格单元格中的位置</p>
-
-      <h3>justify-items: start（项目左对齐）</h3>
-      <div class="grid-items justify-items-start">
-        <div class="item-small">1</div>
-        <div class="item-small">2</div>
-        <div class="item-small">3</div>
-        <div class="item-small">4</div>
-        <div class="item-small">5</div>
-        <div class="item-small">6</div>
-      </div>
-
-      <h3>justify-items: center（项目水平居中）</h3>
-      <div class="grid-items justify-items-center">
-        <div class="item-small">1</div>
-        <div class="item-small">2</div>
-        <div class="item-small">3</div>
-        <div class="item-small">4</div>
-        <div class="item-small">5</div>
-        <div class="item-small">6</div>
-      </div>
-
-      <h3>align-items: center（项目垂直居中）</h3>
-      <div class="grid-items align-items-center">
-        <div class="item-small">1</div>
-        <div class="item-small">2</div>
-        <div class="item-small">3</div>
-        <div class="item-small">4</div>
-        <div class="item-small">5</div>
-        <div class="item-small">6</div>
-      </div>
-
-      <h3>justify-items: stretch（默认，拉伸填充）</h3>
-      <div class="grid-items justify-items-stretch">
-        <div class="item-small">1</div>
-        <div class="item-small">2</div>
-        <div class="item-small">3</div>
-        <div class="item-small">4</div>
-        <div class="item-small">5</div>
-        <div class="item-small">6</div>
-      </div>
-
-      <div class="code-block" style="margin-top: 40px">
-        <strong>常用对齐组合：</strong><br /><br />
-        /* 整个网格居中 */<br />
-        .grid {<br />
-        &nbsp;&nbsp;<span class="keyword">justify-content</span>: <span class="value">center</span>;<br />
-        &nbsp;&nbsp;<span class="keyword">align-content</span>: <span class="value">center</span>;<br />
-        &nbsp;&nbsp;/* 简写：place-content: center; */<br />
-        }<br /><br />
-        /* 项目在单元格中居中 */<br />
-        .grid {<br />
-        &nbsp;&nbsp;<span class="keyword">justify-items</span>: <span class="value">center</span>;<br />
-        &nbsp;&nbsp;<span class="keyword">align-items</span>: <span class="value">center</span>;<br />
-        &nbsp;&nbsp;/* 简写：place-items: center; */<br />
-        }<br /><br />
-        /* 单个项目自定义对齐 */<br />
-        .item {<br />
-        &nbsp;&nbsp;<span class="keyword">justify-self</span>: <span class="value">end</span>;<br />
-        &nbsp;&nbsp;<span class="keyword">align-self</span>: <span class="value">start</span>;<br />
-        &nbsp;&nbsp;/* 简写：place-self: start end; */<br />
-        }
-      </div>
-    </div>
+    </main>
   </body>
 </html>

@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Demo 10: 响应式布局</title>
+    <title>响应式布局 - CSS Grid 布局</title>
     <link href="/src/styles/common.css" rel="stylesheet" />
-    <!-- 防止主题闪烁 -->
+    <link href="styles.css" rel="stylesheet" />
     <script>
       (function () {
         try {
@@ -17,81 +17,14 @@
           }
           document.documentElement.setAttribute('data-theme', actualTheme);
           document.documentElement.style.setProperty('--primary', color);
-        } catch {
-          // 忽略解析错误
+        } catch (e) {
+          console.log(e);
         }
       })();
     </script>
-    <script type="module" src="/src/theme-sync.js"></script>
+    <script type="module" src="/src/theme.js"></script>
     <style>
-      /* 主题适配 */
-      body {
-        background: var(--bg-secondary);
-        color: var(--text-primary);
-        transition:
-          background-color 0.3s ease,
-          color 0.3s ease;
-      }
-
-      .container {
-        background: var(--card-bg);
-        color: var(--text-primary);
-      }
-
-      h1,
-      h2 {
-        color: var(--text-primary);
-      }
-
-      .description {
-        color: var(--text-secondary);
-      }
-
-      .code-block {
-        background: var(--gray-800);
-        color: var(--gray-200);
-        border: 1px solid var(--gray-700);
-      }
-
-      .syntax-note,
-      .info-box {
-        background: var(--primary-light);
-        border-left-color: var(--primary);
-        color: var(--text-primary);
-      }
-
-      .syntax-note code,
-      .info-box code {
-        background: var(--bg-primary);
-        color: var(--primary);
-      }
-    </style>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-        background: var(--bg-secondary);
-      }
-
-      .container {
-        max-width: 1000px;
-        margin: 0 auto;
-        background: var(--card-bg);
-        padding: 30px;
-        border-radius: 8px;
-      }
-
-      h1 {
-        color: var(--text-primary);
-        margin-bottom: 10px;
-      }
-
-      .description {
-        color: var(--text-secondary);
-        margin-bottom: 30px;
-        line-height: 1.6;
-      }
-
+      /* 页面特定样式 */
       .code-block {
         background: var(--gray-800);
         color: var(--gray-200);
@@ -134,20 +67,6 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       }
 
-      .back-link {
-        display: inline-block;
-        margin-top: 30px;
-        color: var(--primary);
-        text-decoration: none;
-      }
-
-      code {
-        background: #f8f9fa;
-        padding: 2px 6px;
-        border-radius: 3px;
-        color: #e74c3c;
-      }
-
       @media (max-width: 768px) {
         .grid {
           grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -163,38 +82,70 @@
     </style>
   </head>
   <body>
-    <div class="container">
-      <a class="back-link" href="index.html">← 返回 Grid 教程</a>
-
-      <h1>Demo 10: 响应式布局</h1>
-      <div class="description">
-        <p><strong>知识点：</strong>结合 <code>auto-fit</code>、<code>minmax()</code> 和媒体查询创建响应式网格。</p>
-        <p>桌面：每列最小200px，自动适应</p>
-        <p>平板（≤768px）：每列最小150px</p>
-        <p>手机（≤480px）：单列布局</p>
-        <p>试着调整浏览器窗口大小，观察布局变化！</p>
+    <!-- Skip to main content link for accessibility -->
+    <a class="skip-link" href="#main-content">跳转到主要内容</a>
+    <!-- 左侧边栏导航 -->
+    <aside class="sidebar" aria-label="演示导航" role="navigation">
+      <div class="sidebar-header">
+        <h1>CSS Grid 布局</h1>
+        <a class="back-home" href="index.html" aria-label="返回主页">← 返回主页</a>
       </div>
+      <nav class="sidebar-nav" aria-label="主导航">
+        <div class="nav-section">
+          <h3>基础概念</h3>
+          <a class="nav-item" href="demo1-basic.html">基础网格</a>
+          <a class="nav-item" href="demo2-columns-rows.html">定义列和行</a>
+          <a class="nav-item" href="demo3-gap.html">网格间距</a>
+        </div>
+        <div class="nav-section">
+          <h3>网格定位</h3>
+          <a class="nav-item" href="demo4-grid-area.html">网格区域</a>
+          <a class="nav-item" href="demo5-span.html">跨越单元格</a>
+        </div>
+        <div class="nav-section">
+          <h3>自动布局</h3>
+          <a class="nav-item" href="demo6-auto-fill.html">auto-fill & auto-fit</a>
+          <a class="nav-item" href="demo7-minmax.html">minmax() 函数</a>
+        </div>
+        <div class="nav-section">
+          <h3>对齐与区域</h3>
+          <a class="nav-item" href="demo8-align.html">对齐方式</a>
+          <a class="nav-item" href="demo9-template-areas.html">模板区域</a>
+        </div>
+        <div class="nav-section">
+          <h3>实战应用</h3>
+          <a class="nav-item active" href="demo10-responsive.html">响应式布局</a>
+        </div>
+      </nav>
+    </aside>
 
-      <div class="code-block">
-        .grid {<br />
-        &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>:
-        <span class="value">repeat(auto-fit, minmax(200px, 1fr))</span>;<br />
-        }<br />
-        <br />
-        @media (max-width: 768px) {<br />
-        &nbsp;&nbsp;.grid { <span class="keyword">grid-template-columns</span>:
-        <span class="value">repeat(auto-fit, minmax(150px, 1fr))</span>; }<br />
-        }
-      </div>
+    <!-- 右侧主内容区 -->
+    <main id="main-content" class="main-content" role="main">
+      <div class="demo-page">
+        <h1>响应式布局</h1>
+        <p class="subtitle">结合 auto-fit、minmax() 和媒体查询创建响应式网格</p>
 
-      <div class="grid">
-        <div class="item">项目 1</div>
-        <div class="item">项目 2</div>
-        <div class="item">项目 3</div>
-        <div class="item">项目 4</div>
-        <div class="item">项目 5</div>
-        <div class="item">项目 6</div>
+        <div class="code-block">
+          .grid {<br />
+          &nbsp;&nbsp;<span class="keyword">grid-template-columns</span>:
+          <span class="value">repeat(auto-fit, minmax(200px, 1fr))</span>;<br />
+          }<br />
+          <br />
+          @media (max-width: 768px) {<br />
+          &nbsp;&nbsp;.grid { <span class="keyword">grid-template-columns</span>:
+          <span class="value">repeat(auto-fit, minmax(150px, 1fr))</span>; }<br />
+          }
+        </div>
+
+        <div class="grid">
+          <div class="item">项目 1</div>
+          <div class="item">项目 2</div>
+          <div class="item">项目 3</div>
+          <div class="item">项目 4</div>
+          <div class="item">项目 5</div>
+          <div class="item">项目 6</div>
+        </div>
       </div>
-    </div>
+    </main>
   </body>
 </html>
