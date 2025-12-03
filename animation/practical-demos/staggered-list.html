@@ -136,6 +136,10 @@
 
       /* 响应式调整 */
       @media (max-width: 768px) {
+        .list-container {
+          max-width: 100%;
+        }
+
         .list-item {
           padding: var(--spacing-sm) var(--spacing-md);
         }
@@ -159,6 +163,7 @@
         .list-item {
           flex-direction: column;
           text-align: center;
+          padding: var(--spacing-sm);
         }
 
         .delay-example {

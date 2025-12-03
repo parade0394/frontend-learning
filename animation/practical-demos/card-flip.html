@@ -177,11 +177,13 @@
       @media (max-width: 768px) {
         .flip-demo-container {
           grid-template-columns: 1fr;
-          padding: var(--spacing-md);
+          padding: var(--spacing-sm);
+          max-width: 100%;
         }
 
         .flip-card {
           height: 280px;
+          max-width: 100%;
         }
 
         .flip-card-icon {
@@ -198,8 +200,16 @@
       }
 
       @media (max-width: 480px) {
+        .flip-demo-container {
+          padding: var(--spacing-xs);
+        }
+
         .flip-card {
-          height: 260px;
+          height: 240px;
+        }
+
+        .flip-card-face {
+          padding: var(--spacing-md);
         }
 
         .flip-controls {

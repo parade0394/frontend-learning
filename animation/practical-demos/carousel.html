@@ -239,8 +239,12 @@
 
       /* 移动端适配 */
       @media (max-width: 768px) {
+        .carousel-container {
+          max-width: 100%;
+        }
+
         .carousel-slide {
-          padding: var(--spacing-lg);
+          padding: var(--spacing-md);
         }
 
         .slide-icon {
@@ -253,6 +257,7 @@
 
         .slide-description {
           font-size: 1rem;
+          max-width: 90%;
         }
 
         .carousel-nav-btn {
@@ -272,7 +277,7 @@
 
       @media (max-width: 480px) {
         .carousel-slide {
-          padding: var(--spacing-md);
+          padding: var(--spacing-sm);
         }
 
         .slide-icon {
@@ -280,11 +285,12 @@
         }
 
         .slide-title {
-          font-size: 1.3rem;
+          font-size: 1.2rem;
         }
 
         .slide-description {
-          font-size: 0.9rem;
+          font-size: 0.85rem;
+          max-width: 95%;
         }
 
         .carousel-controls {
