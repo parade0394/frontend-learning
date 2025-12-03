@@ -161,9 +161,9 @@
 
         <section class="section">
           <h2>语法说明</h2>
-          <pre class="code-block"><code>
-            <span class="keyword">.element</span> { <span class="property">will-change</span>: <span class="value">auto | property-name</span>; }
-          </code></pre>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">will-change:</span> <span class="value">auto | property-name</span>;</code></pre>
 
           <ul>
             <li><span class="highlight">auto</span> - 默认值，浏览器自动决定</li>
@@ -178,20 +178,26 @@
         <section class="section">
           <h2>使用示例</h2>
 
-          <pre class="code-block"><code>
-            <span class="comment">/* 1. 悬停时会变换的元素 */</span> <span class="keyword">.card</span> { <span class="property">will-change</span>:
-            <span class="value">transform</span>; <span class="property">transition</span>: <span class="value">transform 0.3s</span>; }
+          <pre class="code-block"><code><span class="comment">/* 1. 悬停时会变换的元素 */</span>
+<span class="keyword">.card</span> {
+  <span class="property">will-change</span>: <span class="value">transform</span>;
+  <span class="property">transition</span>: <span class="value">transform 0.3s</span>;
+}
 
-            <span class="keyword">.card:hover</span> { <span class="property">transform</span>: <span class="value">translateY(-10px)</span>; }
+<span class="keyword">.card:hover</span> {
+  <span class="property">transform</span>: <span class="value">translateY(-10px)</span>;
+}
 
-            <span class="comment">/* 2. 持续动画的元素 */</span>
-            <span class="keyword">.loading-spinner</span> { <span class="property">will-change</span>: <span class="value">transform</span>;
-            <span class="property">animation</span>: <span class="value">spin 1s linear infinite</span>; }
+<span class="comment">/* 2. 持续动画的元素 */</span>
+<span class="keyword">.loading-spinner</span> {
+  <span class="property">will-change</span>: <span class="value">transform</span>;
+  <span class="property">animation</span>: <span class="value">spin 1s linear infinite</span>;
+}
 
-            <span class="comment">/* 3. 多个属性 */</span>
-            <span class="keyword">.animated-element</span> { <span class="property">will-change</span>: <span class="value">transform, opacity</span>;
-            }
-          </code></pre>
+<span class="comment">/* 3. 多个属性 */</span>
+<span class="keyword">.animated-element</span> {
+  <span class="property">will-change</span>: <span class="value">transform, opacity</span>;
+}</code></pre>
         </section>
 
         <section class="section">
@@ -223,17 +229,25 @@
             <div class="animated-box">优化</div>
           </div>
 
-          <pre class="code-block"><code>
-            <span class="keyword">.animated-box</span> { <span class="property">will-change</span>: <span class="value">transform</span>;
-            <span class="property">animation</span>: <span class="value">complexMove 3s ease-in-out infinite</span>; }
+          <pre class="code-block"><code><span class="keyword">.animated-box</span> {
+  <span class="property">will-change</span>: <span class="value">transform</span>;
+  <span class="property">animation</span>: <span class="value">complexMove 3s ease-in-out infinite</span>;
+}
 
-            <span class="keyword">@keyframes</span> <span class="value">complexMove</span> { <span class="keyword">0%</span> {
-            <span class="property">transform</span>: <span class="value">translate(0, 0) rotate(0deg)</span>; } <span class="keyword">25%</span> {
-            <span class="property">transform</span>: <span class="value">translate(100px, 0) rotate(90deg)</span>; }
-            <span class="keyword">50%</span> { <span class="property">transform</span>:
-            <span class="value">translate(100px, 50px) rotate(180deg)</span>; } <span class="keyword">75%</span> {
-            <span class="property">transform</span>: <span class="value">translate(0, 50px) rotate(270deg)</span>; } }
-          </code></pre>
+<span class="keyword">@keyframes</span> <span class="value">complexMove</span> {
+  <span class="keyword">0%, 100%</span> {
+    <span class="property">transform</span>: <span class="value">translate(0, 0) rotate(0deg)</span>;
+  }
+  <span class="keyword">25%</span> {
+    <span class="property">transform</span>: <span class="value">translate(100px, 0) rotate(90deg)</span>;
+  }
+  <span class="keyword">50%</span> {
+    <span class="property">transform</span>: <span class="value">translate(100px, 50px) rotate(180deg)</span>;
+  }
+  <span class="keyword">75%</span> {
+    <span class="property">transform</span>: <span class="value">translate(0, 50px) rotate(270deg)</span>;
+  }
+}</code></pre>
         </section>
 
         <section class="section">
@@ -265,19 +279,18 @@
         <section class="section">
           <h2>最佳实践</h2>
 
-          <pre class="code-block"><code>
-            <span class="comment">/* 方式 1：CSS 中设置（适合持续动画） */</span> <span class="keyword">.loading-spinner</span> {
-            <span class="property">will-change</span>: <span class="value">transform</span>; <span class="property">animation</span>:
-            <span class="value">spin 1s linear infinite</span>; }
+          <pre class="code-block"><code><span class="comment">/* 方式 1：CSS 中设置（适合持续动画） */</span>
+<span class="keyword">.loading-spinner</span> {
+  <span class="property">will-change</span>: <span class="value">transform</span>;
+  <span class="property">animation</span>: <span class="value">spin 1s linear infinite</span>;
+}
 
-            <span class="comment">/* 方式 2：JavaScript 动态设置（推荐） */</span>
-            <span class="keyword">element</span>.<span class="property">style</span>.<span class="value">willChange</span> =
-            <span class="value">'transform'</span>;
-            <span class="comment">// 执行动画...</span>
-            <span class="keyword">element</span>.<span class="property">addEventListener</span>(<span class="value">'transitionend'</span>, () => {
-            <span class="keyword">element</span>.<span class="property">style</span>.<span class="value">willChange</span> =
-            <span class="value">'auto'</span>; <span class="comment">// 动画结束后移除</span> });
-          </code></pre>
+<span class="comment">/* 方式 2：JavaScript 动态设置（推荐） */</span>
+<span class="keyword">element</span>.<span class="property">style</span>.<span class="value">willChange</span> = <span class="value">'transform'</span>;
+<span class="comment">// 执行动画...</span>
+<span class="keyword">element</span>.<span class="property">addEventListener</span>(<span class="value">'transitionend'</span>, () => {
+  <span class="keyword">element</span>.<span class="property">style</span>.<span class="value">willChange</span> = <span class="value">'auto'</span>; <span class="comment">// 动画结束后移除</span>
+});</code></pre>
 
           <div class="info-box">
             <p>
