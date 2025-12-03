@@ -1,0 +1,641 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="3D旋转相册 - 使用 rotateY 和 perspective 实现立体相册效果" />
+    <title>3D旋转相册 - CSS Transform & Transition 实战应用</title>
+    <link href="/src/styles/common.css" rel="stylesheet" />
+    <link href="../styles.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+    <!-- 防止主题闪烁 -->
+    <script>
+      (function () {
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    </script>
+    <script type="module" src="/src/theme-sync.js"></script>
+    <style>
+      /* 演示专用样式 */
+      .carousel-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-lg);
+        padding: var(--spacing-xl);
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      /* 3D相册舞台 */
+      .carousel-stage {
+        width: 100%;
+        max-width: 600px;
+        height: 400px;
+        perspective: 1200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      /* 相册容器 */
+      .carousel-3d {
+        width: 300px;
+        height: 300px;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* 照片项 */
+      .carousel-item {
+        position: absolute;
+        width: 280px;
+        height: 280px;
+        left: 50%;
+        top: 50%;
+        margin-left: -140px;
+        margin-top: -140px;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+        backface-visibility: hidden;
+      }
+
+      .carousel-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      /* 照片标题 */
+      .carousel-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: var(--spacing-md);
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+        color: white;
+        font-size: 0.95rem;
+        font-weight: 600;
+        text-align: center;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+      }
+
+      .carousel-item:hover .carousel-caption {
+        transform: translateY(0);
+      }
+
+      /* 当前照片高亮 */
+      .carousel-item.active {
+        box-shadow: 0 15px 60px rgba(16, 185, 129, 0.4);
+      }
+
+      /* 控制面板 */
+      .carousel-controls {
+        width: 100%;
+        max-width: 600px;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md);
+      }
+
+      .control-buttons-row {
+        display: flex;
+        justify-content: center;
+        gap: var(--spacing-sm);
+        flex-wrap: wrap;
+      }
+
+      .control-buttons-row .btn {
+        min-width: 120px;
+      }
+
+      /* 缩略图导航 */
+      .thumbnail-nav {
+        display: flex;
+        justify-content: center;
+        gap: var(--spacing-sm);
+        flex-wrap: wrap;
+        padding: var(--spacing-md);
+        background: var(--bg-secondary);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
+      }
+
+      .thumbnail {
+        width: 60px;
+        height: 60px;
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+        cursor: pointer;
+        border: 3px solid transparent;
+        transition: all var(--transition-base);
+        opacity: 0.6;
+      }
+
+      .thumbnail:hover {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+
+      .thumbnail.active {
+        border-color: var(--primary);
+        opacity: 1;
+        box-shadow: 0 0 0 2px var(--primary-light);
+      }
+
+      .thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      /* 自动播放动画 */
+      @keyframes autoRotate {
+        from {
+          transform: rotateY(0deg);
+        }
+        to {
+          transform: rotateY(-360deg);
+        }
+      }
+
+      .carousel-3d.auto-play {
+        animation: autoRotate 20s linear infinite;
+      }
+
+      /* 移动端适配 */
+      @media (max-width: 768px) {
+        .carousel-container {
+          padding: var(--spacing-md);
+        }
+
+        .carousel-stage {
+          height: 350px;
+        }
+
+        .carousel-3d {
+          width: 250px;
+          height: 250px;
+        }
+
+        .carousel-item {
+          width: 230px;
+          height: 230px;
+          margin-left: -115px;
+          margin-top: -115px;
+        }
+
+        .thumbnail {
+          width: 50px;
+          height: 50px;
+        }
+
+        .control-buttons-row .btn {
+          min-width: 100px;
+          font-size: 0.9rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .carousel-stage {
+          height: 300px;
+        }
+
+        .carousel-3d {
+          width: 200px;
+          height: 200px;
+        }
+
+        .carousel-item {
+          width: 180px;
+          height: 180px;
+          margin-left: -90px;
+          margin-top: -90px;
+        }
+
+        .thumbnail {
+          width: 45px;
+          height: 45px;
+        }
+
+        .control-buttons-row {
+          flex-direction: column;
+        }
+
+        .control-buttons-row .btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo-page">
+      <!-- 面包屑导航 -->
+      <nav class="breadcrumb">
+        <a href="../../index.html">首页</a>
+        <span class="separator">›</span>
+        <a href="../index.html">CSS Transform & Transition</a>
+        <span class="separator">›</span>
+        <a href="index.html">实战应用</a>
+        <span class="separator">›</span>
+        <span class="current">3D旋转相册</span>
+      </nav>
+
+      <!-- 标题和描述 -->
+      <h1>📦 3D旋转相册</h1>
+      <p class="subtitle">使用 rotateY 和 perspective 创建立体旋转相册，多张照片围成一圈，可以旋转查看每一张</p>
+
+      <!-- 知识点标签 -->
+      <div class="knowledge-tags">
+        <span class="tag-label">使用的知识点：</span>
+        <a class="knowledge-tag" href="../demos/rotateY.html">
+          <span class="tag-icon">🔄</span>
+          rotateY()
+        </a>
+        <a class="knowledge-tag" href="../demos/perspective.html">
+          <span class="tag-icon">👁️</span>
+          perspective
+        </a>
+        <a class="knowledge-tag" href="../demos/transform-style.html">
+          <span class="tag-icon">📦</span>
+          transform-style
+        </a>
+        <a class="knowledge-tag" href="../demos/timing.html">
+          <span class="tag-icon">📈</span>
+          transition-timing-function
+        </a>
+      </div>
+
+      <!-- 交互演示区 -->
+      <section class="interactive-demo">
+        <h2>交互演示</h2>
+        <p>点击缩略图或使用按钮切换照片，体验3D旋转相册效果</p>
+
+        <div class="demo-info">
+          <p>💡 提示：点击下方缩略图快速跳转到对应照片，或使用上一张/下一张按钮浏览</p>
+        </div>
+
+        <div class="carousel-container">
+          <!-- 3D相册舞台 -->
+          <div class="carousel-stage">
+            <div id="carousel-3d" class="carousel-3d"></div>
+          </div>
+
+          <!-- 控制面板 -->
+          <div class="carousel-controls">
+            <!-- 控制按钮 -->
+            <div class="control-buttons-row">
+              <button id="prev-btn" class="btn">← 上一张</button>
+              <button id="auto-play-btn" class="btn btn-secondary">自动播放</button>
+              <button id="next-btn" class="btn">下一张 →</button>
+            </div>
+
+            <!-- 缩略图导航 -->
+            <div id="thumbnail-nav" class="thumbnail-nav"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 实现步骤 -->
+      <section class="implementation">
+        <h2>实现步骤</h2>
+
+        <h3>步骤 1：HTML 结构</h3>
+        <p>创建3D相册的容器结构：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">HTML</span>
+          </div>
+          <pre class="code-block"><code><span class="comment">&lt;!-- 3D相册舞台 --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"carousel-stage"</span><span class="tag">&gt;</span>
+  <span class="comment">&lt;!-- 相册容器（可旋转） --&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"carousel-3d"</span><span class="tag">&gt;</span>
+    <span class="comment">&lt;!-- 照片项（通过 JavaScript 动态生成） --&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"carousel-item"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="string">"..."</span> <span class="attr">alt</span>=<span class="string">"照片"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"carousel-caption"</span><span class="tag">&gt;</span>照片标题<span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></code></pre>
+        </div>
+
+        <h3>步骤 2：设置 3D 空间</h3>
+        <p>在舞台上设置 perspective，在相册容器上设置 transform-style：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">CSS</span>
+          </div>
+          <pre class="code-block"><code><span class="comment">/* 3D相册舞台 - 提供透视 */</span>
+<span class="keyword">.carousel-stage</span> {
+  <span class="property">width</span>: <span class="value">600px</span>;
+  <span class="property">height</span>: <span class="value">400px</span>;
+  <span class="property">perspective</span>: <span class="value">1200px</span>;
+}
+
+<span class="comment">/* 相册容器 - 保持 3D 空间 */</span>
+<span class="keyword">.carousel-3d</span> {
+  <span class="property">width</span>: <span class="value">300px</span>;
+  <span class="property">height</span>: <span class="value">300px</span>;
+  <span class="property">transform-style</span>: <span class="value">preserve-3d</span>;
+  <span class="property">transition</span>: <span class="value">transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)</span>;
+}</code></pre>
+        </div>
+
+        <h3>步骤 3：计算照片位置</h3>
+        <p>根据照片数量，计算每张照片的旋转角度和位置：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">JavaScript</span>
+          </div>
+          <pre class="code-block"><code><span class="keyword">const</span> totalImages = <span class="value">8</span>;
+<span class="keyword">const</span> angleStep = <span class="value">360</span> / totalImages;  <span class="comment">// 每张照片间隔角度</span>
+<span class="keyword">const</span> radius = <span class="value">400</span>;  <span class="comment">// 相册半径</span>
+
+<span class="comment">// 为每张照片设置位置</span>
+images.<span class="value">forEach</span>((<span class="keyword">img</span>, <span class="keyword">index</span>) =&gt; {
+  <span class="keyword">const</span> angle = angleStep * index;
+  <span class="keyword">const</span> item = <span class="property">document</span>.<span class="value">createElement</span>(<span class="string">'div'</span>);
+  item.<span class="property">className</span> = <span class="string">'carousel-item'</span>;
+
+  <span class="comment">// 旋转并向外推</span>
+  item.<span class="property">style</span>.<span class="property">transform</span> = <span class="string">`rotateY(</span><span class="value">${angle}</span><span class="string">deg) translateZ(</span><span class="value">${radius}</span><span class="string">px)`</span>;
+});</code></pre>
+        </div>
+
+        <h3>步骤 4：实现旋转切换</h3>
+        <p>通过旋转整个相册容器来切换照片：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">JavaScript</span>
+          </div>
+          <pre class="code-block"><code><span class="keyword">let</span> currentIndex = <span class="value">0</span>;
+
+<span class="keyword">function</span> <span class="value">rotateTo</span>(<span class="keyword">index</span>) {
+  currentIndex = index;
+  <span class="keyword">const</span> angle = -angleStep * index;  <span class="comment">// 负数表示反向旋转</span>
+
+  carousel.<span class="property">style</span>.<span class="property">transform</span> = <span class="string">`rotateY(</span><span class="value">${angle}</span><span class="string">deg)`</span>;
+}
+
+<span class="comment">// 下一张</span>
+<span class="keyword">function</span> <span class="value">next</span>() {
+  currentIndex = (currentIndex + <span class="value">1</span>) % totalImages;
+  <span class="value">rotateTo</span>(currentIndex);
+}
+
+<span class="comment">// 上一张</span>
+<span class="keyword">function</span> <span class="value">prev</span>() {
+  currentIndex = (currentIndex - <span class="value">1</span> + totalImages) % totalImages;
+  <span class="value">rotateTo</span>(currentIndex);
+}</code></pre>
+        </div>
+
+        <h3>步骤 5：添加缩略图导航</h3>
+        <p>创建缩略图，点击可快速跳转到对应照片：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">JavaScript</span>
+          </div>
+          <pre class="code-block"><code><span class="comment">// 创建缩略图</span>
+images.<span class="value">forEach</span>((<span class="keyword">img</span>, <span class="keyword">index</span>) =&gt; {
+  <span class="keyword">const</span> thumb = <span class="property">document</span>.<span class="value">createElement</span>(<span class="string">'div'</span>);
+  thumb.<span class="property">className</span> = <span class="string">'thumbnail'</span>;
+  thumb.<span class="property">innerHTML</span> = <span class="string">`&lt;img src="</span><span class="value">${img.url}</span><span class="string">" alt="</span><span class="value">${img.title}</span><span class="string">"&gt;`</span>;
+
+  <span class="comment">// 点击跳转</span>
+  thumb.<span class="value">addEventListener</span>(<span class="string">'click'</span>, () =&gt; {
+    <span class="value">rotateTo</span>(index);
+  });
+
+  thumbnailNav.<span class="value">appendChild</span>(thumb);
+});</code></pre>
+        </div>
+      </section>
+
+      <!-- 关键要点 -->
+      <section class="key-points">
+        <h2>关键要点</h2>
+        <ul>
+          <li><strong>圆形排列</strong>：使用 rotateY 和 translateZ 将照片排列成圆形，每张照片间隔 360° ÷ 照片数量</li>
+          <li><strong>半径计算</strong>：translateZ 的值决定了圆的半径，值越大圆越大，照片之间距离越远</li>
+          <li><strong>反向旋转</strong>：旋转容器时使用负角度，这样照片会按正确方向切换到前面</li>
+          <li><strong>平滑过渡</strong>：使用 cubic-bezier 缓动函数创建更自然的旋转动画效果</li>
+          <li><strong>backface-visibility</strong>：隐藏照片背面，避免旋转到背面时看到镜像</li>
+          <li><strong>实际应用</strong>：适用于照片展示、产品轮播、团队成员介绍等需要多项展示的场景</li>
+          <li><strong>响应式设计</strong>：在移动端适当减小相册尺寸和半径，保证良好的显示效果</li>
+          <li><strong>用户体验</strong>：提供缩略图��航和按钮控制，让用户可以快速定位到想看的照片</li>
+        </ul>
+      </section>
+
+      <!-- 相关演示 -->
+      <section class="related-demos">
+        <h2>相关演示</h2>
+        <div class="scenario-links">
+          <a class="scenario-link" href="../demos/rotateY.html">
+            <span class="scenario-icon">🔄</span>
+            <div class="scenario-content">
+              <h4>rotateY() 基础</h4>
+              <p>了解 Y 轴旋转的基本用法 →</p>
+            </div>
+          </a>
+          <a class="scenario-link" href="../demos/perspective.html">
+            <span class="scenario-icon">👁️</span>
+            <div class="scenario-content">
+              <h4>perspective 透视</h4>
+              <p>理解 3D 透视的原理 →</p>
+            </div>
+          </a>
+          <a class="scenario-link" href="carousel.html">
+            <span class="scenario-icon">🎠</span>
+            <div class="scenario-content">
+              <h4>2D 轮播图</h4>
+              <p>对比 2D 和 3D 轮播的区别 →</p>
+            </div>
+          </a>
+          <a class="scenario-link" href="card-flip.html">
+            <span class="scenario-icon">🎴</span>
+            <div class="scenario-content">
+              <h4>卡片翻转</h4>
+              <p>探索另一种 3D 效果 →</p>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- 返回链接 -->
+      <div style="margin-top: 60px; text-align: center">
+        <a class="btn" href="index.html">← 返回实战应用列表</a>
+      </div>
+    </div>
+
+    <script type="module">
+      // 照片数据（使用 Unsplash 免费图片）
+      const images = [
+        {
+          url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop',
+          title: '山脉风光',
+        },
+        {
+          url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=400&fit=crop',
+          title: '自然美景',
+        },
+        {
+          url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400&h=400&fit=crop',
+          title: '森林小径',
+        },
+        {
+          url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=400&fit=crop',
+          title: '田野风光',
+        },
+        {
+          url: 'https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=400&h=400&fit=crop',
+          title: '湖光山色',
+        },
+        {
+          url: 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=400&h=400&fit=crop',
+          title: '日落时分',
+        },
+        {
+          url: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=400&h=400&fit=crop',
+          title: '海滨风景',
+        },
+        {
+          url: 'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=400&h=400&fit=crop',
+          title: '星空夜景',
+        },
+      ];
+
+      const carousel = document.getElementById('carousel-3d');
+      const thumbnailNav = document.getElementById('thumbnail-nav');
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+      const autoPlayBtn = document.getElementById('auto-play-btn');
+
+      let currentIndex = 0;
+      let isAutoPlaying = false;
+      let autoPlayInterval = null;
+
+      const totalImages = images.length;
+      const angleStep = 360 / totalImages;
+      const radius = 400;
+
+      // 初始化相册
+      function initCarousel() {
+        // 创建照片项
+        images.forEach((img, index) => {
+          const item = document.createElement('div');
+          item.className = 'carousel-item';
+          if (index === 0) {
+            item.classList.add('active');
+          }
+
+          const angle = angleStep * index;
+          item.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
+
+          item.innerHTML = `
+            <img src="${img.url}" alt="${img.title}" loading="lazy">
+            <div class="carousel-caption">${img.title}</div>
+          `;
+
+          carousel.appendChild(item);
+
+          // 创建缩略图
+          const thumb = document.createElement('div');
+          thumb.className = 'thumbnail';
+          if (index === 0) {
+            thumb.classList.add('active');
+          }
+          thumb.innerHTML = `<img src="${img.url}" alt="${img.title}">`;
+          thumb.addEventListener('click', () => rotateTo(index));
+          thumbnailNav.appendChild(thumb);
+        });
+      }
+
+      // 旋转到指定索引
+      function rotateTo(index) {
+        currentIndex = index;
+        const angle = -angleStep * index;
+        carousel.style.transform = `rotateY(${angle}deg)`;
+
+        // 更新活动状态
+        document.querySelectorAll('.carousel-item').forEach((item, i) => {
+          item.classList.toggle('active', i === index);
+        });
+        document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+          thumb.classList.toggle('active', i === index);
+        });
+      }
+
+      // 下一张
+      function next() {
+        currentIndex = (currentIndex + 1) % totalImages;
+        rotateTo(currentIndex);
+      }
+
+      // 上一张
+      function prev() {
+        currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+        rotateTo(currentIndex);
+      }
+
+      // 自动播放
+      function toggleAutoPlay() {
+        isAutoPlaying = !isAutoPlaying;
+
+        if (isAutoPlaying) {
+          autoPlayBtn.textContent = '停止播放';
+          autoPlayBtn.classList.remove('btn-secondary');
+          autoPlayBtn.classList.add('btn');
+          autoPlayInterval = setInterval(next, 3000);
+        } else {
+          autoPlayBtn.textContent = '自动播放';
+          autoPlayBtn.classList.remove('btn');
+          autoPlayBtn.classList.add('btn-secondary');
+          clearInterval(autoPlayInterval);
+        }
+      }
+
+      // 事件监听
+      prevBtn.addEventListener('click', prev);
+      nextBtn.addEventListener('click', next);
+      autoPlayBtn.addEventListener('click', toggleAutoPlay);
+
+      // 键盘控制
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+          prev();
+        }
+        if (e.key === 'ArrowRight') {
+          next();
+        }
+      });
+
+      // 初始化
+      initCarousel();
+    </script>
+  </body>
+</html>

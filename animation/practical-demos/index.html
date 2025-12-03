@@ -1,0 +1,193 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="CSS Transform & Transition 实战应用场景 - 8个真实世界的动画交互案例" />
+    <title>实战应用 - CSS Transform & Transition</title>
+    <link href="/src/styles/common.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+    <!-- 防止主题闪烁 -->
+    <script>
+      (function () {
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    </script>
+    <script type="module" src="/src/theme-sync.js"></script>
+  </head>
+  <body>
+    <div class="nav-page">
+      <header>
+        <a class="back-link" href="../index.html" style="display: inline-block; margin-bottom: 20px">
+          ← 返回动画模块
+        </a>
+        <h1>🎯 实战应用场景</h1>
+        <p class="page-description">
+          探索 CSS Transform & Transition
+          在真实项目中的应用。每个案例都展示了如何组合多个知识点，创建生产就绪的动画效果。
+        </p>
+      </header>
+
+      <!-- 导航交互 -->
+      <section class="category-section">
+        <h2 class="category-title">
+          <span class="category-icon">🧭</span>
+          导航交互
+        </h2>
+        <div class="demo-grid">
+          <a class="card practical-demo-card" href="sidebar-slide.html">
+            <div class="card-icon">🎯</div>
+            <h3>侧边栏滑入滑出</h3>
+            <p>响应式导航菜单的经典实现，使用 translateX 实现平滑的侧边栏动画效果</p>
+            <div class="card-meta">
+              <span class="difficulty">⭐ 简单</span>
+              <span class="knowledge-count">📚 3个知识点</span>
+            </div>
+          </a>
+
+          <a class="card practical-demo-card" href="dropdown-menu.html">
+            <div class="card-icon">📋</div>
+            <h3>下拉菜单</h3>
+            <p>垂直展开的菜单动画，使用 translateY 或 scaleY 实现流畅的下拉效果</p>
+            <div class="card-meta">
+              <span class="difficulty">⭐ 简单</span>
+              <span class="knowledge-count">📚 4个知识点</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- 卡片效果 -->
+      <section class="category-section">
+        <h2 class="category-title">
+          <span class="category-icon">🎴</span>
+          卡片效果
+        </h2>
+        <div class="demo-grid">
+          <a class="card practical-demo-card" href="card-flip.html">
+            <div class="card-icon">🔄</div>
+            <h3>卡片翻转</h3>
+            <p>3D 翻转效果，使用 rotateY、perspective 和 backface-visibility 创建逼真的卡片翻转</p>
+            <div class="card-meta">
+              <span class="difficulty">⭐⭐ 中等</span>
+              <span class="knowledge-count">📚 4个知识点</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- 轮播滚动 -->
+      <section class="category-section">
+        <h2 class="category-title">
+          <span class="category-icon">🎠</span>
+          轮播滚动
+        </h2>
+        <div class="demo-grid">
+          <a class="card practical-demo-card" href="carousel.html">
+            <div class="card-icon">🖼️</div>
+            <h3>轮播图</h3>
+            <p>图片轮播组件，使用 translateX 实现平滑的图片切换动画，支持手动和自动播放</p>
+            <div class="card-meta">
+              <span class="difficulty">⭐⭐ 中等</span>
+              <span class="knowledge-count">📚 3个知识点</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- 折叠展开 -->
+      <section class="category-section">
+        <h2 class="category-title">
+          <span class="category-icon">📂</span>
+          折叠展开
+        </h2>
+        <div class="demo-grid">
+          <a class="card practical-demo-card" href="accordion.html">
+            <div class="card-icon">📑</div>
+            <h3>手风琴</h3>
+            <p>可折叠的内容面板，使用 scaleY 或 max-height 实现平滑的展开收起效果</p>
+            <div class="card-meta">
+              <span class="difficulty">⭐⭐ 中等</span>
+              <span class="knowledge-count">📚 3个知识点</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- 3D效果 -->
+      <section class="category-section">
+        <h2 class="category-title">
+          <span class="category-icon">🎲</span>
+          3D 效果
+        </h2>
+        <div class="demo-grid">
+          <a class="card practical-demo-card" href="product-viewer.html">
+            <div class="card-icon">🎡</div>
+            <h3>3D 旋转相册</h3>
+            <p>立体旋转相册效果，多张照片围成一圈，使用 rotateY 和 perspective 创建沉浸式浏览体验</p>
+            <div class="card-meta">
+              <span class="difficulty">⭐⭐ 中等</span>
+              <span class="knowledge-count">📚 4个知识点</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- 加载动画 -->
+      <section class="category-section">
+        <h2 class="category-title">
+          <span class="category-icon">⏳</span>
+          加载动画
+        </h2>
+        <div class="demo-grid">
+          <a class="card practical-demo-card" href="loading-spinner.html">
+            <div class="card-icon">⚡</div>
+            <h3>加载动画</h3>
+            <p>多种加载指示器样式，使用 @keyframes 和 rotate/scale/opacity 创建动态加载效果</p>
+            <div class="card-meta">
+              <span class="difficulty">⭐ 简单</span>
+              <span class="knowledge-count">📚 4个知识点</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- 列表动画 -->
+      <section class="category-section">
+        <h2 class="category-title">
+          <span class="category-icon">📝</span>
+          列表动画
+        </h2>
+        <div class="demo-grid">
+          <a class="card practical-demo-card" href="staggered-list.html">
+            <div class="card-icon">🎬</div>
+            <h3>列表交错动画</h3>
+            <p>列表项依次出现效果，使用递增的 transition-delay 创建优雅的交错动画</p>
+            <div class="card-meta">
+              <span class="difficulty">⭐⭐ 中等</span>
+              <span class="knowledge-count">📚 3个知识点</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <footer
+        style="text-align: center; margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--border-color)"
+      >
+        <p style="color: var(--text-secondary); font-size: 0.95rem">💡 每个案例都包含完整的代码示例和实现说明</p>
+        <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 10px">🎯 点击卡片开始学习实战应用</p>
+      </footer>
+    </div>
+  </body>
+</html>

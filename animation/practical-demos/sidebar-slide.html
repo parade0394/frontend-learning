@@ -1,0 +1,450 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="侧边栏滑入滑出效果 - 使用 translateX 实现响应式导航菜单" />
+    <title>侧边栏滑入滑出 - CSS Transform & Transition 实战应用</title>
+    <link href="/src/styles/common.css" rel="stylesheet" />
+    <link href="../styles.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+    <!-- 防止主题闪烁 -->
+    <script>
+      (function () {
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    </script>
+    <script type="module" src="/src/theme-sync.js"></script>
+    <style>
+      /* 演示专用样式 */
+      .demo-sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 280px;
+        height: 100%;
+        background: var(--card-bg);
+        border-right: 2px solid var(--border-color);
+        box-shadow: var(--shadow-lg);
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1000;
+        overflow-y: auto;
+      }
+
+      .demo-sidebar.open {
+        transform: translateX(0);
+      }
+
+      .demo-sidebar-header {
+        padding: var(--spacing-lg);
+        border-bottom: 2px solid var(--border-color);
+        background: var(--primary-light);
+      }
+
+      .demo-sidebar-header h3 {
+        margin: 0 0 var(--spacing-xs) 0;
+        color: var(--primary);
+        font-size: 1.3rem;
+      }
+
+      .demo-sidebar-header p {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+      }
+
+      .demo-sidebar-nav {
+        padding: var(--spacing-md);
+      }
+
+      .demo-nav-item {
+        display: block;
+        padding: var(--spacing-sm) var(--spacing-md);
+        margin-bottom: var(--spacing-xs);
+        color: var(--text-primary);
+        text-decoration: none;
+        border-radius: var(--radius-md);
+        transition: all var(--transition-fast);
+        font-weight: 500;
+      }
+
+      .demo-nav-item:hover {
+        background: var(--primary-light);
+        color: var(--primary);
+        transform: translateX(5px);
+      }
+
+      .demo-toggle-btn {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        width: 50px;
+        height: 50px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        box-shadow: var(--shadow-md);
+        transition: all var(--transition-base);
+        z-index: 1001;
+      }
+
+      .demo-toggle-btn:hover {
+        background: var(--primary-dark);
+        transform: scale(1.05);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .demo-toggle-btn:active {
+        transform: scale(0.95);
+      }
+
+      .demo-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transition: all var(--transition-base);
+        z-index: 999;
+      }
+
+      .demo-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .demo-content-area {
+        margin-left: 0;
+        padding: 100px var(--spacing-lg) var(--spacing-lg);
+        transition: margin-left var(--transition-base);
+      }
+
+      /* 移动端适配 */
+      @media (max-width: 768px) {
+        .demo-sidebar {
+          width: 85%;
+          max-width: 320px;
+        }
+
+        .demo-toggle-btn {
+          top: 15px;
+          left: 15px;
+          width: 45px;
+          height: 45px;
+          font-size: 1.3rem;
+        }
+
+        .demo-content-area {
+          padding: 80px var(--spacing-md) var(--spacing-md);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .demo-sidebar {
+          width: 90%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo-page">
+      <!-- 面包屑导航 -->
+      <nav class="breadcrumb">
+        <a href="../../index.html">首页</a>
+        <span class="separator">›</span>
+        <a href="../index.html">CSS Transform & Transition</a>
+        <span class="separator">›</span>
+        <a href="index.html">实战应用</a>
+        <span class="separator">›</span>
+        <span class="current">侧边栏滑入滑出</span>
+      </nav>
+
+      <!-- 标题和描述 -->
+      <h1>🎯 侧边栏滑入滑出</h1>
+      <p class="subtitle">响应式导航菜单的经典实现，使用 translateX 实现平滑的侧边栏动画效果</p>
+
+      <!-- 知识点标签 -->
+      <div class="knowledge-tags">
+        <span class="tag-label">使用的知识点：</span>
+        <a class="knowledge-tag" href="../demos/translateX.html">
+          <span class="tag-icon">→</span>
+          translateX()
+        </a>
+        <a class="knowledge-tag" href="../demos/duration.html">
+          <span class="tag-icon">⏰</span>
+          transition-duration
+        </a>
+        <a class="knowledge-tag" href="../demos/timing.html">
+          <span class="tag-icon">📈</span>
+          transition-timing-function
+        </a>
+      </div>
+
+      <!-- 交互演示区 -->
+      <section class="interactive-demo">
+        <h2>交互演示</h2>
+        <p>点击左上角的按钮，体验侧边栏滑入滑出效果：</p>
+
+        <div class="demo-info">
+          <p>💡 提示：点击左上角的菜单按钮或遮罩层来切换侧边栏</p>
+        </div>
+
+        <!-- 演示侧边栏 -->
+        <aside id="demo-sidebar" class="demo-sidebar">
+          <div class="demo-sidebar-header">
+            <h3>导航菜单</h3>
+            <p>这是一个响应式侧边栏</p>
+          </div>
+          <nav class="demo-sidebar-nav">
+            <a class="demo-nav-item" href="#home">🏠 首页</a>
+            <a class="demo-nav-item" href="#products">📦 产品</a>
+            <a class="demo-nav-item" href="#services">⚙️ 服务</a>
+            <a class="demo-nav-item" href="#about">ℹ️ 关于我们</a>
+            <a class="demo-nav-item" href="#contact">📧 联系方式</a>
+            <a class="demo-nav-item" href="#blog">📝 博客</a>
+            <a class="demo-nav-item" href="#support">💬 支持</a>
+          </nav>
+        </aside>
+
+        <!-- 切换按钮 -->
+        <button id="toggle-btn" class="demo-toggle-btn" aria-label="切换侧边栏">☰</button>
+
+        <!-- 遮罩层 -->
+        <div id="demo-overlay" class="demo-overlay"></div>
+
+        <!-- 内容区域 -->
+        <div class="demo-content-area">
+          <div class="info-box">
+            <p><strong>演示说明：</strong></p>
+            <ul style="margin: 10px 0 0 20px; line-height: 1.8">
+              <li>侧边栏默认隐藏在屏幕左侧外</li>
+              <li>点击按钮时，侧边栏从左侧滑入</li>
+              <li>再次点击按钮或遮罩层，侧边栏滑出</li>
+              <li>使用 cubic-bezier 缓动函数实现流畅动画</li>
+              <li>移动端自动适配宽度</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 实现步骤 -->
+      <section class="implementation">
+        <h2>实现步骤</h2>
+
+        <h3>步骤 1：HTML 结构</h3>
+        <p>创建侧边栏、切换按钮和遮罩层的基本结构：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">HTML</span>
+          </div>
+          <pre class="code-block"><code><span class="comment">&lt;!-- 侧边栏 --&gt;</span>
+<span class="tag">&lt;aside</span> <span class="attr">id</span>=<span class="string">"sidebar"</span> <span class="attr">class</span>=<span class="string">"sidebar"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"sidebar-header"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;h3&gt;</span>导航菜单<span class="tag">&lt;/h3&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;nav</span> <span class="attr">class</span>=<span class="string">"sidebar-nav"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="string">"#"</span><span class="tag">&gt;</span>首页<span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="string">"#"</span><span class="tag">&gt;</span>产品<span class="tag">&lt;/a&gt;</span>
+    <span class="comment">&lt;!-- 更多导航项 --&gt;</span>
+  <span class="tag">&lt;/nav&gt;</span>
+<span class="tag">&lt;/aside&gt;</span>
+
+<span class="comment">&lt;!-- 切换按钮 --&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">id</span>=<span class="string">"toggle-btn"</span> <span class="attr">class</span>=<span class="string">"toggle-btn"</span><span class="tag">&gt;</span>☰<span class="tag">&lt;/button&gt;</span>
+
+<span class="comment">&lt;!-- 遮罩层 --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">id</span>=<span class="string">"overlay"</span> <span class="attr">class</span>=<span class="string">"overlay"</span><span class="tag">&gt;&lt;/div&gt;</span></code></pre>
+        </div>
+
+        <h3>步骤 2：CSS 样式</h3>
+        <p>使用 translateX 将侧边栏初始位置设置在屏幕外，并添加过渡效果：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">CSS</span>
+          </div>
+          <pre class="code-block"><code><span class="keyword">.sidebar</span> {
+  <span class="property">position</span>: <span class="value">fixed</span>;
+  <span class="property">left</span>: <span class="value">0</span>;
+  <span class="property">top</span>: <span class="value">0</span>;
+  <span class="property">width</span>: <span class="value">280px</span>;
+  <span class="property">height</span>: <span class="value">100%</span>;
+  <span class="property">background</span>: <span class="value">white</span>;
+  <span class="property">box-shadow</span>: <span class="value">0 0 20px rgba(0, 0, 0, 0.1)</span>;
+
+  <span class="comment">/* 关键：初始位置在屏幕外 */</span>
+  <span class="property">transform</span>: <span class="value">translateX(-100%)</span>;
+
+  <span class="comment">/* 过渡效果 */</span>
+  <span class="property">transition</span>: <span class="value">transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)</span>;
+  <span class="property">z-index</span>: <span class="value">1000</span>;
+}
+
+<span class="comment">/* 打开状态 */</span>
+<span class="keyword">.sidebar.open</span> {
+  <span class="property">transform</span>: <span class="value">translateX(0)</span>;
+}
+
+<span class="comment">/* 遮罩层 */</span>
+<span class="keyword">.overlay</span> {
+  <span class="property">position</span>: <span class="value">fixed</span>;
+  <span class="property">top</span>: <span class="value">0</span>;
+  <span class="property">left</span>: <span class="value">0</span>;
+  <span class="property">width</span>: <span class="value">100%</span>;
+  <span class="property">height</span>: <span class="value">100%</span>;
+  <span class="property">background</span>: <span class="value">rgba(0, 0, 0, 0.5)</span>;
+  <span class="property">opacity</span>: <span class="value">0</span>;
+  <span class="property">visibility</span>: <span class="value">hidden</span>;
+  <span class="property">transition</span>: <span class="value">all 0.3s ease</span>;
+  <span class="property">z-index</span>: <span class="value">999</span>;
+}
+
+<span class="keyword">.overlay.active</span> {
+  <span class="property">opacity</span>: <span class="value">1</span>;
+  <span class="property">visibility</span>: <span class="value">visible</span>;
+}</code></pre>
+        </div>
+
+        <h3>步骤 3：JavaScript 交互</h3>
+        <p>添加点击事件来切换侧边栏的打开/关闭状态：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">JavaScript</span>
+          </div>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">const</span> sidebar = <span class="property">document</span>.<span class="value">getElementById</span>(<span class="string">'sidebar'</span>);
+<span class="keyword">const</span> toggleBtn = <span class="property">document</span>.<span class="value">getElementById</span>(<span class="string">'toggle-btn'</span>);
+<span class="keyword">const</span> overlay = <span class="property">document</span>.<span class="value">getElementById</span>(<span class="string">'overlay'</span>);
+
+<span class="comment">// 切换侧边栏</span>
+<span class="keyword">function</span> <span class="value">toggleSidebar</span>() {
+  sidebar.<span class="property">classList</span>.<span class="value">toggle</span>(<span class="string">'open'</span>);
+  overlay.<span class="property">classList</span>.<span class="value">toggle</span>(<span class="string">'active'</span>);
+}
+
+<span class="comment">// 按钮点击事件</span>
+toggleBtn.<span class="value">addEventListener</span>(<span class="string">'click'</span>, toggleSidebar);
+
+<span class="comment">// 点击遮罩层关闭</span>
+overlay.<span class="value">addEventListener</span>(<span class="string">'click'</span>, toggleSidebar);</code></pre>
+        </div>
+
+        <h3>步骤 4：移动端适配</h3>
+        <p>使用媒体查询优化移动端体验：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">CSS</span>
+          </div>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">@media</span> (<span class="property">max-width</span>: <span class="value">768px</span>) {
+  <span class="keyword">.sidebar</span> {
+    <span class="property">width</span>: <span class="value">85%</span>;
+    <span class="property">max-width</span>: <span class="value">320px</span>;
+  }
+
+  <span class="keyword">.toggle-btn</span> {
+    <span class="property">width</span>: <span class="value">45px</span>;
+    <span class="property">height</span>: <span class="value">45px</span>;
+  }
+}</code></pre>
+        </div>
+      </section>
+
+      <!-- 关键要点 -->
+      <section class="key-points">
+        <h2>关键要点</h2>
+        <ul>
+          <li><strong>使用 translateX(-100%)</strong> 将侧边栏隐藏在屏幕左侧外，避免使用 left 属性以获得更好的性能</li>
+          <li><strong>cubic-bezier(0.4, 0, 0.2, 1)</strong> 缓动函数提供流畅的加速和减速效果</li>
+          <li><strong>transition-duration: 0.3s</strong> 是侧边栏动画的最佳时长，既不会太快也不会太慢</li>
+          <li><strong>遮罩层</strong>提供更好的用户体验，点击遮罩可关闭侧边栏</li>
+          <li><strong>z-index 层级管理</strong>确保侧边栏在遮罩层之上，遮罩层在内容之上</li>
+          <li><strong>移动端适配</strong>使用百分比宽度和 max-width 确保在小屏幕上的良好显示</li>
+          <li><strong>性能优化</strong>transform 属性使用 GPU 加速，比修改 left/right 性能更好</li>
+        </ul>
+      </section>
+
+      <!-- 相关演示 -->
+      <section class="related-demos">
+        <h2>相关演示</h2>
+        <div class="scenario-links">
+          <a class="scenario-link" href="../demos/translateX.html">
+            <span class="scenario-icon">→</span>
+            <div class="scenario-content">
+              <h4>translateX() 基础</h4>
+              <p>了解 X 轴平移的基本用法 →</p>
+            </div>
+          </a>
+          <a class="scenario-link" href="../demos/timing.html">
+            <span class="scenario-icon">📈</span>
+            <div class="scenario-content">
+              <h4>缓动函数</h4>
+              <p>探索不同的过渡效果 →</p>
+            </div>
+          </a>
+          <a class="scenario-link" href="dropdown-menu.html">
+            <span class="scenario-icon">📋</span>
+            <div class="scenario-content">
+              <h4>下拉菜单</h4>
+              <p>查看垂直方向的类似效果 →</p>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- 返回链接 -->
+      <div style="margin-top: 60px; text-align: center">
+        <a class="btn" href="index.html">← 返回实战应用列表</a>
+      </div>
+    </div>
+
+    <script type="module">
+      // 演示侧边栏交互
+      const sidebar = document.getElementById('demo-sidebar');
+      const toggleBtn = document.getElementById('toggle-btn');
+      const overlay = document.getElementById('demo-overlay');
+
+      function toggleSidebar() {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('active');
+      }
+
+      toggleBtn.addEventListener('click', toggleSidebar);
+      overlay.addEventListener('click', toggleSidebar);
+
+      // 阻止导航链接的默认行为（仅用于演示）
+      document.querySelectorAll('.demo-nav-item').forEach((link) => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          // 可以在这里添加页面切换逻辑
+        });
+      });
+    </script>
+  </body>
+</html>

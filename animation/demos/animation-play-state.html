@@ -316,13 +316,28 @@
           </div>
 
           <div class="info-box">
-            <p><strong>⚡ 实际应用场景：</strong></p>
+            <p><strong>💡 重要说明：</strong></p>
             <ul>
-              <li><strong>加载动画：</strong>数据加载完成后暂停旋转动画</li>
-              <li><strong>轮播图：</strong>鼠标悬停时暂停自动播放</li>
-              <li><strong>游戏：</strong>暂停游戏时停止所有动画</li>
-              <li><strong>无障碍：</strong>为有前庭障碍的用户提供暂停动画的选项</li>
+              <li><strong>暂停位置：</strong>动画会在当前位置暂停，不会重置</li>
+              <li><strong>多个动画：</strong>如果元素有多个动画，会同时暂停/播放所有动画</li>
+              <li>
+                <strong>常见用法：</strong>悬停暂停 <code>:hover { animation-play-state: paused; }</code>，或通过
+                JavaScript 添加/移除类名控制
+              </li>
             </ul>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>常见应用场景</h2>
+          <div class="scenario-links">
+            <a class="scenario-link" href="../practical-demos/loading-spinner.html">
+              <span class="scenario-icon">⏳</span>
+              <div class="scenario-content">
+                <h4>加载动画</h4>
+                <p>查看完整实现 →</p>
+              </div>
+            </a>
           </div>
         </section>
 

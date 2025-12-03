@@ -1,0 +1,483 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>列表交错动画 - CSS Transform & Transition 实战应用</title>
+    <link href="../../src/styles/common.css" rel="stylesheet" />
+    <link href="../styles.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+    <script type="module" src="/src/theme-sync.js"></script>
+    <style>
+      /* ========================================
+         列表交错动画样式
+         ======================================== */
+
+      .list-demo-container {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-lg);
+      }
+
+      /* 列表容器 */
+      .staggered-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+      }
+
+      /* 列表项基础样式 */
+      .list-item {
+        padding: var(--spacing-md) var(--spacing-lg);
+        background: var(--card-bg);
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+        box-shadow: var(--shadow-sm);
+
+        /* 初始状态：隐藏 */
+        opacity: 0;
+        transform: translateY(20px);
+
+        /* 过渡效果 */
+        transition:
+          opacity 0.6s ease-out,
+          transform 0.6s ease-out;
+      }
+
+      /* 显示状态 */
+      .list-item.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* 列表项图标 */
+      .list-item-icon {
+        width: 50px;
+        height: 50px;
+        background: var(--primary-light);
+        border: 2px solid var(--primary);
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+      }
+
+      /* 列表项内容 */
+      .list-item-content {
+        flex: 1;
+      }
+
+      .list-item-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 0 0 4px 0;
+      }
+
+      .list-item-desc {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        margin: 0;
+        line-height: 1.5;
+      }
+
+      /* 列表项序号 */
+      .list-item-number {
+        width: 32px;
+        height: 32px;
+        background: var(--primary);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+      }
+
+      /* 延迟值示例 */
+      .delay-example {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--spacing-md);
+        margin: var(--spacing-lg) 0;
+      }
+
+      .delay-card {
+        padding: var(--spacing-md);
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-md);
+        text-align: center;
+      }
+
+      .delay-card-title {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-bottom: var(--spacing-xs);
+        font-weight: 600;
+      }
+
+      .delay-card-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary);
+        font-family: var(--font-mono);
+      }
+
+      /* 响应式调整 */
+      @media (max-width: 768px) {
+        .list-item {
+          padding: var(--spacing-sm) var(--spacing-md);
+        }
+
+        .list-item-icon {
+          width: 40px;
+          height: 40px;
+          font-size: 1.2rem;
+        }
+
+        .list-item-title {
+          font-size: 1rem;
+        }
+
+        .list-item-desc {
+          font-size: 0.85rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .list-item {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .delay-example {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="demo-page">
+        <nav class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="separator">›</span>
+          <a href="../index.html">CSS Transform & Transition</a>
+          <span class="separator">›</span>
+          <a href="index.html">实战应用</a>
+          <span class="separator">›</span>
+          <span class="current">列表交错动画</span>
+        </nav>
+
+        <h1>📝 列表交错动画</h1>
+        <p class="subtitle">使用递增的 transition-delay 创建列表项依次出现的优雅效果</p>
+
+        <div class="knowledge-tags">
+          <span class="tag-label">使用的知识点：</span>
+          <a class="knowledge-tag" href="../demos/delay.html">
+            <span class="tag-icon">⏱️</span>
+            transition-delay
+          </a>
+          <a class="knowledge-tag" href="../demos/translateY.html">
+            <span class="tag-icon">↕️</span>
+            translateY
+          </a>
+          <a class="knowledge-tag" href="../demos/duration.html">
+            <span class="tag-icon">⏰</span>
+            transition-duration
+          </a>
+          <a class="knowledge-tag" href="../demos/timing.html">
+            <span class="tag-icon">📈</span>
+            transition-timing-function
+          </a>
+        </div>
+
+        <section class="interactive-demo">
+          <h2>交互演示</h2>
+
+          <div class="demo-controls">
+            <button id="playBtn" class="btn-primary">▶️ 播放动画</button>
+            <button id="resetBtn" class="btn-secondary">🔄 重置</button>
+          </div>
+
+          <div class="demo-container">
+            <div class="list-demo-container">
+              <ul id="list1" class="staggered-list">
+                <li class="list-item" data-delay="0">
+                  <div class="list-item-icon">🎯</div>
+                  <div class="list-item-content">
+                    <h3 class="list-item-title">第一步：规划项目</h3>
+                    <p class="list-item-desc">明确项目目标和需求，制定详细的开发计划</p>
+                  </div>
+                  <div class="list-item-number">1</div>
+                </li>
+                <li class="list-item" data-delay="100">
+                  <div class="list-item-icon">🎨</div>
+                  <div class="list-item-content">
+                    <h3 class="list-item-title">第二步：设计界面</h3>
+                    <p class="list-item-desc">创建用户友好的界面设计和交互原型</p>
+                  </div>
+                  <div class="list-item-number">2</div>
+                </li>
+                <li class="list-item" data-delay="200">
+                  <div class="list-item-icon">💻</div>
+                  <div class="list-item-content">
+                    <h3 class="list-item-title">第三步：编写代码</h3>
+                    <p class="list-item-desc">使用最佳实践实现功能，确保代码质量</p>
+                  </div>
+                  <div class="list-item-number">3</div>
+                </li>
+                <li class="list-item" data-delay="300">
+                  <div class="list-item-icon">🧪</div>
+                  <div class="list-item-content">
+                    <h3 class="list-item-title">第四步：测试验证</h3>
+                    <p class="list-item-desc">进行全面测试，修复发现的问题和缺陷</p>
+                  </div>
+                  <div class="list-item-number">4</div>
+                </li>
+                <li class="list-item" data-delay="400">
+                  <div class="list-item-icon">🚀</div>
+                  <div class="list-item-content">
+                    <h3 class="list-item-title">第五步：部署上线</h3>
+                    <p class="list-item-desc">将项目部署到生产环境，开始正式运营</p>
+                  </div>
+                  <div class="list-item-number">5</div>
+                </li>
+                <li class="list-item" data-delay="500">
+                  <div class="list-item-icon">📊</div>
+                  <div class="list-item-content">
+                    <h3 class="list-item-title">第六步：监控优化</h3>
+                    <p class="list-item-desc">持续监控性能指标，不断优化用户体验</p>
+                  </div>
+                  <div class="list-item-number">6</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="demo-info">
+            <p>💡 提示：点击"播放动画"查看列表项依次出现的效果</p>
+          </div>
+        </section>
+
+        <section class="implementation">
+          <h2>实现步骤</h2>
+
+          <div class="step">
+            <h3>步骤 1：HTML 结构</h3>
+            <p>创建列表结构，每个列表项包含图标、内容和序号：</p>
+            <pre
+              class="code-block"
+            ><code><span class="tag">&lt;ul</span> <span class="attr">class</span>=<span class="string">"staggered-list"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;li</span> <span class="attr">class</span>=<span class="string">"list-item"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"list-item-icon"</span><span class="tag">&gt;</span>🎯<span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"list-item-content"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;h3</span> <span class="attr">class</span>=<span class="string">"list-item-title"</span><span class="tag">&gt;</span>标题<span class="tag">&lt;/h3&gt;</span>
+      <span class="tag">&lt;p</span> <span class="attr">class</span>=<span class="string">"list-item-desc"</span><span class="tag">&gt;</span>描述<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"list-item-number"</span><span class="tag">&gt;</span>1<span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/li&gt;</span>
+  <span class="comment">&lt;!-- 更多列表项... --&gt;</span>
+<span class="tag">&lt;/ul&gt;</span></code></pre>
+          </div>
+
+          <div class="step">
+            <h3>步骤 2：设置初始状态</h3>
+            <p>列表项初始状态为隐藏（透明且向下偏移）：</p>
+            <pre class="code-block"><code><span class="keyword">.list-item</span> {
+  <span class="comment">/* 初始状态：隐藏 */</span>
+  <span class="property">opacity</span>: <span class="value">0</span>;
+  <span class="property">transform</span>: <span class="value">translateY(20px)</span>;
+
+  <span class="comment">/* 过渡效果 */</span>
+  <span class="property">transition</span>:
+    <span class="value">opacity 0.6s ease-out</span>,
+    <span class="value">transform 0.6s ease-out</span>;
+}</code></pre>
+          </div>
+
+          <div class="step">
+            <h3>步骤 3：定义显示状态</h3>
+            <p>添加 .show 类使列表项显示：</p>
+            <pre class="code-block"><code><span class="keyword">.list-item.show</span> {
+  <span class="property">opacity</span>: <span class="value">1</span>;
+  <span class="property">transform</span>: <span class="value">translateY(0)</span>;
+}</code></pre>
+          </div>
+
+          <div class="step">
+            <h3>步骤 4：使用 JavaScript 添加递增延迟</h3>
+            <p>通过 JavaScript 为每个列表项设置递增的 transition-delay：</p>
+            <pre class="code-block"><code><span class="comment">// 获取所有列表项</span>
+<span class="keyword">const</span> items = document.querySelectorAll(<span class="string">'.list-item'</span>);
+
+<span class="comment">// 播放动画</span>
+<span class="keyword">function</span> playAnimation() {
+  items.forEach((item, index) => {
+    <span class="comment">// 为每个项设置递增的延迟（100ms 间隔）</span>
+    <span class="keyword">const</span> delay = index * <span class="value">100</span>;
+    item.style.transitionDelay = <span class="string">`</span>${delay}<span class="string">ms`</span>;
+
+    <span class="comment">// 添加 show 类触发动画</span>
+    setTimeout(() => {
+      item.classList.add(<span class="string">'show'</span>);
+    }, <span class="value">50</span>);
+  });
+}
+
+<span class="comment">// 重置动画</span>
+<span class="keyword">function</span> resetAnimation() {
+  items.forEach(item => {
+    item.classList.remove(<span class="string">'show'</span>);
+    item.style.transitionDelay = <span class="string">'0ms'</span>;
+  });
+}</code></pre>
+          </div>
+
+          <div class="step">
+            <h3>步骤 5：延迟值示例</h3>
+            <p>每个列表项的延迟值递增，创建交错效果：</p>
+            <div class="delay-example">
+              <div class="delay-card">
+                <div class="delay-card-title">第 1 项</div>
+                <div class="delay-card-value">0ms</div>
+              </div>
+              <div class="delay-card">
+                <div class="delay-card-title">第 2 项</div>
+                <div class="delay-card-value">100ms</div>
+              </div>
+              <div class="delay-card">
+                <div class="delay-card-title">第 3 项</div>
+                <div class="delay-card-value">200ms</div>
+              </div>
+              <div class="delay-card">
+                <div class="delay-card-title">第 4 项</div>
+                <div class="delay-card-value">300ms</div>
+              </div>
+              <div class="delay-card">
+                <div class="delay-card-title">第 5 项</div>
+                <div class="delay-card-value">400ms</div>
+              </div>
+              <div class="delay-card">
+                <div class="delay-card-title">第 6 项</div>
+                <div class="delay-card-value">500ms</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="key-points">
+          <h2>关键要点</h2>
+          <ul>
+            <li><strong>transition-delay：</strong>通过递增的延迟值创建交错效果，每个元素依次出现</li>
+            <li><strong>组合变换：</strong>同时使用 translateY 和 opacity 创建平滑的淡入上升效果</li>
+            <li><strong>延迟间隔：</strong>通常使用 50-150ms 的间隔，太短会显得仓促，太长会显得拖沓</li>
+            <li><strong>timing-function：</strong>使用 ease-out 让动画开始快、结束慢，更自然</li>
+            <li><strong>初始状态：</strong>确保元素初始状态为隐藏（opacity: 0），避免闪烁</li>
+            <li><strong>性能优化：</strong>使用 transform 和 opacity 属性，它们由 GPU 加速</li>
+            <li><strong>可访问性：</strong>考虑使用 prefers-reduced-motion 为需要的用户禁用动画</li>
+            <li><strong>应用场景：</strong>适用于列表加载、菜单展开、卡片网格等场景</li>
+          </ul>
+        </section>
+
+        <section class="related-demos">
+          <h2>相关演示</h2>
+          <div class="scenario-links">
+            <a class="scenario-link" href="../demos/delay.html">
+              <span class="scenario-icon">⏱️</span>
+              <div class="scenario-content">
+                <h4>transition-delay 基础</h4>
+                <p>学习过渡延迟的基础知识 →</p>
+              </div>
+            </a>
+            <a class="scenario-link" href="../demos/translateY.html">
+              <span class="scenario-icon">↕️</span>
+              <div class="scenario-content">
+                <h4>translateY 垂直移动</h4>
+                <p>学习垂直方向的位移变换 →</p>
+              </div>
+            </a>
+            <a class="scenario-link" href="../demos/timing.html">
+              <span class="scenario-icon">📈</span>
+              <div class="scenario-content">
+                <h4>timing-function 缓动函数</h4>
+                <p>了解不同的动画缓动效果 →</p>
+              </div>
+            </a>
+            <a class="scenario-link" href="loading-spinner.html">
+              <span class="scenario-icon">⏳</span>
+              <div class="scenario-content">
+                <h4>加载动画</h4>
+                <p>查看更多延迟动画应用 →</p>
+              </div>
+            </a>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script type="module">
+      const playBtn = document.getElementById('playBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const items = document.querySelectorAll('.list-item');
+
+      // 播放动画
+      function playAnimation() {
+        // 先重置
+        resetAnimation();
+
+        // 延迟一点再开始，确保重置完成
+        setTimeout(() => {
+          items.forEach((item, index) => {
+            const delay = parseInt(item.dataset.delay) || index * 100;
+            item.style.transitionDelay = `${delay}ms`;
+
+            // 添加 show 类触发动画
+            setTimeout(() => {
+              item.classList.add('show');
+            }, 50);
+          });
+        }, 50);
+
+        // 更新按钮状态
+        playBtn.disabled = true;
+        playBtn.textContent = '⏳ 播放中...';
+
+        // 动画完成后恢复按钮
+        const totalDuration = (items.length - 1) * 100 + 600 + 100; // 最后一项延迟 + 动画时长 + 缓冲
+        setTimeout(() => {
+          playBtn.disabled = false;
+          playBtn.textContent = '▶️ 播放动画';
+        }, totalDuration);
+      }
+
+      // 重置动画
+      function resetAnimation() {
+        items.forEach((item) => {
+          item.classList.remove('show');
+          item.style.transitionDelay = '0ms';
+        });
+      }
+
+      // 事件监听
+      playBtn.addEventListener('click', playAnimation);
+      resetBtn.addEventListener('click', resetAnimation);
+
+      // 页面加载时自动播放一次
+      window.addEventListener('load', () => {
+        setTimeout(playAnimation, 500);
+      });
+    </script>
+  </body>
+</html>

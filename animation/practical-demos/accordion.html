@@ -1,0 +1,599 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="手风琴效果 - 使用 max-height 和 scaleY 实现可折叠的内容面板" />
+    <title>手风琴效果 - CSS Transform & Transition 实战应用</title>
+    <link href="/src/styles/common.css" rel="stylesheet" />
+    <link href="../styles.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+    <!-- 防止主题闪烁 -->
+    <script>
+      (function () {
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    </script>
+    <script type="module" src="/src/theme-sync.js"></script>
+    <style>
+      /* 演示专用样式 */
+      .accordion-container {
+        max-width: 700px;
+        margin: 0 auto;
+      }
+
+      .accordion-item {
+        margin-bottom: var(--spacing-sm);
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        background: var(--card-bg);
+        transition: all var(--transition-base);
+      }
+
+      .accordion-item:hover {
+        border-color: var(--primary);
+        box-shadow: var(--shadow-md);
+      }
+
+      .accordion-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--spacing-md) var(--spacing-lg);
+        background: var(--bg-secondary);
+        cursor: pointer;
+        user-select: none;
+        transition: all var(--transition-fast);
+      }
+
+      .accordion-header:hover {
+        background: var(--primary-light);
+      }
+
+      .accordion-header.active {
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+
+      .accordion-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+      }
+
+      .accordion-icon {
+        font-size: 1.3rem;
+        flex-shrink: 0;
+      }
+
+      .accordion-toggle {
+        font-size: 1.5rem;
+        color: var(--text-secondary);
+        transition: transform var(--transition-base);
+        flex-shrink: 0;
+      }
+
+      .accordion-header.active .accordion-toggle {
+        transform: rotate(180deg);
+        color: var(--primary);
+      }
+
+      .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .accordion-content.open {
+        max-height: 500px;
+      }
+
+      .accordion-body {
+        padding: var(--spacing-lg);
+        color: var(--text-primary);
+        line-height: 1.8;
+      }
+
+      .accordion-body p {
+        margin: 0 0 var(--spacing-sm) 0;
+      }
+
+      .accordion-body p:last-child {
+        margin-bottom: 0;
+      }
+
+      .accordion-body ul {
+        margin: var(--spacing-sm) 0;
+        padding-left: var(--spacing-lg);
+      }
+
+      .accordion-body li {
+        margin-bottom: var(--spacing-xs);
+      }
+
+      /* 模式切换按钮 */
+      .mode-toggle {
+        display: flex;
+        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-lg);
+        padding: var(--spacing-sm);
+        background: var(--bg-secondary);
+        border-radius: var(--radius-lg);
+        border: 2px solid var(--border-color);
+      }
+
+      .mode-btn {
+        flex: 1;
+        padding: var(--spacing-sm) var(--spacing-md);
+        background: var(--card-bg);
+        color: var(--text-primary);
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        font-weight: 600;
+        transition: all var(--transition-fast);
+      }
+
+      .mode-btn:hover {
+        border-color: var(--primary);
+        transform: translateY(-2px);
+      }
+
+      .mode-btn.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      /* ScaleY 演示样式 */
+      .accordion-content-scale {
+        transform-origin: top;
+        transform: scaleY(0);
+        max-height: none;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .accordion-content-scale.open {
+        transform: scaleY(1);
+      }
+
+      /* 移动端适配 */
+      @media (max-width: 768px) {
+        .accordion-title {
+          font-size: 1rem;
+        }
+
+        .accordion-icon {
+          font-size: 1.1rem;
+        }
+
+        .accordion-header {
+          padding: var(--spacing-sm) var(--spacing-md);
+        }
+
+        .accordion-body {
+          padding: var(--spacing-md);
+        }
+
+        .mode-toggle {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo-page">
+      <!-- 面包屑导航 -->
+      <nav class="breadcrumb">
+        <a href="../../index.html">首页</a>
+        <span class="separator">›</span>
+        <a href="../index.html">CSS Transform & Transition</a>
+        <span class="separator">›</span>
+        <a href="index.html">实战应用</a>
+        <span class="separator">›</span>
+        <span class="current">手风琴效果</span>
+      </nav>
+
+      <!-- 标题和描述 -->
+      <h1>📋 手风琴效果</h1>
+      <p class="subtitle">可折叠的内容面板，使用 max-height 或 scaleY 实现平滑的展开收起动画</p>
+
+      <!-- 知识点标签 -->
+      <div class="knowledge-tags">
+        <span class="tag-label">使用的知识点：</span>
+        <a class="knowledge-tag" href="../demos/scaleY.html">
+          <span class="tag-icon">↕️</span>
+          scaleY()
+        </a>
+        <a class="knowledge-tag" href="../demos/duration.html">
+          <span class="tag-icon">⏰</span>
+          transition-duration
+        </a>
+        <a class="knowledge-tag" href="../demos/transform-origin.html">
+          <span class="tag-icon">📍</span>
+          transform-origin
+        </a>
+      </div>
+
+      <!-- 交互演示区 -->
+      <section class="interactive-demo">
+        <h2>交互演示</h2>
+        <p>点击面板标题展开或收起内容，体验两种不同的实现方式：</p>
+
+        <!-- 模式切换 -->
+        <div class="mode-toggle">
+          <button class="mode-btn active" data-mode="maxheight">max-height 模式（推荐）</button>
+          <button class="mode-btn" data-mode="scale">scaleY 模式</button>
+        </div>
+
+        <div class="demo-info">
+          <p>💡 提示：单开模式下，打开新面板会自动关闭其他面板；多开模式下可以同时展开多个面板</p>
+        </div>
+
+        <div class="demo-controls">
+          <button id="toggle-mode" class="btn btn-primary">切换为多开模式</button>
+          <button id="expand-all" class="btn btn-secondary">全部展开</button>
+          <button id="collapse-all" class="btn btn-secondary">全部收起</button>
+        </div>
+
+        <div class="demo-container" style="display: block; padding: var(--spacing-lg)">
+          <div id="accordion" class="accordion-container">
+            <!-- 手风琴项目 1 -->
+            <div class="accordion-item">
+              <div class="accordion-header">
+                <h3 class="accordion-title">
+                  <span class="accordion-icon">🎨</span>
+                  什么是 CSS Transform？
+                </h3>
+                <span class="accordion-toggle">▼</span>
+              </div>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p>CSS Transform 是一个强大的 CSS 属性，允许你对元素进行 2D 或 3D 变换。</p>
+                  <p><strong>主要功能包括：</strong></p>
+                  <ul>
+                    <li>平移（translate）- 移动元素位置</li>
+                    <li>旋转（rotate）- 旋转元素</li>
+                    <li>缩放（scale）- 改变元素大小</li>
+                    <li>倾斜（skew）- 扭曲元素形状</li>
+                  </ul>
+                  <p>Transform 使用 GPU 加速，性能优于直接修改 top、left 等属性。</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 手风琴项目 2 -->
+            <div class="accordion-item">
+              <div class="accordion-header">
+                <h3 class="accordion-title">
+                  <span class="accordion-icon">⚡</span>
+                  为什么使用 Transform？
+                </h3>
+                <span class="accordion-toggle">▼</span>
+              </div>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p>使用 Transform 有以下优势：</p>
+                  <ul>
+                    <li><strong>性能优越</strong> - 使用 GPU 加速，动画更流畅</li>
+                    <li><strong>不影响布局</strong> - 变换不会触发页面重排</li>
+                    <li><strong>组合使用</strong> - 可以同时应用多个变换效果</li>
+                    <li><strong>3D 支持</strong> - 支持创建立体效果</li>
+                    <li><strong>易于动画</strong> - 配合 transition 实现平滑过渡</li>
+                  </ul>
+                  <p>这使得 Transform 成为现代 Web 动画的首选方案。</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 手风琴项目 3 -->
+            <div class="accordion-item">
+              <div class="accordion-header">
+                <h3 class="accordion-title">
+                  <span class="accordion-icon">🎯</span>
+                  常见应用场景
+                </h3>
+                <span class="accordion-toggle">▼</span>
+              </div>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p>Transform 在实际项目中有广泛应用：</p>
+                  <ul>
+                    <li><strong>导航菜单</strong> - 侧边栏滑入滑出、下拉菜单展开</li>
+                    <li><strong>卡片效果</strong> - 翻转卡片、悬停放大</li>
+                    <li><strong>轮播图</strong> - 图片切换、无缝滚动</li>
+                    <li><strong>3D 展示</strong> - 产品查看器、立方体旋转</li>
+                    <li><strong>加载动画</strong> - 旋转加载器、脉冲效果</li>
+                    <li><strong>页面过渡</strong> - 路由切换动画</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- 手风琴项目 4 -->
+            <div class="accordion-item">
+              <div class="accordion-header">
+                <h3 class="accordion-title">
+                  <span class="accordion-icon">💡</span>
+                  最佳实践建议
+                </h3>
+                <span class="accordion-toggle">▼</span>
+              </div>
+              <div class="accordion-content">
+                <div class="accordion-body">
+                  <p>使用 Transform 时的注意事项：</p>
+                  <ul>
+                    <li><strong>优先使用 transform</strong> - 而不是 top/left/margin</li>
+                    <li><strong>合理使用 will-change</strong> - 提前告知浏览器优化</li>
+                    <li><strong>避免过度动画</strong> - 保持动画简洁流畅</li>
+                    <li><strong>考虑可访问性</strong> - 尊重用户的减少动画偏好</li>
+                    <li><strong>测试性能</strong> - 在低端设备上验证效果</li>
+                    <li><strong>提供降级方案</strong> - 确保旧浏览器的基本功能</li>
+                  </ul>
+                  <p>遵循这些原则可以创建高质量的用户体验。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 实现步骤 -->
+      <section class="implementation">
+        <h2>实现步骤</h2>
+
+        <h3>方法一：max-height 实现（推荐）</h3>
+        <p>使用 max-height 过渡是最常用的方法，兼容性好且效果自然：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">HTML</span>
+          </div>
+          <pre
+            class="code-block"
+          ><code><span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"accordion-item"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"accordion-header"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;h3&gt;</span>标题<span class="tag">&lt;/h3&gt;</span>
+    <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="string">"accordion-toggle"</span><span class="tag">&gt;</span>▼<span class="tag">&lt;/span&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"accordion-content"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"accordion-body"</span><span class="tag">&gt;</span>
+      内容...
+    <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></code></pre>
+        </div>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">CSS</span>
+          </div>
+          <pre class="code-block"><code><span class="keyword">.accordion-content</span> {
+  <span class="comment">/* 初始状态：高度为 0 */</span>
+  <span class="property">max-height</span>: <span class="value">0</span>;
+  <span class="property">overflow</span>: <span class="value">hidden</span>;
+  <span class="property">transition</span>: <span class="value">max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1)</span>;
+}
+
+<span class="comment">/* 展开状态：设置足够大的高度 */</span>
+<span class="keyword">.accordion-content.open</span> {
+  <span class="property">max-height</span>: <span class="value">500px</span>; <span class="comment">/* 根据实际内容调整 */</span>
+}
+
+<span class="comment">/* 箭头旋转动画 */</span>
+<span class="keyword">.accordion-toggle</span> {
+  <span class="property">transition</span>: <span class="value">transform 0.3s ease</span>;
+}
+
+<span class="keyword">.accordion-header.active .accordion-toggle</span> {
+  <span class="property">transform</span>: <span class="value">rotate(180deg)</span>;
+}</code></pre>
+        </div>
+
+        <h3>方法二：scaleY 实现</h3>
+        <p>使用 scaleY 可以实现更流畅的动画，但需要注意 transform-origin：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">CSS</span>
+          </div>
+          <pre class="code-block"><code><span class="keyword">.accordion-content</span> {
+  <span class="comment">/* 从顶部开始缩放 */</span>
+  <span class="property">transform-origin</span>: <span class="value">top</span>;
+  <span class="property">transform</span>: <span class="value">scaleY(0)</span>;
+  <span class="property">transition</span>: <span class="value">transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)</span>;
+}
+
+<span class="keyword">.accordion-content.open</span> {
+  <span class="property">transform</span>: <span class="value">scaleY(1)</span>;
+}</code></pre>
+        </div>
+
+        <h3>JavaScript 交互逻辑</h3>
+        <p>实现单开和多开两种模式：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">JavaScript</span>
+          </div>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">let</span> multipleMode = <span class="value">false</span>; <span class="comment">// 单开/多开模式</span>
+
+<span class="keyword">const</span> headers = <span class="property">document</span>.<span class="value">querySelectorAll</span>(<span class="string">'.accordion-header'</span>);
+
+headers.<span class="value">forEach</span>(<span class="keyword">header</span> => {
+  header.<span class="value">addEventListener</span>(<span class="string">'click'</span>, () => {
+    <span class="keyword">const</span> item = header.<span class="property">parentElement</span>;
+    <span class="keyword">const</span> content = item.<span class="value">querySelector</span>(<span class="string">'.accordion-content'</span>);
+    <span class="keyword">const</span> isOpen = content.<span class="property">classList</span>.<span class="value">contains</span>(<span class="string">'open'</span>);
+
+    <span class="comment">// 单开模式：关闭其他面板</span>
+    <span class="keyword">if</span> (!multipleMode && !isOpen) {
+      <span class="property">document</span>.<span class="value">querySelectorAll</span>(<span class="string">'.accordion-content'</span>).<span class="value">forEach</span>(<span class="keyword">c</span> => {
+        c.<span class="property">classList</span>.<span class="value">remove</span>(<span class="string">'open'</span>);
+        c.<span class="property">parentElement</span>.<span class="value">querySelector</span>(<span class="string">'.accordion-header'</span>)
+          .<span class="property">classList</span>.<span class="value">remove</span>(<span class="string">'active'</span>);
+      });
+    }
+
+    <span class="comment">// 切换当前面板</span>
+    content.<span class="property">classList</span>.<span class="value">toggle</span>(<span class="string">'open'</span>);
+    header.<span class="property">classList</span>.<span class="value">toggle</span>(<span class="string">'active'</span>);
+  });
+});</code></pre>
+        </div>
+      </section>
+
+      <!-- 关键要点 -->
+      <section class="key-points">
+        <h2>关键要点</h2>
+        <ul>
+          <li><strong>max-height 方法</strong>更稳定可靠，是生产环境的首选方案</li>
+          <li><strong>max-height 值</strong>需要设置得足够大以容纳内容，但不要过大以免影响动画时长</li>
+          <li><strong>scaleY 方法</strong>动画更流畅，但内容会被压缩，可能影响可读性</li>
+          <li><strong>transform-origin: top</strong> 确保 scaleY 从顶部开始展开</li>
+          <li><strong>overflow: hidden</strong> 是必需的，防止内容溢出</li>
+          <li><strong>cubic-bezier 缓动</strong>提供自然的加速和减速效果</li>
+          <li><strong>单开模式</strong>适合 FAQ 页面，多开模式适合内容分类展示</li>
+          <li><strong>箭头旋转</strong>提供视觉反馈，增强用户体验</li>
+        </ul>
+      </section>
+
+      <!-- 相关演示 -->
+      <section class="related-demos">
+        <h2>相关演示</h2>
+        <div class="scenario-links">
+          <a class="scenario-link" href="../demos/scaleY.html">
+            <span class="scenario-icon">↕️</span>
+            <div class="scenario-content">
+              <h4>scaleY() 基础</h4>
+              <p>了解 Y 轴缩放的基本用法 →</p>
+            </div>
+          </a>
+          <a class="scenario-link" href="../demos/transform-origin.html">
+            <span class="scenario-icon">📍</span>
+            <div class="scenario-content">
+              <h4>transform-origin</h4>
+              <p>控制变换的原点位置 →</p>
+            </div>
+          </a>
+          <a class="scenario-link" href="dropdown-menu.html">
+            <span class="scenario-icon">📋</span>
+            <div class="scenario-content">
+              <h4>下拉菜单</h4>
+              <p>查看类似的展开收起效果 →</p>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- 返回链接 -->
+      <div style="margin-top: 60px; text-align: center">
+        <a class="btn" href="index.html">← 返回实战应用列表</a>
+      </div>
+    </div>
+
+    <script type="module">
+      // 手风琴交互逻辑
+      let multipleMode = false; // 单开/多开模式
+      let currentMethod = 'maxheight'; // 当前实现方法
+
+      const accordion = document.getElementById('accordion');
+      const headers = accordion.querySelectorAll('.accordion-header');
+      const toggleModeBtn = document.getElementById('toggle-mode');
+      const expandAllBtn = document.getElementById('expand-all');
+      const collapseAllBtn = document.getElementById('collapse-all');
+      const modeBtns = document.querySelectorAll('.mode-btn');
+
+      // 切换手风琴面板
+      function toggleAccordion(header) {
+        const item = header.parentElement;
+        const content = item.querySelector('.accordion-content');
+        const isOpen = content.classList.contains('open');
+
+        // 单开模式：关闭其他面板
+        if (!multipleMode && !isOpen) {
+          accordion.querySelectorAll('.accordion-content').forEach((c) => {
+            c.classList.remove('open');
+            c.parentElement.querySelector('.accordion-header').classList.remove('active');
+          });
+        }
+
+        // 切换当前面板
+        content.classList.toggle('open');
+        header.classList.toggle('active');
+      }
+
+      // 为每个标题添加点击事件
+      headers.forEach((header) => {
+        header.addEventListener('click', () => toggleAccordion(header));
+      });
+
+      // 切换单开/多开模式
+      toggleModeBtn.addEventListener('click', () => {
+        multipleMode = !multipleMode;
+        toggleModeBtn.textContent = multipleMode ? '切换为单开模式' : '切换为多开模式';
+      });
+
+      // 全部展开
+      expandAllBtn.addEventListener('click', () => {
+        accordion.querySelectorAll('.accordion-content').forEach((content) => {
+          content.classList.add('open');
+          content.parentElement.querySelector('.accordion-header').classList.add('active');
+        });
+      });
+
+      // 全部收起
+      collapseAllBtn.addEventListener('click', () => {
+        accordion.querySelectorAll('.accordion-content').forEach((content) => {
+          content.classList.remove('open');
+          content.parentElement.querySelector('.accordion-header').classList.remove('active');
+        });
+      });
+
+      // 切换实现方法（max-height vs scaleY）
+      modeBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const mode = btn.dataset.mode;
+          if (mode === currentMethod) {
+            return;
+          }
+
+          // 更新按钮状态
+          modeBtns.forEach((b) => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          // 切换实现方法
+          currentMethod = mode;
+          const contents = accordion.querySelectorAll('.accordion-content');
+
+          if (mode === 'scale') {
+            contents.forEach((content) => {
+              content.classList.add('accordion-content-scale');
+            });
+          } else {
+            contents.forEach((content) => {
+              content.classList.remove('accordion-content-scale');
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

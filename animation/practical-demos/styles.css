@@ -1,0 +1,906 @@
+/* ========================================
+   实战应用演示 - 专用样式
+   Practical Demos Specific Styles
+   ======================================== */
+
+/* ========================================
+   导航卡片组件 - Navigation Cards
+   ======================================== */
+
+.practical-demo-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  min-height: 200px;
+}
+
+.practical-demo-card .card-icon {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.practical-demo-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.practical-demo-card p {
+  flex: 1;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.card-meta {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  margin-top: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--border-color);
+}
+
+.card-meta span {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.difficulty {
+  font-weight: 600;
+}
+
+.knowledge-count {
+  color: var(--primary);
+}
+
+/* ========================================
+   知识点标签组件 - Knowledge Tags
+   ======================================== */
+
+.knowledge-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  align-items: center;
+  margin: var(--spacing-lg) 0;
+  padding: var(--spacing-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+}
+
+.tag-label {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.knowledge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--card-bg);
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-sm);
+}
+
+.knowledge-tag:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.tag-icon {
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+/* ========================================
+   场景链接组件 - Scenario Links
+   ======================================== */
+
+.scenario-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+}
+
+.scenario-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-sm);
+}
+
+.scenario-link:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.scenario-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-light);
+  border-radius: var(--radius-md);
+  border: 2px solid var(--primary);
+}
+
+.scenario-content {
+  flex: 1;
+}
+
+.scenario-content h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.scenario-content p {
+  font-size: 0.85rem;
+  color: var(--primary);
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ========================================
+   面包屑导航 - Breadcrumb
+   ======================================== */
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+}
+
+.breadcrumb a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.breadcrumb a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.breadcrumb .separator {
+  color: var(--text-secondary);
+  user-select: none;
+}
+
+.breadcrumb .current {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* ========================================
+   交互演示组件 - Interactive Demo
+   ======================================== */
+
+.interactive-demo {
+  margin: var(--spacing-lg) 0;
+}
+
+.demo-controls {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-md);
+}
+
+.demo-controls .btn {
+  flex: 1;
+  min-width: 120px;
+}
+
+.demo-container {
+  min-height: 300px;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.demo-info {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--primary-light);
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius-sm);
+}
+
+.demo-info p {
+  margin: 0;
+  color: var(--primary-dark);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* ========================================
+   代码区域组件 - Code Section
+   ======================================== */
+
+.code-section {
+  margin: var(--spacing-lg) 0;
+}
+
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--gray-700);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  border: 1px solid var(--gray-600);
+  border-bottom: none;
+}
+
+.code-label {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray-200);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-copy {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  background: var(--gray-600);
+  color: var(--gray-200);
+  border: 1px solid var(--gray-500);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-weight: 500;
+}
+
+.btn-copy:hover {
+  background: var(--gray-500);
+  color: white;
+}
+
+.btn-copy:active {
+  transform: scale(0.95);
+}
+
+.code-section .code-block {
+  margin: 0;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  border-top: none;
+}
+
+/* ========================================
+   演示页面布局 - Demo Page Layout
+   ======================================== */
+
+.demo-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--spacing-lg) var(--spacing-md);
+}
+
+.demo-page h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.2;
+}
+
+.demo-page .subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-lg);
+  line-height: 1.6;
+}
+
+.demo-page h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.demo-page h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* ========================================
+   关键要点 - Key Points
+   ======================================== */
+
+.key-points {
+  margin: var(--spacing-lg) 0;
+}
+
+.key-points ul {
+  list-style: none;
+  padding: 0;
+}
+
+.key-points li {
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  background: var(--bg-secondary);
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.key-points li::before {
+  content: "✓";
+  color: var(--primary);
+  font-weight: bold;
+  margin-right: var(--spacing-sm);
+}
+
+/* ========================================
+   相关演示 - Related Demos
+   ======================================== */
+
+.related-demos {
+  margin: var(--spacing-xl) 0;
+  padding: var(--spacing-lg);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+}
+
+.related-demos h2 {
+  margin-top: 0;
+  border-bottom: none;
+}
+
+/* ========================================
+   导航页面布局 - Navigation Page Layout
+   ======================================== */
+
+.nav-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-lg) var(--spacing-md);
+}
+
+.nav-page header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.nav-page h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.nav-page .page-description {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 700px;
+  margin: 0 auto var(--spacing-lg);
+  line-height: 1.6;
+}
+
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+  margin: var(--spacing-lg) 0;
+}
+
+.category-section {
+  margin: var(--spacing-xl) 0;
+}
+
+.category-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.category-icon {
+  font-size: 1.8rem;
+}
+
+/* ========================================
+   响应式设计 - Responsive Design
+   ======================================== */
+
+@media (max-width: 768px) {
+  .demo-page h1,
+  .nav-page h1 {
+    font-size: 2rem;
+  }
+
+  .demo-page h2 {
+    font-size: 1.5rem;
+  }
+
+  .demo-page h3 {
+    font-size: 1.1rem;
+  }
+
+  .knowledge-tags {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .scenario-links {
+    grid-template-columns: 1fr;
+  }
+
+  .demo-controls {
+    flex-direction: column;
+  }
+
+  .demo-controls .btn {
+    width: 100%;
+  }
+
+  .demo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .code-header {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    align-items: flex-start;
+  }
+
+  .btn-copy {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .demo-page,
+  .nav-page {
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+
+  .demo-page h1,
+  .nav-page h1 {
+    font-size: 1.75rem;
+  }
+
+  .practical-demo-card {
+    min-height: auto;
+  }
+
+  .scenario-link {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .demo-container {
+    min-height: 250px;
+    padding: var(--spacing-md);
+  }
+}
+
+/* ========================================
+   打印样式 - Print Styles
+   ======================================== */
+
+@media print {
+  .demo-controls,
+  .btn-copy,
+  .back-link,
+  .breadcrumb {
+    display: none;
+  }
+
+  .demo-page,
+  .nav-page {
+    max-width: 100%;
+  }
+
+  .code-block {
+    break-inside: avoid;
+  }
+}
+
+/* ========================================
+   加载动画演示 - Loading Spinner Styles
+   ======================================== */
+
+.spinners-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+  margin: var(--spacing-lg) 0;
+}
+
+.spinner-card {
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+}
+
+.spinner-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.spinner-card h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.spinner-container {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.spinner {
+  position: relative;
+}
+
+.spinner-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.btn-small {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+  width: 100%;
+}
+
+.btn-small:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.btn-small:active {
+  transform: translateY(0);
+}
+
+/* ========================================
+   Spinner 1: 经典旋转 - Classic Rotate
+   ======================================== */
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner-classic {
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--gray-200);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.spinner-classic.paused {
+  animation-play-state: paused;
+}
+
+/* ========================================
+   Spinner 2: 脉冲缩放 - Pulse Scale
+   ======================================== */
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.5;
+  }
+}
+
+.spinner-pulse {
+  width: 50px;
+  height: 50px;
+  background: var(--primary);
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.spinner-pulse.paused {
+  animation-play-state: paused;
+}
+
+/* ========================================
+   Spinner 3: 渐变点 - Fade Dots
+   ======================================== */
+
+@keyframes fade {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.spinner-dots {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.spinner-dots span {
+  width: 12px;
+  height: 12px;
+  background: var(--primary);
+  border-radius: 50%;
+  animation: fade 1.4s ease-in-out infinite;
+}
+
+.spinner-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.spinner-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.spinner-dots.paused span {
+  animation-play-state: paused;
+}
+
+/* ========================================
+   Spinner 4: 弹跳球 - Bounce
+   ======================================== */
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-20px) scale(0.8);
+  }
+}
+
+.spinner-bounce {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  height: 50px;
+}
+
+.spinner-bounce span {
+  width: 14px;
+  height: 14px;
+  background: var(--primary);
+  border-radius: 50%;
+  animation: bounce 0.8s ease-in-out infinite;
+}
+
+.spinner-bounce span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.spinner-bounce span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.spinner-bounce span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.spinner-bounce.paused span {
+  animation-play-state: paused;
+}
+
+/* ========================================
+   响应式调整 - Responsive Adjustments
+   ======================================== */
+
+@media (max-width: 768px) {
+  .spinners-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+  }
+
+  .spinner-container {
+    height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .spinners-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========================================
+   Spinner 5: 渐进点 - Progressive Dots
+   ======================================== */
+
+@keyframes progressiveDot1 {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  85% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+@keyframes progressiveDot2 {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  25% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  85% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+@keyframes progressiveDot3 {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  85% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+.spinner-progressive {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.spinner-progressive span {
+  width: 12px;
+  height: 12px;
+  background: var(--primary);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0);
+}
+
+.spinner-progressive span:nth-child(1) {
+  animation: progressiveDot1 2s ease-in-out infinite;
+}
+
+.spinner-progressive span:nth-child(2) {
+  animation: progressiveDot2 2s ease-in-out infinite;
+}
+
+.spinner-progressive span:nth-child(3) {
+  animation: progressiveDot3 2s ease-in-out infinite;
+}
+
+.spinner-progressive.paused span {
+  animation-play-state: paused;
+}
