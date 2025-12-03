@@ -328,6 +328,58 @@ body {
   transform: translateX(-50%);
 }
 
+/* ========================================
+   应用场景链接卡片
+   ======================================== */
+
+.scenario-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.scenario-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: all var(--transition-base);
+}
+
+.scenario-link:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.scenario-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.scenario-content {
+  flex: 1;
+}
+
+.scenario-content h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 4px;
+}
+
+.scenario-content p {
+  font-size: 0.875rem;
+  color: var(--primary);
+  margin: 0;
+  font-weight: 500;
+}
+
 /* Animation Classes */
 .animate-translate {
   transform: translate(100px, 50px);
@@ -445,6 +497,16 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  /* 应用场景链接响应式 */
+  .scenario-links {
+    grid-template-columns: 1fr;
+  }
+
+  .scenario-link {
+    flex-direction: column;
+    text-align: center;
   }
 }
 

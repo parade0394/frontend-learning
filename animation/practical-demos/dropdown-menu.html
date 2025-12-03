@@ -1,0 +1,681 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="下拉菜单效果 - 使用 translateY 和 scaleY 实现平滑的菜单展开动画" />
+    <title>下拉菜单 - CSS Transform & Transition 实战应用</title>
+    <link href="/src/styles/common.css" rel="stylesheet" />
+    <link href="../styles.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+    <!-- 防止主题闪烁 -->
+    <script>
+      (function () {
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    </script>
+    <script type="module" src="/src/theme-sync.js"></script>
+    <style>
+      /* 演示专用样式 */
+      .dropdown-demo-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: var(--spacing-xl);
+        padding: var(--spacing-lg);
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      /* 下拉菜单容器 */
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      /* 下拉按钮 */
+      .dropdown-btn {
+        padding: var(--spacing-sm) var(--spacing-lg);
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+        transition: all var(--transition-base);
+        box-shadow: var(--shadow-sm);
+        min-width: 180px;
+        justify-content: space-between;
+      }
+
+      .dropdown-btn:hover {
+        background: var(--primary-dark);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-1px);
+      }
+
+      .dropdown-btn:active {
+        transform: translateY(0);
+      }
+
+      .dropdown-arrow {
+        font-size: 0.8rem;
+        transition: transform var(--transition-base);
+      }
+
+      .dropdown.open .dropdown-arrow {
+        transform: rotate(180deg);
+      }
+
+      /* 下拉菜单内容 - translateY 版本 */
+      .dropdown-menu-translateY {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        min-width: 100%;
+        background: var(--card-bg);
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+        z-index: 1000;
+
+        /* 初始状态：隐藏在上方 */
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .dropdown.open .dropdown-menu-translateY {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      /* 下拉菜单内容 - scaleY 版本 */
+      .dropdown-menu-scaleY {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        min-width: 100%;
+        background: var(--card-bg);
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+        z-index: 1000;
+
+        /* 初始状态：垂直缩放为 0 */
+        opacity: 0;
+        visibility: hidden;
+        transform: scaleY(0);
+        transform-origin: top;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .dropdown.open .dropdown-menu-scaleY {
+        opacity: 1;
+        visibility: visible;
+        transform: scaleY(1);
+      }
+
+      /* 菜单项 */
+      .dropdown-item {
+        display: block;
+        padding: var(--spacing-sm) var(--spacing-md);
+        color: var(--text-primary);
+        text-decoration: none;
+        transition: all var(--transition-fast);
+        border-bottom: 1px solid var(--border-color);
+        font-size: 0.95rem;
+        white-space: nowrap;
+      }
+
+      .dropdown-item:last-child {
+        border-bottom: none;
+      }
+
+      .dropdown-item:hover {
+        background: var(--primary-light);
+        color: var(--primary);
+        padding-left: calc(var(--spacing-md) + 8px);
+      }
+
+      .dropdown-item-icon {
+        margin-right: var(--spacing-xs);
+      }
+
+      /* 带延迟的菜单项 */
+      .dropdown-menu-delay .dropdown-item {
+        opacity: 0;
+        transform: translateX(-10px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .dropdown.open .dropdown-menu-delay .dropdown-item {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      /* 为每个菜单项添加递增的延迟 */
+      .dropdown.open .dropdown-menu-delay .dropdown-item:nth-child(1) {
+        transition-delay: 0.05s;
+      }
+      .dropdown.open .dropdown-menu-delay .dropdown-item:nth-child(2) {
+        transition-delay: 0.1s;
+      }
+      .dropdown.open .dropdown-menu-delay .dropdown-item:nth-child(3) {
+        transition-delay: 0.15s;
+      }
+      .dropdown.open .dropdown-menu-delay .dropdown-item:nth-child(4) {
+        transition-delay: 0.2s;
+      }
+      .dropdown.open .dropdown-menu-delay .dropdown-item:nth-child(5) {
+        transition-delay: 0.25s;
+      }
+
+      /* 演示标签 */
+      .demo-label {
+        display: inline-block;
+        padding: 4px 10px;
+        background: var(--primary-light);
+        color: var(--primary);
+        border-radius: var(--radius-sm);
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: var(--spacing-sm);
+      }
+
+      .demo-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-sm);
+      }
+
+      /* 移动端适配 */
+      @media (max-width: 768px) {
+        .dropdown-demo-container {
+          grid-template-columns: 1fr;
+          padding: var(--spacing-md);
+        }
+
+        .dropdown-btn {
+          width: 100%;
+        }
+
+        .dropdown-menu-translateY,
+        .dropdown-menu-scaleY,
+        .dropdown-menu-delay {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo-page">
+      <!-- 面包屑导航 -->
+      <nav class="breadcrumb">
+        <a href="../../index.html">首页</a>
+        <span class="separator">›</span>
+        <a href="../index.html">CSS Transform & Transition</a>
+        <span class="separator">›</span>
+        <a href="index.html">实战应用</a>
+        <span class="separator">›</span>
+        <span class="current">下拉菜单</span>
+      </nav>
+
+      <!-- 标题和描述 -->
+      <h1>📋 下拉菜单</h1>
+      <p class="subtitle">使用 translateY 和 scaleY 实现平滑的菜单展开动画，支持多种过渡效果和延迟动画</p>
+
+      <!-- 知识点标签 -->
+      <div class="knowledge-tags">
+        <span class="tag-label">使用的知识点：</span>
+        <a class="knowledge-tag" href="../demos/translateY.html">
+          <span class="tag-icon">↓</span>
+          translateY()
+        </a>
+        <a class="knowledge-tag" href="../demos/scaleY.html">
+          <span class="tag-icon">↕️</span>
+          scaleY()
+        </a>
+        <a class="knowledge-tag" href="../demos/delay.html">
+          <span class="tag-icon">⏱️</span>
+          transition-delay
+        </a>
+        <a class="knowledge-tag" href="../demos/transform-origin.html">
+          <span class="tag-icon">📍</span>
+          transform-origin
+        </a>
+      </div>
+
+      <!-- 交互演示区 -->
+      <section class="interactive-demo">
+        <h2>交互演示</h2>
+        <p>点击按钮体验三种不同的下拉菜单动画效果：</p>
+
+        <div class="demo-info">
+          <p>💡 提示：点击按钮打开菜单，再次点击或点击外部区域关闭菜单</p>
+        </div>
+
+        <div class="dropdown-demo-container">
+          <!-- 方式 1: translateY -->
+          <div class="demo-wrapper">
+            <span class="demo-label">translateY 平移</span>
+            <div class="dropdown" data-dropdown="1">
+              <button class="dropdown-btn">
+                <span>选择操作</span>
+                <span class="dropdown-arrow">▼</span>
+              </button>
+              <div class="dropdown-menu-translateY">
+                <a class="dropdown-item" href="#edit">
+                  <span class="dropdown-item-icon">✏️</span>
+                  编辑
+                </a>
+                <a class="dropdown-item" href="#copy">
+                  <span class="dropdown-item-icon">📋</span>
+                  复制
+                </a>
+                <a class="dropdown-item" href="#share">
+                  <span class="dropdown-item-icon">🔗</span>
+                  分享
+                </a>
+                <a class="dropdown-item" href="#download">
+                  <span class="dropdown-item-icon">⬇️</span>
+                  下载
+                </a>
+                <a class="dropdown-item" href="#delete">
+                  <span class="dropdown-item-icon">🗑️</span>
+                  删除
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 方式 2: scaleY -->
+          <div class="demo-wrapper">
+            <span class="demo-label">scaleY 缩放</span>
+            <div class="dropdown" data-dropdown="2">
+              <button class="dropdown-btn">
+                <span>文件菜单</span>
+                <span class="dropdown-arrow">▼</span>
+              </button>
+              <div class="dropdown-menu-scaleY">
+                <a class="dropdown-item" href="#new">
+                  <span class="dropdown-item-icon">📄</span>
+                  新建文件
+                </a>
+                <a class="dropdown-item" href="#open">
+                  <span class="dropdown-item-icon">📂</span>
+                  打开文件
+                </a>
+                <a class="dropdown-item" href="#save">
+                  <span class="dropdown-item-icon">💾</span>
+                  保存
+                </a>
+                <a class="dropdown-item" href="#saveas">
+                  <span class="dropdown-item-icon">📝</span>
+                  另存为
+                </a>
+                <a class="dropdown-item" href="#close">
+                  <span class="dropdown-item-icon">❌</span>
+                  关闭
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 方式 3: 带延迟的菜单项 -->
+          <div class="demo-wrapper">
+            <span class="demo-label">交错延迟</span>
+            <div class="dropdown" data-dropdown="3">
+              <button class="dropdown-btn">
+                <span>用户设置</span>
+                <span class="dropdown-arrow">▼</span>
+              </button>
+              <div class="dropdown-menu-scaleY dropdown-menu-delay">
+                <a class="dropdown-item" href="#profile">
+                  <span class="dropdown-item-icon">👤</span>
+                  个人资料
+                </a>
+                <a class="dropdown-item" href="#settings">
+                  <span class="dropdown-item-icon">⚙️</span>
+                  账户设置
+                </a>
+                <a class="dropdown-item" href="#notifications">
+                  <span class="dropdown-item-icon">🔔</span>
+                  通知
+                </a>
+                <a class="dropdown-item" href="#privacy">
+                  <span class="dropdown-item-icon">🔒</span>
+                  隐私
+                </a>
+                <a class="dropdown-item" href="#logout">
+                  <span class="dropdown-item-icon">🚪</span>
+                  退出登录
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 实现步骤 -->
+      <section class="implementation">
+        <h2>实现步骤</h2>
+
+        <h3>步骤 1：HTML 结构</h3>
+        <p>创建下拉菜单的基本结构，包含按钮和菜单内容：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">HTML</span>
+          </div>
+          <pre class="code-block"><code><span class="comment">&lt;!-- 下拉菜单容器 --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"dropdown"</span><span class="tag">&gt;</span>
+  <span class="comment">&lt;!-- 触发按钮 --&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="string">"dropdown-btn"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;span&gt;</span>选择操作<span class="tag">&lt;/span&gt;</span>
+    <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="string">"dropdown-arrow"</span><span class="tag">&gt;</span>▼<span class="tag">&lt;/span&gt;</span>
+  <span class="tag">&lt;/button&gt;</span>
+
+  <span class="comment">&lt;!-- 下拉菜单内容 --&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"dropdown-menu"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;a</span> <span class="attr">class</span>=<span class="string">"dropdown-item"</span> <span class="attr">href</span>=<span class="string">"#"</span><span class="tag">&gt;</span>编辑<span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;a</span> <span class="attr">class</span>=<span class="string">"dropdown-item"</span> <span class="attr">href</span>=<span class="string">"#"</span><span class="tag">&gt;</span>复制<span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;a</span> <span class="attr">class</span>=<span class="string">"dropdown-item"</span> <span class="attr">href</span>=<span class="string">"#"</span><span class="tag">&gt;</span>删除<span class="tag">&lt;/a&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></code></pre>
+        </div>
+
+        <h3>步骤 2：方式一 - 使用 translateY</h3>
+        <p>使用 translateY 实现从上方滑入的效果：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">CSS</span>
+          </div>
+          <pre class="code-block"><code><span class="keyword">.dropdown</span> {
+  <span class="property">position</span>: <span class="value">relative</span>;
+  <span class="property">display</span>: <span class="value">inline-block</span>;
+}
+
+<span class="keyword">.dropdown-menu</span> {
+  <span class="property">position</span>: <span class="value">absolute</span>;
+  <span class="property">top</span>: <span class="value">calc(100% + 8px)</span>;
+  <span class="property">left</span>: <span class="value">0</span>;
+  <span class="property">min-width</span>: <span class="value">100%</span>;
+  <span class="property">background</span>: <span class="value">white</span>;
+  <span class="property">border-radius</span>: <span class="value">8px</span>;
+  <span class="property">box-shadow</span>: <span class="value">0 4px 12px rgba(0, 0, 0, 0.15)</span>;
+  <span class="property">overflow</span>: <span class="value">hidden</span>;
+  <span class="property">z-index</span>: <span class="value">1000</span>;
+
+  <span class="comment">/* 初始状态：隐藏在上方 */</span>
+  <span class="property">opacity</span>: <span class="value">0</span>;
+  <span class="property">visibility</span>: <span class="value">hidden</span>;
+  <span class="property">transform</span>: <span class="value">translateY(-10px)</span>;
+  <span class="property">transition</span>: <span class="value">all 0.3s cubic-bezier(0.4, 0, 0.2, 1)</span>;
+}
+
+<span class="comment">/* 打开状态 */</span>
+<span class="keyword">.dropdown.open .dropdown-menu</span> {
+  <span class="property">opacity</span>: <span class="value">1</span>;
+  <span class="property">visibility</span>: <span class="value">visible</span>;
+  <span class="property">transform</span>: <span class="value">translateY(0)</span>;
+}</code></pre>
+        </div>
+
+        <h3>步骤 3：方式二 - 使用 scaleY</h3>
+        <p>使用 scaleY 实现垂直缩放展开的效果：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">CSS</span>
+          </div>
+          <pre class="code-block"><code><span class="keyword">.dropdown-menu</span> {
+  <span class="property">position</span>: <span class="value">absolute</span>;
+  <span class="property">top</span>: <span class="value">calc(100% + 8px)</span>;
+  <span class="property">left</span>: <span class="value">0</span>;
+  <span class="property">min-width</span>: <span class="value">100%</span>;
+  <span class="property">background</span>: <span class="value">white</span>;
+  <span class="property">border-radius</span>: <span class="value">8px</span>;
+  <span class="property">box-shadow</span>: <span class="value">0 4px 12px rgba(0, 0, 0, 0.15)</span>;
+  <span class="property">overflow</span>: <span class="value">hidden</span>;
+  <span class="property">z-index</span>: <span class="value">1000</span>;
+
+  <span class="comment">/* 初始状态：垂直缩放为 0 */</span>
+  <span class="property">opacity</span>: <span class="value">0</span>;
+  <span class="property">visibility</span>: <span class="value">hidden</span>;
+  <span class="property">transform</span>: <span class="value">scaleY(0)</span>;
+  <span class="property">transform-origin</span>: <span class="value">top</span>;
+  <span class="comment">/* transform-origin 设置为 top，从顶部开始展开 */</span>
+  <span class="property">transition</span>: <span class="value">all 0.3s cubic-bezier(0.4, 0, 0.2, 1)</span>;
+}
+
+<span class="keyword">.dropdown.open .dropdown-menu</span> {
+  <span class="property">opacity</span>: <span class="value">1</span>;
+  <span class="property">visibility</span>: <span class="value">visible</span>;
+  <span class="property">transform</span>: <span class="value">scaleY(1)</span>;
+}</code></pre>
+        </div>
+
+        <h3>步骤 4：添加菜单项交错延迟</h3>
+        <p>为菜单项添加递增的 transition-delay，实现依次出现的效果：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">CSS</span>
+          </div>
+          <pre class="code-block"><code><span class="comment">/* 菜单项初始状态 */</span>
+<span class="keyword">.dropdown-menu .dropdown-item</span> {
+  <span class="property">opacity</span>: <span class="value">0</span>;
+  <span class="property">transform</span>: <span class="value">translateX(-10px)</span>;
+  <span class="property">transition</span>: <span class="value">all 0.3s cubic-bezier(0.4, 0, 0.2, 1)</span>;
+}
+
+<span class="comment">/* 打开时显示菜单项 */</span>
+<span class="keyword">.dropdown.open .dropdown-menu .dropdown-item</span> {
+  <span class="property">opacity</span>: <span class="value">1</span>;
+  <span class="property">transform</span>: <span class="value">translateX(0)</span>;
+}
+
+<span class="comment">/* 为每个菜单项添加递增的延迟 */</span>
+<span class="keyword">.dropdown.open .dropdown-menu .dropdown-item:nth-child(1)</span> {
+  <span class="property">transition-delay</span>: <span class="value">0.05s</span>;
+}
+<span class="keyword">.dropdown.open .dropdown-menu .dropdown-item:nth-child(2)</span> {
+  <span class="property">transition-delay</span>: <span class="value">0.1s</span>;
+}
+<span class="keyword">.dropdown.open .dropdown-menu .dropdown-item:nth-child(3)</span> {
+  <span class="property">transition-delay</span>: <span class="value">0.15s</span>;
+}
+<span class="keyword">.dropdown.open .dropdown-menu .dropdown-item:nth-child(4)</span> {
+  <span class="property">transition-delay</span>: <span class="value">0.2s</span>;
+}
+<span class="keyword">.dropdown.open .dropdown-menu .dropdown-item:nth-child(5)</span> {
+  <span class="property">transition-delay</span>: <span class="value">0.25s</span>;
+}</code></pre>
+        </div>
+
+        <h3>步骤 5：JavaScript 交互</h3>
+        <p>添加点击事件来切换菜单的打开/关闭状态：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">JavaScript</span>
+          </div>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">const</span> dropdowns = <span class="property">document</span>.<span class="value">querySelectorAll</span>(<span class="string">'.dropdown'</span>);
+
+dropdowns.<span class="value">forEach</span>(<span class="keyword">dropdown</span> =&gt; {
+  <span class="keyword">const</span> btn = dropdown.<span class="value">querySelector</span>(<span class="string">'.dropdown-btn'</span>);
+
+  <span class="comment">// 切换下拉菜单</span>
+  btn.<span class="value">addEventListener</span>(<span class="string">'click'</span>, (<span class="keyword">e</span>) =&gt; {
+    e.<span class="value">stopPropagation</span>();
+    <span class="comment">// 关闭其他下拉菜单</span>
+    dropdowns.<span class="value">forEach</span>(<span class="keyword">d</span> =&gt; {
+      <span class="keyword">if</span> (d !== dropdown) d.<span class="property">classList</span>.<span class="value">remove</span>(<span class="string">'open'</span>);
+    });
+    <span class="comment">// 切换当前菜单</span>
+    dropdown.<span class="property">classList</span>.<span class="value">toggle</span>(<span class="string">'open'</span>);
+  });
+});
+
+<span class="comment">// 点击外部关闭所有菜单</span>
+<span class="property">document</span>.<span class="value">addEventListener</span>(<span class="string">'click'</span>, () =&gt; {
+  dropdowns.<span class="value">forEach</span>(<span class="keyword">d</span> =&gt; d.<span class="property">classList</span>.<span class="value">remove</span>(<span class="string">'open'</span>));
+});</code></pre>
+        </div>
+
+        <h3>步骤 6：处理 overflow 和 clipping</h3>
+        <p>正确处理菜单的溢出和裁剪，确保动画流畅：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">CSS</span>
+          </div>
+          <pre class="code-block"><code><span class="keyword">.dropdown-menu</span> {
+  <span class="comment">/* overflow: hidden 防止内容溢出 */</span>
+  <span class="property">overflow</span>: <span class="value">hidden</span>;
+
+  <span class="comment">/* 对于 scaleY，overflow: hidden 是必需的 */</span>
+  <span class="comment">/* 它确保缩放时内容被正确裁剪 */</span>
+}
+
+<span class="comment">/* 如果需要滚动条（菜单项很多时）*/</span>
+<span class="keyword">.dropdown-menu</span> {
+  <span class="property">max-height</span>: <span class="value">300px</span>;
+  <span class="property">overflow-y</span>: <span class="value">auto</span>;
+}
+
+<span class="comment">/* 但要注意：overflow-y: auto 与 scaleY 配合时 */</span>
+<span class="comment">/* 可能需要在外层包裹一个容器 */</span></code></pre>
+        </div>
+      </section>
+
+      <!-- 关键要点 -->
+      <section class="key-points">
+        <h2>关键要点</h2>
+        <ul>
+          <li>
+            <strong>translateY vs scaleY</strong>：translateY 提供平移效果，scaleY 提供缩放效果。translateY
+            更流畅，scaleY 更有视觉冲击力
+          </li>
+          <li><strong>transform-origin</strong>：使用 scaleY 时必须设置 transform-origin: top，确保从顶部开始展开</li>
+          <li><strong>overflow: hidden</strong>：对于 scaleY 动画是必需的，它确保缩放时内容被正确裁剪，不会溢出</li>
+          <li>
+            <strong>visibility 和 opacity</strong>：同时使用这两个属性，visibility 控制元素是否占据空间，opacity
+            控制透明度过渡
+          </li>
+          <li><strong>transition-delay</strong>：为菜单项添加递增的延迟（0.05s 间隔），创建流畅的交错动画效果</li>
+          <li><strong>cubic-bezier 缓动</strong>：使用 cubic-bezier(0.4, 0, 0.2, 1) 提供自然的加速和减速效果</li>
+          <li><strong>z-index 管理</strong>：确保下拉菜单在其他内容之上（z-index: 1000）</li>
+          <li><strong>点击外部关闭</strong>：监听 document 的点击事件，点击菜单外部时自动关闭，提升用户体验</li>
+          <li><strong>阻止事件冒泡</strong>：在按钮点击事件中使用 stopPropagation()，防止触发 document 的点击事件</li>
+          <li><strong>性能优化</strong>：使用 transform 而不是修改 height，可以利用 GPU 加速</li>
+        </ul>
+      </section>
+
+      <!-- 相关演示 -->
+      <section class="related-demos">
+        <h2>相关演示</h2>
+        <div class="scenario-links">
+          <a class="scenario-link" href="../demos/translateY.html">
+            <span class="scenario-icon">↓</span>
+            <div class="scenario-content">
+              <h4>translateY() 基础</h4>
+              <p>了解 Y 轴平移的基本用法 →</p>
+            </div>
+          </a>
+          <a class="scenario-link" href="../demos/scaleY.html">
+            <span class="scenario-icon">↕️</span>
+            <div class="scenario-content">
+              <h4>scaleY() 缩放</h4>
+              <p>理解垂直缩放的原理 →</p>
+            </div>
+          </a>
+          <a class="scenario-link" href="../demos/delay.html">
+            <span class="scenario-icon">⏱️</span>
+            <div class="scenario-content">
+              <h4>transition-delay</h4>
+              <p>探索过渡延迟的应用 →</p>
+            </div>
+          </a>
+          <a class="scenario-link" href="sidebar-slide.html">
+            <span class="scenario-icon">🎯</span>
+            <div class="scenario-content">
+              <h4>侧边栏滑入滑出</h4>
+              <p>查看水平方向的类似效果 →</p>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- 返回链接 -->
+      <div style="margin-top: 60px; text-align: center">
+        <a class="btn" href="index.html">← 返回实战应用列表</a>
+      </div>
+    </div>
+
+    <script type="module">
+      // 获取所有下拉菜单
+      const dropdowns = document.querySelectorAll('.dropdown');
+
+      dropdowns.forEach((dropdown) => {
+        const btn = dropdown.querySelector('.dropdown-btn');
+
+        // 切换下拉菜单
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+
+          // 关闭其他下拉菜单
+          dropdowns.forEach((d) => {
+            if (d !== dropdown) {
+              d.classList.remove('open');
+            }
+          });
+
+          // 切换当前菜单
+          dropdown.classList.toggle('open');
+        });
+      });
+
+      // 点击外部关闭所有菜单
+      document.addEventListener('click', () => {
+        dropdowns.forEach((d) => {
+          d.classList.remove('open');
+        });
+      });
+
+      // 阻止菜单项点击时关闭菜单（可选）
+      document.querySelectorAll('.dropdown-item').forEach((item) => {
+        item.addEventListener('click', (e) => {
+          e.preventDefault();
+          // 这里可以添加实际的导航逻辑
+          console.log('点击了:', e.target.textContent.trim());
+        });
+      });
+    </script>
+  </body>
+</html>

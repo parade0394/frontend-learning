@@ -1,0 +1,764 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="轮播图切换效果 - 使用 translateX 实现图片轮播组件" />
+    <title>轮播图切换 - CSS Transform & Transition 实战应用</title>
+    <link href="/src/styles/common.css" rel="stylesheet" />
+    <link href="../styles.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+    <!-- 防止主题闪烁 -->
+    <script>
+      (function () {
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    </script>
+    <script type="module" src="/src/theme-sync.js"></script>
+    <style>
+      /* 演示专用样式 */
+      .carousel-container {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+        background: var(--card-bg);
+      }
+
+      .carousel-viewport {
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+      }
+
+      .carousel-track {
+        display: flex;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        height: 100%;
+      }
+
+      .carousel-slide {
+        min-width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: var(--spacing-xl);
+        text-align: center;
+        position: relative;
+      }
+
+      .carousel-slide:nth-child(1) {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .carousel-slide:nth-child(2) {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      }
+
+      .carousel-slide:nth-child(3) {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      }
+
+      .carousel-slide:nth-child(4) {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      }
+
+      .carousel-slide:nth-child(5) {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      }
+
+      .slide-content {
+        color: white;
+        z-index: 1;
+      }
+
+      .slide-icon {
+        font-size: 4rem;
+        margin-bottom: var(--spacing-md);
+        animation: float 3s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .slide-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: var(--spacing-sm);
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .slide-description {
+        font-size: 1.1rem;
+        opacity: 0.95;
+        max-width: 600px;
+        line-height: 1.6;
+        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      /* 导航按钮 */
+      .carousel-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+      }
+
+      .carousel-nav.prev {
+        left: var(--spacing-md);
+      }
+
+      .carousel-nav.next {
+        right: var(--spacing-md);
+      }
+
+      .carousel-nav-btn {
+        width: 50px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: var(--gray-700);
+        box-shadow: var(--shadow-md);
+        transition: all var(--transition-base);
+      }
+
+      .carousel-nav-btn:hover {
+        background: white;
+        transform: scale(1.1);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .carousel-nav-btn:active {
+        transform: scale(0.95);
+      }
+
+      .carousel-nav-btn:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+
+      /* 指示器 */
+      .carousel-indicators {
+        position: absolute;
+        bottom: var(--spacing-md);
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: var(--spacing-xs);
+        z-index: 10;
+      }
+
+      .carousel-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        border: 2px solid white;
+        cursor: pointer;
+        transition: all var(--transition-base);
+      }
+
+      .carousel-indicator:hover {
+        background: rgba(255, 255, 255, 0.8);
+        transform: scale(1.2);
+      }
+
+      .carousel-indicator.active {
+        background: white;
+        width: 30px;
+        border-radius: 6px;
+      }
+
+      /* 自动播放控制 */
+      .carousel-controls {
+        display: flex;
+        gap: var(--spacing-sm);
+        justify-content: center;
+        margin-top: var(--spacing-md);
+        flex-wrap: wrap;
+      }
+
+      .autoplay-status {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+        padding: 8px 16px;
+        background: var(--primary-light);
+        color: var(--primary);
+        border-radius: var(--radius-md);
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+
+      .status-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--primary);
+        animation: pulse-dot 2s infinite;
+      }
+
+      @keyframes pulse-dot {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+
+      /* 移动端适配 */
+      @media (max-width: 768px) {
+        .carousel-slide {
+          padding: var(--spacing-lg);
+        }
+
+        .slide-icon {
+          font-size: 3rem;
+        }
+
+        .slide-title {
+          font-size: 1.5rem;
+        }
+
+        .slide-description {
+          font-size: 1rem;
+        }
+
+        .carousel-nav-btn {
+          width: 40px;
+          height: 40px;
+          font-size: 1.2rem;
+        }
+
+        .carousel-nav.prev {
+          left: var(--spacing-sm);
+        }
+
+        .carousel-nav.next {
+          right: var(--spacing-sm);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .carousel-slide {
+          padding: var(--spacing-md);
+        }
+
+        .slide-icon {
+          font-size: 2.5rem;
+        }
+
+        .slide-title {
+          font-size: 1.3rem;
+        }
+
+        .slide-description {
+          font-size: 0.9rem;
+        }
+
+        .carousel-controls {
+          flex-direction: column;
+        }
+
+        .carousel-controls .btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo-page">
+      <!-- 面包屑导航 -->
+      <nav class="breadcrumb">
+        <a href="../../index.html">首页</a>
+        <span class="separator">›</span>
+        <a href="../index.html">CSS Transform & Transition</a>
+        <span class="separator">›</span>
+        <a href="index.html">实战应用</a>
+        <span class="separator">›</span>
+        <span class="current">轮播图切换</span>
+      </nav>
+
+      <!-- 标题和描述 -->
+      <h1>🎠 轮播图切换</h1>
+      <p class="subtitle">使用 translateX 实现流畅的图片轮播效果，支持手动控制和自动播放</p>
+
+      <!-- 知识点标签 -->
+      <div class="knowledge-tags">
+        <span class="tag-label">使用的知识点：</span>
+        <a class="knowledge-tag" href="../demos/translateX.html">
+          <span class="tag-icon">→</span>
+          translateX()
+        </a>
+        <a class="knowledge-tag" href="../demos/timing.html">
+          <span class="tag-icon">📈</span>
+          transition-timing-function
+        </a>
+        <a class="knowledge-tag" href="../demos/multiple.html">
+          <span class="tag-icon">🔗</span>
+          多重变换
+        </a>
+      </div>
+
+      <!-- 交互演示区 -->
+      <section class="interactive-demo">
+        <h2>交互演示</h2>
+        <p>使用左右箭头按钮或点击指示器切换幻灯片，也可以开启自动播放：</p>
+
+        <div class="demo-info">
+          <p>💡 提示：点击左右箭头切换幻灯片，点击底部圆点跳转到指定幻灯片</p>
+        </div>
+
+        <!-- 轮播图容器 -->
+        <div class="carousel-container">
+          <div class="carousel-viewport">
+            <div id="carousel-track" class="carousel-track">
+              <!-- 幻灯片 1 -->
+              <div class="carousel-slide">
+                <div class="slide-content">
+                  <div class="slide-icon">🎨</div>
+                  <h3 class="slide-title">创意设计</h3>
+                  <p class="slide-description">打造独特的视觉体验，让您的品牌脱颖而出</p>
+                </div>
+              </div>
+
+              <!-- 幻灯片 2 -->
+              <div class="carousel-slide">
+                <div class="slide-content">
+                  <div class="slide-icon">💻</div>
+                  <h3 class="slide-title">前端开发</h3>
+                  <p class="slide-description">使用现代技术栈构建高性能的 Web 应用</p>
+                </div>
+              </div>
+
+              <!-- 幻灯片 3 -->
+              <div class="carousel-slide">
+                <div class="slide-content">
+                  <div class="slide-icon">📱</div>
+                  <h3 class="slide-title">移动优先</h3>
+                  <p class="slide-description">响应式设计，完美适配各种设备和屏幕</p>
+                </div>
+              </div>
+
+              <!-- 幻灯片 4 -->
+              <div class="carousel-slide">
+                <div class="slide-content">
+                  <div class="slide-icon">🚀</div>
+                  <h3 class="slide-title">性能优化</h3>
+                  <p class="slide-description">极致的加载速度和流畅的用户体验</p>
+                </div>
+              </div>
+
+              <!-- 幻灯片 5 -->
+              <div class="carousel-slide">
+                <div class="slide-content">
+                  <div class="slide-icon">🎯</div>
+                  <h3 class="slide-title">精准交付</h3>
+                  <p class="slide-description">按时按质完成项目，超越客户期望</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 导航按钮 -->
+          <div class="carousel-nav prev">
+            <button id="prev-btn" class="carousel-nav-btn" aria-label="上一张">‹</button>
+          </div>
+          <div class="carousel-nav next">
+            <button id="next-btn" class="carousel-nav-btn" aria-label="下一张">›</button>
+          </div>
+
+          <!-- 指示器 -->
+          <div id="carousel-indicators" class="carousel-indicators">
+            <button class="carousel-indicator active" data-index="0" aria-label="幻灯片 1"></button>
+            <button class="carousel-indicator" data-index="1" aria-label="幻灯片 2"></button>
+            <button class="carousel-indicator" data-index="2" aria-label="幻灯片 3"></button>
+            <button class="carousel-indicator" data-index="3" aria-label="幻灯片 4"></button>
+            <button class="carousel-indicator" data-index="4" aria-label="幻灯片 5"></button>
+          </div>
+        </div>
+
+        <!-- 控制按钮 -->
+        <div class="carousel-controls">
+          <button id="autoplay-btn" class="btn">开启自动播放</button>
+          <button id="reset-btn" class="btn btn-secondary">重置到第一张</button>
+          <span id="autoplay-status" class="autoplay-status" style="display: none">
+            <span class="status-indicator"></span>
+            自动播放中
+          </span>
+        </div>
+      </section>
+
+      <!-- 实现步骤 -->
+      <section class="implementation">
+        <h2>实现步骤</h2>
+
+        <h3>步骤 1：HTML 结构</h3>
+        <p>创建轮播图的基本结构，包括视口、轨道和幻灯片：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">HTML</span>
+          </div>
+          <pre class="code-block"><code><span class="comment">&lt;!-- 轮播图容器 --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"carousel-container"</span><span class="tag">&gt;</span>
+  <span class="comment">&lt;!-- 视口 - 只显示一张幻灯片 --&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"carousel-viewport"</span><span class="tag">&gt;</span>
+    <span class="comment">&lt;!-- 轨道 - 包含所有幻灯片 --&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"carousel-track"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"carousel-slide"</span><span class="tag">&gt;</span>幻灯片 1<span class="tag">&lt;/div&gt;</span>
+      <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"carousel-slide"</span><span class="tag">&gt;</span>幻灯片 2<span class="tag">&lt;/div&gt;</span>
+      <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"carousel-slide"</span><span class="tag">&gt;</span>幻灯片 3<span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+
+  <span class="comment">&lt;!-- 导航按钮 --&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="string">"prev-btn"</span><span class="tag">&gt;</span>‹<span class="tag">&lt;/button&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="string">"next-btn"</span><span class="tag">&gt;</span>›<span class="tag">&lt;/button&gt;</span>
+
+  <span class="comment">&lt;!-- 指示器 --&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"carousel-indicators"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;button</span> <span class="attr">data-index</span>=<span class="string">"0"</span><span class="tag">&gt;&lt;/button&gt;</span>
+    <span class="tag">&lt;button</span> <span class="attr">data-index</span>=<span class="string">"1"</span><span class="tag">&gt;&lt;/button&gt;</span>
+    <span class="tag">&lt;button</span> <span class="attr">data-index</span>=<span class="string">"2"</span><span class="tag">&gt;&lt;/button&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></code></pre>
+        </div>
+
+        <h3>步骤 2：CSS 样式</h3>
+        <p>使用 flexbox 和 translateX 实现轮播效果：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">CSS</span>
+          </div>
+          <pre class="code-block"><code><span class="comment">/* 视口 - 隐藏溢出内容 */</span>
+<span class="keyword">.carousel-viewport</span> {
+  <span class="property">overflow</span>: <span class="value">hidden</span>;
+  <span class="property">width</span>: <span class="value">100%</span>;
+}
+
+<span class="comment">/* 轨道 - 使用 flexbox 横向排列 */</span>
+<span class="keyword">.carousel-track</span> {
+  <span class="property">display</span>: <span class="value">flex</span>;
+  <span class="property">transition</span>: <span class="value">transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)</span>;
+}
+
+<span class="comment">/* 幻灯片 - 每张占满视口宽度 */</span>
+<span class="keyword">.carousel-slide</span> {
+  <span class="property">min-width</span>: <span class="value">100%</span>;
+  <span class="property">height</span>: <span class="value">100%</span>;
+}</code></pre>
+        </div>
+
+        <h3>步骤 3：JavaScript 切换逻辑</h3>
+        <p>使用 translateX 移动轨道来切换幻灯片：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">JavaScript</span>
+          </div>
+          <pre class="code-block"><code><span class="keyword">let</span> currentIndex = <span class="value">0</span>;
+<span class="keyword">const</span> track = <span class="property">document</span>.<span class="value">querySelector</span>(<span class="string">'.carousel-track'</span>);
+<span class="keyword">const</span> slides = <span class="property">document</span>.<span class="value">querySelectorAll</span>(<span class="string">'.carousel-slide'</span>);
+<span class="keyword">const</span> totalSlides = slides.<span class="property">length</span>;
+
+<span class="comment">// 更新轮播图位置</span>
+<span class="keyword">function</span> <span class="value">updateCarousel</span>() {
+  <span class="keyword">const</span> offset = -currentIndex * <span class="value">100</span>;
+  track.<span class="property">style</span>.<span class="property">transform</span> = <span class="string">`translateX(</span><span class="value">${offset}</span><span class="string">%)`</span>;
+}
+
+<span class="comment">// 下一张</span>
+<span class="keyword">function</span> <span class="value">nextSlide</span>() {
+  currentIndex = (currentIndex + <span class="value">1</span>) % totalSlides;
+  <span class="value">updateCarousel</span>();
+}
+
+<span class="comment">// 上一张</span>
+<span class="keyword">function</span> <span class="value">prevSlide</span>() {
+  currentIndex = (currentIndex - <span class="value">1</span> + totalSlides) % totalSlides;
+  <span class="value">updateCarousel</span>();
+}</code></pre>
+        </div>
+
+        <h3>步骤 4：添加指示器</h3>
+        <p>实现点击指示器跳转到指定幻灯片：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">JavaScript</span>
+          </div>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">const</span> indicators = <span class="property">document</span>.<span class="value">querySelectorAll</span>(<span class="string">'.carousel-indicator'</span>);
+
+<span class="comment">// 更新指示器状态</span>
+<span class="keyword">function</span> <span class="value">updateIndicators</span>() {
+  indicators.<span class="value">forEach</span>((<span class="keyword">indicator</span>, <span class="keyword">index</span>) =&gt; {
+    indicator.<span class="property">classList</span>.<span class="value">toggle</span>(<span class="string">'active'</span>, index === currentIndex);
+  });
+}
+
+<span class="comment">// 点击指示器跳转</span>
+indicators.<span class="value">forEach</span>(<span class="keyword">indicator</span> =&gt; {
+  indicator.<span class="value">addEventListener</span>(<span class="string">'click'</span>, () =&gt; {
+    currentIndex = <span class="value">parseInt</span>(indicator.<span class="property">dataset</span>.<span class="property">index</span>);
+    <span class="value">updateCarousel</span>();
+    <span class="value">updateIndicators</span>();
+  });
+});</code></pre>
+        </div>
+
+        <h3>步骤 5：自动播放功能</h3>
+        <p>实现可选的自动播放功能：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">JavaScript</span>
+          </div>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">let</span> autoplayInterval = <span class="value">null</span>;
+
+<span class="comment">// 开启自动播放</span>
+<span class="keyword">function</span> <span class="value">startAutoplay</span>() {
+  autoplayInterval = <span class="value">setInterval</span>(() =&gt; {
+    <span class="value">nextSlide</span>();
+  }, <span class="value">3000</span>); <span class="comment">// 每 3 秒切换</span>
+}
+
+<span class="comment">// 停止自动播放</span>
+<span class="keyword">function</span> <span class="value">stopAutoplay</span>() {
+  <span class="keyword">if</span> (autoplayInterval) {
+    <span class="value">clearInterval</span>(autoplayInterval);
+    autoplayInterval = <span class="value">null</span>;
+  }
+}</code></pre>
+        </div>
+      </section>
+
+      <!-- 关键要点 -->
+      <section class="key-points">
+        <h2>关键要点</h2>
+        <ul>
+          <li>
+            <strong>使用 translateX 百分比</strong>实现切换，每张幻灯片移动 -100%
+            的倍数，避免使用固定像素值以适应不同屏幕
+          </li>
+          <li><strong>overflow: hidden</strong> 在视口上隐藏溢出内容，确保只显示当前幻灯片</li>
+          <li><strong>min-width: 100%</strong> 确保每张幻灯片占满整个视口宽度</li>
+          <li><strong>cubic-bezier(0.4, 0, 0.2, 1)</strong> 缓动函数提供流畅的切换效果，类似原生应用的体验</li>
+          <li><strong>循环切换</strong>使用取模运算（%）实现无限循环，到达最后一张后自动回到第一张</li>
+          <li><strong>指示器同步</strong>切换幻灯片时同步更新指示器状态，提供清晰的位置反馈</li>
+          <li><strong>自动播放控制</strong>使用 setInterval 实现自动播放，用户交互时应暂停以提升体验</li>
+          <li><strong>性能优化</strong>transform 属性使用 GPU 加速，比修改 left/margin 性能更好</li>
+          <li><strong>响应式设计</strong>使用百分比和 aspect-ratio 确保在不同设备上的良好显示</li>
+        </ul>
+      </section>
+
+      <!-- 相关演示 -->
+      <section class="related-demos">
+        <h2>相关演示</h2>
+        <div class="scenario-links">
+          <a class="scenario-link" href="../demos/translateX.html">
+            <span class="scenario-icon">→</span>
+            <div class="scenario-content">
+              <h4>translateX() 基础</h4>
+              <p>了解 X 轴平移的基本用法 →</p>
+            </div>
+          </a>
+          <a class="scenario-link" href="../demos/timing.html">
+            <span class="scenario-icon">📈</span>
+            <div class="scenario-content">
+              <h4>缓动函数</h4>
+              <p>探索不同的过渡效果 →</p>
+            </div>
+          </a>
+          <a class="scenario-link" href="sidebar-slide.html">
+            <span class="scenario-icon">🎯</span>
+            <div class="scenario-content">
+              <h4>侧边栏滑入滑出</h4>
+              <p>查看类似的平移效果 →</p>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- 返回链接 -->
+      <div style="margin-top: 60px; text-align: center">
+        <a class="btn" href="index.html">← 返回实战应用列表</a>
+      </div>
+    </div>
+
+    <script type="module">
+      // 轮播图状态
+      let currentIndex = 0;
+      let autoplayInterval = null;
+      let isAutoplayActive = false;
+
+      // DOM 元素
+      const track = document.getElementById('carousel-track');
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+      const autoplayBtn = document.getElementById('autoplay-btn');
+      const resetBtn = document.getElementById('reset-btn');
+      const autoplayStatus = document.getElementById('autoplay-status');
+      const indicators = document.querySelectorAll('.carousel-indicator');
+      const slides = document.querySelectorAll('.carousel-slide');
+      const totalSlides = slides.length;
+
+      // 更新轮播图位置
+      function updateCarousel() {
+        const offset = -currentIndex * 100;
+        track.style.transform = `translateX(${offset}%)`;
+        updateIndicators();
+      }
+
+      // 更新指示器状态
+      function updateIndicators() {
+        indicators.forEach((indicator, index) => {
+          indicator.classList.toggle('active', index === currentIndex);
+        });
+      }
+
+      // 下一张
+      function nextSlide() {
+        currentIndex = (currentIndex + 1) % totalSlides;
+        updateCarousel();
+      }
+
+      // 上一张
+      function prevSlide() {
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        updateCarousel();
+      }
+
+      // 跳转到指定幻灯片
+      function goToSlide(index) {
+        currentIndex = index;
+        updateCarousel();
+      }
+
+      // 开启自动播放
+      function startAutoplay() {
+        if (autoplayInterval) {
+          return;
+        }
+
+        autoplayInterval = setInterval(() => {
+          nextSlide();
+        }, 3000);
+
+        isAutoplayActive = true;
+        autoplayBtn.textContent = '停止自动播放';
+        autoplayStatus.style.display = 'inline-flex';
+      }
+
+      // 停止自动播放
+      function stopAutoplay() {
+        if (autoplayInterval) {
+          clearInterval(autoplayInterval);
+          autoplayInterval = null;
+        }
+
+        isAutoplayActive = false;
+        autoplayBtn.textContent = '开启自动播放';
+        autoplayStatus.style.display = 'none';
+      }
+
+      // 切换自动播放
+      function toggleAutoplay() {
+        if (isAutoplayActive) {
+          stopAutoplay();
+        } else {
+          startAutoplay();
+        }
+      }
+
+      // 重置到第一张
+      function reset() {
+        stopAutoplay();
+        currentIndex = 0;
+        updateCarousel();
+      }
+
+      // 事件监听
+      prevBtn.addEventListener('click', () => {
+        prevSlide();
+        if (isAutoplayActive) {
+          stopAutoplay();
+          startAutoplay(); // 重新开始计时
+        }
+      });
+
+      nextBtn.addEventListener('click', () => {
+        nextSlide();
+        if (isAutoplayActive) {
+          stopAutoplay();
+          startAutoplay(); // 重新开始计时
+        }
+      });
+
+      autoplayBtn.addEventListener('click', toggleAutoplay);
+      resetBtn.addEventListener('click', reset);
+
+      // 指示器点击事件
+      indicators.forEach((indicator) => {
+        indicator.addEventListener('click', () => {
+          const index = parseInt(indicator.dataset.index);
+          goToSlide(index);
+          if (isAutoplayActive) {
+            stopAutoplay();
+            startAutoplay(); // 重新开始计时
+          }
+        });
+      });
+
+      // 键盘导航
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+          prevSlide();
+        } else if (e.key === 'ArrowRight') {
+          nextSlide();
+        }
+      });
+
+      // 页面卸载时清理定时器
+      window.addEventListener('beforeunload', () => {
+        stopAutoplay();
+      });
+    </script>
+  </body>
+</html>

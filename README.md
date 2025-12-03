@@ -26,8 +26,6 @@ frontend-learning/
 │   ├── index.html          # 动画模块主页
 │   ├── styles.css          # 动画模块专用样式
 │   ├── demos/              # 32+ 个动画演示
-│   ├── product-demo.html   # 产品演示页面
-│   └── showcase.html       # 效果展示集合
 ├── grid/                   # CSS Grid 布局模块
 │   ├── index.html          # Grid 模块主页
 │   └── demo*.html          # 10 个 Grid 演示

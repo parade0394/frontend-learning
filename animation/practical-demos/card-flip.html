@@ -1,0 +1,535 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="卡片翻转效果 - 使用 rotateY 和 perspective 实现 3D 翻转交互" />
+    <title>卡片翻转 - CSS Transform & Transition 实战应用</title>
+    <link href="/src/styles/common.css" rel="stylesheet" />
+    <link href="../styles.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+    <!-- 防止主题闪烁 -->
+    <script>
+      (function () {
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    </script>
+    <script type="module" src="/src/theme-sync.js"></script>
+    <style>
+      /* 演示专用样式 */
+      .flip-demo-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: var(--spacing-lg);
+        padding: var(--spacing-lg);
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      /* 卡片容器 - 提供 3D 空间 */
+      .flip-card {
+        width: 100%;
+        height: 320px;
+        perspective: 1000px;
+        cursor: pointer;
+      }
+
+      /* 卡片内部容器 - 执行翻转 */
+      .flip-card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+      }
+
+      /* Hover 触发翻转 */
+      .flip-card.hover-trigger:hover .flip-card-inner {
+        transform: rotateY(180deg);
+      }
+
+      /* Click 触发翻转 */
+      .flip-card.click-trigger.flipped .flip-card-inner {
+        transform: rotateY(180deg);
+      }
+
+      /* 卡片正面和背面的共同样式 */
+      .flip-card-face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: var(--radius-lg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: var(--spacing-lg);
+        box-shadow: var(--shadow-lg);
+        border: 2px solid var(--border-color);
+      }
+
+      /* 卡片正面 */
+      .flip-card-front {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: white;
+      }
+
+      /* 卡片背面 - 初始旋转 180 度 */
+      .flip-card-back {
+        background: var(--card-bg);
+        color: var(--text-primary);
+        transform: rotateY(180deg);
+      }
+
+      .flip-card-icon {
+        font-size: 3rem;
+        margin-bottom: var(--spacing-md);
+      }
+
+      .flip-card-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: var(--spacing-sm);
+        text-align: center;
+      }
+
+      .flip-card-description {
+        font-size: 0.95rem;
+        text-align: center;
+        line-height: 1.6;
+        opacity: 0.9;
+      }
+
+      .flip-card-back .flip-card-description {
+        color: var(--text-secondary);
+      }
+
+      .flip-trigger-badge {
+        position: absolute;
+        top: var(--spacing-sm);
+        right: var(--spacing-sm);
+        padding: 6px 12px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: var(--radius-sm);
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .flip-card-back .flip-trigger-badge {
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+
+      /* 点击提示 */
+      .click-hint {
+        position: absolute;
+        bottom: var(--spacing-sm);
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 6px 12px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: var(--radius-sm);
+        font-size: 0.8rem;
+        font-weight: 500;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.6;
+        }
+      }
+
+      /* 控制按钮 */
+      .flip-controls {
+        display: flex;
+        gap: var(--spacing-sm);
+        justify-content: center;
+        margin-top: var(--spacing-md);
+        flex-wrap: wrap;
+      }
+
+      .flip-controls .btn {
+        min-width: 150px;
+      }
+
+      /* 移动端适配 */
+      @media (max-width: 768px) {
+        .flip-demo-container {
+          grid-template-columns: 1fr;
+          padding: var(--spacing-md);
+        }
+
+        .flip-card {
+          height: 280px;
+        }
+
+        .flip-card-icon {
+          font-size: 2.5rem;
+        }
+
+        .flip-card-title {
+          font-size: 1.3rem;
+        }
+
+        .flip-card-description {
+          font-size: 0.9rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .flip-card {
+          height: 260px;
+        }
+
+        .flip-controls {
+          flex-direction: column;
+        }
+
+        .flip-controls .btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo-page">
+      <!-- 面包屑导航 -->
+      <nav class="breadcrumb">
+        <a href="../../index.html">首页</a>
+        <span class="separator">›</span>
+        <a href="../index.html">CSS Transform & Transition</a>
+        <span class="separator">›</span>
+        <a href="index.html">实战应用</a>
+        <span class="separator">›</span>
+        <span class="current">卡片翻转</span>
+      </nav>
+
+      <!-- 标题和描述 -->
+      <h1>🎴 卡片翻转</h1>
+      <p class="subtitle">使用 rotateY、perspective 和 backface-visibility 实现流畅的 3D 卡片翻转效果</p>
+
+      <!-- 知识点标签 -->
+      <div class="knowledge-tags">
+        <span class="tag-label">使用的知识点：</span>
+        <a class="knowledge-tag" href="../demos/rotateY.html">
+          <span class="tag-icon">🔄</span>
+          rotateY()
+        </a>
+        <a class="knowledge-tag" href="../demos/perspective.html">
+          <span class="tag-icon">👁️</span>
+          perspective
+        </a>
+        <a class="knowledge-tag" href="../demos/backface-visibility.html">
+          <span class="tag-icon">🎭</span>
+          backface-visibility
+        </a>
+        <a class="knowledge-tag" href="../demos/transform-style.html">
+          <span class="tag-icon">📦</span>
+          transform-style
+        </a>
+      </div>
+
+      <!-- 交互演示区 -->
+      <section class="interactive-demo">
+        <h2>交互演示</h2>
+        <p>体验两种不同的触发方式：悬停翻转和点击翻转</p>
+
+        <div class="demo-info">
+          <p>💡 提示：将鼠标悬停在第一张卡片上，或点击第二、三张卡片查看翻转效果</p>
+        </div>
+
+        <div class="flip-demo-container">
+          <!-- 卡片 1: Hover 触发 -->
+          <div class="flip-card hover-trigger">
+            <div class="flip-card-inner">
+              <div class="flip-card-face flip-card-front">
+                <span class="flip-trigger-badge">Hover</span>
+                <div class="flip-card-icon">🎨</div>
+                <h3 class="flip-card-title">设计服务</h3>
+                <p class="flip-card-description">悬停查看详情</p>
+              </div>
+              <div class="flip-card-face flip-card-back">
+                <span class="flip-trigger-badge">Hover</span>
+                <div class="flip-card-icon">✨</div>
+                <h3 class="flip-card-title">专业设计</h3>
+                <p class="flip-card-description">我们提供 UI/UX 设计、品牌设计和视觉设计服务，帮助您的产品脱颖而出。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 卡片 2: Click 触发 -->
+          <div class="flip-card click-trigger" data-card="1">
+            <div class="flip-card-inner">
+              <div class="flip-card-face flip-card-front">
+                <span class="flip-trigger-badge">Click</span>
+                <div class="flip-card-icon">💻</div>
+                <h3 class="flip-card-title">开发服务</h3>
+                <p class="flip-card-description">点击查看详情</p>
+                <span class="click-hint">👆 点击翻转</span>
+              </div>
+              <div class="flip-card-face flip-card-back">
+                <span class="flip-trigger-badge">Click</span>
+                <div class="flip-card-icon">🚀</div>
+                <h3 class="flip-card-title">全栈开发</h3>
+                <p class="flip-card-description">从前端到后端，我们提供完整的 Web 应用开发解决方案，技术栈现代化。</p>
+                <span class="click-hint">👆 再次点击</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 卡片 3: Click 触发 -->
+          <div class="flip-card click-trigger" data-card="2">
+            <div class="flip-card-inner">
+              <div class="flip-card-face flip-card-front">
+                <span class="flip-trigger-badge">Click</span>
+                <div class="flip-card-icon">📱</div>
+                <h3 class="flip-card-title">移动应用</h3>
+                <p class="flip-card-description">点击查看详情</p>
+                <span class="click-hint">👆 点击翻转</span>
+              </div>
+              <div class="flip-card-face flip-card-back">
+                <span class="flip-trigger-badge">Click</span>
+                <div class="flip-card-icon">📲</div>
+                <h3 class="flip-card-title">跨平台开发</h3>
+                <p class="flip-card-description">使用 React Native 和 Flutter 开发高性能的跨平台移动应用。</p>
+                <span class="click-hint">👆 再次点击</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 控制按钮 -->
+        <div class="flip-controls">
+          <button id="flip-all-btn" class="btn">翻转所有卡片</button>
+          <button id="reset-all-btn" class="btn btn-secondary">重置所有卡片</button>
+        </div>
+      </section>
+
+      <!-- 实现步骤 -->
+      <section class="implementation">
+        <h2>实现步骤</h2>
+
+        <h3>步骤 1：HTML 结构</h3>
+        <p>创建卡片的三层结构：容器、内部翻转层、正反面：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">HTML</span>
+          </div>
+          <pre class="code-block"><code><span class="comment">&lt;!-- 卡片容器 --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"flip-card"</span><span class="tag">&gt;</span>
+  <span class="comment">&lt;!-- 内部翻转层 --&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"flip-card-inner"</span><span class="tag">&gt;</span>
+    <span class="comment">&lt;!-- 正面 --&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"flip-card-face flip-card-front"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;h3&gt;</span>卡片标题<span class="tag">&lt;/h3&gt;</span>
+      <span class="tag">&lt;p&gt;</span>卡片描述<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+
+    <span class="comment">&lt;!-- 背面 --&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"flip-card-face flip-card-back"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;h3&gt;</span>背面标题<span class="tag">&lt;/h3&gt;</span>
+      <span class="tag">&lt;p&gt;</span>背面内容<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></code></pre>
+        </div>
+
+        <h3>步骤 2：设置 3D 空间</h3>
+        <p>在容器上设置 perspective，在内部层设置 transform-style：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">CSS</span>
+          </div>
+          <pre class="code-block"><code><span class="comment">/* 卡片容器 - 提供 3D 透视空间 */</span>
+<span class="keyword">.flip-card</span> {
+  <span class="property">width</span>: <span class="value">300px</span>;
+  <span class="property">height</span>: <span class="value">400px</span>;
+  <span class="property">perspective</span>: <span class="value">1000px</span>;
+  <span class="comment">/* perspective 值越小，3D 效果越明显 */</span>
+}
+
+<span class="comment">/* 内部翻转层 - 保持 3D 空间 */</span>
+<span class="keyword">.flip-card-inner</span> {
+  <span class="property">position</span>: <span class="value">relative</span>;
+  <span class="property">width</span>: <span class="value">100%</span>;
+  <span class="property">height</span>: <span class="value">100%</span>;
+  <span class="property">transition</span>: <span class="value">transform 0.6s</span>;
+  <span class="property">transform-style</span>: <span class="value">preserve-3d</span>;
+  <span class="comment">/* preserve-3d 让子元素保持在 3D 空间中 */</span>
+}</code></pre>
+        </div>
+
+        <h3>步骤 3：设置正反面</h3>
+        <p>使用绝对定位叠加正反面，并隐藏背面：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">CSS</span>
+          </div>
+          <pre class="code-block"><code><span class="comment">/* 正反面共同样式 */</span>
+<span class="keyword">.flip-card-face</span> {
+  <span class="property">position</span>: <span class="value">absolute</span>;
+  <span class="property">width</span>: <span class="value">100%</span>;
+  <span class="property">height</span>: <span class="value">100%</span>;
+  <span class="property">backface-visibility</span>: <span class="value">hidden</span>;
+  <span class="comment">/* 隐藏元素的背面，避免翻转时看到镜像 */</span>
+}
+
+<span class="comment">/* 正面 */</span>
+<span class="keyword">.flip-card-front</span> {
+  <span class="property">background</span>: <span class="value">linear-gradient(135deg, #667eea 0%, #764ba2 100%)</span>;
+  <span class="property">color</span>: <span class="value">white</span>;
+}
+
+<span class="comment">/* 背面 - 初始旋转 180 度 */</span>
+<span class="keyword">.flip-card-back</span> {
+  <span class="property">background</span>: <span class="value">white</span>;
+  <span class="property">color</span>: <span class="value">#333</span>;
+  <span class="property">transform</span>: <span class="value">rotateY(180deg)</span>;
+  <span class="comment">/* 背面预先旋转 180 度，这样翻转时才能正确显示 */</span>
+}</code></pre>
+        </div>
+
+        <h3>步骤 4：实现翻转效果</h3>
+        <p>通过旋转内部层来实现翻转，支持 hover 和 click 两种触发方式：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">CSS</span>
+          </div>
+          <pre class="code-block"><code><span class="comment">/* Hover 触发翻转 */</span>
+<span class="keyword">.flip-card:hover .flip-card-inner</span> {
+  <span class="property">transform</span>: <span class="value">rotateY(180deg)</span>;
+}
+
+<span class="comment">/* Click 触发翻转（通过 JavaScript 添加 .flipped 类）*/</span>
+<span class="keyword">.flip-card.flipped .flip-card-inner</span> {
+  <span class="property">transform</span>: <span class="value">rotateY(180deg)</span>;
+}</code></pre>
+        </div>
+
+        <h3>步骤 5：JavaScript 交互（可选）</h3>
+        <p>为点击触发的卡片添加交互逻辑：</p>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">JavaScript</span>
+          </div>
+          <pre class="code-block"><code><span class="comment">// 获取所有点击触发的卡片</span>
+<span class="keyword">const</span> clickCards = <span class="property">document</span>.<span class="value">querySelectorAll</span>(<span class="string">'.flip-card.click-trigger'</span>);
+
+<span class="comment">// 为每张卡片添加点击事件</span>
+clickCards.<span class="value">forEach</span>(<span class="keyword">card</span> =&gt; {
+  card.<span class="value">addEventListener</span>(<span class="string">'click'</span>, () =&gt; {
+    card.<span class="property">classList</span>.<span class="value">toggle</span>(<span class="string">'flipped'</span>);
+  });
+});</code></pre>
+        </div>
+      </section>
+
+      <!-- 关键要点 -->
+      <section class="key-points">
+        <h2>关键要点</h2>
+        <ul>
+          <li>
+            <strong>perspective 属性</strong>必须设置在父容器上，它定义了观察者到 3D 空间的距离，值越小 3D
+            效果越明显（推荐 1000px）
+          </li>
+          <li><strong>transform-style: preserve-3d</strong> 让子元素保持在 3D 空间中，这是实现翻转效果的关键</li>
+          <li><strong>backface-visibility: hidden</strong> 隐藏元素的背面，防止翻转时看到镜像内容</li>
+          <li>
+            <strong>背面预旋转</strong>：背面元素需要预先旋转 180 度（rotateY(180deg)），这样当容器旋转 180
+            度时，背面才能正确显示
+          </li>
+          <li><strong>过渡时长</strong>：0.6s 是卡片翻转的最佳时长，既不会太快也不会太慢</li>
+          <li><strong>触发方式</strong>：hover 适合桌面端，click 适合移动端，可以同时提供两种方式</li>
+          <li><strong>性能优化</strong>：使用 transform 而不是修改 width/height，可以利用 GPU 加速</li>
+          <li><strong>可访问性</strong>：为点击触发的卡片添加视觉提示，让用户知道可以交互</li>
+        </ul>
+      </section>
+
+      <!-- 相关演示 -->
+      <section class="related-demos">
+        <h2>相关演示</h2>
+        <div class="scenario-links">
+          <a class="scenario-link" href="../demos/rotateY.html">
+            <span class="scenario-icon">🔄</span>
+            <div class="scenario-content">
+              <h4>rotateY() 基础</h4>
+              <p>了解 Y 轴旋转的基本用法 →</p>
+            </div>
+          </a>
+          <a class="scenario-link" href="../demos/perspective.html">
+            <span class="scenario-icon">👁️</span>
+            <div class="scenario-content">
+              <h4>perspective 透视</h4>
+              <p>理解 3D 透视的原理 →</p>
+            </div>
+          </a>
+          <a class="scenario-link" href="../demos/backface-visibility.html">
+            <span class="scenario-icon">🎭</span>
+            <div class="scenario-content">
+              <h4>backface-visibility</h4>
+              <p>控制元素背面的可见性 →</p>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- 返回链接 -->
+      <div style="margin-top: 60px; text-align: center">
+        <a class="btn" href="index.html">← 返回实战应用列表</a>
+      </div>
+    </div>
+
+    <script type="module">
+      // 点击触发的卡片
+      const clickCards = document.querySelectorAll('.flip-card.click-trigger');
+
+      clickCards.forEach((card) => {
+        card.addEventListener('click', () => {
+          card.classList.toggle('flipped');
+        });
+      });
+
+      // 翻转所有卡片按钮
+      const flipAllBtn = document.getElementById('flip-all-btn');
+      const resetAllBtn = document.getElementById('reset-all-btn');
+
+      flipAllBtn.addEventListener('click', () => {
+        clickCards.forEach((card) => {
+          card.classList.add('flipped');
+        });
+      });
+
+      resetAllBtn.addEventListener('click', () => {
+        clickCards.forEach((card) => {
+          card.classList.remove('flipped');
+        });
+      });
+    </script>
+  </body>
+</html>

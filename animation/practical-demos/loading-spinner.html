@@ -1,0 +1,467 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>加载动画 - CSS Transform & Transition 实战应用</title>
+    <link href="../../src/styles/common.css" rel="stylesheet" />
+    <link href="../styles.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+    <script type="module" src="/src/theme-sync.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="demo-page">
+        <nav class="breadcrumb">
+          <a href="../../index.html">首页</a>
+          <span class="separator">›</span>
+          <a href="../index.html">CSS Transform & Transition</a>
+          <span class="separator">›</span>
+          <a href="index.html">实战应用</a>
+          <span class="separator">›</span>
+          <span class="current">加载动画</span>
+        </nav>
+
+        <h1>⏳ 加载动画</h1>
+        <p class="subtitle">使用 @keyframes 和 animation-play-state 创建多种加载指示器</p>
+
+        <div class="knowledge-tags">
+          <span class="tag-label">使用的知识点：</span>
+          <a class="knowledge-tag" href="../demos/keyframes.html">
+            <span class="tag-icon">🎬</span>
+            @keyframes
+          </a>
+          <a class="knowledge-tag" href="../demos/rotate.html">
+            <span class="tag-icon">🔄</span>
+            rotate
+          </a>
+          <a class="knowledge-tag" href="../demos/scale.html">
+            <span class="tag-icon">📏</span>
+            scale
+          </a>
+          <a class="knowledge-tag" href="../demos/animation-play-state.html">
+            <span class="tag-icon">⏯️</span>
+            animation-play-state
+          </a>
+        </div>
+
+        <section class="interactive-demo">
+          <h2>交互演示</h2>
+
+          <div class="demo-controls">
+            <button id="toggleAll" class="btn-primary">
+              <span id="toggleText">⏸️ 暂停所有</span>
+            </button>
+            <button id="resetAll" class="btn-secondary">🔄 重置</button>
+          </div>
+
+          <div class="spinners-grid">
+            <!-- Spinner 1: Classic Rotate -->
+            <div class="spinner-card">
+              <h3>经典旋转</h3>
+              <div class="spinner-container">
+                <div class="spinner spinner-classic"></div>
+              </div>
+              <button class="btn-small" data-toggle="spinner-classic">⏸️ 暂停</button>
+              <p class="spinner-desc">使用 rotate 实现的经典加载器</p>
+            </div>
+
+            <!-- Spinner 2: Pulse Scale -->
+            <div class="spinner-card">
+              <h3>脉冲缩放</h3>
+              <div class="spinner-container">
+                <div class="spinner spinner-pulse"></div>
+              </div>
+              <button class="btn-small" data-toggle="spinner-pulse">⏸️ 暂停</button>
+              <p class="spinner-desc">使用 scale 实现的脉冲效果</p>
+            </div>
+
+            <!-- Spinner 3: Fade Dots -->
+            <div class="spinner-card">
+              <h3>渐变点</h3>
+              <div class="spinner-container">
+                <div class="spinner spinner-dots">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+              <button class="btn-small" data-toggle="spinner-dots">⏸️ 暂停</button>
+              <p class="spinner-desc">使用 opacity 实现的渐变效果</p>
+            </div>
+
+            <!-- Spinner 4: Bounce -->
+            <div class="spinner-card">
+              <h3>弹跳球</h3>
+              <div class="spinner-container">
+                <div class="spinner spinner-bounce">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+              <button class="btn-small" data-toggle="spinner-bounce">⏸️ 暂停</button>
+              <p class="spinner-desc">组合 scale 和 translateY 的弹跳效果</p>
+            </div>
+
+            <!-- Spinner 5: Progressive Dots -->
+            <div class="spinner-card">
+              <h3>渐进点</h3>
+              <div class="spinner-container">
+                <div class="spinner spinner-progressive">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+              <button class="btn-small" data-toggle="spinner-progressive">⏸️ 暂停</button>
+              <p class="spinner-desc">依次显示1个、2个、3个点的循环效果</p>
+            </div>
+          </div>
+
+          <div class="demo-info">
+            <p>💡 提示：点击单个按钮控制对应动画，或使用"暂停所有"控制全部</p>
+          </div>
+        </section>
+
+        <section class="implementation">
+          <h2>实现步骤</h2>
+
+          <div class="step">
+            <h3>步骤 1：HTML 结构</h3>
+            <p>创建不同类型的加载器容器：</p>
+            <pre class="code-block"><code><span class="comment"><!-- 经典旋转加载器 --></span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"spinner spinner-classic"</span><span class="tag">&gt;&lt;/div&gt;</span>
+
+<span class="comment"><!-- 脉冲缩放加载器 --></span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"spinner spinner-pulse"</span><span class="tag">&gt;&lt;/div&gt;</span>
+
+<span class="comment"><!-- 渐变点加载器 --></span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"spinner spinner-dots"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;span&gt;&lt;/span&gt;</span>
+  <span class="tag">&lt;span&gt;&lt;/span&gt;</span>
+  <span class="tag">&lt;span&gt;&lt;/span&gt;</span>
+<span class="tag">&lt;/div&gt;</span>
+
+<span class="comment"><!-- 弹跳球加载器 --></span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"spinner spinner-bounce"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;span&gt;&lt;/span&gt;</span>
+  <span class="tag">&lt;span&gt;&lt;/span&gt;</span>
+  <span class="tag">&lt;span&gt;&lt;/span&gt;</span>
+<span class="tag">&lt;/div&gt;</span>
+
+<span class="comment"><!-- 渐进点加载器 --></span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"spinner spinner-progressive"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;span&gt;&lt;/span&gt;</span>
+  <span class="tag">&lt;span&gt;&lt;/span&gt;</span>
+  <span class="tag">&lt;span&gt;&lt;/span&gt;</span>
+<span class="tag">&lt;/div&gt;</span></code></pre>
+          </div>
+
+          <div class="step">
+            <h3>步骤 2：定义 @keyframes 动画</h3>
+            <p>为每种加载器创建关键帧动画：</p>
+            <pre class="code-block"><code><span class="comment">/* 经典旋转动画 */</span>
+<span class="keyword">@keyframes</span> <span class="value">spin</span> {
+  <span class="keyword">from</span> {
+    <span class="property">transform</span>: <span class="value">rotate(0deg)</span>;
+  }
+  <span class="keyword">to</span> {
+    <span class="property">transform</span>: <span class="value">rotate(360deg)</span>;
+  }
+}
+
+<span class="comment">/* 脉冲缩放动画 */</span>
+<span class="keyword">@keyframes</span> <span class="value">pulse</span> {
+  <span class="keyword">0%, 100%</span> {
+    <span class="property">transform</span>: <span class="value">scale(1)</span>;
+    <span class="property">opacity</span>: <span class="value">1</span>;
+  }
+  <span class="keyword">50%</span> {
+    <span class="property">transform</span>: <span class="value">scale(1.5)</span>;
+    <span class="property">opacity</span>: <span class="value">0.5</span>;
+  }
+}
+
+<span class="comment">/* 渐变动画 */</span>
+<span class="keyword">@keyframes</span> <span class="value">fade</span> {
+  <span class="keyword">0%, 100%</span> {
+    <span class="property">opacity</span>: <span class="value">0.2</span>;
+  }
+  <span class="keyword">50%</span> {
+    <span class="property">opacity</span>: <span class="value">1</span>;
+  }
+}
+
+<span class="comment">/* 弹跳动画 */</span>
+<span class="keyword">@keyframes</span> <span class="value">bounce</span> {
+  <span class="keyword">0%, 100%</span> {
+    <span class="property">transform</span>: <span class="value">translateY(0) scale(1)</span>;
+  }
+  <span class="keyword">50%</span> {
+    <span class="property">transform</span>: <span class="value">translateY(-20px) scale(0.8)</span>;
+  }
+}
+
+<span class="comment">/* 渐进点动画 - 第1个点 */</span>
+<span class="keyword">@keyframes</span> <span class="value">progressiveDot1</span> {
+  <span class="keyword">0%</span> {
+    <span class="property">opacity</span>: <span class="value">1</span>;
+    <span class="property">transform</span>: <span class="value">scale(1)</span>;
+  }
+  <span class="keyword">75%</span> {
+    <span class="property">opacity</span>: <span class="value">1</span>;
+  }
+  <span class="keyword">85%</span> {
+    <span class="property">opacity</span>: <span class="value">0</span>;
+    <span class="property">transform</span>: <span class="value">scale(0)</span>;
+  }
+}
+
+<span class="comment">/* 渐进点动画 - 第2个点 */</span>
+<span class="keyword">@keyframes</span> <span class="value">progressiveDot2</span> {
+  <span class="keyword">0%, 25%</span> {
+    <span class="property">opacity</span>: <span class="value">0</span>;
+    <span class="property">transform</span>: <span class="value">scale(0)</span>;
+  }
+  <span class="keyword">30%</span> {
+    <span class="property">opacity</span>: <span class="value">1</span>;
+    <span class="property">transform</span>: <span class="value">scale(1)</span>;
+  }
+  <span class="keyword">75%</span> {
+    <span class="property">opacity</span>: <span class="value">1</span>;
+  }
+  <span class="keyword">85%</span> {
+    <span class="property">opacity</span>: <span class="value">0</span>;
+  }
+}
+
+<span class="comment">/* 渐进点动画 - 第3个点 */</span>
+<span class="keyword">@keyframes</span> <span class="value">progressiveDot3</span> {
+  <span class="keyword">0%, 50%</span> {
+    <span class="property">opacity</span>: <span class="value">0</span>;
+    <span class="property">transform</span>: <span class="value">scale(0)</span>;
+  }
+  <span class="keyword">55%</span> {
+    <span class="property">opacity</span>: <span class="value">1</span>;
+    <span class="property">transform</span>: <span class="value">scale(1)</span>;
+  }
+  <span class="keyword">75%</span> {
+    <span class="property">opacity</span>: <span class="value">1</span>;
+  }
+  <span class="keyword">85%</span> {
+    <span class="property">opacity</span>: <span class="value">0</span>;
+  }
+}</code></pre>
+          </div>
+
+          <div class="step">
+            <h3>步骤 3：应用动画到元素</h3>
+            <p>使用 animation 属性应用动画：</p>
+            <pre class="code-block"><code><span class="comment">/* 经典旋转 */</span>
+<span class="keyword">.spinner-classic</span> {
+  <span class="property">width</span>: <span class="value">50px</span>;
+  <span class="property">height</span>: <span class="value">50px</span>;
+  <span class="property">border</span>: <span class="value">4px solid var(--gray-200)</span>;
+  <span class="property">border-top-color</span>: <span class="value">var(--primary)</span>;
+  <span class="property">border-radius</span>: <span class="value">50%</span>;
+  <span class="property">animation</span>: <span class="value">spin 1s linear infinite</span>;
+}
+
+<span class="comment">/* 脉冲缩放 */</span>
+<span class="keyword">.spinner-pulse</span> {
+  <span class="property">width</span>: <span class="value">50px</span>;
+  <span class="property">height</span>: <span class="value">50px</span>;
+  <span class="property">background</span>: <span class="value">var(--primary)</span>;
+  <span class="property">border-radius</span>: <span class="value">50%</span>;
+  <span class="property">animation</span>: <span class="value">pulse 1.5s ease-in-out infinite</span>;
+}
+
+<span class="comment">/* 渐变点 */</span>
+<span class="keyword">.spinner-dots span</span> {
+  <span class="property">width</span>: <span class="value">12px</span>;
+  <span class="property">height</span>: <span class="value">12px</span>;
+  <span class="property">background</span>: <span class="value">var(--primary)</span>;
+  <span class="property">border-radius</span>: <span class="value">50%</span>;
+  <span class="property">animation</span>: <span class="value">fade 1.4s ease-in-out infinite</span>;
+}
+
+<span class="keyword">.spinner-dots span:nth-child(2)</span> {
+  <span class="property">animation-delay</span>: <span class="value">0.2s</span>;
+}
+
+<span class="keyword">.spinner-dots span:nth-child(3)</span> {
+  <span class="property">animation-delay</span>: <span class="value">0.4s</span>;
+}
+
+<span class="comment">/* 渐进点 - 依次显示1个、2个、3个点 */</span>
+<span class="keyword">.spinner-progressive span</span> {
+  <span class="property">width</span>: <span class="value">12px</span>;
+  <span class="property">height</span>: <span class="value">12px</span>;
+  <span class="property">background</span>: <span class="value">var(--primary)</span>;
+  <span class="property">border-radius</span>: <span class="value">50%</span>;
+  <span class="property">opacity</span>: <span class="value">0</span>;
+  <span class="property">transform</span>: <span class="value">scale(0)</span>;
+}
+
+<span class="keyword">.spinner-progressive span:nth-child(1)</span> {
+  <span class="property">animation</span>: <span class="value">progressiveDot1 2s ease-in-out infinite</span>;
+}
+
+<span class="keyword">.spinner-progressive span:nth-child(2)</span> {
+  <span class="property">animation</span>: <span class="value">progressiveDot2 2s ease-in-out infinite</span>;
+}
+
+<span class="keyword">.spinner-progressive span:nth-child(3)</span> {
+  <span class="property">animation</span>: <span class="value">progressiveDot3 2s ease-in-out infinite</span>;
+}</code></pre>
+          </div>
+
+          <div class="step">
+            <h3>步骤 4：使用 animation-play-state 控制播放</h3>
+            <p>通过 JavaScript 切换 animation-play-state：</p>
+            <pre class="code-block"><code><span class="comment">/* CSS 暂停状态 */</span>
+<span class="keyword">.spinner.paused</span> {
+  <span class="property">animation-play-state</span>: <span class="value">paused</span>;
+}
+
+<span class="keyword">.spinner.paused *</span> {
+  <span class="property">animation-play-state</span>: <span class="value">paused</span>;
+}
+
+<span class="comment">// JavaScript 控制</span>
+<span class="keyword">const</span> spinner = document.querySelector(<span class="string">'.spinner-classic'</span>);
+<span class="keyword">const</span> button = document.querySelector(<span class="string">'[data-toggle]'</span>);
+
+button.addEventListener(<span class="string">'click'</span>, () => {
+  spinner.classList.toggle(<span class="string">'paused'</span>);
+
+  <span class="keyword">if</span> (spinner.classList.contains(<span class="string">'paused'</span>)) {
+    button.textContent = <span class="string">'▶️ 播放'</span>;
+  } <span class="keyword">else</span> {
+    button.textContent = <span class="string">'⏸️ 暂停'</span>;
+  }
+});</code></pre>
+          </div>
+        </section>
+
+        <section class="key-points">
+          <h2>关键要点</h2>
+          <ul>
+            <li><strong>@keyframes 定义：</strong>使用 @keyframes 定义可复用的动画序列，支持百分比或 from/to 关键字</li>
+            <li><strong>animation 属性：</strong>简写属性包含 name、duration、timing-function、iteration-count 等</li>
+            <li><strong>infinite 循环：</strong>使用 animation-iteration-count: infinite 创建无限循环动画</li>
+            <li><strong>animation-play-state：</strong>通过 paused/running 值控制动画的播放和暂停</li>
+            <li><strong>animation-delay：</strong>使用延迟创建交错效果，让多个元素依次动画</li>
+            <li><strong>性能优化：</strong>优先使用 transform 和 opacity 属性，它们由 GPU 加速</li>
+            <li><strong>组合动画：</strong>可以在一个 @keyframes 中组合多个属性变化（rotate + scale + opacity）</li>
+          </ul>
+        </section>
+
+        <section class="related-demos">
+          <h2>相关演示</h2>
+          <div class="scenario-links">
+            <a class="scenario-link" href="../demos/keyframes.html">
+              <span class="scenario-icon">🎬</span>
+              <div class="scenario-content">
+                <h4>@keyframes 基础</h4>
+                <p>学习关键帧动画的基础知识 →</p>
+              </div>
+            </a>
+            <a class="scenario-link" href="../demos/animation-play-state.html">
+              <span class="scenario-icon">⏯️</span>
+              <div class="scenario-content">
+                <h4>animation-play-state</h4>
+                <p>控制动画的播放和暂停 →</p>
+              </div>
+            </a>
+            <a class="scenario-link" href="../demos/rotate.html">
+              <span class="scenario-icon">🔄</span>
+              <div class="scenario-content">
+                <h4>rotate 旋转</h4>
+                <p>学习旋转变换的使用 →</p>
+              </div>
+            </a>
+            <a class="scenario-link" href="staggered-list.html">
+              <span class="scenario-icon">📝</span>
+              <div class="scenario-content">
+                <h4>列表交错动画</h4>
+                <p>查看更多延迟动画应用 →</p>
+              </div>
+            </a>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script type="module">
+      // 单个加载器的暂停/播放控制
+      const toggleButtons = document.querySelectorAll('[data-toggle]');
+
+      toggleButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const spinnerClass = button.dataset.toggle;
+          const spinner = document.querySelector(`.${spinnerClass}`);
+
+          if (spinner) {
+            spinner.classList.toggle('paused');
+
+            if (spinner.classList.contains('paused')) {
+              button.innerHTML = '▶️ 播放';
+            } else {
+              button.innerHTML = '⏸️ 暂停';
+            }
+          }
+        });
+      });
+
+      // 全局暂停/播放控制
+      const toggleAllBtn = document.getElementById('toggleAll');
+      const toggleText = document.getElementById('toggleText');
+      let allPaused = false;
+
+      toggleAllBtn.addEventListener('click', () => {
+        const spinners = document.querySelectorAll('.spinner');
+        allPaused = !allPaused;
+
+        spinners.forEach((spinner) => {
+          if (allPaused) {
+            spinner.classList.add('paused');
+          } else {
+            spinner.classList.remove('paused');
+          }
+        });
+
+        // 更新所有按钮文本
+        toggleButtons.forEach((button) => {
+          button.innerHTML = allPaused ? '▶️ 播放' : '⏸️ 暂停';
+        });
+
+        toggleText.textContent = allPaused ? '▶️ 播放所有' : '⏸️ 暂停所有';
+      });
+
+      // 重置所有动画
+      const resetAllBtn = document.getElementById('resetAll');
+
+      resetAllBtn.addEventListener('click', () => {
+        const spinners = document.querySelectorAll('.spinner');
+
+        // 移除暂停状态
+        spinners.forEach((spinner) => {
+          spinner.classList.remove('paused');
+          // 触发重排以重启动画
+          spinner.style.animation = 'none';
+          spinner.offsetHeight; // 触发重排
+          spinner.style.animation = '';
+        });
+
+        // 重置所有按钮
+        allPaused = false;
+        toggleButtons.forEach((button) => {
+          button.innerHTML = '⏸️ 暂停';
+        });
+        toggleText.textContent = '⏸️ 暂停所有';
+      });
+    </script>
+  </body>
+</html>
