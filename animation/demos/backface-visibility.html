@@ -113,6 +113,28 @@
         transform: rotateX(-90deg) translateZ(75px);
       }
 
+      /* 响应式布局 */
+      .scene-comparison {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin: 30px 0;
+      }
+
+      @media (max-width: 768px) {
+        .scene-comparison {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .explanation-box {
+        background: #fffbeb;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        border-left: 4px solid #f59e0b;
+      }
+
       /* 对比演示样式 */
       .correct-demo-container {
         width: 200px;
@@ -248,7 +270,7 @@
 
           <h3 style="margin-top: 30px; font-size: 1.1rem">场景对比演示</h3>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0">
+          <div class="scene-comparison">
             <!-- 场景 1 -->
             <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1)">
               <h4 style="margin-top: 0; text-align: center; color: #1f2937">场景 1：正常叠加</h4>
@@ -503,7 +525,7 @@
           <h2>对比演示：visible vs hidden</h2>
           <p>悬停卡片查看翻转效果</p>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 30px 0">
+          <div class="scene-comparison" style="gap: 40px">
             <div>
               <h3 style="text-align: center; margin-bottom: 20px">visible（默认）</h3>
               <div class="card-demo">
@@ -676,7 +698,7 @@
 
           <h3 style="margin-top: 30px; font-size: 1.1rem">对比演示</h3>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0">
+          <div class="scene-comparison">
             <!-- 方式 1：在父元素上旋转（正确） -->
             <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1)">
               <h4 style="margin-top: 0; text-align: center; color: #166534">✅ 方式 1：在父元素上旋转</h4>
@@ -855,15 +877,7 @@
 
           <h3 style="margin-top: 30px; font-size: 1.1rem">为什么方式 2 不行？</h3>
 
-          <div
-            style="
-              background: #fffbeb;
-              padding: 20px;
-              border-radius: 8px;
-              margin: 20px 0;
-              border-left: 4px solid #f59e0b;
-            "
-          >
+          <div class="explanation-box">
             <h4 style="margin-top: 0; color: #92400e; font-size: 1rem">🔑 关键原因：transform 属性会被覆盖</h4>
 
             <div style="background: white; padding: 20px; border-radius: 6px; margin: 15px 0">
@@ -1082,7 +1096,7 @@
 
           <h3 style="margin-top: 30px; font-size: 1.1rem">为什么不能少一层？</h3>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0">
+          <div class="scene-comparison" style="gap: 20px; margin: 20px 0">
             <div style="background: #fef2f2; padding: 20px; border-radius: 8px; border: 2px solid #fca5a5">
               <h4 style="margin-top: 0; color: #991b1b">❌ 错误：只有两层</h4>
               <pre
@@ -1202,7 +1216,7 @@
 
             <div style="background: white; padding: 20px; border-radius: 6px; margin: 20px 0">
               <h5 style="margin-top: 0; color: #1f2937; font-size: 0.95rem">验证：单个元素的正反面</h5>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 15px 0">
+              <div class="scene-comparison" style="gap: 20px; margin: 15px 0">
                 <div>
                   <div style="text-align: center; margin-bottom: 10px; font-weight: bold; color: #374151">
                     正面（rotateY(0deg)）
