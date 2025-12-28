@@ -179,10 +179,10 @@
           ><code><span class="keyword">function</span> <span class="function">isInViewport</span>(element) {
   <span class="keyword">const</span> rect = element.<span class="function">getBoundingClientRect</span>();
   <span class="keyword">return</span> (
-    rect.top >= <span class="value">0</span> &&
-    rect.left >= <span class="value">0</span> &&
-    rect.bottom <= window.innerHeight &&
-    rect.right <= window.innerWidth
+    rect.top &gt;= <span class="value">0</span> &amp;&amp;
+    rect.left &gt;= <span class="value">0</span> &amp;&amp;
+    rect.bottom &lt;= window.innerHeight &amp;&amp;
+    rect.right &lt;= window.innerWidth
   );
 }</code></pre>
 
@@ -233,10 +233,10 @@
   <span class="keyword">const</span> rect2 = el2.<span class="function">getBoundingClientRect</span>();
 
   <span class="keyword">return</span> !(
-    rect1.right < rect2.left ||
-    rect1.left > rect2.right ||
-    rect1.bottom < rect2.top ||
-    rect1.top > rect2.bottom
+    rect1.right &lt; rect2.left ||
+    rect1.left &gt; rect2.right ||
+    rect1.bottom &lt; rect2.top ||
+    rect1.top &gt; rect2.bottom
   );
 }</code></pre>
         </section>
