@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="手风琴效果 - 使用 max-height 和 scaleY 实现可折叠的内容面板" />
+    <meta name="description" content="手风琴效果 - 使用 max-height 和 CSS Grid 实现可折叠的内容面板" />
     <title>手风琴效果 - CSS Transform & Transition 实战应用</title>
     <link href="/src/styles/common.css" rel="stylesheet" />
     <link href="../styles.css" rel="stylesheet" />
@@ -104,7 +104,7 @@
       }
 
       .accordion-body {
-        padding: var(--spacing-lg);
+        padding: 0 var(--spacing-lg);
         color: var(--text-primary);
         line-height: 1.8;
       }
@@ -160,16 +160,22 @@
         border-color: var(--primary);
       }
 
-      /* ScaleY 演示样式 */
+      /* Grid 演示样式 */
       .accordion-content-scale {
-        transform-origin: top;
-        transform: scaleY(0);
-        max-height: none;
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: grid;
+        grid-template-rows: 0fr;
+        max-height: unset;
+        transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
       .accordion-content-scale.open {
-        transform: scaleY(1);
+        grid-template-rows: 1fr;
+        padding-top: var(--spacing-lg);
+        padding-bottom: var(--spacing-lg);
+      }
+
+      .accordion-content-scale .accordion-body {
+        overflow: hidden;
       }
 
       /* 移动端适配 */
@@ -225,22 +231,18 @@
 
       <!-- 标题和描述 -->
       <h1>📋 手风琴效果</h1>
-      <p class="subtitle">可折叠的内容面板，使用 max-height 或 scaleY 实现平滑的展开收起动画</p>
+      <p class="subtitle">可折叠的内容面板，使用 max-height 或 CSS Grid 实现平滑的展开收起动画</p>
 
       <!-- 知识点标签 -->
       <div class="knowledge-tags">
         <span class="tag-label">使用的知识点：</span>
-        <a class="knowledge-tag" href="../demos/scaleY.html">
-          <span class="tag-icon">↕️</span>
-          scaleY()
-        </a>
         <a class="knowledge-tag" href="../demos/duration.html">
           <span class="tag-icon">⏰</span>
           transition-duration
         </a>
-        <a class="knowledge-tag" href="../demos/transform-origin.html">
-          <span class="tag-icon">📍</span>
-          transform-origin
+        <a class="knowledge-tag" href="../demos/timing-function.html">
+          <span class="tag-icon">📈</span>
+          timing-function
         </a>
       </div>
 
@@ -251,8 +253,8 @@
 
         <!-- 模式切换 -->
         <div class="mode-toggle">
-          <button class="mode-btn active" data-mode="maxheight">max-height 模式（推荐）</button>
-          <button class="mode-btn" data-mode="scale">scaleY 模式</button>
+          <button class="mode-btn active" data-mode="maxheight">max-height 模式</button>
+          <button class="mode-btn" data-mode="scale">Grid 模式（推荐）</button>
         </div>
 
         <div class="demo-info">
@@ -371,8 +373,8 @@
       <section class="implementation">
         <h2>实现步骤</h2>
 
-        <h3>方法一：max-height 实现（推荐）</h3>
-        <p>使用 max-height 过渡是最常用的方法，兼容性好且效果自然：</p>
+        <h3>方法一：max-height 实现</h3>
+        <p>使用 max-height 过渡是最常用的方法，兼容性好且效果自然,但是需要设置高度</p>
 
         <div class="code-section">
           <div class="code-header">
@@ -419,22 +421,27 @@
 }</code></pre>
         </div>
 
-        <h3>方法二：scaleY 实现</h3>
-        <p>使用 scaleY 可以实现更流畅的动画，但需要注意 transform-origin：</p>
+        <h3>方法二：Grid 实现（推荐）</h3>
+        <p>使用 CSS Grid 的 grid-template-rows 实现，动画流畅且不占据文档流空间：</p>
 
         <div class="code-section">
           <div class="code-header">
             <span class="code-label">CSS</span>
           </div>
           <pre class="code-block"><code><span class="keyword">.accordion-content</span> {
-  <span class="comment">/* 从顶部开始缩放 */</span>
-  <span class="property">transform-origin</span>: <span class="value">top</span>;
-  <span class="property">transform</span>: <span class="value">scaleY(0)</span>;
-  <span class="property">transition</span>: <span class="value">transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)</span>;
+  <span class="comment">/* 使用 Grid 布局控制高度 */</span>
+  <span class="property">display</span>: <span class="value">grid</span>;
+  <span class="property">grid-template-rows</span>: <span class="value">0fr</span>; <span class="comment">/* 折叠状态 */</span>
+  <span class="property">transition</span>: <span class="value">grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1)</span>;
 }
 
 <span class="keyword">.accordion-content.open</span> {
-  <span class="property">transform</span>: <span class="value">scaleY(1)</span>;
+  <span class="property">grid-template-rows</span>: <span class="value">1fr</span>; <span class="comment">/* 展开状态 */</span>
+}
+
+<span class="comment">/* 内容需要设置 overflow: hidden */</span>
+<span class="keyword">.accordion-body</span> {
+  <span class="property">overflow</span>: <span class="value">hidden</span>;
 }</code></pre>
         </div>
 
@@ -478,10 +485,11 @@ headers.<span class="value">forEach</span>(<span class="keyword">header</span> =
       <section class="key-points">
         <h2>关键要点</h2>
         <ul>
-          <li><strong>max-height 方法</strong>更稳定可靠，是生产环境的首选方案</li>
+          <li><strong>Grid 方法</strong>是最现代的方案，使用 grid-template-rows: 0fr/1fr 实现高度过渡</li>
+          <li><strong>无需预估高度</strong> - Grid 方法自动适应内容，不像 max-height 需要设置固定值</li>
+          <li><strong>不占据空间</strong> - 折叠状态下完全不占据文档流空间，布局更自然</li>
+          <li><strong>max-height 方法</strong>兼容性更好，适合需要支持旧浏览器的项目</li>
           <li><strong>max-height 值</strong>需要设置得足够大以容纳内容，但不要过大以免影响动画时长</li>
-          <li><strong>scaleY 方法</strong>动画更流畅，但内容会被压缩，可能影响可读性</li>
-          <li><strong>transform-origin: top</strong> 确保 scaleY 从顶部开始展开</li>
           <li><strong>overflow: hidden</strong> 是必需的，防止内容溢出</li>
           <li><strong>cubic-bezier 缓动</strong>提供自然的加速和减速效果</li>
           <li><strong>单开模式</strong>适合 FAQ 页面，多开模式适合内容分类展示</li>
@@ -493,18 +501,18 @@ headers.<span class="value">forEach</span>(<span class="keyword">header</span> =
       <section class="related-demos">
         <h2>相关演示</h2>
         <div class="scenario-links">
-          <a class="scenario-link" href="../demos/scaleY.html">
-            <span class="scenario-icon">↕️</span>
+          <a class="scenario-link" href="../demos/duration.html">
+            <span class="scenario-icon">⏰</span>
             <div class="scenario-content">
-              <h4>scaleY() 基础</h4>
-              <p>了解 Y 轴缩放的基本用法 →</p>
+              <h4>transition-duration</h4>
+              <p>控制动画持续时间 →</p>
             </div>
           </a>
-          <a class="scenario-link" href="../demos/transform-origin.html">
-            <span class="scenario-icon">📍</span>
+          <a class="scenario-link" href="../demos/timing-function.html">
+            <span class="scenario-icon">📈</span>
             <div class="scenario-content">
-              <h4>transform-origin</h4>
-              <p>控制变换的原点位置 →</p>
+              <h4>timing-function</h4>
+              <p>调整动画缓动效果 →</p>
             </div>
           </a>
           <a class="scenario-link" href="dropdown-menu.html">
@@ -581,7 +589,7 @@ headers.<span class="value">forEach</span>(<span class="keyword">header</span> =
         });
       });
 
-      // 切换实现方法（max-height vs scaleY）
+      // 切换实现方法（max-height vs Grid）
       modeBtns.forEach((btn) => {
         btn.addEventListener('click', () => {
           const mode = btn.dataset.mode;

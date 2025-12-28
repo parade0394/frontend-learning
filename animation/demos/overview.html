@@ -579,6 +579,132 @@
           </div>
         </section>
 
+        <!-- 文档流影响说明 -->
+        <section class="overview-section">
+          <h2>📐 是否影响文档流？</h2>
+
+          <p>
+            <strong>重要概念：</strong>Transition 和 Animation 本身不是变换，它们只是让属性变化变得平滑。
+            是否影响文档流，取决于你动画的是什么属性。
+          </p>
+
+          <h3>Transform - 永远不影响文档流 ✅</h3>
+          <pre class="code-block"><code><span class="comment">/* Transform 只是视觉变化，不影响布局 */</span>
+<span class="keyword">.box</span> {
+  <span class="property">transform</span>: <span class="value">translate(100px, 100px)</span>;
+  <span class="comment">/* 元素视觉上移动了，但原来的空间仍然占据 */</span>
+  <span class="comment">/* 不会影响其他元素的布局 */</span>
+}</code></pre>
+
+          <h3>属性分类对比</h3>
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>属性类型</th>
+                <th>是否影响文档流</th>
+                <th>示例</th>
+                <th>性能</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Transform</strong></td>
+                <td>❌ 不影响</td>
+                <td>translate, rotate, scale, skew</td>
+                <td>⚡ 最佳（仅合成）</td>
+              </tr>
+              <tr>
+                <td><strong>Opacity</strong></td>
+                <td>❌ 不影响</td>
+                <td>opacity</td>
+                <td>⚡ 最佳（仅合成）</td>
+              </tr>
+              <tr>
+                <td><strong>Filter</strong></td>
+                <td>❌ 不影响</td>
+                <td>blur, brightness, contrast</td>
+                <td>⚡ 最佳（仅合成）</td>
+              </tr>
+              <tr>
+                <td><strong>盒模型</strong></td>
+                <td>✅ 影响</td>
+                <td>width, height, margin, padding</td>
+                <td>⚠️ 差（触发重排）</td>
+              </tr>
+              <tr>
+                <td><strong>定位</strong></td>
+                <td>✅ 影响</td>
+                <td>top, left, right, bottom</td>
+                <td>⚠️ 差（触发重排）</td>
+              </tr>
+              <tr>
+                <td><strong>颜色</strong></td>
+                <td>❌ 不影响</td>
+                <td>color, background-color, border-color</td>
+                <td>⚡ 好（仅重绘）</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>代码示例对比</h3>
+          <pre class="code-block"><code><span class="comment">/* ✅ 不影响文档流 - 动画 transform */</span>
+<span class="keyword">.box</span> {
+  <span class="property">transition</span>: <span class="value">transform 0.3s</span>;
+}
+<span class="keyword">.box:hover</span> {
+  <span class="property">transform</span>: <span class="value">translateX(100px)</span>; <span class="comment">/* 只是视觉变化 */</span>
+}
+
+<span class="comment">/* ✅ 不影响文档流 - 动画 opacity */</span>
+<span class="keyword">.box</span> {
+  <span class="property">transition</span>: <span class="value">opacity 0.3s</span>;
+}
+<span class="keyword">.box:hover</span> {
+  <span class="property">opacity</span>: <span class="value">0.5</span>; <span class="comment">/* 只是透明度变化 */</span>
+}
+
+<span class="comment">/* ❌ 影响文档流 - 动画 width */</span>
+<span class="keyword">.box</span> {
+  <span class="property">transition</span>: <span class="value">width 0.3s</span>;
+}
+<span class="keyword">.box:hover</span> {
+  <span class="property">width</span>: <span class="value">200px</span>; <span class="comment">/* 会影响其他元素的位置！ */</span>
+}
+
+<span class="comment">/* ❌ 影响文档流 - 动画 margin */</span>
+<span class="keyword">.box</span> {
+  <span class="property">transition</span>: <span class="value">margin 0.3s</span>;
+}
+<span class="keyword">.box:hover</span> {
+  <span class="property">margin-left</span>: <span class="value">50px</span>; <span class="comment">/* 会影响其他元素的位置！ */</span>
+}</code></pre>
+
+          <div class="info-box" style="background: #f0fdf4; border-left-color: #10b981; margin-top: 20px">
+            <h3 style="color: #059669; margin-top: 0">⚡ 性能最佳实践</h3>
+            <p style="color: #065f46; margin-bottom: 15px">
+              <strong>为了性能和避免布局抖动，推荐只动画这些属性：</strong>
+            </p>
+            <ul style="line-height: 2; color: #065f46; margin: 0 0 15px 20px">
+              <li><strong>transform</strong> - 平移、旋转、缩放、倾斜</li>
+              <li><strong>opacity</strong> - 透明度</li>
+              <li><strong>filter</strong> - 滤镜效果</li>
+            </ul>
+            <p style="color: #065f46; margin: 0">
+              这些属性只触发<strong>合成（Composite）</strong>，不会触发<strong>重排（Reflow）</strong>或<strong>重绘（Repaint）</strong>，性能最好。
+            </p>
+          </div>
+
+          <pre class="code-block" style="margin-top: 20px"><code><span class="comment">/* ✅ 推荐：高性能动画 */</span>
+<span class="keyword">.box</span> {
+  <span class="property">transition</span>: <span class="value">transform 0.3s, opacity 0.3s</span>;
+}
+
+<span class="comment">/* ❌ 避免：会触发重排，性能差 */</span>
+<span class="keyword">.box</span> {
+  <span class="property">transition</span>: <span class="value">width 0.3s, height 0.3s, margin 0.3s</span>;
+}</code></pre>
+        </section>
+
         <!-- 总结 -->
         <section class="overview-section">
           <div class="summary-box">
@@ -603,6 +729,8 @@
               <li>Transition 和 Animation 都可以动画任何 CSS 属性，不只是 transform</li>
               <li>Transform 可以单独使用，但没有动画过程，是瞬间变化的</li>
               <li>如果想要平滑的动画效果，需要配合 Transition 或 Animation</li>
+              <li><strong>Transform 永远不影响文档流</strong>，是否影响文档流取决于动画的属性</li>
+              <li>推荐只动画 transform、opacity、filter，性能最好</li>
             </ul>
           </div>
         </section>
