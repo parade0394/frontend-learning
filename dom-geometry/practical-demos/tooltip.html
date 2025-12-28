@@ -1,0 +1,237 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>工具提示定位 - DOM 元素尺寸和位置 API 实战案例</title>
+    <link href="../styles.css" rel="stylesheet" />
+    <script type="module" src="/src/theme-sync.js"></script>
+    <style>
+      .tooltip-trigger {
+        display: inline-block;
+        padding: 10px 20px;
+        background: var(--primary);
+        color: white;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        font-weight: 600;
+        margin: 10px;
+      }
+
+      .tooltip {
+        position: fixed;
+        background: #1f2937;
+        color: white;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        pointer-events: none;
+        z-index: 1000;
+        max-width: 250px;
+        box-shadow: var(--shadow-lg);
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+
+      .tooltip.visible {
+        opacity: 1;
+      }
+
+      .tooltip::after {
+        content: '';
+        position: absolute;
+        border: 8px solid transparent;
+      }
+
+      .tooltip.top::after {
+        bottom: -16px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-top-color: #1f2937;
+      }
+
+      .tooltip.bottom::after {
+        top: -16px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-bottom-color: #1f2937;
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>DOM 元素尺寸和位置 API</h1>
+        <a class="back-home" href="../index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>实战应用</h3>
+          <a class="nav-item" href="drag-drop.html">拖拽元素</a>
+          <a class="nav-item" href="snap-align.html">元素吸附对齐</a>
+          <a class="nav-item active" href="tooltip.html">工具提示定位</a>
+          <a class="nav-item" href="dropdown.html">下拉菜单定位</a>
+          <a class="nav-item" href="modal-center.html">模态框居中</a>
+          <a class="nav-item" href="scroll-progress.html">滚动进度条</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>工具提示定位</h1>
+        <p class="subtitle">智能定位工具提示，防止超出视口边界</p>
+
+        <section class="section">
+          <h2>实现原理</h2>
+          <p>
+            使用 <code>getBoundingClientRect()</code> 获取目标元素和视口的位置信息，
+            动态计算工具提示的最佳位置，避免超出视口。
+          </p>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">function</span> <span class="function">positionTooltip</span>(element, tooltip) {
+  <span class="keyword">const</span> rect = element.<span class="function">getBoundingClientRect</span>();
+  <span class="keyword">const</span> tooltipRect = tooltip.<span class="function">getBoundingClientRect</span>();
+
+  <span class="comment">// 默认显示在上方</span>
+  <span class="keyword">let</span> top = rect.top - tooltipRect.height - <span class="value">10</span>;
+  <span class="keyword">let</span> left = rect.left + (rect.width - tooltipRect.width) / <span class="value">2</span>;
+
+  <span class="comment">// 检查是否超出顶部</span>
+  <span class="keyword">if</span> (top &lt; <span class="value">0</span>) {
+    <span class="comment">// 改为显示在下方</span>
+    top = rect.bottom + <span class="value">10</span>;
+  }
+
+  <span class="comment">// 检查是否超出左右边界</span>
+  <span class="keyword">if</span> (left &lt; <span class="value">0</span>) {
+    left = <span class="value">10</span>;
+  } <span class="keyword">else if</span> (left + tooltipRect.width &gt; window.innerWidth) {
+    left = window.innerWidth - tooltipRect.width - <span class="value">10</span>;
+  }
+
+  tooltip.style.top = top + <span class="string">'px'</span>;
+  tooltip.style.left = left + <span class="string">'px'</span>;
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例：智能工具提示</h2>
+          <p>悬停在按钮上查看工具提示（会自动避开边界）</p>
+
+          <div class="demo-container" style="height: 300px">
+            <div
+              style="
+                display: flex;
+                gap: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+              "
+            >
+              <button class="tooltip-trigger" data-tooltip="这是顶部按钮的工具提示">顶部按钮</button>
+              <button class="tooltip-trigger" data-tooltip="这是中间按钮的工具提示">中间按钮</button>
+              <button class="tooltip-trigger" data-tooltip="这是底部按钮的工具提示，会自动调整位置">底部按钮</button>
+            </div>
+
+            <div id="tooltip" class="tooltip top"></div>
+          </div>
+
+          <div class="info-panel">
+            <h4>提示框位置</h4>
+            <div class="info-row">
+              <span class="info-label">位置策略:</span>
+              <span id="tooltip-position" class="info-value">-</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Top:</span>
+              <span id="tooltip-top" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Left:</span>
+              <span id="tooltip-left" class="info-value">0px</span>
+            </div>
+          </div>
+
+          <div class="tip">
+            <h4>💡 关键点</h4>
+            <p>
+              工具提示会自动选择最佳位置：<br />
+              1. 优先显示在上方<br />
+              2. 如果上方空间不足，显示在下方<br />
+              3. 防止超出左右边界
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>总结</h2>
+          <ul>
+            <li>使用 getBoundingClientRect() 获取元素位置</li>
+            <li>计算工具提示的默认位置</li>
+            <li>检测是否会超出视口边界</li>
+            <li>动态调整位置到合适的方向</li>
+            <li>确保工具提示始终可见</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      const tooltip = document.getElementById('tooltip');
+      const triggers = document.querySelectorAll('.tooltip-trigger');
+
+      triggers.forEach((trigger) => {
+        trigger.addEventListener('mouseenter', () => {
+          const text = trigger.getAttribute('data-tooltip');
+          tooltip.textContent = text;
+          tooltip.classList.add('visible');
+
+          positionTooltip(trigger, tooltip);
+        });
+
+        trigger.addEventListener('mouseleave', () => {
+          tooltip.classList.remove('visible');
+        });
+      });
+
+      function positionTooltip(element, tooltip) {
+        const rect = element.getBoundingClientRect();
+        const tooltipHeight = tooltip.offsetHeight || 40;
+        const tooltipWidth = tooltip.offsetWidth || 200;
+
+        // 默认显示在上方
+        let top = rect.top - tooltipHeight - 10;
+        let left = rect.left + (rect.width - tooltipWidth) / 2;
+        let position = 'top';
+
+        // 检查是否超出顶部
+        if (top < 0) {
+          // 改为显示在下方
+          top = rect.bottom + 10;
+          position = 'bottom';
+          tooltip.className = 'tooltip visible bottom';
+        } else {
+          tooltip.className = 'tooltip visible top';
+        }
+
+        // 检查是否超出左右边界
+        if (left < 10) {
+          left = 10;
+        } else if (left + tooltipWidth > window.innerWidth - 10) {
+          left = window.innerWidth - tooltipWidth - 10;
+        }
+
+        tooltip.style.top = top + 'px';
+        tooltip.style.left = left + 'px';
+
+        document.getElementById('tooltip-position').textContent = position;
+        document.getElementById('tooltip-top').textContent = Math.round(top) + 'px';
+        document.getElementById('tooltip-left').textContent = Math.round(left) + 'px';
+      }
+    </script>
+  </body>
+</html>

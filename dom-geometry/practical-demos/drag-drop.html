@@ -1,0 +1,304 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>拖拽元素 - DOM 元素尺寸和位置 API 实战案例</title>
+    <link href="../styles.css" rel="stylesheet" />
+    <script type="module" src="/src/theme-sync.js"></script>
+    <style>
+      .draggable {
+        width: 150px;
+        height: 150px;
+        background: var(--primary);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius-md);
+        cursor: move;
+        user-select: none;
+        position: absolute;
+        box-shadow: var(--shadow-lg);
+        font-weight: 600;
+      }
+
+      .draggable:active {
+        cursor: grabbing;
+      }
+
+      .draggable.dragging {
+        opacity: 0.8;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .drop-zone {
+        width: 100%;
+        height: 100%;
+        border: 3px dashed var(--border-color);
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-secondary);
+        font-weight: 500;
+        background: var(--bg-secondary);
+      }
+
+      .drop-zone.highlight {
+        border-color: var(--primary);
+        background: var(--primary-light);
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>DOM 元素尺寸和位置 API</h1>
+        <a class="back-home" href="../index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础属性</h3>
+          <a class="nav-item" href="../demos/offset.html">offset* 属性</a>
+          <a class="nav-item" href="../demos/client.html">client* 属性</a>
+          <a class="nav-item" href="../demos/scroll.html">scroll* 属性</a>
+          <a class="nav-item" href="../demos/offset-parent.html">offsetParent</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>核心 API</h3>
+          <a class="nav-item" href="../demos/bounding-rect.html">getBoundingClientRect()</a>
+          <a class="nav-item" href="../demos/scroll-into-view.html">scrollIntoView()</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>现代 Observer API</h3>
+          <a class="nav-item" href="../demos/resize-observer.html">ResizeObserver</a>
+          <a class="nav-item" href="../demos/intersection-observer.html">IntersectionObserver</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>实战应用</h3>
+          <a class="nav-item active" href="drag-drop.html">拖拽元素</a>
+          <a class="nav-item" href="snap-align.html">元素吸附对齐</a>
+          <a class="nav-item" href="tooltip.html">工具提示定位</a>
+          <a class="nav-item" href="dropdown.html">下拉菜单定位</a>
+          <a class="nav-item" href="modal-center.html">模态框居中</a>
+          <a class="nav-item" href="scroll-progress.html">滚动进度条</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>拖拽元素</h1>
+        <p class="subtitle">结合鼠标事件和位置 API 实现可拖拽元素</p>
+
+        <section class="section">
+          <h2>实现原理</h2>
+          <p>
+            使用 <span class="highlight">mousedown</span>、<span class="highlight">mousemove</span>、<span
+              class="highlight"
+              >mouseup</span
+            >
+            事件结合 <code>getBoundingClientRect()</code> 实现拖拽功能。
+          </p>
+
+          <pre class="code-block"><code><span class="keyword">let</span> isDragging = <span class="value">false</span>;
+<span class="keyword">let</span> startX, startY, initialX, initialY;
+
+element.<span class="function">addEventListener</span>(<span class="string">'mousedown'</span>, (e) => {
+  isDragging = <span class="value">true</span>;
+  startX = e.clientX;
+  startY = e.clientY;
+
+  <span class="keyword">const</span> rect = element.<span class="function">getBoundingClientRect</span>();
+  initialX = rect.left;
+  initialY = rect.top;
+
+  element.classList.<span class="function">add</span>(<span class="string">'dragging'</span>);
+});
+
+document.<span class="function">addEventListener</span>(<span class="string">'mousemove'</span>, (e) => {
+  <span class="keyword">if</span> (!isDragging) <span class="keyword">return</span>;
+
+  <span class="keyword">const</span> dx = e.clientX - startX;
+  <span class="keyword">const</span> dy = e.clientY - startY;
+
+  element.style.left = (initialX + dx) + <span class="string">'px'</span>;
+  element.style.top = (initialY + dy) + <span class="string">'px'</span>;
+});
+
+document.<span class="function">addEventListener</span>(<span class="string">'mouseup'</span>, () => {
+  isDragging = <span class="value">false</span>;
+  element.classList.<span class="function">remove</span>(<span class="string">'dragging'</span>);
+});</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：基础拖拽</h2>
+          <p>在下方区域拖动元素</p>
+
+          <div class="demo-container" style="position: relative; height: 400px">
+            <div id="drag1" class="draggable" style="left: 50px; top: 50px">拖动我</div>
+          </div>
+
+          <div class="info-panel">
+            <h4>实时位置</h4>
+            <div class="info-row">
+              <span class="info-label">X:</span>
+              <span id="val1-x" class="info-value">50px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Y:</span>
+              <span id="val1-y" class="info-value">50px</span>
+            </div>
+          </div>
+
+          <button class="control-button secondary" onclick="resetDrag1()">重置位置</button>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：限制拖拽范围</h2>
+          <p>元素只能在容器内移动</p>
+
+          <div
+            id="container2"
+            class="demo-container"
+            style="position: relative; height: 400px; border: 3px solid var(--border-color)"
+          >
+            <div id="drag2" class="draggable" style="left: 50px; top: 50px; background: #3b82f6">限制范围</div>
+          </div>
+
+          <div class="tip">
+            <h4>💡 关键点</h4>
+            <p>
+              计算边界时，需要考虑元素自身的宽高。<br />
+              最小 X = 0，最大 X = 容器宽度 - 元素宽度
+            </p>
+          </div>
+
+          <pre class="code-block"><code><span class="keyword">const</span> containerWidth = container.offsetWidth;
+<span class="keyword">const</span> elementWidth = element.offsetWidth;
+<span class="keyword">const</span> maxX = containerWidth - elementWidth;
+<span class="keyword">const</span> maxY = containerHeight - elementHeight;
+
+<span class="comment">// 限制位置</span>
+x = Math.<span class="function">max</span>(<span class="value">0</span>, Math.<span class="function">min</span>(x, maxX));
+y = Math.<span class="function">max</span>(<span class="value">0</span>, Math.<span class="function">min</span>(y, maxY));</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>总结</h2>
+          <ul>
+            <li>使用 mousedown 记录初始位置和鼠标位置</li>
+            <li>mousemove 时计算位移并更新元素位置</li>
+            <li>mouseup 清除拖拽状态</li>
+            <li>使用 getBoundingClientRect() 获取精确位置</li>
+            <li>注意边界检测，防止元素移出容器</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      // 示例 1：基础拖拽
+      const drag1 = document.getElementById('drag1');
+      let isDragging1 = false;
+      let startX1, startY1, initialX1, initialY1;
+
+      drag1.addEventListener('mousedown', (e) => {
+        isDragging1 = true;
+        startX1 = e.clientX;
+        startY1 = e.clientY;
+
+        const rect = drag1.getBoundingClientRect();
+        initialX1 = rect.left;
+        initialY1 = rect.top;
+
+        drag1.classList.add('dragging');
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging1) {
+          return;
+        }
+
+        const dx = e.clientX - startX1;
+        const dy = e.clientY - startY1;
+
+        const newX = initialX1 + dx;
+        const newY = initialY1 + dy;
+
+        drag1.style.left = newX + 'px';
+        drag1.style.top = newY + 'px';
+
+        document.getElementById('val1-x').textContent = Math.round(newX) + 'px';
+        document.getElementById('val1-y').textContent = Math.round(newY) + 'px';
+      });
+
+      document.addEventListener('mouseup', () => {
+        if (isDragging1) {
+          isDragging1 = false;
+          drag1.classList.remove('dragging');
+        }
+      });
+
+      window.resetDrag1 = function () {
+        drag1.style.left = '50px';
+        drag1.style.top = '50px';
+        document.getElementById('val1-x').textContent = '50px';
+        document.getElementById('val1-y').textContent = '50px';
+      };
+
+      // 示例 2：限制范围
+      const drag2 = document.getElementById('drag2');
+      const container2 = document.getElementById('container2');
+      let isDragging2 = false;
+      let startX2, startY2, initialX2, initialY2;
+
+      drag2.addEventListener('mousedown', (e) => {
+        isDragging2 = true;
+        startX2 = e.clientX;
+        startY2 = e.clientY;
+
+        const rect = drag2.getBoundingClientRect();
+        const containerRect = container2.getBoundingClientRect();
+        initialX2 = rect.left - containerRect.left;
+        initialY2 = rect.top - containerRect.top;
+
+        drag2.classList.add('dragging');
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging2) {
+          return;
+        }
+
+        const dx = e.clientX - startX2;
+        const dy = e.clientY - startY2;
+
+        let newX = initialX2 + dx;
+        let newY = initialY2 + dy;
+
+        // 限制范围
+        const maxX = container2.offsetWidth - drag2.offsetWidth;
+        const maxY = container2.offsetHeight - drag2.offsetHeight;
+
+        newX = Math.max(0, Math.min(newX, maxX));
+        newY = Math.max(0, Math.min(newY, maxY));
+
+        drag2.style.left = newX + 'px';
+        drag2.style.top = newY + 'px';
+      });
+
+      document.addEventListener('mouseup', () => {
+        if (isDragging2) {
+          isDragging2 = false;
+          drag2.classList.remove('dragging');
+        }
+      });
+    </script>
+  </body>
+</html>

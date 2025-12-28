@@ -1,0 +1,239 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>模态框居中 - DOM 元素尺寸和位置 API 实战案例</title>
+    <link href="../styles.css" rel="stylesheet" />
+    <script type="module" src="/src/theme-sync.js"></script>
+    <style>
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      }
+
+      .modal-overlay.visible {
+        display: flex;
+      }
+
+      .modal {
+        background: var(--card-bg);
+        border-radius: var(--radius-lg);
+        padding: 30px;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: var(--shadow-lg);
+        position: relative;
+      }
+
+      .modal h2 {
+        color: var(--text-primary);
+        margin-bottom: 15px;
+      }
+
+      .modal p {
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text-secondary);
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+      }
+
+      .modal-close:hover {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>DOM 元素尺寸和位置 API</h1>
+        <a class="back-home" href="../index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>实战应用</h3>
+          <a class="nav-item" href="drag-drop.html">拖拽元素</a>
+          <a class="nav-item" href="snap-align.html">元素吸附对齐</a>
+          <a class="nav-item" href="tooltip.html">工具提示定位</a>
+          <a class="nav-item" href="dropdown.html">下拉菜单定位</a>
+          <a class="nav-item active" href="modal-center.html">模态框居中</a>
+          <a class="nav-item" href="scroll-progress.html">滚动进度条</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>模态框居中</h1>
+        <p class="subtitle">实现水平和垂直居中的模态框</p>
+
+        <section class="section">
+          <h2>实现方法</h2>
+          <p>有多种方法实现模态框居中，这里介绍三种常用方法。</p>
+
+          <h3>方法 1：Flexbox（推荐）</h3>
+          <pre class="code-block"><code>.modal-overlay {
+  <span class="keyword">display</span>: flex;
+  <span class="keyword">align-items</span>: center;
+  <span class="keyword">justify-content</span>: center;
+}</code></pre>
+
+          <h3>方法 2：Transform + Absolute</h3>
+          <pre class="code-block"><code>.modal {
+  <span class="keyword">position</span>: fixed;
+  <span class="keyword">top</span>: <span class="value">50%</span>;
+  <span class="keyword">left</span>: <span class="value">50%</span>;
+  <span class="keyword">transform</span>: <span class="function">translate</span>(-<span class="value">50%</span>, -<span class="value">50%</span>);
+}</code></pre>
+
+          <h3>方法 3：JavaScript 动态计算</h3>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">function</span> <span class="function">centerModal</span>(modal) {
+  <span class="keyword">const</span> modalWidth = modal.offsetWidth;
+  <span class="keyword">const</span> modalHeight = modal.offsetHeight;
+  <span class="keyword">const</span> windowWidth = window.innerWidth;
+  <span class="keyword">const</span> windowHeight = window.innerHeight;
+
+  <span class="keyword">const</span> left = (windowWidth - modalWidth) / <span class="value">2</span>;
+  <span class="keyword">const</span> top = (windowHeight - modalHeight) / <span class="value">2</span>;
+
+  modal.style.left = left + <span class="string">'px'</span>;
+  modal.style.top = top + <span class="string">'px'</span>;
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例：居中模态框</h2>
+          <p>点击按钮打开居中的模态框</p>
+
+          <button class="control-button" onclick="openModal()">打开模态框</button>
+
+          <div class="info-panel" style="margin-top: 20px">
+            <h4>模态框信息</h4>
+            <div class="info-row">
+              <span class="info-label">窗口宽度:</span>
+              <span id="window-width" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">窗口高度:</span>
+              <span id="window-height" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">模态框宽度:</span>
+              <span id="modal-width" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">居中方式:</span>
+              <span class="info-value">Flexbox</span>
+            </div>
+          </div>
+
+          <div class="tip">
+            <h4>💡 推荐使用 Flexbox</h4>
+            <p>
+              Flexbox 是最简洁、最可靠的居中方法：<br />
+              - 代码简单，易于理解<br />
+              - 无需知道模态框的具体尺寸<br />
+              - 完美响应式<br />
+              - 浏览器兼容性好
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>总结</h2>
+          <ul>
+            <li>Flexbox 是最简单、最推荐的居中方法</li>
+            <li>Transform + Absolute 适合固定尺寸的模态框</li>
+            <li>JavaScript 方法适合动态计算的特殊场景</li>
+            <li>使用 fixed 定位确保模态框始终相对于视口居中</li>
+            <li>添加半透明遮罩层提升用户体验</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <!-- 模态框 -->
+    <div id="modal-overlay" class="modal-overlay">
+      <div class="modal">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <h2>居中模态框</h2>
+        <p>这个模态框使用 Flexbox 实现水平和垂直居中。 无论窗口尺寸如何变化，模态框都会保持居中显示。</p>
+        <p>Flexbox 是实现居中的最佳方案，代码简洁且性能优秀。</p>
+        <button class="control-button" onclick="closeModal()">关闭</button>
+      </div>
+    </div>
+
+    <script>
+      const overlay = document.getElementById('modal-overlay');
+      const modal = overlay.querySelector('.modal');
+
+      window.openModal = function () {
+        overlay.classList.add('visible');
+
+        // 更新信息
+        document.getElementById('window-width').textContent = window.innerWidth + 'px';
+        document.getElementById('window-height').textContent = window.innerHeight + 'px';
+
+        // 等待模态框显示后再获取尺寸
+        setTimeout(() => {
+          document.getElementById('modal-width').textContent = modal.offsetWidth + 'px';
+        }, 100);
+      };
+
+      window.closeModal = function () {
+        overlay.classList.remove('visible');
+      };
+
+      // 点击遮罩层关闭模态框
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          window.closeModal();
+        }
+      });
+
+      // ESC 键关闭
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.classList.contains('visible')) {
+          window.closeModal();
+        }
+      });
+
+      // 监听窗口尺寸变化
+      window.addEventListener('resize', () => {
+        if (overlay.classList.contains('visible')) {
+          document.getElementById('window-width').textContent = window.innerWidth + 'px';
+          document.getElementById('window-height').textContent = window.innerHeight + 'px';
+          document.getElementById('modal-width').textContent = modal.offsetWidth + 'px';
+        }
+      });
+    </script>
+  </body>
+</html>

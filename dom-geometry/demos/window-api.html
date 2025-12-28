@@ -1,0 +1,281 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>window API - DOM 元素尺寸和位置 API</title>
+    <link href="../styles.css" rel="stylesheet" />
+    <script type="module" src="/src/theme-sync.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>DOM 元素尺寸和位置 API</h1>
+        <a class="back-home" href="../index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础属性</h3>
+          <a class="nav-item" href="offset.html">offset* 属性</a>
+          <a class="nav-item" href="client.html">client* 属性</a>
+          <a class="nav-item" href="scroll.html">scroll* 属性</a>
+          <a class="nav-item" href="offset-parent.html">offsetParent</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>核心 API</h3>
+          <a class="nav-item" href="bounding-rect.html">getBoundingClientRect()</a>
+          <a class="nav-item" href="client-rects.html">getClientRects()</a>
+          <a class="nav-item" href="scroll-into-view.html">scrollIntoView()</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>窗口和文档</h3>
+          <a class="nav-item active" href="window-api.html">window API</a>
+          <a class="nav-item" href="document-scroll.html">document 滚动兼容</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>现代 Observer API</h3>
+          <a class="nav-item" href="resize-observer.html">ResizeObserver</a>
+          <a class="nav-item" href="intersection-observer.html">IntersectionObserver</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>实战应用</h3>
+          <a class="nav-item" href="../practical-demos/drag-drop.html">拖拽元素</a>
+          <a class="nav-item" href="../practical-demos/scroll-progress.html">滚动进度条</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>window API</h1>
+        <p class="subtitle">浏览器窗口尺寸和滚动位置</p>
+
+        <section class="section">
+          <h2>API 说明</h2>
+          <p><span class="highlight">window</span> 对象提供了浏览器窗口的尺寸和滚动位置信息。</p>
+
+          <pre class="code-block"><code><span class="comment">// 窗口尺寸</span>
+<span class="function">console</span>.<span class="function">log</span>(window.innerWidth);   <span class="comment">// 窗口内部宽度</span>
+<span class="function">console</span>.<span class="function">log</span>(window.innerHeight);  <span class="comment">// 窗口内部高度</span>
+<span class="function">console</span>.<span class="function">log</span>(window.outerWidth);   <span class="comment">// 窗口外部宽度（包含边框）</span>
+<span class="function">console</span>.<span class="function">log</span>(window.outerHeight);  <span class="comment">// 窗口外部高度</span>
+
+<span class="comment">// 滚动位置</span>
+<span class="function">console</span>.<span class="function">log</span>(window.scrollX);      <span class="comment">// 水平滚动位置</span>
+<span class="function">console</span>.<span class="function">log</span>(window.scrollY);      <span class="comment">// 垂直滚动位置</span>
+<span class="function">console</span>.<span class="function">log</span>(window.pageXOffset); <span class="comment">// scrollX 的别名</span>
+<span class="function">console</span>.<span class="function">log</span>(window.pageYOffset); <span class="comment">// scrollY 的别名</span></code></pre>
+
+          <ul>
+            <li><strong>innerWidth / innerHeight</strong> - 浏览器窗口的内部尺寸（不含边框）</li>
+            <li><strong>outerWidth / outerHeight</strong> - 浏览器窗口的外部尺寸（含边框）</li>
+            <li><strong>scrollX / scrollY</strong> - 文档的滚动位置</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：窗口尺寸</h2>
+          <p>实时显示窗口尺寸</p>
+
+          <div class="info-panel">
+            <h4>窗口尺寸（调整浏览器窗口大小观察变化）</h4>
+            <div class="info-row">
+              <span class="info-label">innerWidth:</span>
+              <span id="val1-inner-w" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">innerHeight:</span>
+              <span id="val1-inner-h" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">outerWidth:</span>
+              <span id="val1-outer-w" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">outerHeight:</span>
+              <span id="val1-outer-h" class="info-value">0px</span>
+            </div>
+          </div>
+
+          <div class="tip">
+            <h4>💡 inner vs outer</h4>
+            <p>
+              innerWidth/Height 是文档可显示区域的尺寸<br />
+              outerWidth/Height 是整个浏览器窗口的尺寸<br />
+              响应式设计应该使用 innerWidth
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：滚动位置</h2>
+          <p>监听页面滚动</p>
+
+          <div id="scroll2" class="scroll-container" style="height: 250px">
+            <div style="padding: 20px; min-height: 500px">
+              <p style="color: var(--text-secondary)">↓ 向下滚动查看数值变化 ↓</p>
+              <p style="margin: 100px 0; color: var(--text-secondary)">继续滚动...</p>
+            </div>
+          </div>
+
+          <div class="info-panel">
+            <h4>滚动位置</h4>
+            <div class="info-row">
+              <span class="info-label">scrollY:</span>
+              <span id="val2-scroll-y" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">pageYOffset:</span>
+              <span id="val2-page-y" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">scrollX:</span>
+              <span id="val2-scroll-x" class="info-value">0px</span>
+            </div>
+          </div>
+
+          <button class="control-button" onclick="document.getElementById('scroll2').scrollTop = 0">重置滚动</button>
+        </section>
+
+        <section class="section">
+          <h2>示例 3：响应式监听</h2>
+          <p>监听窗口尺寸变化</p>
+
+          <div id="container3" class="demo-container">
+            <div id="box3" class="demo-box" style="margin: 0 auto">调整窗口大小</div>
+          </div>
+
+          <div class="info-panel">
+            <h4>响应式状态</h4>
+            <div class="info-row">
+              <span class="info-label">窗口宽度:</span>
+              <span id="val3-width" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">设备类型:</span>
+              <span id="val3-device" class="info-value">-</span>
+            </div>
+          </div>
+
+          <pre class="code-block"><code><span class="comment">// 监听窗口尺寸变化</span>
+window.<span class="function">addEventListener</span>(<span class="string">'resize'</span>, () => {
+  <span class="keyword">const</span> width = window.innerWidth;
+  <span class="keyword">if</span> (width &lt; <span class="value">768</span>) {
+    <span class="function">console</span>.<span class="function">log</span>(<span class="string">'移动设备'</span>);
+  } <span class="keyword">else</span> {
+    <span class="function">console</span>.<span class="function">log</span>(<span class="string">'桌面设备'</span>);
+  }
+});</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 4：回到顶部按钮</h2>
+          <p>基于滚动位置显示按钮</p>
+
+          <div id="scroll4" class="scroll-container" style="height: 200px; margin-bottom: 20px">
+            <div style="padding: 20px; min-height: 400px">
+              <p style="color: var(--text-secondary)">↓ 向下滚动查看按钮 ↓</p>
+            </div>
+          </div>
+
+          <button
+            id="back-to-top"
+            class="control-button"
+            style="display: none"
+            onclick="document.getElementById('scroll4').scrollTop = 0"
+          >
+            ↑ 回到顶部
+          </button>
+
+          <div class="info-panel">
+            <h4>按钮状态</h4>
+            <div class="info-row">
+              <span class="info-label">滚动距离:</span>
+              <span id="val4-scroll" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">按钮显示:</span>
+              <span id="val4-visible" class="info-value">否</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>总结</h2>
+          <ul>
+            <li>window.innerWidth/Height 获取窗口内部尺寸</li>
+            <li>window.scrollX/Y 获取文档滚动位置</li>
+            <li>resize 事件监听窗口尺寸变化</li>
+            <li>scroll 事件监听滚动位置变化</li>
+            <li>响应式设计的基础 API</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      // 示例 1：窗口尺寸
+      function updateWindowInfo() {
+        document.getElementById('val1-inner-w').textContent = window.innerWidth + 'px';
+        document.getElementById('val1-inner-h').textContent = window.innerHeight + 'px';
+        document.getElementById('val1-outer-w').textContent = window.outerWidth + 'px';
+        document.getElementById('val1-outer-h').textContent = window.outerHeight + 'px';
+      }
+
+      window.addEventListener('resize', updateWindowInfo);
+      updateWindowInfo();
+
+      // 示例 2：滚动位置
+      const scroll2 = document.getElementById('scroll2');
+
+      function updateScrollInfo() {
+        document.getElementById('val2-scroll-y').textContent = Math.round(scroll2.scrollTop) + 'px';
+        document.getElementById('val2-page-y').textContent = Math.round(window.pageYOffset) + 'px';
+        document.getElementById('val2-scroll-x').textContent = Math.round(scroll2.scrollLeft) + 'px';
+      }
+
+      scroll2.addEventListener('scroll', updateScrollInfo);
+      updateScrollInfo();
+
+      // 示例 3：响应式监听
+      function updateResponsive() {
+        const width = window.innerWidth;
+        document.getElementById('val3-width').textContent = width + 'px';
+
+        let device;
+        if (width < 768) {
+          device = '移动设备';
+        } else if (width < 1024) {
+          device = '平板设备';
+        } else {
+          device = '桌面设备';
+        }
+        document.getElementById('val3-device').textContent = device;
+      }
+
+      window.addEventListener('resize', updateResponsive);
+      updateResponsive();
+
+      // 示例 4：回到顶部
+      const scroll4 = document.getElementById('scroll4');
+      const backToTop = document.getElementById('back-to-top');
+
+      scroll4.addEventListener('scroll', () => {
+        const scrollTop = scroll4.scrollTop;
+        document.getElementById('val4-scroll').textContent = Math.round(scrollTop) + 'px';
+
+        if (scrollTop > 100) {
+          backToTop.style.display = 'inline-block';
+          document.getElementById('val4-visible').textContent = '是';
+        } else {
+          backToTop.style.display = 'none';
+          document.getElementById('val4-visible').textContent = '否';
+        }
+      });
+    </script>
+  </body>
+</html>

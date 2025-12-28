@@ -1,0 +1,343 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>滚动进度条 - DOM 元素尺寸和位置 API 实战案例</title>
+    <link href="../styles.css" rel="stylesheet" />
+    <script type="module" src="/src/theme-sync.js"></script>
+    <style>
+      /* 滚动进度条容器 */
+      .progress-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--border-color);
+        z-index: 9999;
+      }
+
+      .progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+        width: 0%;
+        transition: width 0.1s ease;
+      }
+
+      /* 圆形进度指示器 */
+      .circle-progress {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        background: var(--card-bg);
+        border: 3px solid var(--border-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: var(--text-primary);
+        z-index: 9999;
+        box-shadow: var(--shadow-lg);
+      }
+
+      /* 文章内容 */
+      .article {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+
+      .article h1 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        color: var(--text-primary);
+      }
+
+      .article .meta {
+        color: var(--text-secondary);
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid var(--border-color);
+      }
+
+      .article h2 {
+        font-size: 1.8rem;
+        margin: 40px 0 20px;
+        color: var(--text-primary);
+      }
+
+      .article p {
+        line-height: 1.8;
+        margin-bottom: 20px;
+        color: var(--text-secondary);
+        font-size: 1.05rem;
+      }
+
+      .article code {
+        background: var(--bg-secondary);
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-family: var(--font-mono);
+        color: var(--primary);
+      }
+
+      /* 返回顶部按钮 */
+      .back-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 100px;
+        width: 50px;
+        height: 50px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        box-shadow: var(--shadow-lg);
+        transition: all var(--transition-base);
+        z-index: 9999;
+      }
+
+      .back-to-top:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+      }
+
+      .back-to-top.visible {
+        display: flex;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 顶部进度条 -->
+    <div class="progress-container">
+      <div id="progress-bar" class="progress-bar"></div>
+    </div>
+
+    <!-- 圆形进度指示器 -->
+    <div id="circle-progress" class="circle-progress">0%</div>
+
+    <!-- 返回顶部按钮 -->
+    <button id="back-to-top" class="back-to-top" title="返回顶部">↑</button>
+
+    <!-- 文章内容 -->
+    <article class="article">
+      <h1>DOM 元素尺寸和位置 API 指南</h1>
+      <div class="meta">
+        <p>发布于 2024年1月1日 · 阅读时间 5 分钟</p>
+      </div>
+
+      <p>
+        在前端开发中，经常需要获取和操作 DOM 元素的尺寸和位置信息。 JavaScript 提供了丰富的 API 来帮助我们实现这些功能。
+        本教程将通过实际案例，演示如何使用这些 API 构建实用的功能。
+      </p>
+
+      <h2>1. 基础属性</h2>
+      <p>
+        offset、client、scroll 系列属性是最基础的元素测量方式。
+        <code>offsetWidth</code> 和 <code>offsetHeight</code> 返回元素的布局尺寸， 包含 border、padding
+        和滚动条，但不包含 margin。
+      </p>
+      <p>
+        <code>clientWidth</code> 和 <code>clientHeight</code> 则返回元素的可见区域尺寸， 不包含 border
+        和滚动条。这在计算可显示区域时非常有用。
+      </p>
+
+      <h2>2. getBoundingClientRect()</h2>
+      <p>
+        这是最常用的定位 API。它返回元素相对于视口的位置信息。 与 offset
+        属性不同，这个方法返回的值会随着页面滚动而实时更新。
+      </p>
+      <p>
+        <code>getBoundingClientRect()</code> 返回一个 DOMRect 对象， 包含 x、y、width、height、top、right、bottom、left
+        等属性。 这些值都是相对于浏览器视口的。
+      </p>
+
+      <h2>3. IntersectionObserver</h2>
+      <p>这是现代浏览器提供的强大 API，用于检测元素是否进入视口。 相比传统的 scroll 事件监听，它具有更好的性能。</p>
+      <p>
+        <code>IntersectionObserver</code> 可以用于实现图片懒加载、无限滚动、
+        视差动画等功能。它不会频繁触发回调，而是提供了精确的控制。
+      </p>
+
+      <h2>4. ResizeObserver</h2>
+      <p><code>ResizeObserver</code> 可以监听任意元素的尺寸变化。 这在构建响应式组件时非常有用。</p>
+      <p>
+        传统的 <code>window.resize</code> 事件只能监听窗口大小的变化， 而
+        <code>ResizeObserver</code> 可以精确监听单个元素的变化， 提供了更细粒度的控制。
+      </p>
+
+      <h2>5. scrollIntoView()</h2>
+      <p>这个方法可以让元素滚动到可见区域。 它支持平滑滚动和精确的对齐控制。</p>
+      <p>
+        <code>scrollIntoView()</code> 非常适合用于实现目录导航、 表单错误定位等功能。通过
+        <code>behavior: 'smooth'</code> 选项， 可以提供流畅的用户体验。
+      </p>
+
+      <h2>6. 实战应用</h2>
+      <p>
+        将这些 API 组合使用，可以实现各种实用的功能。 比如，本页面顶部显示的进度条，就是通过监听 scroll 事件， 结合
+        <code>getBoundingClientRect()</code> 实现的。
+      </p>
+      <p>右下角的圆形进度指示器实时显示阅读进度。 当滚动超过一定距离后，"返回顶部"按钮会自动出现。</p>
+
+      <h2>7. 性能优化</h2>
+      <p>
+        在使用这些 API 时，需要注意性能优化。 频繁调用 <code>getBoundingClientRect()</code> 会触发 reflow，
+        可能影响页面性能。
+      </p>
+      <p>
+        建议使用 throttle 或 debounce 来限制回调的执行频率。 对于检测元素可见性的场景，优先使用
+        <code>IntersectionObserver</code>。
+      </p>
+
+      <h2>8. 浏览器兼容性</h2>
+      <p>大部分现代浏览器都支持这些 API。 对于需要支持旧浏览器的项目，可以使用相应的 polyfill。</p>
+      <p>在使用新的 API 之前，建议先检查浏览器兼容性， 确保目标用户群体的浏览器能够正常使用。</p>
+
+      <h2>9. 总结</h2>
+      <p>DOM 元素尺寸和位置 API 是前端开发的基础知识。 掌握这些 API，可以帮助我们构建更加丰富和互动的用户界面。</p>
+      <p>
+        从基础的 offset、client 属性，到现代的 Observer API， 每个方法都有其适用的场景。选择合适的 API，
+        可以让代码更简洁、性能更好。
+      </p>
+
+      <h2>10. 进一步学习</h2>
+      <p>
+        推荐通过实际项目来练习这些 API 的使用。 尝试实现拖拽、定位、懒加载等功能， 深入理解每个 API 的特点和适用场景。
+      </p>
+      <p>
+        随着浏览器技术的不断发展，新的 API 也在不断推出。 保持学习的热情，跟上技术的进步，
+        才能在前端开发的道路上走得更远。
+      </p>
+
+      <div
+        style="
+          margin-top: 60px;
+          padding: 40px;
+          background: var(--bg-secondary);
+          border-radius: 12px;
+          text-align: center;
+        "
+      >
+        <h3 style="color: var(--text-primary); margin-bottom: 15px">恭喜！你已阅读完这篇文章</h3>
+        <p style="color: var(--text-secondary)">希望这篇教程对你有所帮助。继续学习更多 DOM API，提升你的前端技能！</p>
+      </div>
+    </article>
+
+    <script>
+      // 获取元素
+      const progressBar = document.getElementById('progress-bar');
+      const circleProgress = document.getElementById('circle-progress');
+      const backToTop = document.getElementById('back-to-top');
+
+      // 更新进度条
+      function updateProgress() {
+        // 获取文档和视口信息
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight;
+        const clientHeight = document.documentElement.clientHeight;
+
+        // 计算滚动进度
+        const scrollableHeight = scrollHeight - clientHeight;
+        const progress = scrollableHeight > 0 ? (scrollTop / scrollableHeight) * 100 : 0;
+
+        // 更新顶部进度条
+        progressBar.style.width = progress + '%';
+
+        // 更新圆形进度
+        circleProgress.textContent = Math.round(progress) + '%';
+
+        // 更新返回顶部按钮显示状态
+        if (scrollTop > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      }
+
+      // 返回顶部
+      function scrollToTop() {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+      }
+
+      // 监听滚动事件（使用 throttle 优化性能）
+      let ticking = false;
+
+      function onScroll() {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            updateProgress();
+            ticking = false;
+          });
+
+          ticking = true;
+        }
+      }
+
+      // 添加事件监听
+      window.addEventListener('scroll', onScroll);
+      backToTop.addEventListener('click', scrollToTop);
+
+      // 初始化
+      updateProgress();
+
+      // 说明面板
+      const demoCode = `
+// 核心实现代码
+function updateProgress() {
+  const scrollTop = window.scrollY;
+  const scrollHeight = document.documentElement.scrollHeight;
+  const clientHeight = document.documentElement.clientHeight;
+
+  const scrollableHeight = scrollHeight - clientHeight;
+  const progress = (scrollTop / scrollableHeight) * 100;
+
+  progressBar.style.width = progress + '%';
+}
+
+// 使用 requestAnimationFrame 优化性能
+window.addEventListener('scroll', () => {
+  window.requestAnimationFrame(updateProgress);
+});
+      `.trim();
+
+      console.log('滚动进度条实现代码：\n' + demoCode);
+    </script>
+
+    <!-- 返回主页链接 -->
+    <div style="position: fixed; top: 20px; left: 20px; z-index: 9999">
+      <a
+        href="../index.html"
+        style="
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 20px;
+          background: var(--card-bg);
+          border: 2px solid var(--border-color);
+          border-radius: 8px;
+          text-decoration: none;
+          color: var(--text-primary);
+          font-weight: 600;
+          transition: all var(--transition-base);
+          box-shadow: var(--shadow-md);
+        "
+      >
+        ← 返回列表
+      </a>
+    </div>
+  </body>
+</html>

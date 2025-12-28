@@ -1,0 +1,241 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>下拉菜单定位 - DOM 元素尺寸和位置 API 实战案例</title>
+    <link href="../styles.css" rel="stylesheet" />
+    <script type="module" src="/src/theme-sync.js"></script>
+    <style>
+      .dropdown-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .dropdown-trigger {
+        padding: 12px 24px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 1rem;
+      }
+
+      .dropdown-menu {
+        position: fixed;
+        background: white;
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+        min-width: 200px;
+        z-index: 1000;
+        display: none;
+        overflow: hidden;
+      }
+
+      .dropdown-menu.visible {
+        display: block;
+      }
+
+      .dropdown-item {
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+        color: var(--text-primary);
+        border-bottom: 1px solid var(--bg-secondary);
+      }
+
+      .dropdown-item:hover {
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+
+      .dropdown-item:last-child {
+        border-bottom: none;
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>DOM 元素尺寸和位置 API</h1>
+        <a class="back-home" href="../index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>实战应用</h3>
+          <a class="nav-item" href="drag-drop.html">拖拽元素</a>
+          <a class="nav-item" href="snap-align.html">元素吸附对齐</a>
+          <a class="nav-item" href="tooltip.html">工具提示定位</a>
+          <a class="nav-item active" href="dropdown.html">下拉菜单定位</a>
+          <a class="nav-item" href="modal-center.html">模态框居中</a>
+          <a class="nav-item" href="scroll-progress.html">滚动进度条</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>下拉菜单定位</h1>
+        <p class="subtitle">计算下拉菜单的最佳位置，处理边界情况</p>
+
+        <section class="section">
+          <h2>实现原理</h2>
+          <p>下拉菜单需要根据触发按钮的位置智能定位，确保菜单完整显示在视口内。</p>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">function</span> <span class="function">positionDropdown</span>(trigger, menu) {
+  <span class="keyword">const</span> triggerRect = trigger.<span class="function">getBoundingClientRect</span>();
+  <span class="keyword">const</span> menuRect = menu.<span class="function">getBoundingClientRect</span>();
+
+  <span class="comment">// 默认：左上角对齐，显示在按钮下方</span>
+  <span class="keyword">let</span> top = triggerRect.bottom + <span class="value">5</span>;
+  <span class="keyword">let</span> left = triggerRect.left;
+
+  <span class="comment">// 检查是否超出底部</span>
+  <span class="keyword">if</span> (top + menuRect.height &gt; window.innerHeight) {
+    <span class="comment">// 改为显示在按钮上方</span>
+    top = triggerRect.top - menuRect.height - <span class="value">5</span>;
+  }
+
+  <span class="comment">// 检查是否超出右边界</span>
+  <span class="keyword">if</span> (left + menuRect.width &gt; window.innerWidth) {
+    <span class="comment">// 右对齐</span>
+    left = triggerRect.right - menuRect.width;
+  }
+
+  <span class="comment">// 检查是否超出左边界</span>
+  <span class="keyword">if</span> (left &lt; <span class="value">0</span>) {
+    left = <span class="value">10</span>;
+  }
+
+  menu.style.top = top + <span class="string">'px'</span>;
+  menu.style.left = left + <span class="string">'px'</span>;
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例：智能下拉菜单</h2>
+          <p>点击按钮打开下拉菜单（会自动避开边界）</p>
+
+          <div class="demo-container" style="height: 350px">
+            <div style="display: flex; gap: 20px; justify-content: center; align-items: center; height: 100%">
+              <div class="dropdown-container">
+                <button class="dropdown-trigger" onclick="toggleDropdown('dropdown1')">左侧菜单</button>
+                <div id="dropdown1" class="dropdown-menu">
+                  <div class="dropdown-item">选项 1</div>
+                  <div class="dropdown-item">选项 2</div>
+                  <div class="dropdown-item">选项 3</div>
+                </div>
+              </div>
+
+              <div class="dropdown-container">
+                <button class="dropdown-trigger" onclick="toggleDropdown('dropdown2')">中间菜单</button>
+                <div id="dropdown2" class="dropdown-menu">
+                  <div class="dropdown-item">选项 A</div>
+                  <div class="dropdown-item">选项 B</div>
+                  <div class="dropdown-item">选项 C</div>
+                </div>
+              </div>
+
+              <div class="dropdown-container">
+                <button class="dropdown-trigger" onclick="toggleDropdown('dropdown3')">右侧菜单</button>
+                <div id="dropdown3" class="dropdown-menu">
+                  <div class="dropdown-item">选项 X</div>
+                  <div class="dropdown-item">选项 Y</div>
+                  <div class="dropdown-item">选项 Z</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tip">
+            <h4>💡 关键点</h4>
+            <p>
+              下拉菜单会：<br />
+              1. 默认显示在按钮下方<br />
+              2. 如果下方空间不足，显示在上方<br />
+              3. 防止超出左右边界<br />
+              4. 使用 fixed 定位避免被父容器裁剪
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>总结</h2>
+          <ul>
+            <li>使用 getBoundingClientRect() 获取按钮位置</li>
+            <li>计算菜单的初始位置</li>
+            <li>检测四个方向的边界</li>
+            <li>动态调整菜单位置和方向</li>
+            <li>确保菜单始终在视口内可见</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      let currentDropdown = null;
+
+      window.toggleDropdown = function (id) {
+        const menu = document.getElementById(id);
+
+        // 关闭其他菜单
+        if (currentDropdown && currentDropdown !== menu) {
+          currentDropdown.classList.remove('visible');
+        }
+
+        // 切换当前菜单
+        menu.classList.toggle('visible');
+
+        if (menu.classList.contains('visible')) {
+          currentDropdown = menu;
+          positionDropdown(menu.previousElementSibling, menu);
+        } else {
+          currentDropdown = null;
+        }
+      };
+
+      function positionDropdown(trigger, menu) {
+        const triggerRect = trigger.getBoundingClientRect();
+        const menuHeight = menu.offsetHeight || 120;
+        const menuWidth = menu.offsetWidth || 200;
+
+        // 默认：显示在按钮下方，左对齐
+        let top = triggerRect.bottom + 5;
+        let left = triggerRect.left;
+
+        // 检查是否超出底部
+        if (top + menuHeight > window.innerHeight) {
+          // 改为显示在按钮上方
+          top = triggerRect.top - menuHeight - 5;
+        }
+
+        // 检查是否超出右边界
+        if (left + menuWidth > window.innerWidth - 10) {
+          // 右对齐
+          left = triggerRect.right - menuWidth;
+        }
+
+        // 检查是否超出左边界
+        if (left < 10) {
+          left = 10;
+        }
+
+        menu.style.top = top + 'px';
+        menu.style.left = left + 'px';
+      }
+
+      // 点击页面其他地方关闭菜单
+      document.addEventListener('click', (e) => {
+        if (currentDropdown && !e.target.closest('.dropdown-container')) {
+          currentDropdown.classList.remove('visible');
+          currentDropdown = null;
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,611 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>getBoundingClientRect() - DOM 元素尺寸和位置 API</title>
+    <link href="../styles.css" rel="stylesheet" />
+    <script type="module" src="/src/theme-sync.js"></script>
+  </head>
+  <body>
+    <!-- 左侧边栏导航 -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>DOM 元素尺寸和位置 API</h1>
+        <a class="back-home" href="../index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础属性</h3>
+          <a class="nav-item" href="offset.html">offset* 属性</a>
+          <a class="nav-item" href="client.html">client* 属性</a>
+          <a class="nav-item" href="scroll.html">scroll* 属性</a>
+          <a class="nav-item" href="offset-parent.html">offsetParent</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>核心 API</h3>
+          <a class="nav-item active" href="bounding-rect.html">getBoundingClientRect()</a>
+          <a class="nav-item" href="client-rects.html">getClientRects()</a>
+          <a class="nav-item" href="scroll-into-view.html">scrollIntoView()</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>窗口和文档</h3>
+          <a class="nav-item" href="window-api.html">window API</a>
+          <a class="nav-item" href="document-scroll.html">document 滚动兼容</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>现代 Observer API</h3>
+          <a class="nav-item" href="resize-observer.html">ResizeObserver</a>
+          <a class="nav-item" href="intersection-observer.html">IntersectionObserver</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>实战应用</h3>
+          <a class="nav-item" href="../practical-demos/drag-drop.html">拖拽元素</a>
+          <a class="nav-item" href="../practical-demos/snap-align.html">元素吸附对齐</a>
+          <a class="nav-item" href="../practical-demos/tooltip.html">工具提示定位</a>
+          <a class="nav-item" href="../practical-demos/dropdown.html">下拉菜单定位</a>
+          <a class="nav-item" href="../practical-demos/modal-center.html">模态框居中</a>
+          <a class="nav-item" href="../practical-demos/scroll-progress.html">滚动进度条</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>getBoundingClientRect()</h1>
+        <p class="subtitle">获取元素相对于视口的位置和尺寸信息</p>
+
+        <section class="section">
+          <h2>方法说明</h2>
+          <p>
+            <span class="highlight">getBoundingClientRect()</span> 返回元素的大小及其相对于视口的位置。这是最常用的定位
+            API，返回一个 DOMRect 对象。
+          </p>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">const</span> rect = element.<span class="function">getBoundingClientRect</span>();
+<span class="comment">// 返回值：DOMRect 对象</span>
+{
+  x: <span class="value">100</span>,           <span class="comment">// 元素左边缘距离视口左侧的距离</span>
+  y: <span class="value">200</span>,           <span class="comment">// 元素上边缘距离视口顶部的距离</span>
+  width: <span class="value">300</span>,       <span class="comment">// 元素宽度</span>
+  height: <span class="value">150</span>,      <span class="comment">// 元素高度</span>
+  top: <span class="value">200</span>,         <span class="comment">// 等同于 y</span>
+  right: <span class="value">400</span>,       <span class="comment">// x + width</span>
+  bottom: <span class="value">350</span>,      <span class="comment">// y + height</span>
+  left: <span class="value">100</span>         <span class="comment">// 等同于 x</span>
+}</code></pre>
+
+          <ul>
+            <li><strong>x / left</strong> - 元素左边缘距离视口左侧的距离</li>
+            <li><strong>y / top</strong> - 元素上边缘距离视口顶部的距离</li>
+            <li><strong>right</strong> - 元素右边缘距离视口左侧的距离（x + width）</li>
+            <li><strong>bottom</strong> - 元素下边缘距离视口顶部的距离（y + height）</li>
+            <li><strong>width</strong> - 元素宽度</li>
+            <li><strong>height</strong> - 元素高度</li>
+          </ul>
+
+          <div class="tip">
+            <h4>💡 核心优势</h4>
+            <p>
+              与 offset 属性不同，getBoundingClientRect()
+              返回的是相对于<strong>视口</strong>的位置，而不是相对于父元素。当页面滚动时，这些值会实时更新。
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：基础测量</h2>
+          <p>移动鼠标或滚动页面，观察数值的实时变化</p>
+
+          <div id="demo1" class="demo-container">
+            <div id="box1" class="demo-box">目标元素</div>
+          </div>
+
+          <div class="info-panel">
+            <h4>实时数据（相对于视口）</h4>
+            <div class="info-row">
+              <span class="info-label">x (left):</span>
+              <span id="val1-x" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">y (top):</span>
+              <span id="val1-y" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">right:</span>
+              <span id="val1-right" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">bottom:</span>
+              <span id="val1-bottom" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">width:</span>
+              <span id="val1-width" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">height:</span>
+              <span id="val1-height" class="info-value">0px</span>
+            </div>
+          </div>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">const</span> box = document.<span class="function">getElementById</span>(<span class="string">'box'</span>);
+<span class="keyword">const</span> rect = box.<span class="function">getBoundingClientRect</span>();
+
+<span class="function">console</span>.<span class="function">log</span>(<span class="string">`左上角位置: (${rect.x}, ${rect.y})`</span>);
+<span class="function">console</span>.<span class="function">log</span>(<span class="string">`元素尺寸: ${rect.width} × ${rect.height}`</span>);</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：检测元素是否在视口中</h2>
+          <p>判断元素是否完全或部分可见</p>
+
+          <div id="scroll2" class="scroll-container" style="height: 250px">
+            <p style="margin-bottom: 50px; color: var(--text-secondary)">↓ 向下滚动找到目标元素 ↓</p>
+            <div id="box2" class="demo-box" style="margin: 20px 0">目标元素</div>
+            <p style="margin-top: 100px; color: var(--text-secondary)">继续滚动...</p>
+          </div>
+
+          <div class="info-panel">
+            <h4>可见性检测</h4>
+            <div class="info-row">
+              <span class="info-label">元素状态:</span>
+              <span id="val2-status" class="info-value">检测中...</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">top:</span>
+              <span id="val2-top" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">bottom:</span>
+              <span id="val2-bottom" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">视口高度:</span>
+              <span id="val2-viewport" class="info-value">0px</span>
+            </div>
+          </div>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">function</span> <span class="function">isInViewport</span>(element) {
+  <span class="keyword">const</span> rect = element.<span class="function">getBoundingClientRect</span>();
+  <span class="keyword">return</span> (
+    rect.top >= <span class="value">0</span> &&
+    rect.left >= <span class="value">0</span> &&
+    rect.bottom <= window.innerHeight &&
+    rect.right <= window.innerWidth
+  );
+}</code></pre>
+
+          <button class="control-button" onclick="document.getElementById('scroll2').scrollTop = 0">重置滚动</button>
+        </section>
+
+        <section class="section">
+          <h2>示例 3：计算元素重叠区域</h2>
+          <p>检测两个元素是否重叠</p>
+
+          <div class="demo-container" style="position: relative; height: 350px">
+            <div id="box3a" class="demo-box" style="position: absolute; left: 50px; top: 50px; background: #3b82f6">
+              元素 A
+            </div>
+            <div id="box3b" class="demo-box" style="position: absolute; left: 120px; top: 80px; background: #ef4444">
+              元素 B
+            </div>
+
+            <div
+              id="overlap-highlight"
+              class="rect-highlight"
+              style="display: none; background: rgba(16, 185, 129, 0.3); border-color: #10b981"
+            ></div>
+          </div>
+
+          <div class="info-panel">
+            <h4>重叠检测结果</h4>
+            <div class="info-row">
+              <span class="info-label">是否重叠:</span>
+              <span id="val3-overlap" class="info-value">-</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">重叠区域宽度:</span>
+              <span id="val3-overlap-w" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">重叠区域高度:</span>
+              <span id="val3-overlap-h" class="info-value">0px</span>
+            </div>
+          </div>
+
+          <button class="control-button secondary" onclick="randomizePositions()">随机位置</button>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">function</span> <span class="function">checkOverlap</span>(el1, el2) {
+  <span class="keyword">const</span> rect1 = el1.<span class="function">getBoundingClientRect</span>();
+  <span class="keyword">const</span> rect2 = el2.<span class="function">getBoundingClientRect</span>();
+
+  <span class="keyword">return</span> !(
+    rect1.right < rect2.left ||
+    rect1.left > rect2.right ||
+    rect1.bottom < rect2.top ||
+    rect1.top > rect2.bottom
+  );
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 4：滚动时实时更新位置</h2>
+          <p>观察页面滚动时元素位置的变化</p>
+
+          <div
+            style="
+              height: 150px;
+              border: 2px dashed var(--border-color);
+              border-radius: var(--radius-md);
+              padding: 20px;
+              margin-bottom: 20px;
+              overflow: hidden;
+              position: relative;
+            "
+          >
+            <div style="color: var(--text-secondary); font-size: 0.9rem">
+              <p>↓ 滚动整个页面 ↓</p>
+              <p>观察下方元素相对于视口位置的变化</p>
+            </div>
+          </div>
+
+          <div id="demo4" class="demo-container">
+            <div id="box4" class="demo-box">观察我</div>
+          </div>
+
+          <div class="info-panel">
+            <h4>位置追踪</h4>
+            <div class="info-row">
+              <span class="info-label">Y (top):</span>
+              <span id="val4-y" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">相对于视口顶部:</span>
+              <span id="val4-from-top" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">页面滚动距离:</span>
+              <span id="val4-scroll" class="info-value">0px</span>
+            </div>
+          </div>
+
+          <div class="tip">
+            <h4>💡 关键点</h4>
+            <p>
+              页面滚动时，getBoundingClientRect()
+              的返回值会实时更新。如果需要获取元素相对于文档的位置（不受滚动影响），需要加上 scrollY：
+              <br />
+              <code class="code-inline">absoluteTop = rect.top + window.scrollY</code>
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>示例 5：元素定位锚点</h2>
+          <p>在某个元素附近定位另一个元素（如工具提示）</p>
+
+          <div class="demo-container" style="min-height: 400px">
+            <div id="box5" class="demo-box" style="margin: 100px auto">目标元素</div>
+
+            <div
+              id="tooltip5"
+              style="
+                position: fixed;
+                background: #1f2937;
+                color: white;
+                padding: 8px 16px;
+                border-radius: 8px;
+                font-size: 0.9rem;
+                pointer-events: none;
+                display: none;
+                z-index: 1000;
+              "
+            >
+              这是工具提示
+            </div>
+          </div>
+
+          <button class="control-button" onmouseover="showTooltip(event)" onmouseout="hideTooltip()">
+            悬停显示工具提示
+          </button>
+
+          <div class="info-panel">
+            <h4>工具提示位置</h4>
+            <div class="info-row">
+              <span class="info-label">元素顶部:</span>
+              <span id="val5-top" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">元素左侧:</span>
+              <span id="val5-left" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">提示框 Y:</span>
+              <span id="val5-tooltip-y" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">提示框 X:</span>
+              <span id="val5-tooltip-x" class="info-value">0px</span>
+            </div>
+          </div>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">function</span> <span class="function">positionTooltip</span>(element, tooltip) {
+  <span class="keyword">const</span> rect = element.<span class="function">getBoundingClientRect</span>();
+
+  <span class="comment">// 在元素上方居中显示工具提示</span>
+  tooltip.style.top = (rect.top - tooltip.offsetHeight - <span class="value">10</span>) + <span class="string">'px'</span>;
+  tooltip.style.left = (rect.left + rect.width / <span class="value">2</span> - tooltip.offsetWidth / <span class="value">2</span>) + <span class="string">'px'</span>;
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 6：固定定位元素的特殊情况</h2>
+          <p>固定定位元素的位置是相对于视口的</p>
+
+          <div class="demo-container" style="position: relative; height: 300px">
+            <div id="box6a" class="demo-box" style="position: relative; background: #3b82f6">相对定位</div>
+            <div
+              id="box6b"
+              class="demo-box"
+              style="position: fixed; right: 40px; top: 40px; background: #ef4444; width: 120px; height: 80px"
+            >
+              固定定位
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px">
+            <div class="info-panel">
+              <h4>相对定位元素</h4>
+              <div class="info-row">
+                <span class="info-label">top:</span>
+                <span id="val6a-top" class="info-value">0px</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">left:</span>
+                <span id="val6a-left" class="info-value">0px</span>
+              </div>
+            </div>
+            <div class="info-panel">
+              <h4>固定定位元素</h4>
+              <div class="info-row">
+                <span class="info-label">top:</span>
+                <span id="val6b-top" class="info-value">0px</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">left:</span>
+                <span id="val6b-left" class="info-value">0px</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="note">
+            <h4>💡 注意</h4>
+            <p>
+              固定定位元素（position: fixed）的 getBoundingClientRect()
+              返回的值不会随页面滚动而变化，因为它本身就是相对于视口定位的。
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>浏览器兼容性</h2>
+          <table class="compatibility-table">
+            <thead>
+              <tr>
+                <th>方法</th>
+                <th>Chrome</th>
+                <th>Firefox</th>
+                <th>Safari</th>
+                <th>Edge</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>getBoundingClientRect()</td>
+                <td class="supported">✓ 全版本</td>
+                <td class="supported">✓ 全版本</td>
+                <td class="supported">✓ 全版本</td>
+                <td class="supported">✓ 全版本</td>
+              </tr>
+              <tr>
+                <td>返回值 width/height</td>
+                <td class="supported">✓ 全版本</td>
+                <td class="supported">✓ 全版本</td>
+                <td class="supported">✓ 全版本</td>
+                <td class="supported">✓ 全版本</td>
+              </tr>
+              <tr>
+                <td>返回值 x/y</td>
+                <td class="supported">✓ 全版本</td>
+                <td class="supported">✓ 全版本</td>
+                <td class="supported">✓ 全版本</td>
+                <td class="supported">✓ 全版本</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section">
+          <h2>总结</h2>
+          <ul>
+            <li><strong>相对于视口</strong>：返回值是相对于视口的位置，不是相对于文档</li>
+            <li><strong>实时更新</strong>：滚动或缩放时，返回值会自动更新</li>
+            <li><strong>包含 border</strong>：width/height 包含元素的 border</li>
+            <li><strong>常用场景</strong>：检测可见性、元素定位、碰撞检测、懒加载等</li>
+            <li><strong>性能考虑</strong>：频繁调用会触发 reflow，建议缓存结果</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      // 示例 1：基础测量
+      const box1 = document.getElementById('box1');
+
+      function updateBox1() {
+        const rect = box1.getBoundingClientRect();
+        document.getElementById('val1-x').textContent = Math.round(rect.x) + 'px';
+        document.getElementById('val1-y').textContent = Math.round(rect.y) + 'px';
+        document.getElementById('val1-right').textContent = Math.round(rect.right) + 'px';
+        document.getElementById('val1-bottom').textContent = Math.round(rect.bottom) + 'px';
+        document.getElementById('val1-width').textContent = Math.round(rect.width) + 'px';
+        document.getElementById('val1-height').textContent = Math.round(rect.height) + 'px';
+      }
+
+      window.addEventListener('scroll', updateBox1);
+      window.addEventListener('resize', updateBox1);
+      updateBox1();
+
+      // 示例 2：检测可见性
+      const box2 = document.getElementById('box2');
+      const scroll2 = document.getElementById('scroll2');
+
+      function checkVisibility() {
+        const rect = box2.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+
+        document.getElementById('val2-top').textContent = Math.round(rect.top) + 'px';
+        document.getElementById('val2-bottom').textContent = Math.round(rect.bottom) + 'px';
+        document.getElementById('val2-viewport').textContent = Math.round(viewportHeight) + 'px';
+
+        const isVisible = rect.top < viewportHeight && rect.bottom > 0;
+        document.getElementById('val2-status').textContent = isVisible ? '✓ 可见' : '✗ 不可见';
+        document.getElementById('val2-status').style.color = isVisible ? 'var(--success)' : 'var(--error)';
+      }
+
+      scroll2.addEventListener('scroll', checkVisibility);
+      checkVisibility();
+
+      // 示例 3：重叠检测
+      const box3a = document.getElementById('box3a');
+      const box3b = document.getElementById('box3b');
+      const overlapHighlight = document.getElementById('overlap-highlight');
+
+      function checkOverlap() {
+        const rectA = box3a.getBoundingClientRect();
+        const rectB = box3b.getBoundingClientRect();
+
+        const overlap = !(
+          rectA.right < rectB.left ||
+          rectA.left > rectB.right ||
+          rectA.bottom < rectB.top ||
+          rectA.top > rectB.bottom
+        );
+
+        if (overlap) {
+          const x1 = Math.max(rectA.left, rectB.left);
+          const y1 = Math.max(rectA.top, rectB.top);
+          const x2 = Math.min(rectA.right, rectB.right);
+          const y2 = Math.min(rectA.bottom, rectB.bottom);
+
+          const overlapWidth = x2 - x1;
+          const overlapHeight = y2 - y1;
+
+          // 获取容器的相对位置
+          const containerRect = box3a.parentElement.getBoundingClientRect();
+          overlapHighlight.style.display = 'block';
+          overlapHighlight.style.left = x1 - containerRect.left + 'px';
+          overlapHighlight.style.top = y1 - containerRect.top + 'px';
+          overlapHighlight.style.width = overlapWidth + 'px';
+          overlapHighlight.style.height = overlapHeight + 'px';
+
+          document.getElementById('val3-overlap').textContent = '✓ 是';
+          document.getElementById('val3-overlap').style.color = 'var(--success)';
+          document.getElementById('val3-overlap-w').textContent = Math.round(overlapWidth) + 'px';
+          document.getElementById('val3-overlap-h').textContent = Math.round(overlapHeight) + 'px';
+        } else {
+          overlapHighlight.style.display = 'none';
+          document.getElementById('val3-overlap').textContent = '✗ 否';
+          document.getElementById('val3-overlap').style.color = 'var(--error)';
+          document.getElementById('val3-overlap-w').textContent = '0px';
+          document.getElementById('val3-overlap-h').textContent = '0px';
+        }
+      }
+
+      function randomizePositions() {
+        const container = box3a.parentElement;
+        const maxX = container.offsetWidth - 150;
+        const maxY = container.offsetHeight - 150;
+
+        box3a.style.left = Math.random() * maxX + 'px';
+        box3a.style.top = Math.random() * maxY + 'px';
+        box3b.style.left = Math.random() * maxX + 'px';
+        box3b.style.top = Math.random() * maxY + 'px';
+
+        checkOverlap();
+      }
+
+      window.randomizePositions = randomizePositions;
+
+      checkOverlap();
+
+      // 示例 4：滚动追踪
+      const box4 = document.getElementById('box4');
+
+      function updateBox4() {
+        const rect = box4.getBoundingClientRect();
+        document.getElementById('val4-y').textContent = Math.round(rect.y) + 'px';
+        document.getElementById('val4-from-top').textContent = Math.round(rect.top) + 'px';
+        document.getElementById('val4-scroll').textContent = Math.round(window.scrollY) + 'px';
+      }
+
+      window.addEventListener('scroll', updateBox4);
+      updateBox4();
+
+      // 示例 5：工具提示定位
+      const box5 = document.getElementById('box5');
+      const tooltip5 = document.getElementById('tooltip5');
+
+      window.showTooltip = function () {
+        const rect = box5.getBoundingClientRect();
+
+        tooltip5.style.display = 'block';
+        tooltip5.style.left = rect.left + rect.width / 2 - tooltip5.offsetWidth / 2 + 'px';
+        tooltip5.style.top = rect.top - tooltip5.offsetHeight - 10 + 'px';
+
+        document.getElementById('val5-top').textContent = Math.round(rect.top) + 'px';
+        document.getElementById('val5-left').textContent = Math.round(rect.left) + 'px';
+        document.getElementById('val5-tooltip-y').textContent =
+          Math.round(rect.top - tooltip5.offsetHeight - 10) + 'px';
+        document.getElementById('val5-tooltip-x').textContent =
+          Math.round(rect.left + rect.width / 2 - tooltip5.offsetWidth / 2) + 'px';
+      };
+
+      window.hideTooltip = function () {
+        tooltip5.style.display = 'none';
+      };
+
+      // 示例 6：固定定位
+      const box6a = document.getElementById('box6a');
+      const box6b = document.getElementById('box6b');
+
+      function updateBox6() {
+        const rectA = box6a.getBoundingClientRect();
+        const rectB = box6b.getBoundingClientRect();
+
+        document.getElementById('val6a-top').textContent = Math.round(rectA.top) + 'px';
+        document.getElementById('val6a-left').textContent = Math.round(rectA.left) + 'px';
+        document.getElementById('val6b-top').textContent = Math.round(rectB.top) + 'px';
+        document.getElementById('val6b-left').textContent = Math.round(rectB.left) + 'px';
+      }
+
+      window.addEventListener('scroll', updateBox6);
+      updateBox6();
+    </script>
+  </body>
+</html>

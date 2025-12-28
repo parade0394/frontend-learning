@@ -1,0 +1,424 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="DOM 元素尺寸和位置 API 交互式教程，系统掌握 offset、client、scroll、getBoundingClientRect 等 12 个核心知识点，包含 50+ 交互式演示。"
+    />
+    <title>DOM 元素尺寸和位置 API 教程</title>
+    <link href="/src/styles/common.css" rel="stylesheet" />
+    <!-- 防止主题闪烁 -->
+    <script>
+      (function () {
+        try {
+          const theme = localStorage.getItem('themeMode') || 'light';
+          const color = localStorage.getItem('primaryColor') || '#10b981';
+          let actualTheme = theme;
+          if (theme === 'auto') {
+            actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', actualTheme);
+          document.documentElement.style.setProperty('--primary', color);
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    </script>
+    <script type="module" src="/src/theme.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        min-height: 100vh;
+        padding: 40px 20px;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 50px;
+      }
+
+      header h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+        font-weight: 800;
+        color: var(--primary);
+      }
+
+      header p {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        font-weight: 400;
+      }
+
+      .intro-section {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 30px;
+        margin-bottom: 40px;
+        border-left: 4px solid var(--primary);
+      }
+
+      .intro-section h2 {
+        color: var(--text-primary);
+        margin-bottom: 15px;
+        font-size: 1.5rem;
+      }
+
+      .intro-section p {
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin-bottom: 15px;
+      }
+
+      .intro-section ul {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .intro-section li {
+        color: var(--text-secondary);
+        padding: 8px 0;
+        padding-left: 25px;
+        position: relative;
+      }
+
+      .intro-section li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: var(--primary);
+        font-weight: bold;
+      }
+
+      .section-title {
+        font-size: 1.8rem;
+        margin: 40px 0 20px 0;
+        color: var(--text-primary);
+        font-weight: 700;
+      }
+
+      .demo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        margin-bottom: 40px;
+        content-visibility: auto;
+        contain-intrinsic-size: 600px;
+      }
+
+      .difficulty {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-top: 10px;
+      }
+
+      .difficulty.beginner {
+        background: var(--success-light);
+        color: var(--success);
+      }
+
+      .difficulty.intermediate {
+        background: var(--warning-light);
+        color: var(--warning);
+      }
+
+      .difficulty.advanced {
+        background: var(--error-light);
+        color: var(--error);
+      }
+
+      footer {
+        text-align: center;
+        color: var(--text-secondary);
+        margin-top: 60px;
+        padding-top: 30px;
+        border-top: 1px solid var(--border-color);
+      }
+
+      footer p {
+        font-weight: 400;
+      }
+
+      footer a {
+        color: var(--primary);
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      footer a:hover {
+        color: var(--primary-dark);
+      }
+
+      /* Skip link for accessibility */
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: var(--primary);
+        color: white;
+        padding: 8px 16px;
+        text-decoration: none;
+        font-weight: 600;
+        border-radius: 0 0 4px 0;
+        z-index: 100;
+      }
+
+      .skip-link:focus {
+        top: 0;
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 20px 15px;
+        }
+
+        header {
+          margin-bottom: 30px;
+        }
+
+        header h1 {
+          font-size: 2rem;
+        }
+
+        header p {
+          font-size: 1rem;
+        }
+
+        .intro-section {
+          padding: 20px;
+        }
+
+        .section-title {
+          font-size: 1.5rem;
+        }
+
+        .demo-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳转到主要内容</a>
+
+    <div class="container">
+      <header>
+        <h1>DOM 元素尺寸和位置 API</h1>
+        <p>全面掌握 JavaScript 中的元素测量和定位技术</p>
+      </header>
+
+      <section class="intro-section">
+        <h2>📐 关于本模块</h2>
+        <p>
+          本模块系统地介绍了 JavaScript 中用于获取和操作 DOM 元素尺寸与位置的所有重要
+          API。通过丰富的交互式演示，你将学会如何精确测量元素、计算位置、监听变化，以及实现常见的交互效果。
+        </p>
+        <ul>
+          <li><strong>12 个核心知识点</strong>：从基础属性到现代 Observer API</li>
+          <li><strong>50+ 交互式演示</strong>：可视化理解每个 API 的工作原理</li>
+          <li><strong>6 个实战案例</strong>：拖拽、定位、懒加载等实际应用</li>
+          <li><strong>3-4 小时学习时长</strong>：系统掌握元素测量技术</li>
+        </ul>
+      </section>
+
+      <main id="main-content">
+        <h2 class="section-title">🔰 基础属性</h2>
+        <div class="demo-grid">
+          <a class="card" href="demos/offset.html">
+            <h3>offset* 属性</h3>
+            <p>offsetWidth、offsetHeight、offsetTop、offsetLeft - 元素的布局尺寸和相对于 offsetParent 的位置</p>
+            <div class="meta">
+              <span class="difficulty beginner">入门</span>
+              <span class="demos-count">5 个演示</span>
+            </div>
+          </a>
+
+          <a class="card" href="demos/client.html">
+            <h3>client* 属性</h3>
+            <p>clientWidth、clientHeight、clientTop、clientLeft - 元素的可见区域尺寸（不含滚动条）</p>
+            <div class="meta">
+              <span class="difficulty beginner">入门</span>
+              <span class="demos-count">4 个演示</span>
+            </div>
+          </a>
+
+          <a class="card" href="demos/scroll.html">
+            <h3>scroll* 属性</h3>
+            <p>scrollWidth、scrollHeight、scrollLeft、scrollTop - 元素的内容尺寸和滚动位置</p>
+            <div class="meta">
+              <span class="difficulty beginner">入门</span>
+              <span class="demos-count">5 个演示</span>
+            </div>
+          </a>
+
+          <a class="card" href="demos/offset-parent.html">
+            <h3>offsetParent</h3>
+            <p>查找元素的定位父级元素，理解定位上下文和层级关系</p>
+            <div class="meta">
+              <span class="difficulty beginner">入门</span>
+              <span class="demos-count">4 个演示</span>
+            </div>
+          </a>
+        </div>
+
+        <h2 class="section-title">🎯 核心 API</h2>
+        <div class="demo-grid">
+          <a class="card" href="demos/bounding-rect.html">
+            <h3>getBoundingClientRect()</h3>
+            <p>获取元素相对于视口的位置和尺寸信息 - 最常用的定位 API</p>
+            <div class="meta">
+              <span class="difficulty intermediate">中级</span>
+              <span class="demos-count">6 个演示</span>
+            </div>
+          </a>
+
+          <a class="card" href="demos/client-rects.html">
+            <h3>getClientRects()</h3>
+            <p>获取元素的所有矩形区域 - 适用于多行文本和复杂布局</p>
+            <div class="meta">
+              <span class="difficulty intermediate">中级</span>
+              <span class="demos-count">3 个演示</span>
+            </div>
+          </a>
+
+          <a class="card" href="demos/scroll-into-view.html">
+            <h3>scrollIntoView()</h3>
+            <p>滚动元素到可见区域，支持平滑滚动和对齐控制</p>
+            <div class="meta">
+              <span class="difficulty intermediate">中级</span>
+              <span class="demos-count">5 个演示</span>
+            </div>
+          </a>
+        </div>
+
+        <h2 class="section-title">🌐 窗口和文档</h2>
+        <div class="demo-grid">
+          <a class="card" href="demos/window-api.html">
+            <h3>window API</h3>
+            <p>innerWidth、innerHeight、scrollX、scrollY - 浏览器窗口尺寸和滚动位置</p>
+            <div class="meta">
+              <span class="difficulty beginner">入门</span>
+              <span class="demos-count">4 个演示</span>
+            </div>
+          </a>
+
+          <a class="card" href="demos/document-scroll.html">
+            <h3>document 滚动兼容</h3>
+            <p>documentElement.scrollTop 等属性的浏览器兼容性处理</p>
+            <div class="meta">
+              <span class="difficulty intermediate">中级</span>
+              <span class="demos-count">3 个演示</span>
+            </div>
+          </a>
+        </div>
+
+        <h2 class="section-title">🚀 现代 Observer API</h2>
+        <div class="demo-grid">
+          <a class="card" href="demos/resize-observer.html">
+            <h3>ResizeObserver</h3>
+            <p>高效监听元素尺寸变化的现代 API，替代 resize 事件</p>
+            <div class="meta">
+              <span class="difficulty intermediate">中级</span>
+              <span class="demos-count">4 个演示</span>
+            </div>
+          </a>
+
+          <a class="card" href="demos/intersection-observer.html">
+            <h3>IntersectionObserver</h3>
+            <p>异步检测元素是否进入视口 - 懒加载、无限滚动等场景的首选</p>
+            <div class="meta">
+              <span class="difficulty intermediate">中级</span>
+              <span class="demos-count">5 个演示</span>
+            </div>
+          </a>
+        </div>
+
+        <h2 class="section-title">💼 实战应用</h2>
+        <div class="demo-grid">
+          <a class="card" href="practical-demos/drag-drop.html">
+            <h3>拖拽元素</h3>
+            <p>结合鼠标事件和位置 API 实现可拖拽元素</p>
+            <div class="meta">
+              <span class="difficulty advanced">高级</span>
+              <span class="demos-count">1 个案例</span>
+            </div>
+          </a>
+
+          <a class="card" href="practical-demos/snap-align.html">
+            <h3>元素吸附对齐</h3>
+            <p>实现拖拽时的磁吸效果和对齐辅助线</p>
+            <div class="meta">
+              <span class="difficulty advanced">高级</span>
+              <span class="demos-count">1 个案例</span>
+            </div>
+          </a>
+
+          <a class="card" href="practical-demos/tooltip.html">
+            <h3>工具提示定位</h3>
+            <p>智能定位工具提示，防止超出视口边界</p>
+            <div class="meta">
+              <span class="difficulty advanced">高级</span>
+              <span class="demos-count">1 个案例</span>
+            </div>
+          </a>
+
+          <a class="card" href="practical-demos/dropdown.html">
+            <h3>下拉菜单定位</h3>
+            <p>计算下拉菜单的最佳位置，处理边界情况</p>
+            <div class="meta">
+              <span class="difficulty advanced">高级</span>
+              <span class="demos-count">1 个案例</span>
+            </div>
+          </a>
+
+          <a class="card" href="practical-demos/modal-center.html">
+            <h3>模态框居中</h3>
+            <p>实现水平和垂直居中的模态框</p>
+            <div class="meta">
+              <span class="difficulty intermediate">中级</span>
+              <span class="demos-count">1 个案例</span>
+            </div>
+          </a>
+
+          <a class="card" href="practical-demos/scroll-progress.html">
+            <h3>滚动进度条</h3>
+            <p>结合滚动 API 实现阅读进度指示器</p>
+            <div class="meta">
+              <span class="difficulty intermediate">中级</span>
+              <span class="demos-count">1 个案例</span>
+            </div>
+          </a>
+        </div>
+      </main>
+
+      <footer>
+        <p>💡 建议按顺序学习，从基础属性开始，逐步掌握核心 API 和现代 Observer</p>
+        <p style="margin-top: 10px">
+          <a href="../index.html">← 返回首页</a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

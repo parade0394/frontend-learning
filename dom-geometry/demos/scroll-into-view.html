@@ -1,0 +1,303 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>scroll-into-view - DOM 元素尺寸和位置 API</title>
+    <link href="../styles.css" rel="stylesheet" />
+    <script type="module" src="/src/theme-sync.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>DOM 元素尺寸和位置 API</h1>
+        <a class="back-home" href="../index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础属性</h3>
+          <a class="nav-item" href="offset.html">offset* 属性</a>
+          <a class="nav-item" href="client.html">client* 属性</a>
+          <a class="nav-item" href="scroll.html">scroll* 属性</a>
+          <a class="nav-item" href="offset-parent.html">offsetParent</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>核心 API</h3>
+          <a class="nav-item" href="bounding-rect.html">getBoundingClientRect()</a>
+          <a class="nav-item" href="client-rects.html">getClientRects()</a>
+          <a class="nav-item active" href="scroll-into-view.html">scrollIntoView()</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>窗口和文档</h3>
+          <a class="nav-item" href="window-api.html">window API</a>
+          <a class="nav-item" href="document-scroll.html">document 滚动兼容</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>现代 Observer API</h3>
+          <a class="nav-item" href="resize-observer.html">ResizeObserver</a>
+          <a class="nav-item" href="intersection-observer.html">IntersectionObserver</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>实战应用</h3>
+          <a class="nav-item" href="../practical-demos/drag-drop.html">拖拽元素</a>
+          <a class="nav-item" href="../practical-demos/snap-align.html">元素吸附对齐</a>
+          <a class="nav-item" href="../practical-demos/tooltip.html">工具提示定位</a>
+          <a class="nav-item" href="../practical-demos/dropdown.html">下拉菜单定位</a>
+          <a class="nav-item" href="../practical-demos/modal-center.html">模态框居中</a>
+          <a class="nav-item" href="../practical-demos/scroll-progress.html">滚动进度条</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>scrollIntoView()</h1>
+        <p class="subtitle">滚动元素到可见区域的便捷方法</p>
+
+        <section class="section">
+          <h2>方法说明</h2>
+          <p>
+            <span class="highlight">scrollIntoView()</span> 方法可以让元素滚动到可见区域。这是一个非常实用的
+            API，常用于导航、目录跳转等场景。
+          </p>
+
+          <pre class="code-block"><code><span class="comment">// 基础用法</span>
+element.<span class="function">scrollIntoView</span>();
+
+<span class="comment">// 平滑滚动</span>
+element.<span class="function">scrollIntoView</span>({ behavior: <span class="string">'smooth'</span> });
+
+<span class="comment">// 对齐到顶部</span>
+element.<span class="function">scrollIntoView</span>({ block: <span class="string">'start'</span> });
+
+<span class="comment">// 对齐到底部</span>
+element.<span class="function">scrollIntoView</span>({ block: <span class="string">'end'</span> });
+
+<span class="comment">// 水平对齐</span>
+element.<span class="function">scrollIntoView</span>({ inline: <span class="string">'center'</span> });</code></pre>
+
+          <ul>
+            <li><strong>behavior</strong> - 滚动行为：'auto'（默认，瞬间）或 'smooth'（平滑）</li>
+            <li><strong>block</strong> - 垂直对齐：'start'、'center'、'end'、'nearest'</li>
+            <li><strong>inline</strong> - 水平对齐：'start'、'center'、'end'、'nearest'</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：基础滚动</h2>
+          <p>点击按钮，滚动到目标元素</p>
+
+          <div id="scroll1" class="scroll-container" style="height: 250px">
+            <div style="padding: 20px">
+              <p style="color: var(--text-secondary); margin-bottom: 80px">内容顶部</p>
+              <div id="box1" class="demo-box" style="margin: 40px 0">目标元素</div>
+              <p style="color: var(--text-secondary); margin-top: 80px">内容底部</p>
+            </div>
+          </div>
+
+          <div style="margin-top: 20px">
+            <button
+              class="control-button"
+              onclick="document.getElementById('box1').scrollIntoView({ behavior: 'smooth' })"
+            >
+              滚动到目标（平滑）
+            </button>
+            <button class="control-button secondary" onclick="document.getElementById('scroll1').scrollTop = 0">
+              回到顶部
+            </button>
+          </div>
+
+          <pre
+            class="code-block"
+          ><code>document.<span class="function">getElementById</span>(<span class="string">'target'</span>).<span class="function">scrollIntoView</span>({
+  behavior: <span class="string">'smooth'</span>
+});</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：对齐方式</h2>
+          <p>控制元素在视口中的对齐位置</p>
+
+          <div id="scroll2" class="scroll-container" style="height: 300px">
+            <div style="padding: 20px">
+              <p style="color: var(--text-secondary); margin-bottom: 150px">顶部内容</p>
+              <div id="box2" class="demo-box">目标元素</div>
+              <p style="color: var(--text-secondary); margin-top: 150px">底部内容</p>
+            </div>
+          </div>
+
+          <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px">
+            <button class="control-button" onclick="scrollToAlign('start')">对齐到顶部</button>
+            <button class="control-button" onclick="scrollToAlign('center')">居中显示</button>
+            <button class="control-button" onclick="scrollToAlign('end')">对齐到底部</button>
+            <button class="control-button secondary" onclick="document.getElementById('scroll2').scrollTop = 0">
+              重置
+            </button>
+          </div>
+
+          <pre class="code-block"><code><span class="comment">// 对齐到顶部</span>
+element.<span class="function">scrollIntoView</span>({ block: <span class="string">'start'</span> });
+
+<span class="comment">// 居中显示</span>
+element.<span class="function">scrollIntoView</span>({ block: <span class="string">'center'</span> });
+
+<span class="comment">// 对齐到底部</span>
+element.<span class="function">scrollIntoView</span>({ block: <span class="string">'end'</span> });</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 3：目录导航</h2>
+          <p>实现常见的文档目录导航功能</p>
+
+          <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px">
+            <div>
+              <div style="position: sticky; top: 20px">
+                <h4 style="margin-bottom: 15px">📑 目录</h4>
+                <nav style="display: flex; flex-direction: column; gap: 8px">
+                  <button class="control-button" onclick="scrollToSection('section3-1')">第一章</button>
+                  <button class="control-button" onclick="scrollToSection('section3-2')">第二章</button>
+                  <button class="control-button" onclick="scrollToSection('section3-3')">第三章</button>
+                  <button class="control-button" onclick="scrollToSection('section3-4')">第四章</button>
+                </nav>
+              </div>
+            </div>
+
+            <div id="scroll3" class="scroll-container" style="height: 400px">
+              <div
+                id="section3-1"
+                style="
+                  padding: 30px;
+                  border-left: 4px solid var(--primary);
+                  margin-bottom: 20px;
+                  background: var(--card-bg);
+                "
+              >
+                <h3>第一章</h3>
+                <p style="color: var(--text-secondary)">这是第一章的内容...</p>
+              </div>
+              <div
+                id="section3-2"
+                style="
+                  padding: 30px;
+                  border-left: 4px solid var(--primary);
+                  margin-bottom: 20px;
+                  background: var(--card-bg);
+                "
+              >
+                <h3>第二章</h3>
+                <p style="color: var(--text-secondary)">这是第二章的内容...</p>
+              </div>
+              <div
+                id="section3-3"
+                style="
+                  padding: 30px;
+                  border-left: 4px solid var(--primary);
+                  margin-bottom: 20px;
+                  background: var(--card-bg);
+                "
+              >
+                <h3>第三章</h3>
+                <p style="color: var(--text-secondary)">这是第三章的内容...</p>
+              </div>
+              <div
+                id="section3-4"
+                style="
+                  padding: 30px;
+                  border-left: 4px solid var(--primary);
+                  margin-bottom: 20px;
+                  background: var(--card-bg);
+                "
+              >
+                <h3>第四章</h3>
+                <p style="color: var(--text-secondary)">这是第四章的内容...</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="tip">
+            <h4>💡 实际应用</h4>
+            <p>
+              这是文档网站、博客文章中常见的目录导航功能。scrollIntoView() 结合 smooth behavior 可以提供流畅的用户体验。
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>浏览器兼容性</h2>
+          <table class="compatibility-table">
+            <thead>
+              <tr>
+                <th>选项</th>
+                <th>Chrome</th>
+                <th>Firefox</th>
+                <th>Safari</th>
+                <th>Edge</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>基础方法</td>
+                <td class="supported">✓ 全版本</td>
+                <td class="supported">✓ 全版本</td>
+                <td class="supported">✓ 全版本</td>
+                <td class="supported">✓ 全版本</td>
+              </tr>
+              <tr>
+                <td>smooth behavior</td>
+                <td class="supported">✓ 全版本</td>
+                <td class="supported">✓ 36+</td>
+                <td class="supported">✓ 15.4+</td>
+                <td class="supported">✓ 79+</td>
+              </tr>
+              <tr>
+                <td>block/inline 选项</td>
+                <td class="supported">✓ 全版本</td>
+                <td class="supported">✓ 36+</td>
+                <td class="supported">✓ 15.4+</td>
+                <td class="supported">✓ 79+</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section">
+          <h2>总结</h2>
+          <ul>
+            <li><strong>简单易用</strong>：一行代码实现滚动到元素</li>
+            <li><strong>平滑滚动</strong>：behavior: 'smooth' 提供流畅体验</li>
+            <li><strong>灵活对齐</strong>：block 和 inline 选项控制对齐方式</li>
+            <li><strong>常用场景</strong>：目录导航、回到顶部、表单错误定位等</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      // 示例 2：对齐方式
+      window.scrollToAlign = function (align) {
+        document.getElementById('box2').scrollIntoView({
+          behavior: 'smooth',
+          block: align,
+        });
+      };
+
+      // 示例 3：目录导航
+      window.scrollToSection = function (id) {
+        const element = document.getElementById(id);
+        const container = document.getElementById('scroll3');
+
+        // 计算相对位置并滚动
+        const scrollTop = element.offsetTop - container.offsetTop;
+
+        container.scrollTo({
+          top: scrollTop,
+          behavior: 'smooth',
+        });
+      };
+    </script>
+  </body>
+</html>

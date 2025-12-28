@@ -1,0 +1,617 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IntersectionObserver - DOM 元素尺寸和位置 API</title>
+    <link href="../styles.css" rel="stylesheet" />
+    <script type="module" src="/src/theme-sync.js"></script>
+  </head>
+  <body>
+    <!-- 左侧边栏导航 -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>DOM 元素尺寸和位置 API</h1>
+        <a class="back-home" href="../index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础属性</h3>
+          <a class="nav-item" href="offset.html">offset* 属性</a>
+          <a class="nav-item" href="client.html">client* 属性</a>
+          <a class="nav-item" href="scroll.html">scroll* 属性</a>
+          <a class="nav-item" href="offset-parent.html">offsetParent</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>核心 API</h3>
+          <a class="nav-item" href="bounding-rect.html">getBoundingClientRect()</a>
+          <a class="nav-item" href="client-rects.html">getClientRects()</a>
+          <a class="nav-item" href="scroll-into-view.html">scrollIntoView()</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>窗口和文档</h3>
+          <a class="nav-item" href="window-api.html">window API</a>
+          <a class="nav-item" href="document-scroll.html">document 滚动兼容</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>现代 Observer API</h3>
+          <a class="nav-item" href="resize-observer.html">ResizeObserver</a>
+          <a class="nav-item active" href="intersection-observer.html">IntersectionObserver</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>实战应用</h3>
+          <a class="nav-item" href="../practical-demos/drag-drop.html">拖拽元素</a>
+          <a class="nav-item" href="../practical-demos/snap-align.html">元素吸附对齐</a>
+          <a class="nav-item" href="../practical-demos/tooltip.html">工具提示定位</a>
+          <a class="nav-item" href="../practical-demos/dropdown.html">下拉菜单定位</a>
+          <a class="nav-item" href="../practical-demos/modal-center.html">模态框居中</a>
+          <a class="nav-item" href="../practical-demos/scroll-progress.html">滚动进度条</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>IntersectionObserver</h1>
+        <p class="subtitle">异步检测元素是否进入视口 - 现代高效的可见性检测 API</p>
+
+        <section class="section">
+          <h2>API 说明</h2>
+          <p>
+            <span class="highlight">IntersectionObserver</span>
+            提供了一种异步检测目标元素与祖先元素或视口相交情况的方法。相比传统的 scroll 事件监听，它具有更好的性能。
+          </p>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">const</span> observer = <span class="keyword">new</span> <span class="function">IntersectionObserver</span>(callback, options);
+
+<span class="comment">// 回调函数</span>
+<span class="keyword">function</span> <span class="function">callback</span>(entries, observer) {
+  entries.<span class="function">forEach</span>(entry => {
+    <span class="function">console</span>.<span class="function">log</span>(<span class="string">'元素可见性:'</span>, entry.isIntersecting);
+    <span class="function">console</span>.<span class="function">log</span>(<span class="string">'相交比例:'</span>, entry.intersectionRatio);
+    <span class="function">console</span>.<span class="function">log</span>(<span class="string">'相交区域:'</span>, entry.intersectionRect);
+  });
+}
+
+<span class="comment">// 配置选项</span>
+<span class="keyword">const</span> options = {
+  root: <span class="value">null</span>,              <span class="comment">// 视口</span>
+  rootMargin: <span class="string">'0px'</span>,       <span class="comment">// 根边距</span>
+  threshold: <span class="value">0</span>             <span class="comment">// 触发阈值（0-1）</span>
+};
+
+<span class="comment">// 开始观察</span>
+observer.<span class="function">observe</span>(targetElement);</code></pre>
+
+          <ul>
+            <li><strong>isIntersecting</strong> - 元素是否与根元素相交（是否可见）</li>
+            <li><strong>intersectionRatio</strong> - 相交比例（0 到 1）</li>
+            <li><strong>intersectionRect</strong> - 相交区域的矩形信息</li>
+            <li><strong>root</strong> - 用作视口的元素，默认为浏览器视口</li>
+            <li><strong>rootMargin</strong> - 根元素的边距，可以扩大或缩小触发区域</li>
+            <li><strong>threshold</strong> - 触发回调的相交比例阈值</li>
+          </ul>
+
+          <div class="tip">
+            <h4>💡 性能优势</h4>
+            <p>
+              IntersectionObserver 使用浏览器内部优化，不会频繁触发主线程。相比 scroll + getBoundingClientRect
+              的组合，性能大幅提升。
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：基础用法 - 检测元素是否可见</h2>
+          <p>滚动页面，观察元素进入/离开视口时的状态变化</p>
+
+          <div
+            style="
+              height: 120px;
+              overflow: hidden;
+              border: 2px dashed var(--border-color);
+              border-radius: var(--radius-md);
+              padding: 15px;
+              margin-bottom: 20px;
+            "
+          >
+            <p style="color: var(--text-secondary)">↓ 向下滚动查看目标元素 ↓</p>
+          </div>
+
+          <div id="demo1" class="demo-container">
+            <div id="box1" class="demo-box">目标元素</div>
+          </div>
+
+          <div class="info-panel">
+            <h4>可见性状态</h4>
+            <div class="info-row">
+              <span class="info-label">isIntersecting:</span>
+              <span id="val1-visible" class="info-value">-</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">相交比例:</span>
+              <span id="val1-ratio" class="info-value">0%</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">触发次数:</span>
+              <span id="val1-count" class="info-value">0</span>
+            </div>
+          </div>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">const</span> observer = <span class="keyword">new</span> <span class="function">IntersectionObserver</span>((entries) => {
+  entries.<span class="function">forEach</span>(entry => {
+    <span class="keyword">if</span> (entry.isIntersecting) {
+      <span class="function">console</span>.<span class="function">log</span>(<span class="string">'元素进入视口'</span>);
+    } <span class="keyword">else</span> {
+      <span class="function">console</span>.<span class="function">log</span>(<span class="string">'元素离开视口'</span>);
+    }
+  });
+});
+
+observer.<span class="function">observe</span>(document.<span class="function">getElementById</span>(<span class="string">'box'</span>));</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：自定义阈值（threshold）</h2>
+          <p>设置多个触发阈值，精确控制触发时机</p>
+
+          <div id="scroll2" class="scroll-container" style="height: 300px">
+            <p style="margin-bottom: 50px; color: var(--text-secondary)">↓ 向下滚动 ↓</p>
+            <div id="box2" class="demo-box" style="margin: 20px 0">目标元素</div>
+            <p style="margin-top: 100px; color: var(--text-secondary)">继续滚动...</p>
+          </div>
+
+          <div class="info-panel">
+            <h4>阈值触发记录</h4>
+            <div class="info-row">
+              <span class="info-label">当前比例:</span>
+              <span id="val2-ratio" class="info-value">0%</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">触发阈值:</span>
+              <span id="val2-threshold" class="info-value">-</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">触发历史:</span>
+              <span id="val2-history" class="info-value">-</span>
+            </div>
+          </div>
+
+          <button class="control-button" onclick="document.getElementById('scroll2').scrollTop = 0;">重置滚动</button>
+
+          <pre class="code-block"><code><span class="keyword">const</span> options = {
+  threshold: [<span class="value">0</span>, <span class="value">0.25</span>, <span class="value">0.5</span>, <span class="value">0.75</span>, <span class="value">1.0</span>]  <span class="comment">// 多个阈值</span>
+};
+
+<span class="keyword">const</span> observer = <span class="keyword">new</span> <span class="function">IntersectionObserver</span>((entries) => {
+  entries.<span class="function">forEach</span>(entry => {
+    <span class="function">console</span>.<span class="function">log</span>(<span class="string">`可见比例: ${Math.round(entry.intersectionRatio * 100)}%`</span>);
+  });
+}, options);</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 3：rootMargin - 提前触发</h2>
+          <p>使用 rootMargin 提前或延迟触发回调，实现图片预加载等场景</p>
+
+          <div id="scroll3" class="scroll-container" style="height: 300px">
+            <p style="margin-bottom: 50px; color: var(--text-secondary)">↓ 向下滚动（元素进入前 100px 就会触发）↓</p>
+            <div id="box3" class="demo-box" style="margin: 20px 0; background: #3b82f6">目标元素</div>
+            <p style="margin-top: 100px; color: var(--text-secondary)">继续滚动...</p>
+          </div>
+
+          <div class="info-panel">
+            <h4>提前触发检测</h4>
+            <div class="info-row">
+              <span class="info-label">状态:</span>
+              <span id="val3-status" class="info-value">等待中</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">到视口距离:</span>
+              <span id="val3-distance" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">rootMargin:</span>
+              <span class="info-value">100px</span>
+            </div>
+          </div>
+
+          <button class="control-button" onclick="document.getElementById('scroll3').scrollTop = 0;">重置滚动</button>
+
+          <div class="tip">
+            <h4>💡 应用场景</h4>
+            <p>
+              rootMargin: '100px' 表示元素距离视口还有 100px
+              时就会触发回调。这对于图片懒加载非常有用，可以在用户看到图片之前就开始加载。
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>示例 4：无限滚动</h2>
+          <p>检测到底部元素时自动加载更多内容</p>
+
+          <div id="scroll4" class="scroll-container" style="height: 350px">
+            <div id="content4">
+              <p style="padding: 10px; color: var(--text-secondary)">内容项 1</p>
+              <p style="padding: 10px; color: var(--text-secondary)">内容项 2</p>
+              <p style="padding: 10px; color: var(--text-secondary)">内容项 3</p>
+            </div>
+            <div id="loading4" class="demo-box" style="margin: 20px auto; min-width: 200px; background: #f59e0b">
+              加载中...
+            </div>
+          </div>
+
+          <div class="info-panel">
+            <h4>加载状态</h4>
+            <div class="info-row">
+              <span class="info-label">加载指示器状态:</span>
+              <span id="val4-status" class="info-value">检测中</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">已加载项数:</span>
+              <span id="val4-count" class="info-value">3</span>
+            </div>
+          </div>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">const</span> observer = <span class="keyword">new</span> <span class="function">IntersectionObserver</span>((entries) => {
+  <span class="keyword">if</span> (entries[<span class="value">0</span>].isIntersecting) {
+    <span class="comment">// 加载更多内容</span>
+    <span class="function">loadMoreContent</span>();
+  }
+}, {
+  rootMargin: <span class="string">'100px'</span>  <span class="comment">// 提前 100px 触发</span>
+});
+
+observer.<span class="function">observe</span>(document.<span class="function">getElementById</span>(<span class="string">'loading'</span>));</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 5：懒加载图片</h2>
+          <p>图片进入视口时才加载 src</p>
+
+          <div id="scroll5" class="scroll-container" style="height: 400px">
+            <p style="margin-bottom: 30px; color: var(--text-secondary)">↓ 向下滚动查看图片加载效果 ↓</p>
+
+            <div class="image-item" style="margin-bottom: 30px; text-align: center">
+              <div class="lazy-image" data-src="https://via.placeholder.com/300x200/3b82f6/ffffff?text=Image+1">
+                <span style="color: var(--text-secondary)">图片 1 - 等待加载</span>
+              </div>
+            </div>
+
+            <div class="image-item" style="margin-bottom: 30px; text-align: center">
+              <div class="lazy-image" data-src="https://via.placeholder.com/300x200/10b981/ffffff?text=Image+2">
+                <span style="color: var(--text-secondary)">图片 2 - 等待加载</span>
+              </div>
+            </div>
+
+            <div class="image-item" style="margin-bottom: 30px; text-align: center">
+              <div class="lazy-image" data-src="https://via.placeholder.com/300x200/ef4444/ffffff?text=Image+3">
+                <span style="color: var(--text-secondary)">图片 3 - 等待加载</span>
+              </div>
+            </div>
+
+            <p style="margin-top: 50px; color: var(--text-secondary)">继续滚动...</p>
+          </div>
+
+          <div class="info-panel">
+            <h4>加载统计</h4>
+            <div class="info-row">
+              <span class="info-label">已加载图片:</span>
+              <span id="val5-count" class="info-value">0 / 3</span>
+            </div>
+          </div>
+
+          <button class="control-button secondary" onclick="resetLazyLoad()">重置演示</button>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">const</span> imageObserver = <span class="keyword">new</span> <span class="function">IntersectionObserver</span>((entries, observer) => {
+  entries.<span class="function">forEach</span>(entry => {
+    <span class="keyword">if</span> (entry.isIntersecting) {
+      <span class="keyword">const</span> img = entry.target;
+      <span class="keyword">const</span> src = img.<span class="function">getAttribute</span>(<span class="string">'data-src'</span>);
+
+      <span class="comment">// 加载图片</span>
+      img.src = src;
+      img.classList.<span class="function">add</span>(<span class="string">'loaded'</span>);
+
+      <span class="comment">// 停止观察已加载的图片</span>
+      observer.<span class="function">unobserve</span>(img);
+    }
+  });
+});
+
+document.<span class="function">querySelectorAll</span>(<span class="string">'.lazy-image'</span>).<span class="function">forEach</span>(img => {
+  imageObserver.<span class="function">observe</span>(img);
+});</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 6：视差动画</h2>
+          <p>根据元素在视口中的位置实现平滑的动画效果</p>
+
+          <div id="scroll6" class="scroll-container" style="height: 500px">
+            <div id="parallax6" class="demo-box" style="margin: 100px auto; transition: transform 0.1s ease-out">
+              视差元素
+            </div>
+          </div>
+
+          <div class="info-panel">
+            <h4>动画状态</h4>
+            <div class="info-row">
+              <span class="info-label">可见比例:</span>
+              <span id="val6-ratio" class="info-value">0%</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">缩放比例:</span>
+              <span id="val6-scale" class="info-value">1.0</span>
+            </div>
+          </div>
+
+          <button class="control-button" onclick="document.getElementById('scroll6').scrollTop = 0;">重置滚动</button>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">const</span> observer = <span class="keyword">new</span> <span class="function">IntersectionObserver</span>((entries) => {
+  entries.<span class="function">forEach</span>(entry => {
+    <span class="keyword">const</span> ratio = entry.intersectionRatio;
+
+    <span class="comment">// 根据可见比例调整缩放</span>
+    <span class="keyword">const</span> scale = <span class="value">0.5</span> + (ratio * <span class="value">0.5</span>);
+    entry.target.style.transform = <span class="string">`scale(${scale})`</span>;
+  });
+}, {
+  threshold: Array.<span class="function">from</span>({length: <span class="value">100</span>}, (_, i) => i / <span class="value">100</span>)  <span class="comment">// 0% 到 100% 每隔 1%</span>
+});</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>浏览器兼容性</h2>
+          <table class="compatibility-table">
+            <thead>
+              <tr>
+                <th>API</th>
+                <th>Chrome</th>
+                <th>Firefox</th>
+                <th>Safari</th>
+                <th>Edge</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>IntersectionObserver</td>
+                <td class="supported">✓ 51+</td>
+                <td class="supported">✓ 55+</td>
+                <td class="supported">✓ 12.1+</td>
+                <td class="supported">✓ 15+</td>
+              </tr>
+              <tr>
+                <td>IntersectionObserver v2</td>
+                <td class="supported">✓ 74+</td>
+                <td class="partial">部分支持</td>
+                <td class="not-supported">✗</td>
+                <td class="supported">✓ 79+</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="note">
+            <h4>💡 Polyfill</h4>
+            <p>
+              对于不支持 IntersectionObserver 的浏览器，可以使用
+              <a href="https://github.com/w3c/IntersectionObserver" target="_blank" style="color: var(--primary)"
+                >W3C polyfill</a
+              >
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>总结</h2>
+          <ul>
+            <li><strong>高性能</strong>：不会频繁触发回调，性能优于 scroll 事件</li>
+            <li><strong>异步</strong>：不阻塞主线程，用户体验更好</li>
+            <li><strong>灵活配置</strong>：支持 threshold 和 rootMargin 精确控制触发时机</li>
+            <li><strong>常用场景</strong>：图片懒加载、无限滚动、动画触发、广告曝光统计等</li>
+            <li><strong>注意事项</strong>：回调中避免复杂计算，观察后记得在适当时机 unobserve</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      // 示例 1：基础用法
+      const box1 = document.getElementById('box1');
+      let count1 = 0;
+
+      const observer1 = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          count1++;
+          document.getElementById('val1-visible').textContent = entry.isIntersecting ? '✓ 可见' : '✗ 不可见';
+          document.getElementById('val1-visible').style.color = entry.isIntersecting
+            ? 'var(--success)'
+            : 'var(--error)';
+          document.getElementById('val1-ratio').textContent = Math.round(entry.intersectionRatio * 100) + '%';
+          document.getElementById('val1-count').textContent = count1;
+        });
+      });
+
+      observer1.observe(box1);
+
+      // 示例 2：自定义阈值
+      const box2 = document.getElementById('box2');
+      const history2 = [];
+
+      const observer2 = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const ratio = Math.round(entry.intersectionRatio * 100);
+            document.getElementById('val2-ratio').textContent = ratio + '%';
+
+            // 记录触发的阈值
+            const thresholds = [0, 25, 50, 75, 100];
+            thresholds.forEach((t) => {
+              if (Math.abs(ratio - t) <= 2) {
+                history2.push(t + '%');
+                document.getElementById('val2-threshold').textContent = t + '%';
+              }
+            });
+
+            document.getElementById('val2-history').textContent = history2.slice(-5).join(' → ');
+          });
+        },
+        { threshold: [0, 0.25, 0.5, 0.75, 1.0] }
+      );
+
+      observer2.observe(box2);
+
+      // 示例 3：rootMargin
+      const box3 = document.getElementById('box3');
+      const scroll3 = document.getElementById('scroll3');
+
+      const observer3 = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              document.getElementById('val3-status').textContent = '✓ 已进入';
+              document.getElementById('val3-status').style.color = 'var(--success)';
+            } else {
+              document.getElementById('val3-status').textContent = '✗ 已离开';
+              document.getElementById('val3-status').style.color = 'var(--error)';
+            }
+          });
+        },
+        { rootMargin: '100px' }
+      );
+
+      observer3.observe(box3);
+
+      scroll3.addEventListener('scroll', () => {
+        const rect = box3.getBoundingClientRect();
+        const distance = Math.max(0, rect.top - scroll3.offsetHeight);
+        document.getElementById('val3-distance').textContent = Math.round(distance) + 'px';
+      });
+
+      // 示例 4：无限滚动
+      const loading4 = document.getElementById('loading4');
+      const content4 = document.getElementById('content4');
+      let count4 = 3;
+
+      const observer4 = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            document.getElementById('val4-status').textContent = '加载中...';
+            document.getElementById('val4-status').style.color = 'var(--warning)';
+
+            // 模拟异步加载
+            setTimeout(() => {
+              const newItem = document.createElement('p');
+              newItem.style.padding = '10px';
+              newItem.style.color = 'var(--text-secondary)';
+              newItem.textContent = `内容项 ${++count4}`;
+              content4.appendChild(newItem);
+
+              document.getElementById('val4-count').textContent = count4;
+              document.getElementById('val4-status').textContent = '✓ 已加载';
+              document.getElementById('val4-status').style.color = 'var(--success)';
+
+              // 滚动到底部
+              const scrollContainer = document.getElementById('scroll4');
+              scrollContainer.scrollTop = scrollContainer.scrollHeight;
+            }, 500);
+          }
+        },
+        { rootMargin: '100px' }
+      );
+
+      observer4.observe(loading4);
+
+      // 示例 5：懒加载图片
+      let loadedCount5 = 0;
+
+      const imageObserver = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const container = entry.target;
+              const src = container.getAttribute('data-src');
+
+              // 模拟图片加载
+              container.innerHTML = `<img src="${src}" alt="Lazy loaded image" style="max-width: 100%; border-radius: 8px;" />`;
+              container.classList.add('loaded');
+
+              loadedCount5++;
+              document.getElementById('val5-count').textContent = `${loadedCount5} / 3`;
+
+              observer.unobserve(container);
+            }
+          });
+        },
+        { rootMargin: '50px' }
+      );
+
+      function initLazyLoad() {
+        loadedCount5 = 0;
+        document.querySelectorAll('.lazy-image').forEach((img) => {
+          img.innerHTML = `<span style="color: var(--text-secondary);">${img.querySelector('span')?.textContent || '等待加载'}</span>`;
+          imageObserver.observe(img);
+        });
+        document.getElementById('val5-count').textContent = '0 / 3';
+      }
+
+      initLazyLoad();
+
+      window.resetLazyLoad = function () {
+        imageObserver.disconnect();
+        document.getElementById('scroll5').scrollTop = 0;
+        initLazyLoad();
+      };
+
+      // 示例 6：视差动画
+      const parallax6 = document.getElementById('parallax6');
+
+      const observer6 = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const ratio = entry.intersectionRatio;
+            const scale = 0.5 + ratio * 0.5;
+
+            parallax6.style.transform = `scale(${scale})`;
+            document.getElementById('val6-ratio').textContent = Math.round(ratio * 100) + '%';
+            document.getElementById('val6-scale').textContent = scale.toFixed(2);
+          });
+        },
+        { threshold: Array.from({ length: 101 }, (_, i) => i / 100) }
+      );
+
+      observer6.observe(parallax6);
+    </script>
+
+    <style>
+      .image-item {
+        padding: 20px;
+      }
+
+      .lazy-image {
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg-secondary);
+        border: 2px dashed var(--border-color);
+        border-radius: var(--radius-md);
+      }
+    </style>
+  </body>
+</html>

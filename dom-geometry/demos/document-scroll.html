@@ -1,0 +1,242 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>document 滚动兼容 - DOM 元素尺寸和位置 API</title>
+    <link href="../styles.css" rel="stylesheet" />
+    <script type="module" src="/src/theme-sync.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>DOM 元素尺寸和位置 API</h1>
+        <a class="back-home" href="../index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础属性</h3>
+          <a class="nav-item" href="offset.html">offset* 属性</a>
+          <a class="nav-item" href="client.html">client* 属性</a>
+          <a class="nav-item" href="scroll.html">scroll* 属性</a>
+          <a class="nav-item" href="offset-parent.html">offsetParent</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>核心 API</h3>
+          <a class="nav-item" href="bounding-rect.html">getBoundingClientRect()</a>
+          <a class="nav-item" href="client-rects.html">getClientRects()</a>
+          <a class="nav-item" href="scroll-into-view.html">scrollIntoView()</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>窗口和文档</h3>
+          <a class="nav-item" href="window-api.html">window API</a>
+          <a class="nav-item active" href="document-scroll.html">document 滚动兼容</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>现代 Observer API</h3>
+          <a class="nav-item" href="resize-observer.html">ResizeObserver</a>
+          <a class="nav-item" href="intersection-observer.html">IntersectionObserver</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>实战应用</h3>
+          <a class="nav-item" href="../practical-demos/drag-drop.html">拖拽元素</a>
+          <a class="nav-item" href="../practical-demos/scroll-progress.html">滚动进度条</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>document 滚动兼容</h1>
+        <p class="subtitle">处理不同浏览器的滚动属性差异</p>
+
+        <section class="section">
+          <h2>兼容性问题</h2>
+          <p>在不同浏览器中，获取文档滚动位置的方法存在差异。需要统一处理以确保兼容性。</p>
+
+          <pre class="code-block"><code><span class="comment">// 获取垂直滚动位置（兼容所有浏览器）</span>
+<span class="keyword">function</span> <span class="function">getScrollTop</span>() {
+  <span class="keyword">return</span> window.pageYOffset ||
+         document.documentElement.scrollTop ||
+         document.body.scrollTop ||
+         <span class="value">0</span>;
+}
+
+<span class="comment">// 设置滚动位置</span>
+<span class="keyword">function</span> <span class="function">setScrollTop</span>(value) {
+  window.pageYOffset = value;
+  document.documentElement.scrollTop = value;
+  document.body.scrollTop = value;
+}</code></pre>
+
+          <div class="note">
+            <h4>⚠️ 为什么需要兼容</h4>
+            <p>不同浏览器和文档模式（quirks mode vs standards mode）使用不同的属性来存储滚动位置。</p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：对比不同属性</h2>
+          <p>观察不同浏览器属性值的差异</p>
+
+          <div id="scroll1" class="scroll-container" style="height: 250px">
+            <div style="padding: 20px; min-height: 500px">
+              <p style="color: var(--text-secondary)">↓ 向下滚动 ↓</p>
+            </div>
+          </div>
+
+          <div class="info-panel">
+            <h4>滚动位置对比</h4>
+            <div class="info-row">
+              <span class="info-label">window.scrollY:</span>
+              <span id="val1-scroll-y" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">window.pageYOffset:</span>
+              <span id="val1-page-y" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">document.documentElement.scrollTop:</span>
+              <span id="val1-doc-scroll" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">document.body.scrollTop:</span>
+              <span id="val1-body-scroll" class="info-value">0px</span>
+            </div>
+          </div>
+
+          <button class="control-button" onclick="document.getElementById('scroll1').scrollTop = 0">重置滚动</button>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：封装的工具函数</h2>
+          <p>使用统一的 API 处理滚动</p>
+
+          <div id="scroll2" class="scroll-container" style="height: 200px">
+            <div style="padding: 20px; min-height: 400px">
+              <p style="color: var(--text-secondary)">↓ 滚动测试工具函数 ↓</p>
+            </div>
+          </div>
+
+          <button class="control-button" onclick="scrollToPos2(100)">滚动到 100px</button>
+          <button class="control-button" onclick="scrollToPos2(200)">滚动到 200px</button>
+          <button class="control-button secondary" onclick="scrollToPos2(0)">回到顶部</button>
+
+          <div class="info-panel">
+            <h4>当前滚动位置</h4>
+            <div class="info-row">
+              <span class="info-label">统一函数获取:</span>
+              <span id="val2-unified" class="info-value">0px</span>
+            </div>
+          </div>
+
+          <pre class="code-block"><code><span class="comment">// 推荐的工具函数</span>
+<span class="keyword">const</span> ScrollUtils = {
+  <span class="function">getScrollTop</span>() {
+    <span class="keyword">return</span> window.pageYOffset || document.documentElement.scrollTop;
+  },
+
+  <span class="function">setScrollTop</span>(value) {
+    <span class="keyword">const</span> y = <span class="function">this</span>.<span class="function">getScrollTop</span>();
+    window.<span class="function">scrollTo</span>({
+      top: value,
+      behavior: <span class="string">'smooth'</span>
+    });
+  }
+};</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 3：平滑滚动到指定位置</h2>
+          <p>兼容的平滑滚动实现</p>
+
+          <div id="scroll3" class="scroll-container" style="height: 200px">
+            <div style="padding: 20px">
+              <p style="color: var(--text-secondary); margin-bottom: 300px">↓ 向下滚动 ↓</p>
+              <div id="target3" class="demo-box" style="margin: 20px auto">目标位置</div>
+            </div>
+          </div>
+
+          <button class="control-button" onclick="smoothScrollToTarget()">平滑滚动到目标</button>
+          <button class="control-button secondary" onclick="document.getElementById('scroll3').scrollTop = 0">
+            重置
+          </button>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">function</span> <span class="function">smoothScrollToElement</span>(element) {
+  <span class="keyword">const</span> rect = element.<span class="function">getBoundingClientRect</span>();
+  <span class="keyword">const</span> scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  <span class="keyword">const</span> targetY = rect.top + scrollTop;
+
+  window.<span class="function">scrollTo</span>({
+    top: targetY,
+    behavior: <span class="string">'smooth'</span>
+  });
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>总结</h2>
+          <ul>
+            <li>使用 pageYOffset 而不是 scrollY（更好的兼容性）</li>
+            <li>同时设置 documentElement 和 body 的 scrollTop</li>
+            <li>推荐使用 window.scrollTo() 实现平滑滚动</li>
+            <li>封装工具函数简化跨浏览器处理</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      // 示例 1：对比不同属性
+      const scroll1 = document.getElementById('scroll1');
+
+      function updateScroll1() {
+        document.getElementById('val1-scroll-y').textContent = Math.round(window.scrollY) + 'px';
+        document.getElementById('val1-page-y').textContent = Math.round(window.pageYOffset) + 'px';
+        document.getElementById('val1-doc-scroll').textContent = Math.round(document.documentElement.scrollTop) + 'px';
+        document.getElementById('val1-body-scroll').textContent = Math.round(document.body.scrollTop) + 'px';
+      }
+
+      scroll1.addEventListener('scroll', updateScroll1);
+      updateScroll1();
+
+      // 示例 2：工具函数
+      function getScrollTop() {
+        return window.pageYOffset || document.documentElement.scrollTop || 0;
+      }
+
+      window.scrollToPos2 = function (pos) {
+        const container = document.getElementById('scroll2');
+        container.scrollTo({
+          top: pos,
+          behavior: 'smooth',
+        });
+      };
+
+      const scroll2 = document.getElementById('scroll2');
+      scroll2.addEventListener('scroll', () => {
+        document.getElementById('val2-unified').textContent = Math.round(getScrollTop()) + 'px';
+      });
+
+      // 示例 3：平滑滚动
+      window.smoothScrollToTarget = function () {
+        const target = document.getElementById('target3');
+        const container = document.getElementById('scroll3');
+        const rect = target.getBoundingClientRect();
+        const scrollTop = container.scrollTop;
+        const targetY = rect.top + scrollTop - 50;
+
+        container.scrollTo({
+          top: targetY,
+          behavior: 'smooth',
+        });
+      };
+    </script>
+  </body>
+</html>

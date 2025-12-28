@@ -1,0 +1,149 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>scroll* 属性 - DOM 元素尺寸和位置 API</title>
+    <link href="../styles.css" rel="stylesheet" />
+    <script type="module" src="/src/theme-sync.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>DOM 元素尺寸和位置 API</h1>
+        <a class="back-home" href="../index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础属性</h3>
+          <a class="nav-item" href="offset.html">offset* 属性</a>
+          <a class="nav-item" href="client.html">client* 属性</a>
+          <a class="nav-item active" href="scroll.html">scroll* 属性</a>
+          <a class="nav-item" href="offset-parent.html">offsetParent</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>核心 API</h3>
+          <a class="nav-item" href="bounding-rect.html">getBoundingClientRect()</a>
+          <a class="nav-item" href="client-rects.html">getClientRects()</a>
+          <a class="nav-item" href="scroll-into-view.html">scrollIntoView()</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>窗口和文档</h3>
+          <a class="nav-item" href="window-api.html">window API</a>
+          <a class="nav-item" href="document-scroll.html">document 滚动兼容</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>现代 Observer API</h3>
+          <a class="nav-item" href="resize-observer.html">ResizeObserver</a>
+          <a class="nav-item" href="intersection-observer.html">IntersectionObserver</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>实战应用</h3>
+          <a class="nav-item" href="../practical-demos/drag-drop.html">拖拽元素</a>
+          <a class="nav-item" href="../practical-demos/scroll-progress.html">滚动进度条</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>scroll* 属性</h1>
+        <p class="subtitle">获取元素的内容尺寸和滚动位置</p>
+
+        <section class="section">
+          <h2>属性说明</h2>
+          <p><span class="highlight">scroll*</span> 系列属性用于获取和设置元素的滚动信息。</p>
+          <ul>
+            <li><strong>scrollWidth</strong> - 内容的总宽度（包括溢出部分）</li>
+            <li><strong>scrollHeight</strong> - 内容的总高度（包括溢出部分）</li>
+            <li><strong>scrollLeft</strong> - 水平滚动位置（可读写）</li>
+            <li><strong>scrollTop</strong> - 垂直滚动位置（可读写）</li>
+          </ul>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">const</span> container = document.<span class="function">getElementById</span>(<span class="string">'container'</span>);
+
+<span class="function">console</span>.<span class="function">log</span>(container.scrollWidth);   <span class="comment">// 内容总宽度</span>
+<span class="function">console</span>.<span class="function">log</span>(container.scrollHeight);  <span class="comment">// 内容总高度</span>
+<span class="function">console</span>.<span class="function">log</span>(container.scrollTop);     <span class="comment">// 当前滚动位置</span>
+
+<span class="comment">// 设置滚动位置</span>
+container.scrollTop = <span class="value">100</span>;
+container.scrollLeft = <span class="value">50</span>;</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例：内容尺寸和滚动</h2>
+          <p>观察滚动时属性值的变化</p>
+
+          <div id="scroll1" class="scroll-container" style="height: 250px">
+            <div style="padding: 20px; min-height: 500px">
+              <p style="color: var(--text-secondary)">↓ 向下滚动查看效果 ↓</p>
+              <div id="target1" class="demo-box" style="margin: 100px 0">目标元素</div>
+              <p style="color: var(--text-secondary)">内容底部</p>
+            </div>
+          </div>
+
+          <div class="info-panel">
+            <h4>滚动信息</h4>
+            <div class="info-row">
+              <span class="info-label">scrollHeight:</span>
+              <span id="val1-height" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">clientHeight:</span>
+              <span id="val1-client" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">scrollTop:</span>
+              <span id="val1-top" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">可滚动距离:</span>
+              <span id="val1-max" class="info-value">0px</span>
+            </div>
+          </div>
+
+          <button class="control-button" onclick="document.getElementById('scroll1').scrollTop = 0">重置滚动</button>
+
+          <div class="tip">
+            <h4>💡 实际应用</h4>
+            <p>
+              最大滚动距离 = scrollHeight - clientHeight<br />
+              这对于实现"加载更多"或判断是否滚动到底部非常有用。
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>总结</h2>
+          <ul>
+            <li>scrollWidth/Height 表示内容的总尺寸（包括溢出）</li>
+            <li>scrollLeft/Top 是可读写的，可以设置滚动位置</li>
+            <li>常用于实现无限滚动、回到顶部等功能</li>
+            <li>最大滚动距离 = scrollHeight - clientHeight</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      const scroll1 = document.getElementById('scroll1');
+
+      function updateScrollInfo() {
+        document.getElementById('val1-height').textContent = scroll1.scrollHeight + 'px';
+        document.getElementById('val1-client').textContent = scroll1.clientHeight + 'px';
+        document.getElementById('val1-top').textContent = Math.round(scroll1.scrollTop) + 'px';
+        document.getElementById('val1-max').textContent = scroll1.scrollHeight - scroll1.clientHeight + 'px';
+      }
+
+      scroll1.addEventListener('scroll', updateScrollInfo);
+      updateScrollInfo();
+    </script>
+  </body>
+</html>

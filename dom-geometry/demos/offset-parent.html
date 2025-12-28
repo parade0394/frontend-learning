@@ -1,0 +1,127 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>offsetParent - DOM 元素尺寸和位置 API</title>
+    <link href="../styles.css" rel="stylesheet" />
+    <script type="module" src="/src/theme-sync.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>DOM 元素尺寸和位置 API</h1>
+        <a class="back-home" href="../index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础属性</h3>
+          <a class="nav-item" href="offset.html">offset* 属性</a>
+          <a class="nav-item" href="client.html">client* 属性</a>
+          <a class="nav-item" href="scroll.html">scroll* 属性</a>
+          <a class="nav-item active" href="offset-parent.html">offsetParent</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>核心 API</h3>
+          <a class="nav-item" href="bounding-rect.html">getBoundingClientRect()</a>
+          <a class="nav-item" href="scroll-into-view.html">scrollIntoView()</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>现代 Observer API</h3>
+          <a class="nav-item" href="resize-observer.html">ResizeObserver</a>
+          <a class="nav-item" href="intersection-observer.html">IntersectionObserver</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>实战应用</h3>
+          <a class="nav-item" href="../practical-demos/scroll-progress.html">滚动进度条</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>offsetParent</h1>
+        <p class="subtitle">查找元素的定位父级元素</p>
+
+        <section class="section">
+          <h2>属性说明</h2>
+          <p>
+            <span class="highlight">offsetParent</span> 返回元素的定位父级元素，即距离当前元素最近的、position 不为
+            static 的祖先元素。
+          </p>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">const</span> element = document.<span class="function">getElementById</span>(<span class="string">'child'</span>);
+<span class="keyword">const</span> parent = element.offsetParent;
+
+<span class="function">console</span>.<span class="function">log</span>(parent.id);  <span class="comment">// 定位父级的 ID</span></code></pre>
+
+          <ul>
+            <li>如果元素的 position 是 fixed，返回 null</li>
+            <li>如果所有祖先元素都是 static，返回 body 或 html</li>
+            <li>offsetLeft/offsetTop 是相对于 offsetParent 的位置</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>示例：查找 offsetParent 链</h2>
+          <p>点击元素查看其 offsetParent</p>
+
+          <div class="demo-container" style="padding: 40px">
+            <div
+              id="grandparent"
+              style="position: relative; padding: 30px; border: 3px solid #ef4444; margin-bottom: 20px"
+            >
+              <div style="color: var(--text-secondary); margin-bottom: 15px">Grandparent (position: relative)</div>
+
+              <div
+                id="parent"
+                style="position: relative; padding: 30px; border: 3px solid #3b82f6; margin-bottom: 20px"
+              >
+                <div style="color: var(--text-secondary); margin-bottom: 15px">Parent (position: relative)</div>
+
+                <div id="child" class="demo-box" style="cursor: pointer; background: #10b981">子元素<br />(点击我)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-panel">
+            <h4>offsetParent 链</h4>
+            <div class="info-row">
+              <span class="info-label">子元素的 offsetParent:</span>
+              <span id="val-parent" class="info-value">点击查看</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">offsetTop:</span>
+              <span id="val-top" class="info-value">0px</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>总结</h2>
+          <ul>
+            <li>offsetParent 是最近的定位祖先元素</li>
+            <li>fixed 定位的元素 offsetParent 为 null</li>
+            <li>offsetLeft/Top 相对于 offsetParent</li>
+            <li>理解 offsetParent 对计算元素位置很重要</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      const child = document.getElementById('child');
+
+      child.addEventListener('click', () => {
+        const parent = child.offsetParent;
+        document.getElementById('val-parent').textContent = parent.id || parent.tagName;
+        document.getElementById('val-top').textContent = child.offsetTop + 'px';
+      });
+    </script>
+  </body>
+</html>

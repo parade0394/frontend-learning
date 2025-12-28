@@ -1,0 +1,146 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>client* 属性 - DOM 元素尺寸和位置 API</title>
+    <link href="../styles.css" rel="stylesheet" />
+    <script type="module" src="/src/theme-sync.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>DOM 元素尺寸和位置 API</h1>
+        <a class="back-home" href="../index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础属性</h3>
+          <a class="nav-item" href="offset.html">offset* 属性</a>
+          <a class="nav-item active" href="client.html">client* 属性</a>
+          <a class="nav-item" href="scroll.html">scroll* 属性</a>
+          <a class="nav-item" href="offset-parent.html">offsetParent</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>核心 API</h3>
+          <a class="nav-item" href="bounding-rect.html">getBoundingClientRect()</a>
+          <a class="nav-item" href="client-rects.html">getClientRects()</a>
+          <a class="nav-item" href="scroll-into-view.html">scrollIntoView()</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>窗口和文档</h3>
+          <a class="nav-item" href="window-api.html">window API</a>
+          <a class="nav-item" href="document-scroll.html">document 滚动兼容</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>现代 Observer API</h3>
+          <a class="nav-item" href="resize-observer.html">ResizeObserver</a>
+          <a class="nav-item" href="intersection-observer.html">IntersectionObserver</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>实战应用</h3>
+          <a class="nav-item" href="../practical-demos/drag-drop.html">拖拽元素</a>
+          <a class="nav-item" href="../practical-demos/scroll-progress.html">滚动进度条</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>client* 属性</h1>
+        <p class="subtitle">获取元素的可见区域尺寸（不含滚动条和 border）</p>
+
+        <section class="section">
+          <h2>属性说明</h2>
+          <p><span class="highlight">client*</span> 系列属性返回元素的可见区域信息，不包含 border 和滚动条。</p>
+          <ul>
+            <li><strong>clientWidth</strong> - 内容宽度 + padding（不含滚动条）</li>
+            <li><strong>clientHeight</strong> - 内容高度 + padding（不含滚动条）</li>
+            <li><strong>clientLeft</strong> - 左边框宽度</li>
+            <li><strong>clientTop</strong> - 上边框宽度</li>
+          </ul>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">const</span> element = document.<span class="function">getElementById</span>(<span class="string">'box'</span>);
+
+<span class="function">console</span>.<span class="function">log</span>(element.clientWidth);   <span class="comment">// 可见宽度（不含 border 和滚动条）</span>
+<span class="function">console</span>.<span class="function">log</span>(element.clientHeight);  <span class="comment">// 可见高度（不含 border 和滚动条）</span>
+<span class="function">console</span>.<span class="function">log</span>(element.clientLeft);   <span class="comment">// 左边框宽度</span>
+<span class="function">console</span>.<span class="function">log</span>(element.clientTop);    <span class="comment">// 上边框宽度</span></code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例：对比 offset 和 client</h2>
+          <p>观察 border 和滚动条对结果的影响</p>
+
+          <div class="demo-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px">
+            <div>
+              <div id="box1" class="demo-box" style="border: 20px solid #3b82f6; overflow: auto">
+                <div style="height: 200px; padding: 10px">内容区域<br />有边框和滚动条</div>
+              </div>
+            </div>
+
+            <div>
+              <div class="info-panel">
+                <h4>测量结果</h4>
+                <div class="info-row">
+                  <span class="info-label">clientWidth:</span>
+                  <span id="val1-client-w" class="info-value">0px</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">offsetWidth:</span>
+                  <span id="val1-offset-w" class="info-value">0px</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">差值:</span>
+                  <span id="val1-diff-w" class="info-value">0px</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">clientLeft (border):</span>
+                  <span id="val1-client-l" class="info-value">0px</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tip">
+            <h4>💡 关键区别</h4>
+            <p>
+              clientWidth = content + padding（不含 border 和滚动条）<br />
+              offsetWidth = content + padding + border + 滚动条<br />
+              差值就是 border + 滚动条的宽度
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>总结</h2>
+          <ul>
+            <li>clientWidth/Height 表示可见区域尺寸</li>
+            <li>不包含 border 和滚动条</li>
+            <li>clientTop/Left 实际上就是 border 的宽度</li>
+            <li>适用于计算元素的可用显示空间</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      function updateMeasurements() {
+        const box1 = document.getElementById('box1');
+
+        document.getElementById('val1-client-w').textContent = box1.clientWidth + 'px';
+        document.getElementById('val1-offset-w').textContent = box1.offsetWidth + 'px';
+        document.getElementById('val1-diff-w').textContent = box1.offsetWidth - box1.clientWidth + 'px';
+        document.getElementById('val1-client-l').textContent = box1.clientLeft + 'px';
+      }
+
+      updateMeasurements();
+    </script>
+  </body>
+</html>

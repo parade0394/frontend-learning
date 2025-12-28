@@ -1,0 +1,227 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>getClientRects() - DOM 元素尺寸和位置 API</title>
+    <link href="../styles.css" rel="stylesheet" />
+    <script type="module" src="/src/theme-sync.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>DOM 元素尺寸和位置 API</h1>
+        <a class="back-home" href="../index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础属性</h3>
+          <a class="nav-item" href="offset.html">offset* 属性</a>
+          <a class="nav-item" href="client.html">client* 属性</a>
+          <a class="nav-item" href="scroll.html">scroll* 属性</a>
+          <a class="nav-item" href="offset-parent.html">offsetParent</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>核心 API</h3>
+          <a class="nav-item" href="bounding-rect.html">getBoundingClientRect()</a>
+          <a class="nav-item active" href="client-rects.html">getClientRects()</a>
+          <a class="nav-item" href="scroll-into-view.html">scrollIntoView()</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>窗口和文档</h3>
+          <a class="nav-item" href="window-api.html">window API</a>
+          <a class="nav-item" href="document-scroll.html">document 滚动兼容</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>现代 Observer API</h3>
+          <a class="nav-item" href="resize-observer.html">ResizeObserver</a>
+          <a class="nav-item" href="intersection-observer.html">IntersectionObserver</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>实战应用</h3>
+          <a class="nav-item" href="../practical-demos/drag-drop.html">拖拽元素</a>
+          <a class="nav-item" href="../practical-demos/scroll-progress.html">滚动进度条</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>getClientRects()</h1>
+        <p class="subtitle">获取元素的所有矩形区域 - 适用于多行文本</p>
+
+        <section class="section">
+          <h2>方法说明</h2>
+          <p>
+            <span class="highlight">getClientRects()</span>
+            返回元素的多个矩形区域，主要用于多行文本或跨多个盒模型的元素。
+          </p>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">const</span> rects = element.<span class="function">getClientRects</span>();
+<span class="comment">// 返回 DOMRectList 集合</span>
+
+<span class="comment">// 遍历所有矩形</span>
+<span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="value">0</span>; i &lt; rects.length; i++) {
+  <span class="function">console</span>.<span class="function">log</span>(rects[i]);
+}</code></pre>
+
+          <div class="tip">
+            <h4>💡 与 getBoundingClientRect() 的区别</h4>
+            <p>
+              <code>getBoundingClientRect()</code> 返回的是元素的边界矩形（一个），而
+              <code>getClientRects()</code> 返回的是所有组成该元素的矩形（多个）。
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：单行元素 vs 多行元素</h2>
+          <p>对比单行和多行元素返回的矩形数量</p>
+
+          <div class="demo-container">
+            <div id="box1" class="demo-box" style="width: 200px">单行文本</div>
+          </div>
+
+          <div class="info-panel">
+            <h4>单行元素</h4>
+            <div class="info-row">
+              <span class="info-label">矩形数量:</span>
+              <span id="val1-count" class="info-value">0</span>
+            </div>
+          </div>
+
+          <div class="demo-container" style="margin-top: 30px">
+            <div id="box2" class="demo-box" style="width: 150px">这是多行文本示例，它会换行显示多个矩形</div>
+          </div>
+
+          <div class="info-panel">
+            <h4>多行元素</h4>
+            <div class="info-row">
+              <span class="info-label">矩形数量:</span>
+              <span id="val2-count" class="info-value">0</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">每个矩形的高度:</span>
+              <span id="val2-heights" class="info-value">-</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：选中文本的矩形</h2>
+          <p>获取选中文本的矩形区域（高亮效果）</p>
+
+          <div class="demo-container">
+            <p id="text3" style="line-height: 1.8; font-size: 1.1rem; color: var(--text-secondary)">
+              选中这段文字的任意部分，我会显示选中文本的矩形区域。getClientRects()
+              可以精确获取每个选区的位置，这对于实现自定义高亮或其他交互效果非常有用。
+            </p>
+          </div>
+
+          <button class="control-button" onclick="getSelectionRects()">获取选中区域</button>
+
+          <div class="info-panel">
+            <h4>选区信息</h4>
+            <div class="info-row">
+              <span class="info-label">矩形数量:</span>
+              <span id="val3-count" class="info-value">-</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">选区总宽度:</span>
+              <span id="val3-width" class="info-value">-</span>
+            </div>
+          </div>
+
+          <div class="note">
+            <h4>💡 实际应用</h4>
+            <p>这个功能常用于实现自定义的文本高亮、标注、评论等功能。比如 Medium 的评论功能就使用了类似的 API。</p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>示例 3：内联元素</h2>
+          <p>内联元素可能产生多个矩形</p>
+
+          <div class="demo-container">
+            <p style="font-size: 1.1rem; color: var(--text-secondary)">
+              这是一个<span id="inline3" style="background: var(--primary-light); padding: 2px 6px; font-weight: 600"
+                >跨行显示的内联元素示例</span
+              >，当内联元素跨越多行时，每行都会产生一个独立的矩形区域。
+            </p>
+          </div>
+
+          <button class="control-button" onclick="showInlineRects()">显示矩形数量</button>
+
+          <div class="info-panel">
+            <h4>内联元素</h4>
+            <div class="info-row">
+              <span class="info-label">矩形数量:</span>
+              <span id="val3-inline-count" class="info-value">-</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>总结</h2>
+          <ul>
+            <li>getClientRects() 返回多个矩形（DOMRectList）</li>
+            <li>主要用于多行文本、内联元素等场景</li>
+            <li>与 getBoundingClientRect() 配合使用可以获得更精确的位置信息</li>
+            <li>常用于文本高亮、选区检测等高级功能</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      // 示例 1：单行 vs 多行
+      function updateBox1() {
+        const rects = document.getElementById('box1').getClientRects();
+        document.getElementById('val1-count').textContent = rects.length;
+      }
+
+      function updateBox2() {
+        const rects = document.getElementById('box2').getClientRects();
+        document.getElementById('val2-count').textContent = rects.length;
+
+        const heights = Array.from(rects).map((r) => Math.round(r.height) + 'px');
+        document.getElementById('val2-heights').textContent = heights.join(', ');
+      }
+
+      updateBox1();
+      updateBox2();
+
+      // 示例 2：选中文本
+      window.getSelectionRects = function () {
+        const selection = window.getSelection();
+        if (selection.rangeCount > 0) {
+          const range = selection.getRangeAt(0);
+          const rects = range.getClientRects();
+
+          document.getElementById('val3-count').textContent = rects.length;
+
+          let totalWidth = 0;
+          for (let i = 0; i < rects.length; i++) {
+            totalWidth += rects[i].width;
+          }
+          document.getElementById('val3-width').textContent = Math.round(totalWidth) + 'px';
+        } else {
+          document.getElementById('val3-count').textContent = '请先选择文字';
+          document.getElementById('val3-width').textContent = '-';
+        }
+      };
+
+      // 示例 3：内联元素
+      window.showInlineRects = function () {
+        const rects = document.getElementById('inline3').getClientRects();
+        document.getElementById('val3-inline-count').textContent = rects.length;
+      };
+    </script>
+  </body>
+</html>

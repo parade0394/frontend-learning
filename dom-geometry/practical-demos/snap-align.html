@@ -1,0 +1,214 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>元素吸附对齐 - DOM 元素尺寸和位置 API 实战案例</title>
+    <link href="../styles.css" rel="stylesheet" />
+    <script type="module" src="/src/theme-sync.js"></script>
+    <style>
+      .snap-grid {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image:
+          linear-gradient(to right, var(--border-color) 1px, transparent 1px),
+          linear-gradient(to bottom, var(--border-color) 1px, transparent 1px);
+        background-size: 50px 50px;
+        opacity: 0.3;
+        pointer-events: none;
+      }
+
+      .snap-box {
+        width: 150px;
+        height: 100px;
+        background: var(--primary);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius-md);
+        position: absolute;
+        cursor: move;
+        user-select: none;
+        font-weight: 600;
+      }
+
+      .snap-guide {
+        position: absolute;
+        background: #ef4444;
+        pointer-events: none;
+        z-index: 100;
+      }
+
+      .snap-guide.horizontal {
+        height: 2px;
+        width: 100%;
+        left: 0;
+      }
+
+      .snap-guide.vertical {
+        width: 2px;
+        height: 100%;
+        top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>DOM 元素尺寸和位置 API</h1>
+        <a class="back-home" href="../index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>实战应用</h3>
+          <a class="nav-item" href="drag-drop.html">拖拽元素</a>
+          <a class="nav-item active" href="snap-align.html">元素吸附对齐</a>
+          <a class="nav-item" href="tooltip.html">工具提示定位</a>
+          <a class="nav-item" href="dropdown.html">下拉菜单定位</a>
+          <a class="nav-item" href="modal-center.html">模态框居中</a>
+          <a class="nav-item" href="scroll-progress.html">滚动进度条</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>元素吸附对齐</h1>
+        <p class="subtitle">实现拖拽时的磁吸效果和对齐辅助线</p>
+
+        <section class="section">
+          <h2>实现原理</h2>
+          <p>在拖拽过程中，检测元素与其他元素的对齐关系。当接近对齐位置时（如 10px 以内）， 自动吸附到对齐线。</p>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">function</span> <span class="function">checkSnap</span>(element, target) {
+  <span class="keyword">const</span> snapThreshold = <span class="value">10</span>;
+
+  <span class="keyword">const</span> elemRect = element.<span class="function">getBoundingClientRect</span>();
+  <span class="keyword">const</span> targetRect = target.<span class="function">getBoundingClientRect</span>();
+
+  <span class="comment">// 检查左边缘对齐</span>
+  <span class="keyword">if</span> (Math.<span class="function">abs</span>(elemRect.left - targetRect.left) &lt; snapThreshold) {
+    <span class="comment">// 吸附到左边缘</span>
+    <span class="keyword">return</span> { snap: <span class="value">true</span>, value: targetRect.left };
+  }
+
+  <span class="comment">// 检查右边缘对齐</span>
+  <span class="keyword">if</span> (Math.<span class="function">abs</span>(elemRect.right - targetRect.right) &lt; snapThreshold) {
+    <span class="keyword">return</span> { snap: <span class="value">true</span>, value: targetRect.right - elemRect.width };
+  }
+
+  <span class="keyword">return</span> { snap: <span class="value">false</span> };
+}</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例：网格吸附</h2>
+          <p>拖拽元素会自动吸附到 50px 网格</p>
+
+          <div class="demo-container" style="position: relative; height: 400px">
+            <div class="snap-grid"></div>
+            <div id="snap1" class="snap-box" style="left: 0; top: 0">拖动我</div>
+            <div id="guide-h" class="snap-guide" style="display: none"></div>
+            <div id="guide-v" class="snap-guide" style="display: none"></div>
+          </div>
+
+          <div class="info-panel">
+            <h4>当前位置</h4>
+            <div class="info-row">
+              <span class="info-label">X (已吸附):</span>
+              <span id="snap-x" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Y (已吸附):</span>
+              <span id="snap-y" class="info-value">0px</span>
+            </div>
+          </div>
+
+          <div class="tip">
+            <h4>💡 吸附计算</h4>
+            <p>
+              吸附位置 = Math.round(原始位置 / 网格大小) * 网格大小<br />
+              这样元素就会自动对齐到最近的网格线
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>总结</h2>
+          <ul>
+            <li>定义吸附阈值（如 10px）</li>
+            <li>在拖拽过程中持续检测对齐关系</li>
+            <li>显示辅助线提示对齐位置</li>
+            <li>自动调整元素位置到对齐点</li>
+            <li>提升用户体验和精确度</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      const snap1 = document.getElementById('snap1');
+      const guideH = document.getElementById('guide-h');
+      const guideV = document.getElementById('guide-v');
+      const gridSize = 50;
+
+      let isDragging = false;
+      let startX, startY, initialX, initialY;
+
+      snap1.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+
+        const rect = snap1.getBoundingClientRect();
+        const containerRect = snap1.parentElement.getBoundingClientRect();
+        initialX = rect.left - containerRect.left;
+        initialY = rect.top - containerRect.top;
+
+        snap1.style.cursor = 'grabbing';
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) {
+          return;
+        }
+
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+
+        const newX = initialX + dx;
+        const newY = initialY + dy;
+
+        // 吸附到网格
+        const snappedX = Math.round(newX / gridSize) * gridSize;
+        const snappedY = Math.round(newY / gridSize) * gridSize;
+
+        snap1.style.left = snappedX + 'px';
+        snap1.style.top = snappedY + 'px';
+
+        document.getElementById('snap-x').textContent = snappedX + 'px';
+        document.getElementById('snap-y').textContent = snappedY + 'px';
+
+        // 显示对齐线
+        guideH.style.display = 'block';
+        guideH.style.top = snappedY + snap1.offsetHeight / 2 + 'px';
+
+        guideV.style.display = 'block';
+        guideV.style.left = snappedX + snap1.offsetWidth / 2 + 'px';
+      });
+
+      document.addEventListener('mouseup', () => {
+        if (isDragging) {
+          isDragging = false;
+          snap1.style.cursor = 'move';
+          guideH.style.display = 'none';
+          guideV.style.display = 'none';
+        }
+      });
+    </script>
+  </body>
+</html>

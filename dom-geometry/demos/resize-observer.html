@@ -1,0 +1,446 @@
+<!doctype html>
+<html data-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ResizeObserver - DOM 元素尺寸和位置 API</title>
+    <link href="../styles.css" rel="stylesheet" />
+    <script type="module" src="/src/theme-sync.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>DOM 元素尺寸和位置 API</h1>
+        <a class="back-home" href="../index.html">← 返回主页</a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3>基础属性</h3>
+          <a class="nav-item" href="offset.html">offset* 属性</a>
+          <a class="nav-item" href="client.html">client* 属性</a>
+          <a class="nav-item" href="scroll.html">scroll* 属性</a>
+          <a class="nav-item" href="offset-parent.html">offsetParent</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>核心 API</h3>
+          <a class="nav-item" href="bounding-rect.html">getBoundingClientRect()</a>
+          <a class="nav-item" href="client-rects.html">getClientRects()</a>
+          <a class="nav-item" href="scroll-into-view.html">scrollIntoView()</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>窗口和文档</h3>
+          <a class="nav-item" href="window-api.html">window API</a>
+          <a class="nav-item" href="document-scroll.html">document 滚动兼容</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>现代 Observer API</h3>
+          <a class="nav-item active" href="resize-observer.html">ResizeObserver</a>
+          <a class="nav-item" href="intersection-observer.html">IntersectionObserver</a>
+        </div>
+
+        <div class="nav-section">
+          <h3>实战应用</h3>
+          <a class="nav-item" href="../practical-demos/drag-drop.html">拖拽元素</a>
+          <a class="nav-item" href="../practical-demos/snap-align.html">元素吸附对齐</a>
+          <a class="nav-item" href="../practical-demos/tooltip.html">工具提示定位</a>
+          <a class="nav-item" href="../practical-demos/dropdown.html">下拉菜单定位</a>
+          <a class="nav-item" href="../practical-demos/modal-center.html">模态框居中</a>
+          <a class="nav-item" href="../practical-demos/scroll-progress.html">滚动进度条</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="demo-page">
+        <h1>ResizeObserver</h1>
+        <p class="subtitle">高效监听元素尺寸变化的现代 API</p>
+
+        <section class="section">
+          <h2>API 说明</h2>
+          <p>
+            <span class="highlight">ResizeObserver</span> 提供了一种高效监听元素尺寸变化的方法。相比 window.resize
+            事件，它可以精确监听单个元素的变化，性能更好。
+          </p>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">const</span> observer = <span class="keyword">new</span> <span class="function">ResizeObserver</span>(entries => {
+  <span class="keyword">for</span> (<span class="keyword">let</span> entry <span class="keyword">of</span> entries) {
+    <span class="function">console</span>.<span class="function">log</span>(<span class="string">'元素尺寸:'</span>, entry.contentRect);
+    <span class="function">console</span>.<span class="function">log</span>(<span class="string">'宽度:'</span>, entry.contentRect.width);
+    <span class="function">console</span>.<span class="function">log</span>(<span class="string">'高度:'</span>, entry.contentRect.height);
+  }
+});
+
+<span class="comment">// 开始观察</span>
+observer.<span class="function">observe</span>(element);
+
+<span class="comment">// 停止观察</span>
+observer.<span class="function">unobserve</span>(element);
+
+<span class="comment">// 完全停止</span>
+observer.<span class="function">disconnect</span>();</code></pre>
+
+          <ul>
+            <li><strong>contentRect</strong> - 元素的内容区域矩形（不含 border 和 padding）</li>
+            <li><strong>borderBoxSize</strong> - 元素的 border-box 尺寸</li>
+            <li><strong>contentBoxSize</strong> - 元素的 content-box 尺寸</li>
+          </ul>
+
+          <div class="tip">
+            <h4>💡 优势</h4>
+            <p>ResizeObserver 可以监听任意元素的尺寸变化，不仅仅是窗口。它比轮询检查或使用 MutationObserver 更高效。</p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>示例 1：基础用法</h2>
+          <p>调整元素大小，观察尺寸变化</p>
+
+          <div class="demo-container">
+            <div id="box1" class="demo-box" style="width: 200px; height: 150px">调整我的大小</div>
+          </div>
+
+          <div style="margin: 20px 0">
+            <label style="display: block; margin-bottom: 10px; color: var(--text-secondary)">
+              宽度: <span id="width1-val">200</span>px
+            </label>
+            <input id="width1" type="range" value="200" min="100" max="350" style="width: 100%" />
+          </div>
+
+          <div style="margin: 20px 0">
+            <label style="display: block; margin-bottom: 10px; color: var(--text-secondary)">
+              高度: <span id="height1-val">150</span>px
+            </label>
+            <input id="height1" type="range" value="150" min="100" max="300" style="width: 100%" />
+          </div>
+
+          <div class="info-panel">
+            <h4>实时数据</h4>
+            <div class="info-row">
+              <span class="info-label">contentRect.width:</span>
+              <span id="val1-width" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">contentRect.height:</span>
+              <span id="val1-height" class="info-value">0px</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">变化次数:</span>
+              <span id="val1-count" class="info-value">0</span>
+            </div>
+          </div>
+
+          <pre
+            class="code-block"
+          ><code><span class="keyword">const</span> observer = <span class="keyword">new</span> <span class="function">ResizeObserver</span>(entries => {
+  <span class="keyword">for</span> (<span class="keyword">let</span> entry <span class="keyword">of</span> entries) {
+    <span class="keyword">const</span> { width, height } = entry.contentRect;
+    <span class="function">console</span>.<span class="function">log</span>(<span class="string">`新尺寸: ${width} × ${height}`</span>);
+  }
+});
+
+observer.<span class="function">observe</span>(document.<span class="function">getElementById</span>(<span class="string">'box'</span>));</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 2：响应式组件</h2>
+          <p>根据容器尺寸自动调整布局</p>
+
+          <div id="container2" class="demo-container" style="width: 100%; max-width: 600px; margin: 0 auto">
+            <div
+              id="responsive-box"
+              style="
+                background: var(--primary);
+                color: white;
+                padding: 20px;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+              "
+            >
+              <h3 style="margin: 0 0 10px">响应式组件</h3>
+              <p style="margin: 0">当前布局: <strong id="layout-mode">-</strong></p>
+              <p style="margin: 10px 0 0">容器宽度: <strong id="container-width">-</strong></p>
+            </div>
+          </div>
+
+          <div style="margin: 20px 0">
+            <label style="display: block; margin-bottom: 10px; color: var(--text-secondary)"> 调整容器宽度 </label>
+            <input id="width2" type="range" value="600" min="300" max="600" style="width: 100%" />
+          </div>
+
+          <div class="tip">
+            <h4>💡 实际应用</h4>
+            <p>
+              这是响应式组件的基础。你可以根据容器宽度切换不同的布局模式，实现真正的响应式设计，而不仅仅是依赖媒体查询。
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>示例 3：监听多个元素</h2>
+          <p>同时观察多个元素的尺寸变化</p>
+
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px">
+            <div>
+              <div id="box3a" class="demo-box" style="width: 100%; height: 100px">元素 A</div>
+              <input
+                class="size-control"
+                type="range"
+                value="100"
+                data-target="box3a"
+                min="80"
+                max="150"
+                style="width: 100%; margin-top: 10px"
+              />
+            </div>
+            <div>
+              <div id="box3b" class="demo-box" style="width: 100%; height: 100px; background: #3b82f6">元素 B</div>
+              <input
+                class="size-control"
+                type="range"
+                value="100"
+                data-target="box3b"
+                min="80"
+                max="150"
+                style="width: 100%; margin-top: 10px"
+              />
+            </div>
+            <div>
+              <div id="box3c" class="demo-box" style="width: 100%; height: 100px; background: #ef4444">元素 C</div>
+              <input
+                class="size-control"
+                type="range"
+                value="100"
+                data-target="box3c"
+                min="80"
+                max="150"
+                style="width: 100%; margin-top: 10px"
+              />
+            </div>
+          </div>
+
+          <div class="info-panel" style="margin-top: 20px">
+            <h4>变化日志</h4>
+            <div
+              id="log3"
+              style="max-height: 150px; overflow-y: auto; font-size: 0.85rem; color: var(--text-secondary)"
+            >
+              <p>等待尺寸变化...</p>
+            </div>
+          </div>
+
+          <pre class="code-block"><code><span class="comment">// 观察多个元素</span>
+<span class="keyword">const</span> observer = <span class="keyword">new</span> <span class="function">ResizeObserver</span>(entries => {
+  entries.<span class="function">forEach</span>(entry => {
+    <span class="function">console</span>.<span class="function">log</span>(<span class="string">`${entry.target.id}:`</span>, entry.contentRect);
+  });
+});
+
+[el1, el2, el3].<span class="function">forEach</span>(el => observer.<span class="function">observe</span>(el));</code></pre>
+        </section>
+
+        <section class="section">
+          <h2>示例 4：性能优化（throttle）</h2>
+          <p>在回调中使用 throttle 避免过于频繁的更新</p>
+
+          <div class="demo-container">
+            <div id="box4" class="demo-box" style="width: 200px">快速调整大小</div>
+          </div>
+
+          <input id="width4" type="range" value="200" min="100" max="400" style="width: 100%; margin: 20px 0" />
+
+          <div class="info-panel">
+            <h4>性能统计</h4>
+            <div class="info-row">
+              <span class="info-label">实际触发次数:</span>
+              <span id="val4-actual" class="info-value">0</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">throttle 后执行:</span>
+              <span id="val4-throttled" class="info-value">0</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">优化率:</span>
+              <span id="val4-saved" class="info-value">0%</span>
+            </div>
+          </div>
+
+          <div class="note">
+            <h4>⚠️ 注意</h4>
+            <p>
+              虽然ResizeObserver本身已经经过优化，但在回调中执行复杂操作时，仍建议使用 throttle 或 debounce 来提升性能。
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>浏览器兼容性</h2>
+          <table class="compatibility-table">
+            <thead>
+              <tr>
+                <th>API</th>
+                <th>Chrome</th>
+                <th>Firefox</th>
+                <th>Safari</th>
+                <th>Edge</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>ResizeObserver</td>
+                <td class="supported">✓ 64+</td>
+                <td class="supported">✓ 69+</td>
+                <td class="supported">✓ 13.1+</td>
+                <td class="supported">✓ 79+</td>
+              </tr>
+              <tr>
+                <td>borderBoxSize</td>
+                <td class="supported">✓ 84+</td>
+                <td class="partial">部分支持</td>
+                <td class="not-supported">✗</td>
+                <td class="supported">✓ 84+</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="note">
+            <h4>💡 Polyfill</h4>
+            <p>
+              对于不支持的浏览器，可以使用
+              <a
+                href="https://github.com/que-etc/resize-observer-polyfill"
+                target="_blank"
+                style="color: var(--primary)"
+                >ResizeObserver polyfill</a
+              >
+            </p>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>总结</h2>
+          <ul>
+            <li><strong>精确监听</strong>：可以监听任意元素的尺寸变化</li>
+            <li><strong>高性能</strong>：相比轮询或其他方法，性能更好</li>
+            <li><strong>内容区域</strong>：contentRect 返回元素的 content-box 尺寸</li>
+            <li><strong>常用场景</strong>：响应式组件、自适应布局、Canvas 重绘等</li>
+            <li><strong>注意事项</strong>：避免在回调中触发新的尺寸变化，防止无限循环</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      // 示例 1：基础用法
+      const box1 = document.getElementById('box1');
+      const width1 = document.getElementById('width1');
+      const height1 = document.getElementById('height1');
+      let count1 = 0;
+
+      const observer1 = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          count1++;
+          document.getElementById('val1-width').textContent = Math.round(entry.contentRect.width) + 'px';
+          document.getElementById('val1-height').textContent = Math.round(entry.contentRect.height) + 'px';
+          document.getElementById('val1-count').textContent = count1;
+        }
+      });
+
+      observer1.observe(box1);
+
+      width1.addEventListener('input', () => {
+        document.getElementById('width1-val').textContent = width1.value;
+        box1.style.width = width1.value + 'px';
+      });
+
+      height1.addEventListener('input', () => {
+        document.getElementById('height1-val').textContent = height1.value;
+        box1.style.height = height1.value + 'px';
+      });
+
+      // 示例 2：响应式组件
+      const container2 = document.getElementById('container2');
+      const width2 = document.getElementById('width2');
+
+      const observer2 = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const width = Math.round(entry.contentRect.width);
+          document.getElementById('container-width').textContent = width + 'px';
+
+          let mode;
+          if (width < 400) {
+            mode = '紧凑模式';
+          } else if (width < 500) {
+            mode = '标准模式';
+          } else {
+            mode = '宽屏模式';
+          }
+          document.getElementById('layout-mode').textContent = mode;
+        }
+      });
+
+      observer2.observe(container2);
+
+      width2.addEventListener('input', () => {
+        container2.style.maxWidth = width2.value + 'px';
+      });
+
+      // 示例 3：多个元素
+      const observer3 = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const width = Math.round(entry.contentRect.width);
+          const height = Math.round(entry.contentRect.height);
+          const time = new Date().toLocaleTimeString();
+          const log = document.getElementById('log3');
+          log.innerHTML = `<p>[${time}] ${entry.target.id}: ${width} × ${height}</p>` + log.innerHTML;
+        }
+      });
+
+      ['box3a', 'box3b', 'box3c'].forEach((id) => {
+        observer3.observe(document.getElementById(id));
+      });
+
+      document.querySelectorAll('.size-control').forEach((input) => {
+        input.addEventListener('input', () => {
+          const target = document.getElementById(input.dataset.target);
+          target.style.height = input.value + 'px';
+        });
+      });
+
+      // 示例 4：throttle
+      const box4 = document.getElementById('box4');
+      const width4 = document.getElementById('width4');
+      let actualCount4 = 0;
+      let throttledCount4 = 0;
+      let throttleTimer = null;
+
+      const observer4 = new ResizeObserver((_entries) => {
+        actualCount4++;
+        document.getElementById('val4-actual').textContent = actualCount4;
+
+        // Throttle: 100ms 内只执行一次
+        if (!throttleTimer) {
+          throttleTimer = setTimeout(() => {
+            throttledCount4++;
+            document.getElementById('val4-throttled').textContent = throttledCount4;
+
+            const saved = ((1 - throttledCount4 / actualCount4) * 100).toFixed(1);
+            document.getElementById('val4-saved').textContent = saved + '%';
+
+            throttleTimer = null;
+          }, 100);
+        }
+      });
+
+      observer4.observe(box4);
+
+      width4.addEventListener('input', () => {
+        box4.style.width = width4.value + 'px';
+      });
+    </script>
+  </body>
+</html>
