@@ -178,6 +178,18 @@
         overflow: hidden;
       }
 
+      /* JS 动态高度模式 */
+      .accordion-content-js {
+        max-height: unset;
+        height: 0;
+        overflow: hidden;
+        transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .accordion-content-js.open {
+        height: auto; /* 展开后恢复自动高度 */
+      }
+
       /* 移动端适配 */
       @media (max-width: 768px) {
         .accordion-container {
@@ -254,7 +266,8 @@
         <!-- 模式切换 -->
         <div class="mode-toggle">
           <button class="mode-btn active" data-mode="maxheight">max-height 模式</button>
-          <button class="mode-btn" data-mode="scale">Grid 模式（推荐）</button>
+          <button class="mode-btn" data-mode="scale">Grid 模式</button>
+          <button class="mode-btn" data-mode="js">JS 动态高度（推荐）</button>
         </div>
 
         <div class="demo-info">
@@ -421,7 +434,7 @@
 }</code></pre>
         </div>
 
-        <h3>方法二：Grid 实现（推荐）</h3>
+        <h3>方法二：Grid 实现</h3>
         <p>使用 CSS Grid 的 grid-template-rows 实现，动画流畅且不占据文档流空间：</p>
 
         <div class="code-section">
@@ -442,6 +455,92 @@
 <span class="comment">/* 内容需要设置 overflow: hidden */</span>
 <span class="keyword">.accordion-body</span> {
   <span class="property">overflow</span>: <span class="value">hidden</span>;
+}</code></pre>
+        </div>
+
+        <h3>方法三：JavaScript 动态高度（推荐）</h3>
+        <p>通过 JavaScript 动态计算内容的实际高度，实现最精确的过渡效果：</p>
+
+        <div class="demo-info" style="margin-bottom: var(--spacing-md)">
+          <p><strong>💡 什么是"强制重排"？</strong></p>
+          <p>
+            当你用 JavaScript 修改 CSS 属性时，浏览器为了性能优化，不会立即应用这些改变，而是会批量处理。 如果直接写
+            <code>height = '0'</code> 然后立即写 <code>height = '300px'</code>，浏览器会合并这两次操作，直接显示
+            300px，<strong>没有过渡动画</strong>！
+          </p>
+          <p>
+            <strong>强制重排</strong>就是通过访问某些 DOM 属性（如
+            <code>offsetHeight</code>）来强制浏览器立即计算并应用样式改变。 这样浏览器就知道：从 0 过渡到
+            300px，会产生平滑的动画效果。
+          </p>
+          <p>
+            <strong>常用的触发重排的属性：</strong
+            ><code>offsetHeight</code
+            >、<code>offsetWidth</code>、<code>scrollHeight</code>、<code>clientHeight</code>、<code
+              >getBoundingClientRect()</code
+            >
+            等
+          </p>
+        </div>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">CSS</span>
+          </div>
+          <pre class="code-block"><code><span class="keyword">.accordion-content</span> {
+  <span class="property">height</span>: <span class="value">0</span>;
+  <span class="property">overflow</span>: <span class="value">hidden</span>;
+  <span class="property">transition</span>: <span class="value">height 0.3s cubic-bezier(0.4, 0, 0.2, 1)</span>;
+}
+
+<span class="comment">/* 展开状态的高度由 JS 动态设置 */</span>
+<span class="keyword">.accordion-content.open</span> {
+  <span class="comment">/* height 将被 JS 设置为 scrollHeight */</span>
+}</code></pre>
+        </div>
+
+        <div class="code-section">
+          <div class="code-header">
+            <span class="code-label">JavaScript</span>
+          </div>
+          <pre
+            class="code-block"
+          ><code><span class="keyword">function</span> <span class="value">expand</span>(<span class="keyword">content</span>) {
+  <span class="comment">// 1. 设置初始高度为 0</span>
+  content.<span class="property">style</span>.<span class="property">height</span> = <span class="string">'0'</span>;
+  content.<span class="property">style</span>.<span class="property">overflow</span> = <span class="string">'hidden'</span>;
+
+  <span class="comment">// 2. 强制重排，确保初始状态生效</span>
+  <span class="comment">//    访问 offsetHeight 会强制浏览器立即计算布局</span>
+  <span class="comment">//    如果不这样做，浏览器会合并步骤 1 和步骤 3，直接跳到最终状态，没有动画</span>
+  content.<span class="property">offsetHeight</span>;
+
+  <span class="comment">// 3. 设置目标高度为实际内容高度</span>
+  <span class="comment">//    现在浏览器知道：从 0 过渡到 scrollHeight，会产生动画</span>
+  <span class="keyword">const</span> targetHeight = content.<span class="property">scrollHeight</span>;
+  content.<span class="property">style</span>.<span class="property">height</span> = targetHeight + <span class="string">'px'</span>;
+
+  <span class="comment">// 4. 动画结束后设置为 auto，允许内容自适应</span>
+  content.<span class="value">addEventListener</span>(<span class="string">'transitionend'</span>, <span class="keyword">function</span> <span class="value">handler</span>() {
+    <span class="keyword">if</span> (content.<span class="property">classList</span>.<span class="value">contains</span>(<span class="string">'open'</span>)) {
+      content.<span class="property">style</span>.<span class="property">height</span> = <span class="string">'auto'</span>;
+    }
+    content.<span class="property">style</span>.<span class="property">overflow</span> = <span class="string">''</span>;
+    content.<span class="value">removeEventListener</span>(<span class="string">'transitionend'</span>, handler);
+  });
+}
+
+<span class="keyword">function</span> <span class="value">collapse</span>(<span class="keyword">content</span>) {
+  <span class="comment">// 1. 先设置为具体高度值（从 auto 过渡需要先固定高度）</span>
+  <span class="keyword">const</span> currentHeight = content.<span class="property">scrollHeight</span>;
+  content.<span class="property">style</span>.<span class="property">height</span> = currentHeight + <span class="string">'px'</span>;
+  content.<span class="property">style</span>.<span class="property">overflow</span> = <span class="string">'hidden'</span>;
+
+  <span class="comment">// 2. 强制重排</span>
+  content.<span class="property">offsetHeight</span>;
+
+  <span class="comment">// 3. 设置目标高度为 0</span>
+  content.<span class="property">style</span>.<span class="property">height</span> = <span class="string">'0'</span>;
 }</code></pre>
         </div>
 
@@ -485,13 +584,21 @@ headers.<span class="value">forEach</span>(<span class="keyword">header</span> =
       <section class="key-points">
         <h2>关键要点</h2>
         <ul>
-          <li><strong>Grid 方法</strong>是最现代的方案，使用 grid-template-rows: 0fr/1fr 实现高度过渡</li>
-          <li><strong>无需预估高度</strong> - Grid 方法自动适应内容，不像 max-height 需要设置固定值</li>
-          <li><strong>不占据空间</strong> - 折叠状态下完全不占据文档流空间，布局更自然</li>
-          <li><strong>max-height 方法</strong>兼容性更好，适合需要支持旧浏览器的项目</li>
-          <li><strong>max-height 值</strong>需要设置得足够大以容纳内容，但不要过大以免影响动画时长</li>
-          <li><strong>overflow: hidden</strong> 是必需的，防止内容溢出</li>
-          <li><strong>cubic-bezier 缓动</strong>提供自然的加速和减速效果</li>
+          <li><strong>JS 动态高度方法</strong>是最精确的方案，通过 scrollHeight 获取实际内容高度</li>
+          <li>
+            <strong>强制重排原理</strong> - 浏览器会批量处理 DOM 操作以优化性能。访问
+            <code>offsetHeight</code> 等属性会强制浏览器立即计算布局， 确保初始状态（height:
+            0）生效后再应用目标状态（height: 300px），从而产生平滑的过渡动画
+          </li>
+          <li>
+            <strong>没有强制重排的后果</strong> - 如果直接写
+            <code>height = '0'; height = '300px';</code>，浏览器会合并操作， 直接显示 300px，看不到动画效果
+          </li>
+          <li><strong>transitionend 事件</strong> - 动画结束后设置 height: auto，让内容可以自适应高度变化</li>
+          <li><strong>Grid 方法</strong>使用 grid-template-rows: 0fr/1fr，无需预估高度，兼容性较好</li>
+          <li><strong>max-height 方法</strong>兼容性最好，但需要设置足够大的值，且动画时长会受影响</li>
+          <li><strong>overflow: hidden</strong> 是必需的，防止内容在动画过程中溢出</li>
+          <li><strong>cubic-bezier 缓动</strong>提供自然的加速和减速效果，比 linear 更符合物理直觉</li>
           <li><strong>单开模式</strong>适合 FAQ 页面，多开模式适合内容分类展示</li>
           <li><strong>箭头旋转</strong>提供视觉反馈，增强用户体验</li>
         </ul>
@@ -543,6 +650,43 @@ headers.<span class="value">forEach</span>(<span class="keyword">header</span> =
       const collapseAllBtn = document.getElementById('collapse-all');
       const modeBtns = document.querySelectorAll('.mode-btn');
 
+      // JS 动态高度实现
+      function expandWithJS(content) {
+        // 1. 设置初始高度为 0
+        content.style.height = '0';
+        content.style.overflow = 'hidden';
+
+        // 2. 强制重排，确保初始状态生效
+        content.offsetHeight;
+
+        // 3. 设置目标高度为实际内容高度
+        const targetHeight = content.scrollHeight;
+        content.style.height = targetHeight + 'px';
+
+        // 4. 动画结束后设置为 auto，允许内容自适应
+        const handleTransitionEnd = () => {
+          if (content.classList.contains('open')) {
+            content.style.height = 'auto';
+          }
+          content.style.overflow = '';
+          content.removeEventListener('transitionend', handleTransitionEnd);
+        };
+        content.addEventListener('transitionend', handleTransitionEnd);
+      }
+
+      function collapseWithJS(content) {
+        // 1. 先设置为具体高度值（从 auto 过渡需要先固定高度）
+        const currentHeight = content.scrollHeight;
+        content.style.height = currentHeight + 'px';
+        content.style.overflow = 'hidden';
+
+        // 2. 强制重排
+        content.offsetHeight;
+
+        // 3. 设置目标高度为 0
+        content.style.height = '0';
+      }
+
       // 切换手风琴面板
       function toggleAccordion(header) {
         const item = header.parentElement;
@@ -552,14 +696,32 @@ headers.<span class="value">forEach</span>(<span class="keyword">header</span> =
         // 单开模式：关闭其他面板
         if (!multipleMode && !isOpen) {
           accordion.querySelectorAll('.accordion-content').forEach((c) => {
-            c.classList.remove('open');
-            c.parentElement.querySelector('.accordion-header').classList.remove('active');
+            if (c.classList.contains('open')) {
+              c.classList.remove('open');
+              c.parentElement.querySelector('.accordion-header').classList.remove('active');
+
+              // JS 模式下需要手动触发收起动画
+              if (currentMethod === 'js') {
+                collapseWithJS(c);
+              }
+            }
           });
         }
 
         // 切换当前面板
-        content.classList.toggle('open');
-        header.classList.toggle('active');
+        if (isOpen) {
+          content.classList.remove('open');
+          header.classList.remove('active');
+          if (currentMethod === 'js') {
+            collapseWithJS(content);
+          }
+        } else {
+          content.classList.add('open');
+          header.classList.add('active');
+          if (currentMethod === 'js') {
+            expandWithJS(content);
+          }
+        }
       }
 
       // 为每个标题添加点击事件
@@ -576,20 +738,30 @@ headers.<span class="value">forEach</span>(<span class="keyword">header</span> =
       // 全部展开
       expandAllBtn.addEventListener('click', () => {
         accordion.querySelectorAll('.accordion-content').forEach((content) => {
-          content.classList.add('open');
-          content.parentElement.querySelector('.accordion-header').classList.add('active');
+          if (!content.classList.contains('open')) {
+            content.classList.add('open');
+            content.parentElement.querySelector('.accordion-header').classList.add('active');
+            if (currentMethod === 'js') {
+              expandWithJS(content);
+            }
+          }
         });
       });
 
       // 全部收起
       collapseAllBtn.addEventListener('click', () => {
         accordion.querySelectorAll('.accordion-content').forEach((content) => {
-          content.classList.remove('open');
-          content.parentElement.querySelector('.accordion-header').classList.remove('active');
+          if (content.classList.contains('open')) {
+            content.classList.remove('open');
+            content.parentElement.querySelector('.accordion-header').classList.remove('active');
+            if (currentMethod === 'js') {
+              collapseWithJS(content);
+            }
+          }
         });
       });
 
-      // 切换实现方法（max-height vs Grid）
+      // 切换实现方法（max-height vs Grid vs JS）
       modeBtns.forEach((btn) => {
         btn.addEventListener('click', () => {
           const mode = btn.dataset.mode;
@@ -601,6 +773,15 @@ headers.<span class="value">forEach</span>(<span class="keyword">header</span> =
           modeBtns.forEach((b) => b.classList.remove('active'));
           btn.classList.add('active');
 
+          // 先收起所有面板
+          accordion.querySelectorAll('.accordion-content').forEach((content) => {
+            content.classList.remove('open', 'accordion-content-scale', 'accordion-content-js');
+            content.parentElement.querySelector('.accordion-header').classList.remove('active');
+            // 清除内联样式
+            content.style.height = '';
+            content.style.overflow = '';
+          });
+
           // 切换实现方法
           currentMethod = mode;
           const contents = accordion.querySelectorAll('.accordion-content');
@@ -609,9 +790,10 @@ headers.<span class="value">forEach</span>(<span class="keyword">header</span> =
             contents.forEach((content) => {
               content.classList.add('accordion-content-scale');
             });
-          } else {
+          } else if (mode === 'js') {
             contents.forEach((content) => {
-              content.classList.remove('accordion-content-scale');
+              content.classList.add('accordion-content-js');
+              content.style.height = '0';
             });
           }
         });
