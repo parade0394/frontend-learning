@@ -193,8 +193,9 @@
           <div class="tip">
             <h4>💡 关键点</h4>
             <p>
-              offsetLeft/offsetTop 包含了 margin 的值，但不包含父元素的 padding。值是相对于 offsetParent 的 padding
-              边缘计算的。
+              offsetLeft/offsetTop 是元素 border 外边缘到 offsetParent 的 border 内边缘的距离。
+              因此它<strong>包含</strong>父元素的 padding 和子元素的 margin。 本例中：offsetLeft = 父元素 padding-left
+              (40px) + 子元素 margin-left (50px) = 90px
             </p>
           </div>
         </section>
